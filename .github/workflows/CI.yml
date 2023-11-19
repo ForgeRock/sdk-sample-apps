@@ -1,0 +1,41 @@
+name: 'Continuous Integration'
+
+on:
+  - push
+  - pull_request
+
+jobs:
+  setup-build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, mac-latest, windows-latest]
+        node: [18.20.0, '20.x']
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node }}
+      - uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm install
+  build:
+    needs: setup-build
+    strategy:
+      matrix:
+        os: [ubuntu-latest, mac-latest, windows-latest]
+        node: [18.20.0, '20.x']
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Build
+        run: npm run build --workspaces --if-present
