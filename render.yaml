@@ -7,14 +7,6 @@ services:
   rootDir: ./central-login
   buildCommand: npm run build
   staticPublishPath: ./dist
-  buildFilter: 
-    paths: 
-      - '**/*.js'
-      - '**/*.html'
-      - '**/*.scss'
-      - '**/*.css'
-      - '**/*.json'
-
   envVars:
     - fromGroup: sample-settings
 
@@ -24,14 +16,6 @@ services:
   rootDir: ./embedded-login
   buildCommand: npm run build
   staticPublishPath: ./dist
-  buildFilter: 
-    paths: 
-      - '**/*.js'
-      - '**/*.html'
-      - '**/*.scss'
-      - '**/*.css'
-      - '**/*.json'
-
   envVars:
     - fromGroup: sample-settings
 
@@ -39,16 +23,8 @@ services:
   name: angular-todo
   runtime: static
   rootDir: ./angular-todo
-  staticPublishPath: ./dist/angular-todo/browser
   buildCommand: npm run build
-  buildFilter: 
-    paths: 
-      - '**/*.js'
-      - '**/*.ts'
-      - '**/*.scss'
-      - '**/*.css'
-      - '**/*.html'
-      - '**/*.json'
+  staticPublishPath: ./dist/angular-todo/browser
   envVars:
     - fromGroup: sample-settings
 
@@ -58,11 +34,6 @@ services:
   rootDir: ./todo-api
   startCommand: node src/index.js
   buildCommand: npm ci
-  buildFilter: 
-    paths: 
-      - '**/*.js'
-      - '**/*.ts'
-      - '**/*.json'
   envVars:
     - fromGroup: sample-settings
 
