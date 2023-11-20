@@ -22,9 +22,10 @@ services:
 - type: web
   name: angular-todo
   runtime: static
-  rootDir: ./angular-todo
-  buildCommand: npm run build
+  buildCommand: npm ci && cd angular-todo && npm run build
   staticPublishPath: ./dist/angular-todo/browser
+  buildFilters: 
+    - angular-todo
   envVars:
     - fromGroup: sample-settings
 
