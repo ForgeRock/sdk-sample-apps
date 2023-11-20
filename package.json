@@ -3,17 +3,21 @@
   "version": "1.0.0",
   "description": "a repo of sample apps using the ForgeRock SDK",
   "main": "\"\"",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "author": "",
   "license": "ISC",
   "workspaces": [
     "central-login",
     "embedded-login",
     "reactjs-todo",
-    "angular-todo"
+    "angular-todo",
+    "todo-api"
   ],
+  "scripts": {
+    "start:central-login": "npm start -w central-login",
+    "start:embedded-login": "npm start -w embedded-login",
+    "start:angular-todo": "npm start -w todo-api,angular-todo",
+    "start:reactjs-todo": "npm start -w todo-api,reactjs-todo"
+  },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^6.11.0",
     "@typescript-eslint/parser": "^6.11.0",

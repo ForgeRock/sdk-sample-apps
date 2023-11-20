@@ -20,6 +20,8 @@ const config = {
   plugins: [
     new HtmlWebpackPlugin({
       inject: true,
+      template: path.resolve(__dirname, './src/public/index.html'),
+      filename: 'index.html',
     }),
     new webpack.DefinePlugin({
       // Inject all the environment variable into the Webpack build
@@ -31,6 +33,9 @@ const config = {
       'process.env.TREE': JSON.stringify(TREE),
     }),
   ],
+  resolve: {
+    extensions: ['.js', '.jsx', '.html'],
+  },
   entry: {
     main: [path.resolve(__dirname, './src/main.js')],
     styles: [path.resolve(__dirname, './src/styles.css')],
@@ -54,6 +59,7 @@ const config = {
     ],
   },
   devServer: {
+    port: 8443,
     headers: {
       'Access-Control-Allow-Credentials': true,
       'Access-Control-Allow-Origin': 'null',

@@ -1,7 +1,6 @@
 {
   "name": "central-login",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "type": "module",
   "devDependencies": {
@@ -20,7 +19,7 @@
   },
   "scripts": {
     "build": "webpack",
-    "dev": "webpack serve --open"
+    "start": "webpack serve --open"
   },
   "author": "",
   "license": "ISC"
