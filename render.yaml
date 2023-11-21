@@ -20,11 +20,20 @@ services:
     - fromGroup: sample-settings
 
 - type: web
-  name: anguar-todo
+  name: angular-todo
   runtime: static
   rootDir: ./angular-todo
   buildCommand: npm run build
   staticPublishPath: ./dist/angular-todo/browser
+  envVars:
+    - fromGroup: sample-settings
+
+- type: web
+  name: reactjs-todo
+  runtime: static
+  rootDir: ./reactjs-todo
+  buildCommand: npm run build
+  staticPublishPath: ./dist/
   envVars:
     - fromGroup: sample-settings
 
