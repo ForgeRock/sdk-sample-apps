@@ -33,7 +33,7 @@ services:
   runtime: static
   rootDir: ./reactjs-todo
   buildCommand: npm run build
-  staticPublishPath: ./dist/
+  staticPublishPath: ./public
   envVars:
     - fromGroup: sample-settings
 

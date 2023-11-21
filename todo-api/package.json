@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "engines": {
-    "node": "20.x"
+    "node": ">=18"
   },
   "dependencies": {
     "cookie-parser": "^1.4.6",
@@ -15,12 +15,6 @@
     "superagent": "^7.0.1",
     "util": "^0.12.3",
     "uuid": "^8.3.2"
-  },
-  "devDependencies": {
-    "babel-brunch": "^7.0.1",
-    "brunch": "^4.0.2",
-    "nodemon": "^3.0.1",
-    "npm-run-all": "^4.1.5"
   },
   "scripts": {
     "dev": "node --watch src/index.js",
