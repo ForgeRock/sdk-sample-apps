@@ -17,10 +17,4 @@ import { Component } from '@angular/core';
   selector: 'app-register',
   templateUrl: './register.component.html',
 })
-export class RegisterComponent {
-  isWebAuthn = false;
-
-  onSetIsWebAuthn(isWebAuthn: boolean): void {
-    this.isWebAuthn = isWebAuthn;
-  }
-}
+export class RegisterComponent {}

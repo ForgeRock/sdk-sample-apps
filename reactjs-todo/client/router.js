@@ -9,16 +9,16 @@
  */
 
 import React, { useEffect } from 'react';
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 
-import { ProtectedRoute } from './utilities/route';
-import Todos from './views/todos';
 import Footer from './components/layout/footer';
 import Header from './components/layout/header';
 import Home from './views/home';
 import Login from './views/login';
 import Logout from './views/logout';
 import Register from './views/register';
+import { ProtectedRoute } from './utilities/route';
+import Todos from './views/todos';
 
 function ScrollToTop() {
   const { pathname } = useLocation();

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /*
  * angular-todo-prototype
  *
@@ -10,14 +9,20 @@
  */
 
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
+import {
+  ActivatedRouteSnapshot,
+  CanActivate,
+  RouterStateSnapshot,
+  UrlTree,
+  Router,
+} from '@angular/router';
 import { UserService } from '../services/user.service';
-import { TokenStorage, UserManager } from '@forgerock/javascript-sdk';
+import { Tokens, TokenStorage } from '@forgerock/javascript-sdk';
 
 @Injectable({
   providedIn: 'root',
 })
-export class AuthGuard {
+export class AuthGuard implements CanActivate {
   constructor(public userService: UserService, private router: Router) {}
 
   /**
@@ -34,19 +39,8 @@ export class AuthGuard {
     const loginUrl = this.router.parseUrl('/login');
     try {
       // Assume user is likely authenticated if there are tokens
-
-      /** *****************************************************************
-       * SDK INTEGRATION POINT
-       * Summary: Optional client-side route access validation
-       * ------------------------------------------------------------------
-       * Details: Here, we make sure tokens exist using TokenStorage.get()
-       * however there are other checks – validate tokens, session checks..
-       * In this case, we are calling the userinfo endpoint to
-       * ensure valid tokens before continuing, but it's optional.
-       ***************************************************************** */
-      const tokens = await TokenStorage.get();
-      const info = await UserManager.getCurrentUser();
-      if (tokens === undefined || info === undefined) {
+      const tokens: Tokens = await TokenStorage.get();
+      if (tokens === undefined) {
         return loginUrl;
       }
       return true;

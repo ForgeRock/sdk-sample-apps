@@ -8,10 +8,8 @@
  * of the MIT license. See the LICENSE file for details.
  */
 
-import { OnInit } from '@angular/core';
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { ValidatedCreatePasswordCallback } from '@forgerock/javascript-sdk';
-import { PasswordCallback } from '@forgerock/javascript-sdk';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { PasswordCallback, ValidatedCreatePasswordCallback } from '@forgerock/javascript-sdk';
 
 /**
  * Used to collect or set a password
@@ -106,10 +104,14 @@ export class PasswordComponent implements OnInit {
     const validationFailures: string[] = [];
 
     failedPolicies.forEach((policy) => {
-      switch (policy.policyRequirement) {
+      const policyObj = JSON.parse(JSON.parse(JSON.stringify(policy)));
+
+      console.log(policyObj.policyRequirement);
+
+      switch (policyObj.policyRequirement) {
         case 'LENGTH_BASED':
           validationFailures.push(
-            `Ensure password contains more than ${policy.params['min-password-length']} characters. `,
+            `Ensure password contains more than ${policyObj.params['min-password-length']} characters. `,
           );
           break;
         case 'CHARACTER_SET':
