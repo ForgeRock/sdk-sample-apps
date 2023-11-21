@@ -11,14 +11,13 @@ of the MIT license. See the LICENSE file for details.
 <div class="cstm_container_v-centered container-fluid d-flex align-items-center">
   <div class="w-100">
     <app-back-home></app-back-home>
+
     <div class="card shadow-sm p-5 mb-2 w-100">
       <div class="cstm_form-icon align-self-center mb-3">
-        <ng-container *ngIf="!isWebAuthn; else fingerPrint">
-          <app-key-icon size="72px"></app-key-icon>
-        </ng-container>
+        <app-key-icon size="72px"></app-key-icon>
       </div>
 
-      <app-form [action]="'login'" (isWebAuthn)="onSetIsWebAuthn($event)"></app-form>
+      <app-form [action]="'login'"></app-form>
 
       <p class="text-center text-secondary p-3">
         Don’t have an account?
@@ -27,7 +26,3 @@ of the MIT license. See the LICENSE file for details.
     </div>
   </div>
 </div>
-
-<ng-template #fingerPrint>
-  <app-finger-print-icon size="72px"></app-finger-print-icon>
-</ng-template>

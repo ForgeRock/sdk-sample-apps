@@ -22,7 +22,7 @@ import { htmlDecode } from '../../utilities/decode';
  * @param {Object} props.form - The form metadata object
  * @returns {Object} - React component object
  */
-export default function useJourneyHandler({ action, form, resumeUrl }) {
+export default function useJourneyHandler({ action, form }) {
   /**
    * Compose the state used in this view.
    * First, we will use the global state methods found in the App Context.
@@ -38,8 +38,6 @@ export default function useJourneyHandler({ action, form, resumeUrl }) {
   const [renderStep, setRenderStep] = useState(null);
   // Step to submit
   const [submissionStep, setSubmissionStep] = useState(null);
-  // Count steps
-  const [stepCount, setStepCount] = useState(0);
   // Processing submission
   const [submittingForm, setSubmittingForm] = useState(false);
   // User state
@@ -113,12 +111,7 @@ export default function useJourneyHandler({ action, form, resumeUrl }) {
       if (DEBUGGER) debugger;
       let nextStep;
       try {
-        if (resumeUrl) {
-          nextStep = await FRAuth.resume(resumeUrl);
-        } else {
-          nextStep = await FRAuth.next(prev, { tree: form.tree });
-        }
-        setStepCount((current) => current + 1);
+        nextStep = await FRAuth.next(prev, { tree: form.tree });
       } catch (err) {
         console.error(`Error: failure in next step request; ${err}`);
 
@@ -138,9 +131,6 @@ export default function useJourneyHandler({ action, form, resumeUrl }) {
        * of login journey.
        */
       if (nextStep.type === 'LoginSuccess') {
-        // Clear out step count
-        setStepCount(0);
-
         // User is authenticated, now call for OAuth tokens
         getOAuth();
       } else if (nextStep.type === 'LoginFailure') {
@@ -186,7 +176,7 @@ export default function useJourneyHandler({ action, form, resumeUrl }) {
          * so the user doesn't have to refill the form.
          ******************************************************************* */
         if (DEBUGGER) debugger;
-        if (stepCount === 1 && newStep.getStage() === previousStage) {
+        if (newStep.getStage() === previousStage) {
           newStep.callbacks = previousCallbacks;
           newStep.payload = {
             ...previousPayload,

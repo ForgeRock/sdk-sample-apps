@@ -31,8 +31,7 @@ export default function Home() {
     <Fragment>
       <h2 className={`fs-4 fw-normal pt-3 pb-1 ${state.theme.textClass}`}>Getting started</h2>
       <p>
-        To use this app, <Link to="/register">create an account now</Link>! Already have an account?{' '}
-        <Link to="/login">Sign in</Link> to get things done!
+        To use this app, <a href="#">follow the tutorial found on our blog</a>.
       </p>
     </Fragment>
   ) : null;

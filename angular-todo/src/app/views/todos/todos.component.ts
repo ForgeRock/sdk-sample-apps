@@ -8,8 +8,7 @@
  * of the MIT license. See the LICENSE file for details.
  */
 
-import { OnInit } from '@angular/core';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Todo } from '../../features/todo/todo';
 import { TodoService } from '../../services/todo.service';
 

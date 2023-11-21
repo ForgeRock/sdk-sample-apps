@@ -8,13 +8,12 @@
  * of the MIT license. See the LICENSE file for details.
  */
 
-import { OnInit } from '@angular/core';
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import type {
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {
   AttributeInputCallback,
+  NameCallback,
   ValidatedCreateUsernameCallback,
 } from '@forgerock/javascript-sdk';
-import { NameCallback } from '@forgerock/javascript-sdk';
 
 /**
  * Used to collect a username, email address or any other text

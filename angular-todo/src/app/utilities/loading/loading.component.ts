@@ -19,10 +19,6 @@ import { Component, Input } from '@angular/core';
 })
 export class LoadingComponent {
   /**
-   * The header to be displayed with the spinner
-   */
-  @Input() header?: string;
-  /**
    * The message to be displayed with the spinner
    */
   @Input() message?: string;

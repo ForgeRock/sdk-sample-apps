@@ -7,13 +7,11 @@
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
  */
-
-import { Config, TokenStorage } from '@forgerock/javascript-sdk';
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import { createRoot } from 'react-dom/client';
 
 import Router from './router';
-import { AM_URL, DEBUGGER, JOURNEY_LOGIN, REALM_PATH, WEB_OAUTH_CLIENT } from './constants';
+import { AM_URL, APP_URL, JOURNEY_LOGIN, REALM_PATH, WEB_OAUTH_CLIENT } from './constants';
 import { AppContext, useGlobalStateMgmt } from './global-state';
 
 /**
@@ -22,57 +20,13 @@ import { AppContext, useGlobalStateMgmt } from './global-state';
  */
 import './styles/index.scss';
 
-/** ***************************************************************************
- * SDK INTEGRATION POINT
- * Summary: Configure the SDK
- * ----------------------------------------------------------------------------
- * Details: Below, you will see the following settings:
- * - clientId: (OAuth 2.0 only) this is the OAuth 2.0 client you created in ForgeRock, such as `ForgeRockSDKClient`
- * - redirectUri: (OAuth 2.0 only) this is the URI/URL of this app to which the
- *   OAuth 2.0 flow redirects
- * - scope: (OAuth 2.0 only) these are the OAuth scopes that you will request from
- *   ForgeRock
- * - serverConfig: this includes the baseUrl of your ForgeRock AM, and should
- *   include the deployment path at the end, such as `/am/` or `/openam/`
- * - realmPath: this is the realm to use within ForgeRock. such as `alpha` or `root`
- * - tree: The authentication journey/tree to use, such as `sdkAuthenticationTree`
- *************************************************************************** */
-if (DEBUGGER) debugger;
-Config.set({
-  clientId: WEB_OAUTH_CLIENT,
-  redirectUri: `${window.location.origin}/callback`,
-  scope: 'openid profile email',
-  serverConfig: {
-    baseUrl: AM_URL,
-    timeout: '5000',
-  },
-  realmPath: REALM_PATH,
-  tree: JOURNEY_LOGIN,
-});
-
 /**
  * Initialize the React application
+ * This is an IIFE (Immediately Invoked Function Expression),
+ * so it calls itself.
  */
 (async function initAndHydrate() {
-  /** *************************************************************************
-   * SDK INTEGRATION POINT
-   * Summary: Get OAuth/OIDC tokens from storage
-   * --------------------------------------------------------------------------
-   * Details: We can immediately call TokenStorage.get() to check for stored
-   * tokens. If we have them, you can cautiously assume the user is
-   * authenticated.
-   ************************************************************************* */
-  if (DEBUGGER) debugger;
   let isAuthenticated;
-  try {
-    isAuthenticated = !!(await TokenStorage.get());
-  } catch (err) {
-    console.error(`Error: token retrieval for hydration; ${err}`);
-  }
-
-  /**
-   * Pull custom values from outside of the app to (re)hydrate state.
-   */
   const prefersDarkTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
   const email = window.sessionStorage.getItem('sdk_email');
   const username = window.sessionStorage.getItem('sdk_username');
@@ -109,8 +63,7 @@ Config.set({
       </AppContext.Provider>
     );
   }
-
-  const root = ReactDOM.createRoot(rootEl);
+  const root = createRoot(rootEl);
   // Mounts the React app to the existing root element
   root.render(<Init />);
 })();

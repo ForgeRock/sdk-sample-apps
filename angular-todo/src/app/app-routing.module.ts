@@ -9,8 +9,7 @@
  */
 
 import { NgModule } from '@angular/core';
-import { Routes } from '@angular/router';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './views/home/home.component';
 import { LoginComponent } from './views/login/login.component';
 import { TodosComponent } from './views/todos/todos.component';
@@ -24,7 +23,7 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'todos', canActivate: [AuthGuard], component: TodosComponent },
   { path: 'logout', component: LogoutComponent },
-  { path: '', redirectTo: '/home', pathMatch: 'full' }, // redirect to `first-component`
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
 ];
 
 /**

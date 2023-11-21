@@ -11,7 +11,6 @@
 import { Injectable } from '@angular/core';
 import { Todo } from '../features/todo/todo';
 import { environment } from '../../environments/environment';
-import { HttpClient } from '@forgerock/javascript-sdk';
 
 /**
  * Used to define interactions with the backend
@@ -73,25 +72,6 @@ export class TodoService {
    * @returns Response from the request
    */
   request(resource: string, method: string, data?: Todo): Promise<Response> {
-    /** ***********************************************************************
-     * SDK INTEGRATION POINT
-     * Summary: HttpClient for protected resource server requests.
-     * ------------------------------------------------------------------------
-     * Details: This helper retrieves your access token from storage and adds
-     * it to the authorization header as a bearer token for making HTTP
-     * requests to protected resource APIs. It's a wrapper around the native
-     * fetch method.
-     *********************************************************************** */
-    return HttpClient.request({
-      url: resource,
-      init: {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-        method: method,
-      },
-      timeout: 5000,
-    });
+    return new Promise((resolve, reject) => reject('Method not implemented'));
   }
 }

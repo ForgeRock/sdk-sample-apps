@@ -15,6 +15,7 @@ import BackHome from '../components/utilities/back-home';
 import Card from '../components/layout/card';
 import { AppContext } from '../global-state';
 import apiRequest from '../utilities/request';
+import NewUserIcon from '../components/icons/new-user-icon';
 import Form from '../components/journey/form';
 
 /**
@@ -33,6 +34,9 @@ export default function Register() {
       <div className="w-100">
         <BackHome />
         <Card>
+          <div className="cstm_form-icon align-self-center mb-3">
+            <NewUserIcon size="72px" />
+          </div>
           <Form
             action={{ type: 'register' }}
             followUp={initUserInDb}
