@@ -23,6 +23,9 @@ module.exports = () => {
     entry: {
       app: './client/index.js',
     },
+    resolve: {
+      extensions: ['', '.js', '.jsx'],
+    },
     // This helps provide better debugging in browsers
     devtool: 'source-map',
     // The location of where the built files are placed
@@ -85,10 +88,13 @@ module.exports = () => {
       ],
     },
     devServer: {
+      allowedHosts: ['localhost', 'react.example.com', '.example.com'],
+      https: true,
       client: {
         overlay: false,
       },
-      port: process.env.PORT || 8443,
+      port: 8443,
+      historyApiFallback: true,
     },
     plugins: [
       new MiniCssExtractPlugin(),

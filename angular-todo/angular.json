@@ -53,6 +53,11 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "port": 8443,
+            "ssl": true,
+            "allowedHosts": [".example.com", "localhost"]
+          },
           "configurations": {
             "production": {
               "buildTarget": "angular-todo:build:production"
