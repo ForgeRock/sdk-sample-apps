@@ -84,6 +84,12 @@ module.exports = () => {
         },
       ],
     },
+    devServer: {
+      client: {
+        overlay: false,
+      },
+      port: process.env.PORT || 8443,
+    },
     plugins: [
       new MiniCssExtractPlugin(),
       new webpack.DefinePlugin({
