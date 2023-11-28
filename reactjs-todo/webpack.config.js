@@ -23,6 +23,9 @@ module.exports = () => {
     entry: {
       app: './client/index.js',
     },
+    resolve: {
+      extensions: ['', '.js', '.jsx'],
+    },
     // This helps provide better debugging in browsers
     devtool: 'source-map',
     // The location of where the built files are placed
