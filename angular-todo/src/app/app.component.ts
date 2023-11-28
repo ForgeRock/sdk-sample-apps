@@ -28,7 +28,10 @@ export class AppComponent implements OnInit {
   title = 'angular-todo-prototype';
   loading = false;
 
-  constructor(public userService: UserService, private router: Router) {
+  constructor(
+    public userService: UserService,
+    private router: Router,
+  ) {
     const navStart = router.events.pipe(
       filter((evt) => evt instanceof NavigationStart),
     ) as Observable<NavigationStart>;
