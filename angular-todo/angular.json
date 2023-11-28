@@ -53,6 +53,9 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "port": 8443
+          },
           "configurations": {
             "production": {
               "buildTarget": "angular-todo:build:production"
