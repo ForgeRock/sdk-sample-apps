@@ -23,7 +23,10 @@ import { Tokens, TokenStorage } from '@forgerock/javascript-sdk';
   providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
-  constructor(public userService: UserService, private router: Router) {}
+  constructor(
+    public userService: UserService,
+    private router: Router,
+  ) {}
 
   /**
    * Extends CanActivate to protect selected routes from unauthenticated access
@@ -39,7 +42,7 @@ export class AuthGuard implements CanActivate {
     const loginUrl = this.router.parseUrl('/login');
     try {
       // Assume user is likely authenticated if there are tokens
-      const tokens: Tokens = await TokenStorage.get();
+      const tokens = await TokenStorage.get();
       if (tokens === undefined) {
         return loginUrl;
       }
