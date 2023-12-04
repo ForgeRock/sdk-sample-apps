@@ -9,7 +9,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, mac-latest, windows-latest]
-        node: [18.20.0, '20.x']
+        node: [18.19.0, '20.x']
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
@@ -31,7 +31,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, mac-latest, windows-latest]
-        node: [18.20.0, '20.x']
+        node: [18.19.0, '20.x']
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
