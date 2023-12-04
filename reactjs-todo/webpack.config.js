@@ -88,10 +88,13 @@ module.exports = () => {
       ],
     },
     devServer: {
+      allowedHosts: ['localhost', 'react.example.com', '.example.com'],
+      https: true,
       client: {
         overlay: false,
       },
-      port: process.env.PORT || 8443,
+      port: 8443,
+      historyApiFallback: true,
     },
     plugins: [
       new MiniCssExtractPlugin(),
