@@ -64,7 +64,7 @@ export class TextComponent implements OnInit {
    * Emit an event to the parent component, passing the text entered
    * @param event - the value of the text field
    */
-  updateValue(event: any): void {
+  updateValue(event): void {
     this.updatedCallback.emit(event.target.value);
   }
 

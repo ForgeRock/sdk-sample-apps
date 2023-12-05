@@ -43,7 +43,7 @@ export class KbaComponent {
    * Emit an event to the parent component, passing the selected question
    * @param event - the question
    */
-  questionSet(event: any): void {
+  questionSet(event): void {
     this.setQuestion.emit(event.target.value);
   }
 
@@ -51,7 +51,7 @@ export class KbaComponent {
    * Emit an event to the parent component, passing the answer entered
    * @param event - the answer
    */
-  answerSet(event: any): void {
+  answerSet(event): void {
     this.setAnswer.emit(event.target.value);
   }
 }

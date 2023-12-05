@@ -38,7 +38,7 @@ export class ChoiceComponent {
    * Emit an event to the parent component, passing the selected choice
    * @param event - the choice selected
    */
-  setValue(event: any): void {
+  setValue(event): void {
     this.updatedCallback.emit(event.target.value);
   }
 }

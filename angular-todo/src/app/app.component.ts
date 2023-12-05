@@ -30,12 +30,12 @@ export class AppComponent implements OnInit {
     private router: Router,
   ) {
     const navStart = router.events.pipe(
-      filter((evt: any) => evt instanceof NavigationStart),
+      filter((evt) => evt instanceof NavigationStart),
     ) as Observable<NavigationStart>;
 
     const navEnd: Observable<NavigationStart> = router.events.pipe(
       filter(
-        (evt: any) =>
+        (evt) =>
           evt instanceof NavigationEnd ||
           evt instanceof NavigationCancel ||
           evt instanceof NavigationError,

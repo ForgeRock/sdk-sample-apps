@@ -38,7 +38,7 @@ export class BooleanComponent {
    * Emit an event to the parent component, passing the updated value of the checkbox
    * @param event - the updated value of the checkbox
    */
-  updateValue(event: any): void {
+  updateValue(event): void {
     this.updatedCallback.emit(event.currentTarget.checked);
   }
 }

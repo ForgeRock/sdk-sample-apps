@@ -26,6 +26,7 @@ import { Router } from '@angular/router';
  * Used to handle webAuthn journey
  */
 @Component({
+  // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'app-webAuthn',
   templateUrl: './webAuthn.component.html',
 })
@@ -37,7 +38,10 @@ export class WebAuthnComponent implements OnInit {
   success: FRLoginSuccess;
   failure: FRLoginFailure;
 
-  constructor(private router: Router, public userService: UserService) {}
+  constructor(
+    private router: Router,
+    public userService: UserService,
+  ) {}
 
   async ngOnInit(): Promise<void> {
     try {

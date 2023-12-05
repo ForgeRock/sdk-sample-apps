@@ -38,7 +38,7 @@ export class TermsConditionsComponent {
    * Emit an event to the parent component, passing the acceptance of the terms and conditions
    * @param event - the acceptance of the terms and conditions
    */
-  updateValue(event: any): void {
+  updateValue(event): void {
     this.updatedCallback.emit(event.target.checked);
   }
 }

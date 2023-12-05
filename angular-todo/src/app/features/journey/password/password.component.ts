@@ -63,7 +63,7 @@ export class PasswordComponent implements OnInit {
    * Emit an event to the parent component, passing the password entered
    * @param event - the value of the password field
    */
-  updateValue(event: any): void {
+  updateValue(event): void {
     this.updatedCallback.emit(event.target.value);
   }
 
