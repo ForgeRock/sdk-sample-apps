@@ -32,6 +32,7 @@ module.exports = () => {
     output: {
       path: path.resolve(__dirname, 'public'),
       filename: '[name].js',
+      publicPath: '/',
     },
     // Dictates some behavior in Webpack, "development" is a bit quicker
     mode: DEVELOPMENT === 'true' ? 'development' : 'production',
@@ -88,10 +89,12 @@ module.exports = () => {
       ],
     },
     devServer: {
+      allowedHosts: ['localhost', 'react.example.com', '.example.com'],
+      https: true,
       client: {
         overlay: false,
       },
-      port: process.env.PORT || 8443,
+      port: 8443,
     },
     plugins: [
       new MiniCssExtractPlugin(),

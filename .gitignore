@@ -8,3 +8,6 @@ node_modules
 .angular
 todo-api/todos/*
 todo-api/users/*
+!reactjs-todo/public/index.html
+!reactjs-todo/public/README.md
+!reactjs-todo/public/callback/*
