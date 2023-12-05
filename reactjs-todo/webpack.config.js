@@ -91,6 +91,7 @@ module.exports = () => {
       client: {
         overlay: false,
       },
+      historyApiFallback: true,
       port: process.env.PORT || 8443,
     },
     plugins: [
