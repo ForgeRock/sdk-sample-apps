@@ -46,7 +46,8 @@
   },
   "scripts": {
     "build": "webpack",
-    "start": "webpack serve --mode development --open"
+    "start": "webpack serve --mode development --open",
+    "lint": "eslint ."
   },
   "author": "",
   "license": "ISC"

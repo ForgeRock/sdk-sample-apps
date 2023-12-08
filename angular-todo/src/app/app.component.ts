@@ -33,7 +33,7 @@ export class AppComponent implements OnInit {
       filter((evt) => evt instanceof NavigationStart),
     ) as Observable<NavigationStart>;
 
-    const navEnd: Observable<NavigationStart> = router.events.pipe(
+    const navEnd = router.events.pipe(
       filter(
         (evt) =>
           evt instanceof NavigationEnd ||
@@ -89,7 +89,7 @@ export class AppComponent implements OnInit {
      ***************************************************************** */
     try {
       // Assume user is likely authenticated if there are tokens
-      const info = await UserManager.getCurrentUser();
+      const info = (await UserManager.getCurrentUser()) as Record<string, unknown>;
       this.userService.isAuthenticated = true;
       this.userService.info = info;
     } catch (err) {

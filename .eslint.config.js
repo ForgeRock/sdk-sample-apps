@@ -4,7 +4,7 @@ module.exports = {
     node: true,
     es2021: true,
   },
-  extends: ['prettier', 'plugin:react/recommended'],
+  extends: ['prettier'],
   parserOptions: {
     sourceType: 'module',
   },

@@ -114,7 +114,7 @@ export class WebAuthnComponent implements OnInit {
        * valid access token. This is optional and only used for displaying
        * user info in the UI.
        ********************************************************************* */
-      const info = await UserManager.getCurrentUser();
+      const info = (await UserManager.getCurrentUser()) as Record<string, unknown>;
       this.userService.info = info;
       this.userService.isAuthenticated = true;
 
