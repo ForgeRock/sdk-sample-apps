@@ -43,6 +43,7 @@ export default function WebAuthn({ step, setSubmissionStep }) {
       }
     }
     performWebAuthn();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

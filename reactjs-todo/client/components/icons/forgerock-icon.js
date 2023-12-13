@@ -19,7 +19,7 @@ import React from 'react';
  */
 export default function ForgeRockIcon({ classes = '', size = '24px' }) {
   return (
-    <svg classes={classes} height={size} version="1.1" viewBox="0 0 64 64">
+    <svg className={classes} height={size} version="1.1" viewBox="0 0 64 64">
       <g transform="matrix(0.18538366,0,0,0.18538366,-64.077863,86.24418)">
         <polygon
           transform="translate(0,-465.21997)"

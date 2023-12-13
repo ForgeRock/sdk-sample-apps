@@ -25,5 +25,5 @@ export class UserService {
   /**
    * State repreesnting previously retrieved user information
    */
-  info?: unknown;
+  info?: Record<string, unknown>;
 }

@@ -211,6 +211,7 @@ export default function useJourneyHandler({ action, form, resumeUrl }) {
      * submissionStep will initially be `null`, and that's intended.
      */
     getStep(submissionStep);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [action.type, form.tree, submissionStep]);
 
   return [

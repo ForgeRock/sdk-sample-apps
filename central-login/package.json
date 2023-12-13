@@ -19,7 +19,8 @@
   },
   "scripts": {
     "build": "webpack",
-    "start": "webpack serve --open"
+    "start": "webpack serve --open",
+    "lint": "eslint ."
   },
   "author": "",
   "license": "ISC"
