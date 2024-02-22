@@ -60,6 +60,7 @@ const config = {
   },
   devServer: {
     port: 8443,
+    host: 'sdkapp.example.com',
     headers: {
       'Access-Control-Allow-Credentials': true,
       'Access-Control-Allow-Origin': 'null',
