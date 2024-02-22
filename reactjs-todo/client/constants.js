@@ -16,4 +16,5 @@ export const JOURNEY_LOGIN = process.env.JOURNEY_LOGIN;
 export const JOURNEY_REGISTER = process.env.JOURNEY_REGISTER;
 export const WEB_OAUTH_CLIENT = process.env.WEB_OAUTH_CLIENT;
 export const REALM_PATH = process.env.REALM_PATH;
+export const CENTRALIZED_LOGIN = process.env.CENTRALIZED_LOGIN;
 export const SESSION_URL = `${AM_URL}json/realms/root/sessions`;

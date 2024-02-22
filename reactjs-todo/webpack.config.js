@@ -16,6 +16,7 @@ module.exports = () => {
   const JOURNEY_LOGIN = process.env.JOURNEY_LOGIN || localEnv.JOURNEY_LOGIN;
   const JOURNEY_REGISTER = process.env.JOURNEY_REGISTER || localEnv.JOURNEY_REGISTER;
   const WEB_OAUTH_CLIENT = process.env.WEB_OAUTH_CLIENT || localEnv.WEB_OAUTH_CLIENT;
+  const CENTRALIZED_LOGIN = process.env.CENTRALIZED_LOGIN || localEnv.CENTRALIZED_LOGIN;
   const REALM_PATH = process.env.REALM_PATH || localEnv.REALM_PATH;
 
   return {
@@ -107,6 +108,7 @@ module.exports = () => {
         'process.env.JOURNEY_LOGIN': JSON.stringify(JOURNEY_LOGIN),
         'process.env.JOURNEY_REGISTER': JSON.stringify(JOURNEY_REGISTER),
         'process.env.WEB_OAUTH_CLIENT': JSON.stringify(WEB_OAUTH_CLIENT),
+        'process.env.CENTRALIZED_LOGIN': JSON.stringify(CENTRALIZED_LOGIN),
         'process.env.REALM_PATH': JSON.stringify(REALM_PATH),
       }),
     ],
