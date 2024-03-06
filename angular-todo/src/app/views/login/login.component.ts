@@ -25,10 +25,12 @@ export class LoginComponent implements OnInit {
   isWebAuthn = false;
   code: string;
   state: string;
+  centralLogin: string;
   loadingMessage: string;
+  journey: string;
 
   get isCentralizedLogin(): boolean {
-    return environment.CENTRALIZED_LOGIN === 'true' ? true : false;
+    return this.centralLogin === 'true' || environment.CENTRALIZED_LOGIN === 'true' ? true : false;
   }
 
   constructor(
@@ -40,6 +42,8 @@ export class LoginComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.code = this.route.snapshot.queryParamMap.get('code');
     this.state = this.route.snapshot.queryParamMap.get('state');
+    this.centralLogin = this.route.snapshot.queryParamMap.get('centralLogin');
+    this.journey = this.route.snapshot.queryParamMap.get('journey');
 
     if (this.isCentralizedLogin) {
       if (this.code && this.state) {

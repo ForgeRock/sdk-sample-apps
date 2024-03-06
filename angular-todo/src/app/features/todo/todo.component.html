@@ -32,7 +32,7 @@ of the MIT license. See the LICENSE file for details.
       }"
     >
       <app-todo-icon [completed]="todo.completed" [size]="'36px'"></app-todo-icon>
-      {{ todo.title }}
+      <span aria-label="todo title text">{{ todo.title }}</span>
     </label>
   </div>
 
@@ -40,6 +40,7 @@ of the MIT license. See the LICENSE file for details.
     <!--
       Open actions menu
     -->
+    <label [for]="'todo_action_' + todo._id"  class="visually-hidden">More actions</label>
     <button
       class="cstm_dropdown-actions btn h-auto"
       data-bs-toggle="dropdown"
@@ -68,11 +69,13 @@ of the MIT license. See the LICENSE file for details.
         Mark this for deletion
       -->
       <li>
+        <label for="deleteButton"  class="visually-hidden">delete button</label>
         <button
           class="dropdown-item"
           data-bs-toggle="modal"
           data-bs-target="#deleteModal"
           (click)="setDelete(todo)"
+          id="deleteButton"
         >
           Delete
         </button>

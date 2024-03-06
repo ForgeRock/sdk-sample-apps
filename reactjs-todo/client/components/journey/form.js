@@ -40,9 +40,10 @@ import IdentityProvider from './identity-provider';
  * @param {Object} props.action - Action object for a "reducer" pattern
  * @param {string} props.action.type - Action type string that represents the action
  * @param {Object} props.followUp - A function that should be run after successful authentication
+ * @param {Object} props.journey - Query param that represents the journey. Testing purposes
  * @returns {Object} - React component object
  */
-export default function Form({ action, bottomMessage, followUp, topMessage }) {
+export default function Form({ action, bottomMessage, followUp, topMessage, journey }) {
   /**
    * Compose the state used in this view.
    * First, we will use the global state methods found in the App Context.
@@ -54,7 +55,7 @@ export default function Form({ action, bottomMessage, followUp, topMessage }) {
   // Used for setting global authentication state
   const [state, methods] = useContext(AppContext);
   // Map action to form metadata: title, button text and tree
-  const [form] = useReducer(treeReducer, treeReducer(null, action));
+  const [form] = useReducer(treeReducer, treeReducer(null, action, journey));
   // Used for redirection after success
   const navigate = useNavigate();
   const [params] = useSearchParams();

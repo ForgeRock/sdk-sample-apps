@@ -35,8 +35,11 @@ export default function Login() {
   // Get the code and state from the URL query parameters
   const codeParam = params.get('code');
   const stateParam = params.get('state');
+  const centralLogin = params.get('centralLogin');
+  const journey = params.get('journey');
+
   //Get environment variable
-  const isCentralizedLogin = CENTRALIZED_LOGIN === 'true';
+  const isCentralizedLogin = CENTRALIZED_LOGIN === 'true' || centralLogin === 'true';
   const [state, setState] = useState({
     loadingMessage: '',
   });
@@ -98,6 +101,7 @@ export default function Login() {
                   Don’t have an account? <Link to="/register">Sign up here!</Link>
                 </p>
               }
+              journey={journey}
             />
           </Card>
         </div>

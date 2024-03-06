@@ -9,7 +9,7 @@
  */
 
 import React, { useContext } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useSearchParams } from 'react-router-dom';
 
 import AccountIcon from '../icons/account-icon';
 import { AppContext } from '../../global-state';
@@ -31,6 +31,25 @@ export default function Header() {
    */
   const [state] = useContext(AppContext);
   const location = useLocation();
+  const [params] = useSearchParams();
+
+  const centralLogin = params.get('centralLogin');
+  const journey = params.get('journey');
+
+  const queryParams = {};
+
+  if (centralLogin) {
+    queryParams.centralLogin = centralLogin;
+  }
+
+  if (journey) {
+    queryParams.journey = journey;
+  }
+
+  const urlQueryParams = {
+    pathname: '/login',
+    search: new URLSearchParams(queryParams).toString(),
+  };
 
   let TodosItem;
   let LoginOrOutItem;
@@ -110,7 +129,7 @@ export default function Header() {
           className={`cstm_login-link py-2 px-3 mx-1 ${
             state.theme.mode === 'dark' ? 'cstm_login-link_dark' : ''
           }`}
-          to="/login"
+          to={urlQueryParams}
         >
           Sign In
         </Link>

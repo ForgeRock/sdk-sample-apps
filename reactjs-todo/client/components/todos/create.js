@@ -41,7 +41,7 @@ export default function CreateTodo({ addTodo }) {
   return (
     <form
       className={`p-3 d-flex ${state.theme.textClass}`}
-      action="https://api.example.com:8443/todos"
+      action="http://localhost:9443/todos"
       method="POST"
       onSubmit={createTodo}
     >
