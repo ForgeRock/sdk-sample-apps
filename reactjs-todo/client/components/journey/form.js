@@ -106,7 +106,6 @@ export default function Form({ action, bottomMessage, followUp, topMessage, jour
     finalizeAuthState();
 
     // Only `user` is a needed dependency, all others are "stable"
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   /**
@@ -141,7 +140,7 @@ export default function Form({ action, bottomMessage, followUp, topMessage, jour
       case 'KbaCreateCallback':
         return <Kba callback={cb} inputName={name} key={name} />;
       case 'TextOutputCallback':
-        return <TextOutput callback={cb} key={`textOutput-${idx}`} />; //For TextOutput callbacks, 'input' field comes empty which leads to a unique-key-prop error
+        return <TextOutput callback={cb} key={`textOutput-${idx}`} />; // For TextOutput callbacks, 'input' field comes empty which leads to a unique-key-prop error
       case 'ConfirmationCallback':
         return <Confirmation callback={cb} inputName={name} key={name} />;
       case 'SelectIdPCallback':

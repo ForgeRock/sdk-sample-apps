@@ -1,50 +1,50 @@
 previewsEnabled: false
 
 services:
-- type: web
-  name: central-login
-  runtime: static
-  rootDir: ./central-login
-  buildCommand: npm run build
-  staticPublishPath: ./dist
-  envVars:
-    - fromGroup: sample-settings
+  - type: web
+    name: central-login
+    runtime: static
+    rootDir: ./central-login
+    buildCommand: npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - fromGroup: sample-settings
 
-- type: web
-  name: embedded-login
-  runtime: static
-  rootDir: ./embedded-login
-  buildCommand: npm run build
-  staticPublishPath: ./dist
-  envVars:
-    - fromGroup: sample-settings
+  - type: web
+    name: embedded-login
+    runtime: static
+    rootDir: ./embedded-login
+    buildCommand: npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - fromGroup: sample-settings
 
-- type: web
-  name: angular-todo
-  runtime: static
-  rootDir: ./angular-todo
-  buildCommand: npm run build
-  staticPublishPath: ./dist/angular-todo/browser
-  envVars:
-    - fromGroup: sample-settings
+  - type: web
+    name: angular-todo
+    runtime: static
+    rootDir: ./angular-todo
+    buildCommand: npm run build
+    staticPublishPath: ./dist/angular-todo/browser
+    envVars:
+      - fromGroup: sample-settings
 
-- type: web
-  name: reactjs-todo
-  runtime: static
-  rootDir: ./reactjs-todo
-  buildCommand: npm run build
-  staticPublishPath: ./public
-  envVars:
-    - fromGroup: sample-settings
+  - type: web
+    name: reactjs-todo
+    runtime: static
+    rootDir: ./reactjs-todo
+    buildCommand: npm run build
+    staticPublishPath: ./public
+    envVars:
+      - fromGroup: sample-settings
 
-- type: web
-  name: todo-api
-  runtime: node
-  rootDir: ./todo-api
-  startCommand: node src/index.js
-  buildCommand: npm ci
-  envVars:
-    - fromGroup: sample-settings
+  - type: web
+    name: todo-api
+    runtime: node
+    rootDir: ./todo-api
+    startCommand: node src/index.js
+    buildCommand: npm ci
+    envVars:
+      - fromGroup: sample-settings
 
 envVarGroups:
   - name: sample-settings

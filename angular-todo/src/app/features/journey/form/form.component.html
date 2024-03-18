@@ -18,12 +18,12 @@ of the MIT license. See the LICENSE file for details.
     success
       ? successMessage
       : failure
-      ? failureMessage
-      : showWebAuthn
-      ? webAuthn
-      : step
-      ? callbacks
-      : loading
+        ? failureMessage
+        : showWebAuthn
+          ? webAuthn
+          : step
+            ? callbacks
+            : loading
   "
 >
   <ng-template #loading>

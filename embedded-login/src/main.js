@@ -30,7 +30,7 @@ const handlers = {
     panel.querySelector('.btn').addEventListener('click', () => {
       const nameCallback = step.getCallbackOfType('NameCallback');
       const passwordCallback = step.getCallbackOfType('PasswordCallback');
-      nameCallback.setName(panel.querySelector('input[type=text]').value);
+      nameCallback.setName(panel.querySelector('input[name=username]').value);
       passwordCallback.setPassword(panel.querySelector('input[type=password]').value);
       nextStep(step);
     });
@@ -79,7 +79,10 @@ const handleStep = async (step) => {
   switch (step.type) {
     case 'LoginSuccess': {
       // If we have a session token, get user information
+
+      // eslint-disable-next-line no-unused-vars
       const sessionToken = step.getSessionToken();
+      // eslint-disable-next-line no-unused-vars
       const tokens = await forgerock.TokenManager.getTokens();
       const user = await forgerock.UserManager.getCurrentUser();
       return showUser(user);
@@ -87,7 +90,7 @@ const handleStep = async (step) => {
 
     case 'LoginFailure': {
       showStep('Error');
-      handlers['Error'](step);
+      handlers.Error(step);
       return;
     }
 

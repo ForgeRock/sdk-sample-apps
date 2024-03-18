@@ -45,19 +45,16 @@ export default function Todos() {
   async function completeTodo(_id, completed) {
     dispatch({ type: 'complete-todo', payload: { _id, completed } });
     await apiRequest(`todos/${_id}`, 'POST', { completed });
-    return;
   }
 
   async function deleteTodo() {
     dispatch({ type: 'delete-todo', payload: { _id: selectedDeleteTodo._id } });
     await apiRequest(`todos/${selectedDeleteTodo._id}`, 'DELETE');
-    return;
   }
 
   async function editTodo({ _id, title }) {
     dispatch({ type: 'edit-todo', payload: { _id, title } });
     await apiRequest(`todos/${_id}`, 'POST', { title });
-    return;
   }
 
   /**

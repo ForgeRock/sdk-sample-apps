@@ -90,7 +90,7 @@ export default function Text({ callback, inputName }) {
         onChange={setValue}
         placeholder={textInputLabel}
         required={isRequired ? 'required' : ''}
-        type={stringAttributeName == 'mail' ? 'email' : 'text'}
+        type={stringAttributeName === 'mail' ? 'email' : 'text'}
       />
       <label htmlFor={inputName}>{textInputLabel}</label>
       {Validation}

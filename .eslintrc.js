@@ -1,9 +1,12 @@
 module.exports = {
+  root: true,
+  extends: ['standard-with-typescript'],
   env: {
     browser: true,
     node: true,
     es2021: true,
   },
+  ignorePatterns: ['**/dist/*', 'node_modules/*'],
   extends: ['prettier'],
   parserOptions: {
     sourceType: 'module',
@@ -19,7 +22,7 @@ module.exports = {
       },
     },
   ],
-  plugins: ['prettier', 'react'],
+  plugins: ['prettier'],
   rules: {
     'prettier/prettier': ['error'],
   },
