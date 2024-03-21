@@ -3,6 +3,13 @@ module.exports = {
     browser: true,
     es2021: true,
   },
+  ignorePatterns: [
+    '**/node_modules/**',
+    '**/dist/**',
+    'public',
+    'playwright-report',
+    'test-results',
+  ],
   extends: ['standard', 'plugin:react/recommended', 'prettier'],
   overrides: [
     {

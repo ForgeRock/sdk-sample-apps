@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid';
 
 const userName = uuid();
 
-test('sign up user react', async ({ page }) => {
+test('React - Register user', async ({ page }) => {
   await page.goto('https://localhost:8443/');
   await page.getByRole('link', { name: 'Sign Up' }).click();
   await page.getByLabel('Username').fill(userName);

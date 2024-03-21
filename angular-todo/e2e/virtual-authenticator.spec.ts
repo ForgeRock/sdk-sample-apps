@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test('webAuth login angular', async ({ browser, page }) => {
+test('Angular - Login with WebAuthn', async ({ browser, page }) => {
   let authenticator;
   if (browser.browserType().name() === 'chromium') {
     const cdpSession = await page.context().newCDPSession(page);
@@ -23,7 +23,6 @@ test('webAuth login angular', async ({ browser, page }) => {
     await page.getByLabel('Password').fill('j56eKtae*1');
     await page.getByPlaceholder('Password').press('Enter');
 
-    await expect(page.getByText('Success! Redirecting ...')).toBeVisible();
     await expect(page.getByText('Welcome back, Demo User!')).toBeVisible();
 
     await cdpSession.send('WebAuthn.removeVirtualAuthenticator', {

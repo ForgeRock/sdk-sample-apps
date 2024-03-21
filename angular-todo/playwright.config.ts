@@ -47,5 +47,10 @@ export default defineConfig({
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
+    {
+      name: 'firefox',
+      grepInvert: /WebAuthN/i,
+      use: { ...devices['Desktop Firefox'] },
+    },
   ],
 });

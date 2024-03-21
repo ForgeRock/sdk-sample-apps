@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test('webAuth login react', async ({ browser, page }) => {
+test('React - Login with WebAuthN', async ({ browser, page }) => {
   let authenticator;
   if (browser.browserType().name() === 'chromium') {
     const cdpSession = await page.context().newCDPSession(page);

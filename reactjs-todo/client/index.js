@@ -63,7 +63,7 @@ Config.set({
     timeout: '5000',
   },
   realmPath: REALM_PATH,
-  tree: `${journeyParam ? journeyParam : JOURNEY_LOGIN}`,
+  tree: `${journeyParam || JOURNEY_LOGIN}`,
 });
 
 /**

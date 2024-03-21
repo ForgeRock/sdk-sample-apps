@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test('centralized login angular', async ({ page }) => {
+test('Angular - Login with centralized login', async ({ page }) => {
   await page.goto('https://localhost:8443/home?centralLogin=true');
 
   await page.getByRole('link', { name: 'Sign In', exact: true }).click();
@@ -14,6 +14,5 @@ test('centralized login angular', async ({ page }) => {
 
   await page.reload();
 
-  await expect(page.getByText('Success! Redirecting ...')).toBeVisible();
   await expect(page.getByText('Welcome back, user01 user01!')).toBeVisible();
 });

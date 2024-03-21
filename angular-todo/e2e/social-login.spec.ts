@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test('social login angular', async ({ page }) => {
+test('Angular - Login with social login', async ({ page }) => {
   await page.goto('https://localhost:8443/home?journey=TEST_LoginWithSocial');
   await page.getByRole('link', { name: 'Sign In', exact: true }).click();
 

@@ -1,6 +1,11 @@
 {
   "root": true,
-  "ignorePatterns": ["projects/**/*"],
+  "ignorePatterns": [
+    "node_modules",
+    "dist",
+    "test-results",
+    "playwright-report"
+  ],
   "overrides": [
     {
       "files": ["*.ts"],

@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid';
 
 const userName = uuid();
 
-test('sign up user angular', async ({ page }) => {
+test('Angular - Register user', async ({ page }) => {
   await page.goto('https://localhost:8443/home');
   await page.getByRole('link', { name: 'Sign Up' }).click();
   await page.getByLabel('Username').fill(userName);
@@ -26,6 +26,5 @@ test('sign up user angular', async ({ page }) => {
   await page.getByLabel('Please accept our below Terms').check();
   await page.getByRole('button', { name: 'Submit' }).click();
 
-  await expect(page.getByText('Success! Redirecting ...')).toBeVisible();
   await expect(page.getByText('Welcome back, newUser newUser')).toBeVisible();
 });

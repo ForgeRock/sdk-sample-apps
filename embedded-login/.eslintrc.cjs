@@ -4,6 +4,7 @@ module.exports = {
     es2021: true,
   },
   extends: ['standard', 'prettier'],
+  ignorePatterns: ['**/node_modules/**', '**/dist/**'],
   overrides: [
     {
       env: {

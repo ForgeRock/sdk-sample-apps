@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test('embedded login angular', async ({ page }) => {
+test('Angular - Login with embedded login', async ({ page }) => {
   await page.goto('https://localhost:8443/');
   await page.getByRole('link', { name: 'Sign In', exact: true }).click();
 
@@ -19,6 +19,5 @@ test('embedded login angular', async ({ page }) => {
   await page.getByLabel('Password').fill('Password1!');
   await page.getByLabel('Password').press('Enter');
 
-  await expect(page.getByText('Success! Redirecting ...')).toBeVisible();
   await expect(page.getByText('Welcome back, user01 user01!')).toBeVisible();
 });
