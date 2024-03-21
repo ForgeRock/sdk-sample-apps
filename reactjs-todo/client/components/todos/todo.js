@@ -55,11 +55,14 @@ export default function Todo({ completeTodo, setSelectedDeleteTodo, setSelectedE
         />
         <label htmlFor={todo._id} className={todoClasses}>
           <TodoIcon classes="me-2" completed={todo.completed} size="36px" />
-          {todo.title}
+          <span aria-label="todo title text">{todo.title}</span>
         </label>
       </div>
 
       <div className="dropdown text-end d-flex align-items-center" aria-expanded="false">
+        <label htmlFor={`todo_action_${todo._id}`} className="visually-hidden">
+          More actions
+        </label>
         <button
           className="cstm_dropdown-actions btn h-auto"
           data-bs-toggle="dropdown"

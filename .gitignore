@@ -11,3 +11,7 @@ todo-api/users/*
 !reactjs-todo/public/index.html
 !reactjs-todo/public/callback/*
 reactjs-todo/public/*
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

@@ -66,10 +66,15 @@ export class AppComponent implements OnInit {
      * - tree: The authentication journey/tree to use, such as `sdkAuthenticationTree`
      *************************************************************************** */
 
+    const urlParams = new URLSearchParams(window.location.search);
+    const centralLoginParam = urlParams.get('centralLogin');
+    const journeyParam = urlParams.get('journey');
     Config.set({
       clientId: environment.WEB_OAUTH_CLIENT,
       redirectUri: `${window.location.origin}/${
-        environment.CENTRALIZED_LOGIN === 'true' ? 'login' : 'callback.html'
+        environment.CENTRALIZED_LOGIN === 'true' || centralLoginParam === 'true'
+          ? 'login?centralLogin=true'
+          : 'callback.html'
       }`,
       scope: 'openid profile email',
       serverConfig: {
@@ -77,7 +82,7 @@ export class AppComponent implements OnInit {
         timeout: 3000, // 9000 or less
       },
       realmPath: environment.REALM_PATH,
-      tree: environment.JOURNEY_LOGIN,
+      tree: `${journeyParam ? journeyParam : environment.JOURNEY_LOGIN}`,
     });
 
     /** *****************************************************************

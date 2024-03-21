@@ -17,13 +17,13 @@ import { JOURNEY_LOGIN, JOURNEY_REGISTER } from '../../constants';
  * @param {string} action.type - Action type that describes what to do
  * @returns {Object} - the tree's metadata
  */
-export default function reducer(_, action) {
+export default function reducer(_, action, journey) {
   switch (action.type) {
     case 'login':
       return {
         buttonText: 'Sign In',
         titleText: 'Sign In',
-        tree: JOURNEY_LOGIN,
+        tree: journey ? journey : JOURNEY_LOGIN,
       };
     case 'register':
       return {

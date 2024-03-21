@@ -45,10 +45,17 @@ import './styles/index.scss';
  * - tree: The authentication journey/tree to use, such as `sdkAuthenticationTree`
  *************************************************************************** */
 if (DEBUGGER) debugger;
+
+const urlParams = new URLSearchParams(window.location.search);
+const centralLoginParam = urlParams.get('centralLogin');
+const journeyParam = urlParams.get('journey');
+
 Config.set({
   clientId: WEB_OAUTH_CLIENT,
   redirectUri: `${window.location.origin}/${
-    CENTRALIZED_LOGIN === 'true' ? 'login' : 'callback.html'
+    CENTRALIZED_LOGIN === 'true' || centralLoginParam === 'true'
+      ? 'login?centralLogin=true'
+      : 'callback.html'
   }`,
   scope: 'openid profile email',
   serverConfig: {
@@ -56,7 +63,7 @@ Config.set({
     timeout: '5000',
   },
   realmPath: REALM_PATH,
-  tree: JOURNEY_LOGIN,
+  tree: `${journeyParam ? journeyParam : JOURNEY_LOGIN}`,
 });
 
 /**

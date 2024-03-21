@@ -42,6 +42,8 @@ export class FormComponent implements OnInit {
    */
   @Input() action?: string;
 
+  @Input() journey?: string;
+
   /**
    * the value representing whether is a webAuthn step or not
    */
@@ -248,7 +250,7 @@ export class FormComponent implements OnInit {
       case 'login': {
         this.title = 'Sign In';
         this.buttonText = 'Submit';
-        this.tree = environment.JOURNEY_LOGIN;
+        this.tree = this.journey ? this.journey : environment.JOURNEY_LOGIN;
         break;
       }
       case 'register': {

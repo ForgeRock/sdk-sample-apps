@@ -66,7 +66,7 @@ export default function Edit({ selectedEditTodo, setSelectedEditTodo, editTodo }
                 ref={textInput}
                 required="required"
               />
-              <label htmlFor="newTodo">Update todo text</label>
+              <label htmlFor="editTodo">Update todo text</label>
             </div>
           </form>
           <div className={`modal-footer ${state.theme.borderClass}`}>
