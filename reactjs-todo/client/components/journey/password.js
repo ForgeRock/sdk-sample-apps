@@ -105,7 +105,7 @@ export default function Password({ callback, errorMessage, inputName }) {
     <div className="cstm_form-floating input-group form-floating mb-3">
       <input
         className={`cstm_input-password form-control ${
-          validationClass ? validationClass : ''
+          validationClass || ''
         } border-end-0 bg-transparent ${state.theme.textClass} ${state.theme.borderClass}`}
         id={inputName}
         name={inputName}

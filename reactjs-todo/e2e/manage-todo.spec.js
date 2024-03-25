@@ -3,8 +3,8 @@ import { v4 as uuid } from 'uuid';
 
 const toDo = uuid() + ' ' + 'TEST';
 
-test('manage todo react', async ({ page }) => {
-  //create new todo
+test('React - Login with embedded login and manage todos', async ({ page }) => {
+  // create new todo
   await page.goto('https://localhost:8443/');
   await page.getByRole('link', { name: 'Sign In', exact: true }).click();
   await page.getByLabel('User Name').fill('user01');
@@ -16,7 +16,7 @@ test('manage todo react', async ({ page }) => {
   await page.getByRole('button', { name: 'Create' }).click();
   await expect(page.getByText(toDo)).toBeVisible();
 
-  //Edit todo
+  // Edit todo
   await page.getByLabel('More actions').first().click();
   await page.getByRole('button', { name: 'Edit' }).click();
   await page.getByLabel('Update todo text').fill(`${toDo} - Edited`);
@@ -25,7 +25,7 @@ test('manage todo react', async ({ page }) => {
   const newTodo = await page.getByLabel('todo title text').first().textContent();
   await expect(newTodo.trim()).toBe(`${toDo} - Edited`);
 
-  //Delete todo
+  // Delete todo
   await page.getByLabel('More actions').first().click();
   await page.getByRole('button', { name: 'Delete' }).click();
   await page.getByRole('button', { name: 'Delete Todo' }).click();

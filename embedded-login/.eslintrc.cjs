@@ -1,13 +1,10 @@
 module.exports = {
   env: {
     browser: true,
-    node: true,
     es2021: true,
   },
-  extends: ['prettier'],
-  parserOptions: {
-    sourceType: 'module',
-  },
+  extends: ['standard', 'prettier'],
+  ignorePatterns: ['**/node_modules/**', '**/dist/**'],
   overrides: [
     {
       env: {
@@ -19,8 +16,9 @@ module.exports = {
       },
     },
   ],
-  plugins: ['prettier', 'react'],
-  rules: {
-    'prettier/prettier': ['error'],
+  parserOptions: {
+    ecmaVersion: 'latest',
+    sourceType: 'module',
   },
+  rules: {},
 };

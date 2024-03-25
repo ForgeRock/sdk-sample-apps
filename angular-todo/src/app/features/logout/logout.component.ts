@@ -22,7 +22,10 @@ import { UserService } from '../../services/user.service';
   templateUrl: './logout.component.html',
 })
 export class LogoutComponent implements OnInit {
-  constructor(private router: Router, public userService: UserService) {}
+  constructor(
+    private router: Router,
+    public userService: UserService,
+  ) {}
 
   /**
    * As soon as this component loads we want to log the user out

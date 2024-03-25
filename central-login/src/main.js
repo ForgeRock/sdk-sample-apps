@@ -10,8 +10,6 @@ import * as forgerock from '@forgerock/javascript-sdk';
  * of the MIT license. See the LICENSE file for details.
  */
 
-const FATAL = 'Fatal';
-
 forgerock.Config.set({
   clientId: process.env.WEB_OAUTH_CLIENT, // e.g. 'ForgeRockSDKClient'
   redirectUri: `${window.location.origin}`, // Redirect back to your app, e.g. 'https://sdkapp.example.com:8443'

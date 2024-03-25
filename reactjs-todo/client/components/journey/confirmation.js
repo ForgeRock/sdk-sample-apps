@@ -30,7 +30,7 @@ export default function Confirmation({ callback, inputName }) {
    * for accessing values from the callbacks received from AM
    ************************************************************************* */
   if (DEBUGGER) debugger;
-  //Get values nedded by confirmation CB
+  // Get values nedded by confirmation CB
   const options = callback?.getOptions();
 
   function setOptionValue(e) {

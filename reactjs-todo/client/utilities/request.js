@@ -39,7 +39,7 @@ export default async function apiRequest(resource, method, data) {
         headers: {
           'Content-Type': 'application/json',
         },
-        method: method,
+        method,
       },
     });
     if (!response.ok) {

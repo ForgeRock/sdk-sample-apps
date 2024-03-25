@@ -68,7 +68,6 @@ function useAuthValidation(auth, setAuth) {
 
     validateAccessToken();
     // Only `auth` is mutable, all others, even `setAuth` are "stable"
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth]);
 
   return [

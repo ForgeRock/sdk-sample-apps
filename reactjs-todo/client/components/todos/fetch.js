@@ -44,6 +44,5 @@ export default function useTodoFetch(dispatch, setFetched) {
     getTodos();
 
     // There are no dependencies needed as all methods/functions are "stable"
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 }

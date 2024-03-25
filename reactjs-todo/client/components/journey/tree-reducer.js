@@ -23,7 +23,7 @@ export default function reducer(_, action, journey) {
       return {
         buttonText: 'Sign In',
         titleText: 'Sign In',
-        tree: journey ? journey : JOURNEY_LOGIN,
+        tree: journey || JOURNEY_LOGIN,
       };
     case 'register':
       return {

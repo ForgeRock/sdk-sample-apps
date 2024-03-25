@@ -4,40 +4,65 @@ on:
   - pull_request
 
 jobs:
-  setup-build:
+  install:
     strategy:
       matrix:
-        os: [ubuntu-latest, mac-latest, windows-latest]
-        node: [18.19.0, '20.x']
+        os: [ubuntu-latest, macos-latest]
+        node: [18.19.0, 20.11.1]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         id: cache
         with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-      - name: Install dependencies
+          path: |
+            node_modules
+          key: ${{ runner.os }}-npm-${{matrix.node}}-${{ hashFiles('**/package-lock.json') }}
+
+      - run: npm ci
         if: steps.cache.outputs.cache-hit != 'true'
-        run: npm install
-  build:
-    needs: setup-build
+
+  build-test:
     strategy:
       matrix:
-        os: [ubuntu-latest, mac-latest, windows-latest]
-        node: [18.19.0, '20.x']
+        os: [ubuntu-latest, macos-latest]
+        node: [18.19.0, 20.11.1]
+    needs: [install]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
+      - uses: actions/cache@v4
+        id: cache
+        with:
+          path: |
+            node_modules
+          key: ${{ runner.os }}-npm-${{matrix.node}}-${{ hashFiles('**/package-lock.json') }}
+
+      - run: npm ci
+        if: steps.cache.outputs.cache-hit != 'true'
+
       - name: Lint
         run: npm run lint
-      - name: Build
-        run: npm run build --workspaces --if-present
+
+      - run: npx playwright install
+
+      - name: E2E
+        run: npm run e2e -ws --if-present
+        env:
+          REST_OAUTH_SECRET: ${{ secrets.REST_OAUTH_SECRET }}
+
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: Playwright Results - ${{ runner.os }} - ${{ matrix.node }} - ${{ github.run_attempt }}
+          path: |
+            reactjs-todo/test-results
+            reactjs-todo/playwright-report
+            angular-todo/test-results
+            angular-todo/playwright-report

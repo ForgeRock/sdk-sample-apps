@@ -35,7 +35,7 @@ export default defineConfig({
         TIMEOUT: '3000',
         WEB_OAUTH_CLIENT: 'CentralLoginOAuthClient-',
         REST_OAUTH_CLIENT: 'RestOAuthClient',
-        REST_OAUTH_SECRET: process.env.REST_OAUTH_SECRET as string,
+        REST_OAUTH_SECRET: process.env.REST_OAUTH_SECRET || '',
         CENTRALIZED_LOGIN: 'false',
       },
       ignoreHTTPSErrors: true,
@@ -46,6 +46,11 @@ export default defineConfig({
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      name: 'firefox',
+      grepInvert: /WebAuthN/i,
+      use: { ...devices['Desktop Firefox'] },
     },
   ],
 });

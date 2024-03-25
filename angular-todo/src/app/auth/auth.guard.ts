@@ -18,7 +18,10 @@ import { TokenStorage, UserManager } from '@forgerock/javascript-sdk';
   providedIn: 'root',
 })
 export class AuthGuard {
-  constructor(public userService: UserService, private router: Router) {}
+  constructor(
+    public userService: UserService,
+    private router: Router,
+  ) {}
 
   /**
    * Extends CanActivate to protect selected routes from unauthenticated access

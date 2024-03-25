@@ -38,7 +38,7 @@ export default function Login() {
   const centralLogin = params.get('centralLogin');
   const journey = params.get('journey');
 
-  //Get environment variable
+  // Get environment variable
   const isCentralizedLogin = CENTRALIZED_LOGIN === 'true' || centralLogin === 'true';
   const [state, setState] = useState({
     loadingMessage: '',

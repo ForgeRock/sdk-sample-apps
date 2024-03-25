@@ -2,9 +2,8 @@ import { test, expect } from '@playwright/test';
 import { v4 as uuid } from 'uuid';
 
 const toDo = uuid() + ' ' + 'TEST';
-const toDoEdited = uuid();
 
-test('manage todo angular', async ({ page }) => {
+test('Angular - Login with embedded login and manage todos', async ({ page }) => {
   //create new todo
   await page.goto('https://localhost:8443/home');
   await page.getByRole('link', { name: 'Sign In', exact: true }).click();

@@ -48,7 +48,6 @@ export default function Logout() {
     logout();
 
     // All methods/functions used herein are are "stable"
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return <Loading classes="pt-5" message="You're being logged out ..." />;
