@@ -17,7 +17,7 @@ You can run this sample app with the `npm run start:central-login` command. Plea
 3. Clone this repo:
 
    ```
-   git clone https://github.com/ForgeRock/forgerock-javascript-sdk.git
+   git clone https://github.com/ForgeRock/sdk-sample-apps/
    ```
 
 4. In the root folder of the repo, use NPM to install dependencies:
@@ -26,7 +26,7 @@ You can run this sample app with the `npm run start:central-login` command. Plea
    npm install
    ```
 
-5. Open `samples/central-login/.env.example`. Copy the file in the same directory and name it `.env`. Fill in the values in this file with your values.
+5. Open `central-login/.env.example`. Copy the file in the same directory and name it `.env`. Fill in the values in this file with your values.
 
 6. Run the Central Login application
 
@@ -34,6 +34,4 @@ You can run this sample app with the `npm run start:central-login` command. Plea
    npm run start:central-login
    ```
 
-7. Edit your `/etc/hosts` file to point your localhost (e.g. `127.0.0.1`) to `sdkapp.example.com`
-
-8. In a [supported web browser](../../README.md#requirements), navigate to [https://sdkapp.example.com:8443](https://sdkapp.example.com:8443).
+7. In a [supported web browser](../../README.md#requirements), navigate to [https://localhost:8443](https://localhost:8443).

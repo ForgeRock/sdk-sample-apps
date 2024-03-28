@@ -17,7 +17,7 @@ You can run this sample app with the `npm run start:embedded-login` command. Ple
 3. Clone this repo:
 
    ```
-   git clone https://github.com/ForgeRock/forgerock-javascript-sdk.git
+   git clone https://github.com/ForgeRock/sdk-sample-apps/
    ```
 
 4. In the root folder of the repo, use NPM to install dependencies:
@@ -34,6 +34,4 @@ You can run this sample app with the `npm run start:embedded-login` command. Ple
    npm run start:embedded-login
    ```
 
-7. Edit your `/etc/hosts` file to point your localhost (e.g. `127.0.0.1`) to `sdkapp.example.com`
-
-8. In a [supported web browser](../../README.md#requirements), navigate to [https://sdkapp.example.com:8443](https://sdkapp.example.com:8443)
+7. In a [supported web browser](../../README.md#requirements), navigate to [https://localhost:8443](https://localhost:8443)
