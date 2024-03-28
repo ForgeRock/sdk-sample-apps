@@ -20,7 +20,7 @@ Once you have the 5 requirements above met, we can build the project.
 
 #### Configure CORS
 
-- **Allowed Origins**: `https://angular.example.com:8443`
+- **Allowed Origins**: `https://localhost:8443`
 - **Allowed Methods**: `GET` `POST`
 - **Allowed headers**: `accept-api-version` `authorization` `content-type` `x-requested-with`
 - **Allow credentials**: enable
@@ -55,7 +55,7 @@ Here’s a hypothetical example; your values may vary:
 
 ```text
 AM_URL=https://auth.forgerock.com/am
-APP_URL=https://angular.example.com:8443 # in develop we do not use this url for dynamic deployment reasons
+APP_URL=https://localhost:8443 # in develop we do not use this url for dynamic deployment reasons
 API_URL=http://localhost:9443
 DEBUGGER_OFF=true
 JOURNEY_LOGIN=Login
@@ -90,19 +90,6 @@ npm install
 npm run build:angular-todo
 ```
 
-### Update Your `/etc/hosts` File
-
-Now you'll need to update your `hosts` (`/etc/hosts` if on a Mac) to allow for domain aliases:
-
-```sh
-sudo vim /etc/hosts
-```
-
-```text
-# hosts file aliases
-127.0.0.1 angular.example.com
-```
-
 ### Run the App and API
 
 Run the below commands to start the processes needed for building the application and running the servers for both client and API server:
@@ -112,7 +99,7 @@ Run the below commands to start the processes needed for building the applicatio
 npm run start:angular-todo
 ```
 
-Now, you should be able to visit `https://angular.example.com:8443`, which is your web app or client (the Relying Party in OAuth terms). This client will make requests to your AM instance, (the Authorization Server in OAuth terms), which will be running on whatever domain you set, and `http://localhost:9443` as the REST API for your todos (the Resource Server).
+Now, you should be able to visit `https://localhost:8443`, which is your web app or client (the Relying Party in OAuth terms). This client will make requests to your AM instance, (the Authorization Server in OAuth terms), which will be running on whatever domain you set, and `http://localhost:9443` as the REST API for your todos (the Resource Server).
 
 ### Accept Cert Exceptions
 
