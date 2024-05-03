@@ -13,7 +13,7 @@ export default defineConfig({
     trace: 'on',
     baseURL: `${url}`,
     ignoreHTTPSErrors: true,
-    headless: !!process.env.CI,
+    headless: true,
   },
   webServer: [
     {

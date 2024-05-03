@@ -37,5 +37,8 @@
   "lint-staged": {
     "*.{js,jsx,ts,tsx, .cjs}": "prettier --write",
     "*.{html,json}": "prettier --write"
+  },
+  "dependencies": {
+    "@forgerock/javascript-sdk": "*"
   }
 }

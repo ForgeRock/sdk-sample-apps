@@ -69,6 +69,9 @@ const config = {
     static: {
       directory: path.resolve(__dirname, './src/public'),
     },
+    client: {
+      overlay: false,
+    },
     https: true,
   },
   stats: { warnings: false },
