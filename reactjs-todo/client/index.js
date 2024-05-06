@@ -9,6 +9,7 @@
  */
 
 import { Config, TokenStorage } from '@forgerock/javascript-sdk';
+// import { PIProtect } from '@forgerock/ping-protect';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
@@ -65,6 +66,14 @@ Config.set({
   realmPath: REALM_PATH,
   tree: `${journeyParam || JOURNEY_LOGIN}`,
 });
+
+/** *************************************************************************
+ * Initialize Ping Protect module at applicaiton startup
+ * This results in more behavioral data on the user for better risk analysis
+ */
+// PIProtect.start({
+//   envId: '02fb4743-189a-4bc7-9d6c-a919edfe6447',
+// });
 
 /**
  * Initialize the React application

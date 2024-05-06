@@ -10,13 +10,13 @@ import * as forgerock from '@forgerock/javascript-sdk';
  * of the MIT license. See the LICENSE file for details.
  */
 
-forgerock.Config.set({
-  clientId: process.env.WEB_OAUTH_CLIENT, // e.g. 'ForgeRockSDKClient'
+await forgerock.Config.setAsync({
+  clientId: '724ec718-c41c-4d51-98b0-84a583f450f9', // e.g. 'ForgeRockSDKClient'
   redirectUri: `${window.location.origin}`, // Redirect back to your app, e.g. 'https://sdkapp.example.com:8443'
-  scope: process.env.SCOPE, // e.g. 'openid profile email address phone me.read'
+  scope: `${process.env.SCOPE} openid profile email name revoke`, // e.g. 'openid profile email address phone me.read'
   serverConfig: {
-    baseUrl: process.env.AM_URL, // e.g. 'https://myorg.forgeblocks.com/am' or 'https://openam.example.com:8443/openam'
-    timeout: process.env.TIMEOUT, // 3000 to 5000 is good, this impacts the redirect time to login
+    wellknown:
+      'https://auth.pingone.ca/02fb4743-189a-4bc7-9d6c-a919edfe6447/as/.well-known/openid-configuration',
   },
   realmPath: process.env.REALM_PATH, // e.g. 'alpha' or 'root'
 });

@@ -33,6 +33,7 @@ import KeyIcon from '../../components/icons/key-icon';
 import NewUserIcon from '../../components/icons/new-user-icon';
 import FingerPrintIcon from '../../components/icons/finger-print-icon';
 import IdentityProvider from './identity-provider';
+import PingProtect from './ping-protect';
 
 /**
  * @function Form - React component for managing the user authentication journey
@@ -150,6 +151,10 @@ export default function Form({ action, bottomMessage, followUp, topMessage, jour
         return <Unknown callback={cb} key={`unknown-${idx}`} />;
     }
   }
+
+  function selfSubmitForm() {
+    setSubmissionStep(renderStep);
+  }
   /**
    * Render conditions for presenting appropriate views to user.
    * First, we need to handle no "step", which means we are waiting for
@@ -184,6 +189,18 @@ export default function Form({ action, bottomMessage, followUp, topMessage, jour
         <WebAuthn step={renderStep} setSubmissionStep={setSubmissionStep} />
       </>
     );
+  } else if (
+    renderStep.type === 'Step' &&
+    renderStep?.getCallbacksOfType(CallbackType.PingOneProtectInitializeCallback).length > 0
+  ) {
+    const cb = renderStep.getCallbackOfType(CallbackType.PingOneProtectInitializeCallback);
+    return <PingProtect callback={cb} key={`pingProtect`} submit={selfSubmitForm} />;
+  } else if (
+    renderStep.type === 'Step' &&
+    renderStep?.getCallbacksOfType(CallbackType.PingOneProtectEvaluationCallback).length > 0
+  ) {
+    const cb = renderStep.getCallbackOfType(CallbackType.PingOneProtectEvaluationCallback);
+    return <PingProtect callback={cb} key={`pingProtect`} submit={selfSubmitForm} />;
   } else if (
     renderStep.type === 'Step' &&
     renderStep?.getCallbacksOfType(CallbackType.RedirectCallback).length > 0
