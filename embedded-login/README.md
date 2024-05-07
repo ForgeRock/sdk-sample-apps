@@ -26,7 +26,7 @@ You can run this sample app with the `npm run start:embedded-login` command. Ple
    npm install
    ```
 
-5. Open `samples/embedded-login/.env.example`. Copy the file in the same directory and name it `.env`. Fill in the values in this file with your values.
+5. Open `embedded-login/.env.example`. Copy the file in the same directory and name it `.env`. Fill in the values in this file with your values.
 
 6. Run the Embedded Login application
 

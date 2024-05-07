@@ -1,6 +1,6 @@
 <p align="center">
-  <a href="https://github.com/ForgeRock">
-    <img src="https://www.forgerock.com/themes/custom/forgerock/images/fr-logo-horz-color.svg" alt="Logo">
+  <a href="https://github.com/ForgeRock/sdk-sample-apps">
+    <img src="https://cdn.forgerock.com/logo/interim/Logo-PingIdentity-ForgeRock-Hor-FullColor.svg" alt="Logo">
   </a>
   <hr/>
 </p>
@@ -33,10 +33,10 @@ To try out the ForgeRock JavaScript SDK please look at one of our samples:
 
 ## Documentation
 
-Documentation for the SDKs is provided at **<https://sdks.forgerock.com>**, and includes topics such as:
+Documentation for the SDKs is provided on [ForgeRock Backstage](https://backstage.forgerock.com/docs/sdks/latest/index.html), and includes topics such as:
 
 - Introducing the SDK Features
-- Preparing AM for use with the SDKS
+- Preparing your server for use with the SDKS
 - API Reference documentation
 
 ## Requirements

@@ -1,7 +1,7 @@
 {
   "name": "forgerock-sdk-samples",
   "version": "1.0.0",
-  "description": "a repo of sample apps using the ForgeRock SDK",
+  "description": "a repo of sample apps using the ForgeRock SDK for JavaScript",
   "main": "\"\"",
   "author": "",
   "license": "ISC",
@@ -13,11 +13,11 @@
     "todo-api"
   ],
   "scripts": {
-    "todo-api": "npm start -w todo-api",
-    "angular-todo": "npm start -w angular-todo",
-    "reactjs-todo": "npm start -w reactjs-todo",
-    "start:central-login": "npm start -w central-login",
-    "start:embedded-login": "npm start -w embedded-login",
+    "todo-api": "npm start --workspace todo-api",
+    "angular-todo": "npm start --workspace angular-todo",
+    "reactjs-todo": "npm start --workspace reactjs-todo",
+    "start:central-login": "npm start --workspace central-login",
+    "start:embedded-login": "npm start --workspace embedded-login",
     "start:angular-todo": "npm-run-all --parallel todo-api angular-todo",
     "start:reactjs-todo": "npm-run-all --parallel todo-api reactjs-todo",
     "lint": "npm run lint --workspaces --if-present",

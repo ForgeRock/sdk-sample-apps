@@ -20,11 +20,11 @@
     "webpack-dev-server": "^4.15.1"
   },
   "dependencies": {
-    "@forgerock/javascript-sdk": "^4.2.0"
+    "@forgerock/javascript-sdk": "latest"
   },
   "scripts": {
     "build": "webpack",
-    "start": "webpack serve --open",
+    "start": "webpack serve",
     "lint": "eslint ."
   },
   "author": "",

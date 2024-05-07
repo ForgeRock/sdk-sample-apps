@@ -1,10 +1,26 @@
 # Central login
 
-The ForgeRock SDK provides an option for using the Authorization Code Flow (with PKCE) with a centralized login application. For a non-authenticated user, use the login of "redirect" option (from the `TokenManager`) to request OAuth/OIDC tokens. This instructs the SDK to redirect the user to the login application that uses the ForgeRock platform. After successful authentication, the SDK redirects the user back to the original application to obtain OAuth/OIDC tokens and complete the centralized login flow.
+The ForgeRock SDK provides an option for using the Authorization Code Flow (with PKCE) with a centralized login application.
 
-You can run this sample app with the `npm run start:central-login` command. Please [see the Getting Started instructions](#getting-started) for more details.
+For a non-authenticated user, use the `login: redirect` parameter of the `TokenManager` class to request OAuth/OIDC tokens. 
 
-### Getting Started
+This instructs the SDK to redirect the user to the login application that uses either the ForgeRock platform, or PingOne. 
+
+After successful authentication, the SDK redirects the user back to this sample application to obtain OAuth/OIDC tokens and complete the centralized login flow.
+
+To configure this sample, follow the steps in [Getting Started](#getting-started).
+
+Then, run the sample app as follows:
+```
+npm run start:central-login
+``` 
+
+### Instructions
+
+* [ForgeRock server](#forgerock-server)
+* [PingOne server](#pingone-server)
+
+#### ForgeRock server
 
 1. Setup CORS support in an Access Management (AM) instance.
 
@@ -35,3 +51,8 @@ You can run this sample app with the `npm run start:central-login` command. Plea
    ```
 
 7. In a [supported web browser](../README.md#requirements), navigate to [https://localhost:8443](https://localhost:8443).
+
+
+#### PingOne server
+
+* For instructions on configuring this sample to work with a PingOne server, refer to the [PingOne JavaScript tutorial](https://backstage.forgerock.com/docs/sdks/latest/sdks/tutorials/javascript/index.html#tutorial_steps).
