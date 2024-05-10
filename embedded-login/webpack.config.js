@@ -60,6 +60,11 @@ const config = {
   },
   devServer: {
     port: 8443,
+    host: 'localhost',
+    open: false,
+    client: {
+      overlay: false,
+    },
     headers: {
       'Access-Control-Allow-Credentials': true,
       'Access-Control-Allow-Origin': 'null',

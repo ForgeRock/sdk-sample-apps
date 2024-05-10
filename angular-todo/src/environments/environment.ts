@@ -1,10 +1,10 @@
 export const environment = {
-   AM_URL: 'https://openam-sdks.forgeblocks.com/am',
-   REALM_PATH: 'alpha',
-   WEB_OAUTH_CLIENT: 'CentralLoginOAuthClient-',
-   JOURNEY_LOGIN: 'Login',
-   JOURNEY_REGISTER: 'Registration',
-   API_URL: 'http://localhost:9443',
-   production: 'development',
-   CENTRALIZED_LOGIN: 'false'
+  AM_URL: '$AM_URL',
+  REALM_PATH: '$REALM_PATH',
+  WEB_OAUTH_CLIENT: '$WEB_OAUTH_CLIENT',
+  JOURNEY_LOGIN: '$JOURNEY_LOGIN',
+  JOURNEY_REGISTER: '$JOURNEY_REGISTER',
+  API_URL: '$API_URL',
+  production: 'development',
+  CENTRALIZED_LOGIN: '$CENTRALIZED_LOGIN',
 };

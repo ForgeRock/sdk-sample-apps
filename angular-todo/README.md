@@ -82,12 +82,8 @@ REST_OAUTH_CLIENT=RestOAuthClient
 **Run from root of repo**: since this sample app uses npm's workspaces, we recommend running the npm commands from the root of the repo.
 
 ```sh
-# Install all dependencies (no need to pass the -w option)
+# Install all dependencies
 npm install
-
-# (optional) build sample app project
-# only if you want to see the app build; later on when you run the start command this will be done for you
-npm run build:angular-todo
 ```
 
 ### Run the App and API
