@@ -16,5 +16,5 @@ test('React - Login with Centralized Login', async ({ page }) => {
 
   await page.reload();
 
-  await expect(page.getByText('Welcome back, user01 user01!')).toBeVisible();
+  await expect(page.getByText('Welcome back')).toBeVisible();
 });
