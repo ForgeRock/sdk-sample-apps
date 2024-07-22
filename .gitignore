@@ -8,11 +8,12 @@ node_modules
 .angular
 todo-api/todos/*
 todo-api/users/*
-!reactjs-todo/public/index.html
-!reactjs-todo/public/callback/*
 reactjs-todo/public/*
+!reactjs-todo/public/index.html
+!reactjs-todo/public/callback.html
 /test-results/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
 .eslintcache
+reactjs-todo/public/*
