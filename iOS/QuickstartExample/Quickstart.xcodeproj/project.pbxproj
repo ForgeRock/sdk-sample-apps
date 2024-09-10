@@ -379,8 +379,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ForgeRock/forgerock-ios-sdk.git";
 			requirement = {
-				branch = "SDKS-2297_Webauthn_Set_Device_Name";
-				kind = branch;
+				kind = exactVersion;
+				version = 4.4.1;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
