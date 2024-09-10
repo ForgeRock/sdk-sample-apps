@@ -17,3 +17,4 @@ reactjs-todo/public/*
 /playwright/.cache/
 .eslintcache
 reactjs-todo/public/*
+**/xcuserdata/
