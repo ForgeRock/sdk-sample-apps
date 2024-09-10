@@ -243,6 +243,10 @@ extension LoginViewController: PlatformAuthenticatorRegistrationDelegate {
 }
 
 extension LoginViewController: PlatformAuthenticatorAuthenticationDelegate {
+    func localKeyExistsAndPasskeysAreAvailable() {
+        // Use this to offer upgade to Passkeys
+    }
+    
     func selectCredential(keyNames: [String], selectionCallback: @escaping WebAuthnCredentialsSelectionCallback) {
         let actionSheet = UIAlertController(title: "Select Credentials", message: nil, preferredStyle: .actionSheet)
         
