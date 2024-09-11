@@ -9,9 +9,9 @@
 //
 
 #import "ViewController.h"
-#import <FRUI/FRUI.h>
-#import <FRAuth/FRAuth.h>
-#import <FRCore/FRCore.h>
+@import FRUI;
+@import FRAuth;
+@import FRCore;
 
 #define UIColorFromRGB(rgbValue) \
 [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \

@@ -1,4 +1,5 @@
 {
+  "originHash" : "6505c1ab3e92ab671ee04e6dab75d1f60e572689168b62b4f2f6b90e21cd532e",
   "pins" : [
     {
       "identity" : "appauth-ios",
@@ -16,6 +17,15 @@
       "state" : {
         "revision" : "5c7367dadcbe504702c041621dc09752bf2cd747",
         "version" : "16.0.1"
+      }
+    },
+    {
+      "identity" : "forgerock-ios-sdk",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ForgeRock/forgerock-ios-sdk",
+      "state" : {
+        "revision" : "94dd1b2d6e92164da0e512daaeaf418aef0e9b17",
+        "version" : "4.4.1"
       }
     },
     {
@@ -64,5 +74,5 @@
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }
