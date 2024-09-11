@@ -9,8 +9,8 @@
 //
 
 #import "AppDelegate.h"
-#import <FRAuth/FRAuth.h>
-#import <FRCore/FRCore.h>
+@import FRAuth;
+@import FRCore;
 
 @interface AppDelegate ()
 
@@ -22,7 +22,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     // Enable logs for all level
-    [FRLog setLogLevel:[[FRLogLevel alloc] initWithLogs: @[FRLogLevel.all]]];
+    [FRLog setLogLevel: [[FRLogLevel alloc] initWithLogs:@[FRLogLevel.all]]];
     return YES;
 }
 
