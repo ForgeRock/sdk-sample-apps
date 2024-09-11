@@ -181,7 +181,8 @@ class ViewController: UIViewController, ErrorAlertShowing {
         // and want to force SSL Pinning on those endpoints.
         // Make sure to add the Key Hashes of the certificates that correspont to the URLs 
         // set on the `FRURLProtocol.tokenManagementPolicy` & `FRURLProtocol.authorizationPolicy`
-        
+        /*
+         Uncomment on iOS SDK Version 4.5.0 and above
         var sslPinningKeyHashes: [String] = []
         //sslPinningKeyHashes = ["Key1", "Key2"] --> Add Key hashes and uncomment to enable
         
@@ -189,7 +190,7 @@ class ViewController: UIViewController, ErrorAlertShowing {
             let frSecurityConfiguration = FRSecurityConfiguration(hashes: sslPinningKeyHashes)
             FRURLProtocol.frSecurityConfiguration = frSecurityConfiguration
         }
-        
+        */
         //  - MARK: FRUI Customize Cell example
         // Comment out below code to demonstrate FRUI customization
 //        CallbackTableViewCellFactory.shared.registerCallbackTableViewCell(callbackType: "NameCallback", cellClass: CustomNameCallbackCell.self, nibName: "CustomNameCallbackCell")
@@ -214,7 +215,9 @@ class ViewController: UIViewController, ErrorAlertShowing {
         RestClient.shared.setURLSessionConfiguration(config: customConfig, handler: customPinner)
          
         */
-        
+        /*
+         * Uncomment and use for iOS SDKs 4.5.0 and above. Due to SPM issues using 4.4.1 at the moment
+         
         // Start SDK
       if !useDiscoveryURL {
         // use the Config Plist file
@@ -252,6 +255,15 @@ class ViewController: UIViewController, ErrorAlertShowing {
           self.displayLog("Please run on iOS 13 and above")
         }
       }
+    */
+        // Legacy start method with no support for the discovery URL
+        do {
+          try FRAuth.start()
+          self.displayLog("FRAuth SDK started using \(FRAuth.configPlistFileName).plist.")
+        }
+        catch {
+          self.displayLog(String(describing: error))
+        }
     }
     
     
@@ -741,7 +753,8 @@ class ViewController: UIViewController, ErrorAlertShowing {
         }
         
         // If FRUser.currentUser exists, perform logout
-        user.logout(presentingViewController: self, browserType: centralizedLoginBrowserType)
+        // user.logout(presentingViewController: self, browserType: centralizedLoginBrowserType) //Uncomment and use for iOS SDK 4.5.0 +
+        user.logout() // 4.4.1 and below
         self.displayLog("Logout completed")
     }
     
