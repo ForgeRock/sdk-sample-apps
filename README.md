@@ -19,7 +19,7 @@ To try out the Ping JavaScript SDK please look at one of our samples:
 
 - [**Central login - `central-login`**](./central-login/README.md)
 
-  - A barebones example of how to use the `@forgerock/javascript-sdk` in a vanilla html & javascript app with central login. 
+  - A barebones example of how to use the `@forgerock/javascript-sdk` in a vanilla html & javascript app with centralized login (OIDC Login). 
 
 - [**React Todo - `reactjs-todo`**](./reactjs-todo/README.md)
 
@@ -56,9 +56,8 @@ To try out the Ping iOS SDK please look at one of our samples:
 - [**QuickStart Example - `iOS/QuickStart-SwiftUI`**](./iOS/AIC&PingAM/QuickstartExample/Quickstart.xcodeproj/)
  
  - An example iOS project making use of the SDK and UIKit. The sample supports the OOTB Login Journey with Username and Password.
-  (https://backstage.forgerock.com/docs/sdks/latest/sdks/tutorials/ios/index.html)
-<!------------------------------------------------------------------------------------------------------------------------------------>
-<!-- DOCS - Link off to the AM-centric documentation at sdks.forgerock.com. -->
+ (https://backstage.forgerock.com/docs/sdks/latest/sdks/tutorials/ios/index.html)
+
 
 ### Integrate with PingOne DaVinci:
 
