@@ -69,7 +69,7 @@ To try out the Ping iOS SDK please look at one of our samples:
 Documentation for the SDKs is provided on [ForgeRock Backstage](https://backstage.forgerock.com/docs/sdks/latest/index.html), and includes topics such as:
 
 - Introducing the SDK Features
-- Preparing your server for use with the SDKS
+- Preparing your server for use with the SDKs
 - API Reference documentation
 
 ## Requirements
