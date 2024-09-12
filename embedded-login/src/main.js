@@ -78,14 +78,19 @@ const getStage = (step) => {
 const handleStep = async (step) => {
   switch (step.type) {
     case 'LoginSuccess': {
-      // If we have a session token, get user information
+      if (goto != null) {
+        window.location.replace(goto);
+        return;
+      } else {
+        // If we have a session token, get user information
 
-      // eslint-disable-next-line no-unused-vars
-      const sessionToken = step.getSessionToken();
-      // eslint-disable-next-line no-unused-vars
-      const tokens = await forgerock.TokenManager.getTokens();
-      const user = await forgerock.UserManager.getCurrentUser();
-      return showUser(user);
+        // eslint-disable-next-line no-unused-vars
+        const sessionToken = step.getSessionToken();
+        // eslint-disable-next-line no-unused-vars
+        const tokens = await forgerock.TokenManager.getTokens();
+        const user = await forgerock.UserManager.getCurrentUser();
+        return showUser(user);
+      }
     }
 
     case 'LoginFailure': {
@@ -124,6 +129,11 @@ const logout = async () => {
     console.error(error);
   }
 };
+
+// Check URL for query parameters
+const url = new URL(document.location);
+const params = url.searchParams;
+const goto = params.get('goto');
 
 // Begin the login flow
 nextStep();
