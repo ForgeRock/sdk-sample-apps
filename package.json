@@ -6,18 +6,18 @@
   "author": "",
   "license": "ISC",
   "workspaces": [
-    "central-login",
-    "embedded-login",
-    "reactjs-todo",
-    "angular-todo",
-    "todo-api"
+    "JS/central-login",
+    "JS/embedded-login",
+    "JS/reactjs-todo",
+    "JS/angular-todo",
+    "JS/todo-api"
   ],
   "scripts": {
     "todo-api": "npm start --workspace todo-api",
-    "angular-todo": "npm start --workspace angular-todo",
-    "reactjs-todo": "npm start --workspace reactjs-todo",
-    "start:central-login": "npm start --workspace central-login",
-    "start:embedded-login": "npm start --workspace embedded-login",
+    "angular-todo": "npm start --workspace JS/angular-todo",
+    "reactjs-todo": "npm start --workspace JS/reactjs-todo",
+    "start:central-login": "npm start --workspace JS/central-login",
+    "start:embedded-login": "npm start --workspace JS/embedded-login",
     "start:angular-todo": "npm-run-all --parallel todo-api angular-todo",
     "start:reactjs-todo": "npm-run-all --parallel todo-api reactjs-todo",
     "lint": "npm run lint --workspaces --if-present",
@@ -35,7 +35,7 @@
     "typescript": "^5.2.2"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx, .cjs}": "prettier --write",
-    "*.{html,json}": "prettier --write"
+    "JS/*.{js,jsx,ts,tsx, .cjs}": "prettier --write",
+    "JS/*.{html,json}": "prettier --write"
   }
 }
