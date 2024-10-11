@@ -34,6 +34,7 @@ export default function Login() {
 
   // Get the code and state from the URL query parameters
   const codeParam = params.get('code');
+  const errorParam = params.get('error');
   const stateParam = params.get('state');
   const centralLogin = params.get('centralLogin');
   const journey = params.get('journey');
@@ -60,6 +61,8 @@ export default function Login() {
             loadingMessage: 'Success! Redirecting ...',
           });
           await authorize(codeParam, stateParam);
+        } else if (errorParam) {
+          // Do nothing as it will redirect for central login
         } else {
           /** *****************************************************************
            * SDK INTEGRATION POINT
