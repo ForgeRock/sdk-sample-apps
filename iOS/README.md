@@ -13,22 +13,22 @@ Ping provides these iOS samples to help demonstrate SDK functionality/implementa
 
 To try out the Ping iOS SDK please look at one of our samples:
 
-- [**FR Example - `/uikit-frexamples/FRExample`**](./ios/uikit-frexamples/FRExample.xcworkspace)
+- [**FR Example - `/uikit-frexamples/FRExample`**](./uikit-frexamples/)
   
   - An example iOS project making full use of the Ping SDK with a prototyping UI. Allows to explore the SDK uses in detail with example calls for running Journeys, getting OAuth2.0 tokens, User Info and more. Running the workspace makes use of the `FRExample`, `FRExampleObjC` and `FRAuthenticatorExample` projects.
   (https://backstage.forgerock.com/docs/sdks/latest/sdks/tutorials/ios/index.html)
 
-- [**Passkeys Sample - `/uikit-passkeys-sample`**](./ios/uikit-passkeys-sample/PasskeysSample/UnsummitAuthentication.xcodeproj/)
+- [**Passkeys Sample - `/uikit-passkeys-sample`**](./uikit-passkeys-sample/PasskeysSample/)
   
   - An example iOS project using the Ping iOS SDK, showcasing how to protect an application using Journeys and Passkeys. Based on the "Set up passwordless authentication with Passkeys" blog.
   (https://backstage.forgerock.com/docs/sdks/latest/sdks/use-cases/how-to-go-passwordless-with-passkeys.html)
 
-- [**QuickStart using SwiftUI - `/ios/swiftui-quickstart/QuickStart-SwiftUI`**](./ios/swiftui-quickstart/QuickStart.xcodeproj/)
+- [**QuickStart using SwiftUI - `/ios/swiftui-quickstart/QuickStart-SwiftUI`**](./swiftui-quickstart/)
   
   - An example iOS project making use of the SDK and SwiftUI. The sample supports the OOTB Login Journey with Username and Password.
   (https://backstage.forgerock.com/docs/sdks/latest/sdks/tutorials/ios/index.html)
 
-- [**QuickStart using UIKit - `/ios/uikit-quickstart/QuickStart`**](./ios/uikit-quickstart/Quickstart.xcodeproj/)
+- [**QuickStart using UIKit - `/ios/uikit-quickstart/QuickStart`**](./uikit-quickstart/)
  
  - An example iOS project making use of the SDK and UIKit. The sample supports the OOTB Login Journey with Username and Password.
  (https://backstage.forgerock.com/docs/sdks/latest/sdks/tutorials/ios/index.html)
