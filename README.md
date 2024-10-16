@@ -13,7 +13,7 @@ Ping provides these samples to help demonstrate SDK functionality/implementation
 
 To try out the Ping JavaScript SDK please look at one of our samples under [javascript](./javascript/)
 
-To try out the Ping iOS SDK please look at one of our samples under [iOS](./ios/)
+To try out the Ping iOS SDK please look at one of our samples under [iOS](./iOS/)
 
 To try out the Ping iOS SDK please look at one of our samples under [android](./android/)
 
