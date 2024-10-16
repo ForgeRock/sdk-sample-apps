@@ -18,7 +18,7 @@ To try out the Ping iOS SDK please look at one of our samples:
   - An example iOS project making full use of the Ping SDK with a prototyping UI. Allows to explore the SDK uses in detail with example calls for running Journeys, getting OAuth2.0 tokens, User Info and more. Running the workspace makes use of the `FRExample`, `FRExampleObjC` and `FRAuthenticatorExample` projects.
   (https://backstage.forgerock.com/docs/sdks/latest/sdks/tutorials/ios/index.html)
 
-- [**Passkeys Sample - `/uikit-passkeys-sample`**](./uikit-passkeys-sample/PasskeysSample/)
+- [**Passkeys Sample - `/uikit-passkeys-sample`**](./uikit-passkeys-sample/UnsummitAuthentication)
   
   - An example iOS project using the Ping iOS SDK, showcasing how to protect an application using Journeys and Passkeys. Based on the "Set up passwordless authentication with Passkeys" blog.
   (https://backstage.forgerock.com/docs/sdks/latest/sdks/use-cases/how-to-go-passwordless-with-passkeys.html)
