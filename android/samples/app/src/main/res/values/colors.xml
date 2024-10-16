@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2023 ForgeRock. All rights reserved.
+  ~
+  ~  This software may be modified and distributed under the terms
+  ~  of the MIT license. See the LICENSE file for details.
+  -->
+
+<resources>
+    <color name="purple_200">#DB4332</color>
+    <color name="primary">#B3282D</color>
+    <color name="purple_700">#DB4332</color>
+    <color name="teal_200">#69747D</color>
+    <color name="teal_700">#505D68</color>
+    <color name="black">#051727</color>
+    <color name="white">#FFFFFFFF</color>
+</resources>
