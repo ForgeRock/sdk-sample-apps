@@ -11,53 +11,11 @@ Ping provides these samples to help demonstrate SDK functionality/implementation
 
 ### Integrate with PingOne Advanced Identity Cloud / PingAM:
 
-To try out the Ping JavaScript SDK please look at one of our samples:
+To try out the Ping JavaScript SDK please look at one of our samples under [javascript](./javascript/)
 
-- [**Embedded login - `embedded-login`**](./JS/embedded-login/README.md)
+To try out the Ping iOS SDK please look at one of our samples under [iOS](./ios/)
 
-  - A barebones example of how to use the `@forgerock/javascript-sdk` in a vanilla html & javascript app with embedded login. The sample supports the OOTB Login Journey with Username and Password.
-
-- [**Central login - `central-login`**](./JS/central-login/README.md)
-
-  - A barebones example of how to use the `@forgerock/javascript-sdk` in a vanilla html & javascript app with centralized login (OIDC Login). 
-
-- [**React Todo - `reactjs-todo`**](./JS/reactjs-todo/README.md)
-
-  - Todo application that involves authentication and authorization of a user to post Todos with the `@forgerock/javascript-sdk` in ReactJS.
-    The main branch includes many flavors of callbacks, including WebAuthN, embedded login, and social login.
-
-- [**Angular Todo - `angular-todo`**](./JS/angular-todo/README.md)
-  
-  - Todo application that involves authentication and authorization of a user to post Todos with the `@forgerock/javascript-sdk` in Angular.
-    The main branch includes many flavors of callbacks, including WebAuthN, embedded login, and social login.
-
-To try out the Ping iOS SDK please look at one of our samples:
-
-- [**FRAuthenticator Example - `/ios/aic-pingam/FRAuthenticatorExample`**](./ios/aic-pingam/FRAuthenticatorExample/FRAuthenticatorExample.xcodeproj/)
-  
-  - The `FRAuthenticator Example` is a sample app that showcases how to integrate OATH OTPs or Push notifications in the iOS SDK, to have an embedded  MFA-experience directly within your app. This is for use with PingOne Advanced Identity Cloud and PingAM.
-  (https://backstage.forgerock.com/docs/sdks/latest/authenticator/index.html)
-
-- [**FRExample - `/ios/aic-pingam/FRExample`**](./ios/aic-pingam/FRExample.xcworkspace/)
-  
-  - An example iOS project making full use of the Ping SDK with a prototyping UI. Allows to explore the SDK uses in detail with example calls for running Journeys, getting OAuth2.0 tokens, User Info and more. Running the workspace makes use of the `FRExample`, `FRExampleObjC` and `FRAuthenticatorExample` projects.
-  (https://backstage.forgerock.com/docs/sdks/latest/sdks/tutorials/ios/index.html)
-
-- [**PasskeysSample - `/ios/aic-pingam/PasskeysSample`**](./ios/aic-pingam/PasskeysSample/UnsummitAuthentication/UnsummitAuthentication.xcodeproj/)
-  
-  - An example iOS project using the Ping iOS SDK, showcasing how to protect an application using Journeys and Passkeys. Based on the "Set up passwordless authentication with Passkeys" blog.
-  (https://backstage.forgerock.com/docs/sdks/latest/sdks/use-cases/how-to-go-passwordless-with-passkeys.html)
-
-- [**QuickStart SwiftUI - `/ios/aic-pingam/QuickStart-SwiftUI`**](./ios/aic-pingam/QuickStart-SwiftUI/QuickStart.xcodeproj/)
-  
-  - An example iOS project making use of the SDK and SwiftUI. The sample supports the OOTB Login Journey with Username and Password.
-  (https://backstage.forgerock.com/docs/sdks/latest/sdks/tutorials/ios/index.html)
-
-- [**QuickStart Example - `/ios/aic-pingam/QuickStart-SwiftUI`**](./ios/aic-pingam/QuickstartExample/Quickstart.xcodeproj/)
- 
- - An example iOS project making use of the SDK and UIKit. The sample supports the OOTB Login Journey with Username and Password.
- (https://backstage.forgerock.com/docs/sdks/latest/sdks/tutorials/ios/index.html)
-
+To try out the Ping iOS SDK please look at one of our samples under [android](./android/)
 
 ### Integrate with PingOne DaVinci:
 

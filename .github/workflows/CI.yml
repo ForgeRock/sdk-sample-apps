@@ -20,7 +20,7 @@ jobs:
         with:
           path: |
             node_modules
-          key: ${{ runner.os }}-npm-${{matrix.node}}-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-npm-${{matrix.node}}-${{ hashFiles('**/javascript/package-lock.json') }}
 
       - run: npm ci
         if: steps.cache.outputs.cache-hit != 'true'
@@ -42,7 +42,7 @@ jobs:
         with:
           path: |
             node_modules
-          key: ${{ runner.os }}-npm-${{matrix.node}}-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-npm-${{matrix.node}}-${{ hashFiles('**/javascript/package-lock.json') }}
 
       - run: npm ci
         if: steps.cache.outputs.cache-hit != 'true'
@@ -62,7 +62,7 @@ jobs:
         with:
           name: Playwright Results - ${{ runner.os }} - ${{ matrix.node }} - ${{ github.run_attempt }}
           path: |
-            JS/reactjs-todo/test-results
-            JS/reactjs-todo/playwright-report
-            JS/angular-todo/test-results
-            JS/angular-todo/playwright-report
+            javascript/reactjs-todo/test-results
+            javascript/reactjs-todo/playwright-report
+            javascript/angular-todo/test-results
+            javascript/angular-todo/playwright-report
