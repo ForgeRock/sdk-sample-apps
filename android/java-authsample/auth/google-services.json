@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "563799162189",
+    "project_id": "sdk-sample-b1b5c",
+    "storage_bucket": "sdk-sample-b1b5c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:563799162189:android:412089198d00b14d5dcb04",
+        "android_client_info": {
+          "package_name": "org.forgerock.auth"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "563799162189-mr4f0n203mqqb9iq8c5dosmtq3p36d1j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBt4wB3U-SWDYnoMfOldvURy1S-dz_50s8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "563799162189-mr4f0n203mqqb9iq8c5dosmtq3p36d1j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
