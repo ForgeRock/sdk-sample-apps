@@ -24,6 +24,7 @@ import { UserService } from '../../services/user.service';
 export class LoginComponent implements OnInit {
   isWebAuthn = false;
   code: string;
+  error: string;
   state: string;
   centralLogin: string;
   loadingMessage: string;
@@ -41,6 +42,7 @@ export class LoginComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.code = this.route.snapshot.queryParamMap.get('code');
+    this.error = this.route.snapshot.queryParamMap.get('error');
     this.state = this.route.snapshot.queryParamMap.get('state');
     this.centralLogin = this.route.snapshot.queryParamMap.get('centralLogin');
     this.journey = this.route.snapshot.queryParamMap.get('journey');
@@ -57,6 +59,8 @@ export class LoginComponent implements OnInit {
          ***************************************************************** */
         this.loadingMessage = 'Success! Redirecting ...';
         await this.authorize(this.code, this.state);
+      } else if (this.error) {
+        // Do nothing as this will result in a redirect
       } else {
         /** *****************************************************************
          * SDK INTEGRATION POINT
