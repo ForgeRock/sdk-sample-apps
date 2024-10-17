@@ -30,8 +30,8 @@ To try out the Ping iOS SDK please look at one of our samples:
 
 - [**QuickStart using UIKit - `/ios/uikit-quickstart/QuickStart`**](./uikit-quickstart/)
  
- - An example iOS project making use of the SDK and UIKit. The sample supports the OOTB Login Journey with Username and Password.
- (https://backstage.forgerock.com/docs/sdks/latest/sdks/tutorials/ios/index.html)
+  - An example iOS project making use of the SDK and UIKit. The sample supports the OOTB Login Journey with Username and Password.
+  (https://backstage.forgerock.com/docs/sdks/latest/sdks/tutorials/ios/index.html)
 
 
 ### Integrate with PingOne DaVinci:
