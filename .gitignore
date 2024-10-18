@@ -18,3 +18,6 @@ reactjs-todo/public/*
 .eslintcache
 reactjs-todo/public/*
 **/xcuserdata/
+.gradle/
+.idea/
+.vscode/
