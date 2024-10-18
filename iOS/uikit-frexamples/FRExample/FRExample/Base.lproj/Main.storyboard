@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="aAq-sj-F74">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="FRExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.5" contentMode="scaleToFill" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tA1-Zf-vGY">
+                                <rect key="frame" x="35" y="439" width="344" height="388"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="tintColor" systemColor="darkTextColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vsi-fR-Iuf" customClass="FRButton" customModule="FRUI">
+                                <rect key="frame" x="35" y="202" width="344" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="TWv-Z1-VGh"/>
+                                </constraints>
+                                <state key="normal" title="Perform Action"/>
+                                <connections>
+                                    <action selector="performActionWithSender:" destination="BYZ-38-t0r" eventType="touchUpInside" id="pWQ-ek-P99"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Orl-ar-tW1" customClass="FRButton" customModule="FRUI">
+                                <rect key="frame" x="35" y="282" width="344" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="CWy-kA-es7"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="sXY-qg-JnU"/>
+                                </constraints>
+                                <state key="normal" title="Clear Log"/>
+                                <connections>
+                                    <action selector="clearLogBtnClickedWithSender:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Q8E-Ph-PZb"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xP7-ib-U9Q" customClass="FRButton" customModule="FRUI">
+                                <rect key="frame" x="287" y="359" width="92" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="GcK-sU-gob"/>
+                                    <constraint firstAttribute="width" constant="92" id="Tdz-YL-7RK"/>
+                                </constraints>
+                                <state key="normal" title="Invoke"/>
+                                <connections>
+                                    <action selector="invokeAPIButtonWithSender:" destination="BYZ-38-t0r" eventType="touchUpInside" id="GeD-82-ynw"/>
+                                </connections>
+                            </button>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="https://openig.petrov.ca/products" borderStyle="line" placeholder="URL" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="x96-fx-gqH" customClass="FRTextField" customModule="FRUI">
+                                <rect key="frame" x="35" y="358" width="237" height="43"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="43" id="5TA-bP-kGY"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NkK-UP-muE" customClass="FRDropDownButton" customModule="FRUI">
+                                <rect key="frame" x="35" y="132" width="344" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="LO4-0h-gfr"/>
+                                </constraints>
+                                <state key="normal" title="Select an action"/>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="x96-fx-gqH" firstAttribute="top" secondItem="Orl-ar-tW1" secondAttribute="bottom" constant="36" id="3FR-nb-KaB"/>
+                            <constraint firstItem="xP7-ib-U9Q" firstAttribute="leading" secondItem="x96-fx-gqH" secondAttribute="trailing" constant="15" id="5ri-vH-A6t"/>
+                            <constraint firstItem="tA1-Zf-vGY" firstAttribute="top" secondItem="xP7-ib-U9Q" secondAttribute="bottom" constant="40" id="7BB-8g-YAA"/>
+                            <constraint firstItem="vsi-fR-Iuf" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="35" id="Dw0-Rg-xMw"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="xP7-ib-U9Q" secondAttribute="trailing" constant="35" id="Gtz-iu-XzK"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="tA1-Zf-vGY" secondAttribute="trailing" constant="35" id="Mmv-wq-Elr"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="tA1-Zf-vGY" secondAttribute="bottom" constant="35" id="OMM-lF-KVF"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="vsi-fR-Iuf" secondAttribute="trailing" constant="35" id="PBY-oj-NSI"/>
+                            <constraint firstItem="vsi-fR-Iuf" firstAttribute="top" secondItem="NkK-UP-muE" secondAttribute="bottom" constant="40" id="TsT-pg-bE9"/>
+                            <constraint firstItem="Orl-ar-tW1" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="35" id="Whi-p3-FsG"/>
+                            <constraint firstItem="NkK-UP-muE" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="35" id="afc-wH-XuU"/>
+                            <constraint firstItem="Orl-ar-tW1" firstAttribute="top" secondItem="vsi-fR-Iuf" secondAttribute="bottom" constant="40" id="d0c-fn-Rrg"/>
+                            <constraint firstItem="xP7-ib-U9Q" firstAttribute="top" secondItem="Orl-ar-tW1" secondAttribute="bottom" constant="37" id="eF8-UK-Q61"/>
+                            <constraint firstItem="tA1-Zf-vGY" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="35" id="hUZ-ze-HqJ"/>
+                            <constraint firstItem="NkK-UP-muE" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="40" id="iTX-yb-prN"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="NkK-UP-muE" secondAttribute="trailing" constant="35" id="sM8-nu-G9X"/>
+                            <constraint firstItem="x96-fx-gqH" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="35" id="tFh-Mk-Yjo"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Orl-ar-tW1" secondAttribute="trailing" constant="35" id="tGH-uH-SuH"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="BtW-jv-vJs"/>
+                    <connections>
+                        <outlet property="clearLogBtn" destination="Orl-ar-tW1" id="rsR-J0-aa0"/>
+                        <outlet property="dropDown" destination="NkK-UP-muE" id="2kB-NP-e5A"/>
+                        <outlet property="invokeBtn" destination="xP7-ib-U9Q" id="91H-Ps-Emr"/>
+                        <outlet property="loggingView" destination="tA1-Zf-vGY" id="jlz-FG-rnV"/>
+                        <outlet property="performActionBtn" destination="vsi-fR-Iuf" id="0pD-by-sSb"/>
+                        <outlet property="urlField" destination="x96-fx-gqH" id="q6Z-Wa-Lbu"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="137.68115942028987" y="134.59821428571428"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="BDO-Rk-Hie">
+            <objects>
+                <navigationController id="aAq-sj-F74" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="lAt-a9-y2i">
+                        <rect key="frame" x="0.0" y="48" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="AcT-Lk-E3A"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Yte-ER-R80" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-671" y="135"/>
+        </scene>
+    </scenes>
+    <resources>
+        <systemColor name="darkTextColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

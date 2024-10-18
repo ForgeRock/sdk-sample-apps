@@ -1,16 +1,16 @@
 {
   "name": "forgerock-sdk-samples",
   "version": "1.0.0",
-  "description": "a repo of sample apps using the ForgeRock SDK for JavaScript",
+  "description": "Sample apps using the ForgeRock SDK for JavaScript",
   "main": "\"\"",
   "author": "",
   "license": "ISC",
   "workspaces": [
-    "central-login",
-    "embedded-login",
-    "reactjs-todo",
-    "angular-todo",
-    "todo-api"
+    "javascript/central-login",
+    "javascript/embedded-login",
+    "javascript/reactjs-todo",
+    "javascript/angular-todo",
+    "javascript/todo-api"
   ],
   "scripts": {
     "todo-api": "npm start --workspace todo-api",
@@ -35,7 +35,7 @@
     "typescript": "^5.2.2"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx, .cjs}": "prettier --write",
-    "*.{html,json}": "prettier --write"
+    "JS/*.{js,jsx,ts,tsx, .cjs}": "prettier --write",
+    "JS/*.{html,json}": "prettier --write"
   }
 }
