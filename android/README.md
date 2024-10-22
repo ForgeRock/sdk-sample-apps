@@ -13,7 +13,7 @@ Ping provides these Android samples to help demonstrate SDK functionality/implem
 
 To try out the Ping Android SDK please look at one of our samples:
 
-- [**Auth Sample - `/java-authsample`**](./java-authsample/)
+- [**Java UI prototype - `/java-ui-prototype`**](./java-ui-prototype/)
   
   - An example Android project making full use of the Ping SDK with a prototyping UI. Allows to explore the SDK uses in detail with example calls for running Journeys, getting OAuth2.0 tokens, User Info and more. 
   (https://backstage.forgerock.com/docs/sdks/latest/sdks/tutorials/android/index.html)
@@ -26,7 +26,7 @@ To try out the Ping Android SDK please look at one of our samples:
   
   - An example Android project written in Kotlin making use of the SDK. The sample supports the OOTB Login Journey with Username and Password. (https://backstage.forgerock.com/docs/sdks/latest/sdks/tutorials/android/index.html)
 
-- [**Kotlin SDK App - `/kotlin-sdkapp`**](./kotlin-sdkapp/)
+- [**Kotlin UI prototype - `/kotlin-ui-prototype`**](./kotlin-ui-prototype/)
   
   - An example Android project making full use of the Ping SDK with a prototyping UI, written in Kotlin. Allows to explore the SDK uses in detail with example calls for running Journeys, getting OAuth2.0 tokens, User Info and more. 
   (https://backstage.forgerock.com/docs/sdks/latest/sdks/tutorials/android/index.html)

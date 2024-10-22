@@ -15,7 +15,7 @@ To try out the Ping JavaScript SDK please look at one of our samples under [java
 
 To try out the Ping iOS SDK please look at one of our samples under [iOS](./iOS/)
 
-To try out the Ping iOS SDK please look at one of our samples under [android](./android/)
+To try out the Ping Android SDK please look at one of our samples under [android](./android/)
 
 ### Integrate with PingOne DaVinci:
 
