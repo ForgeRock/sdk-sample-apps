@@ -10,15 +10,14 @@ import * as forgerock from '@forgerock/javascript-sdk';
  * of the MIT license. See the LICENSE file for details.
  */
 
-forgerock.Config.set({
+const config = await forgerock.Config.setAsync({
   clientId: process.env.WEB_OAUTH_CLIENT, // e.g. 'ForgeRockSDKClient'
   redirectUri: `${window.location.origin}`, // Redirect back to your app, e.g. 'https://sdkapp.example.com:8443'
   scope: process.env.SCOPE, // e.g. 'openid profile email address phone me.read'
   serverConfig: {
-    baseUrl: process.env.AM_URL, // e.g. 'https://myorg.forgeblocks.com/am' or 'https://openam.example.com:8443/openam'
+    wellknown: process.env.WELL_KNOWN,
     timeout: process.env.TIMEOUT, // 3000 to 5000 is good, this impacts the redirect time to login
-  },
-  realmPath: process.env.REALM_PATH, // e.g. 'alpha' or 'root'
+  }
 });
 
 // Show only the view for this handler
@@ -57,6 +56,8 @@ const authorize = async (code, state) => {
    * the URL will include code and state query parameters that need to
    * be passed in to complete the OAuth flow giving the user access
    */
+  console.log("State:" + state + " code:" + code);
+  
   await forgerock.TokenManager.getTokens({ query: { code, state } });
   const user = await forgerock.UserManager.getCurrentUser();
   showUser(user);

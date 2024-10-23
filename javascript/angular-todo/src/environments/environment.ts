@@ -1,10 +1,10 @@
 export const environment = {
-  AM_URL: '$AM_URL',
-  REALM_PATH: '$REALM_PATH',
-  WEB_OAUTH_CLIENT: '$WEB_OAUTH_CLIENT',
-  JOURNEY_LOGIN: '$JOURNEY_LOGIN',
-  JOURNEY_REGISTER: '$JOURNEY_REGISTER',
-  API_URL: '$API_URL',
-  production: 'development',
-  CENTRALIZED_LOGIN: '$CENTRALIZED_LOGIN',
+   AM_URL: 'undefined',
+   REALM_PATH: 'undefined',
+   WEB_OAUTH_CLIENT: 'undefined',
+   JOURNEY_LOGIN: 'undefined',
+   JOURNEY_REGISTER: 'undefined',
+   API_URL: 'undefined',
+   production: 'development',
+   CENTRALIZED_LOGIN: 'undefined'
 };

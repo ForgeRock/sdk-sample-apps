@@ -15,6 +15,7 @@ const AM_URL = process.env.AM_URL;
 const TIMEOUT = process.env.TIMEOUT;
 const REALM_PATH = process.env.REALM_PATH;
 const TREE = process.env.TREE;
+const WELL_KNOWN = process.env.WELL_KNOWN;
 
 const config = {
   plugins: [
@@ -31,6 +32,7 @@ const config = {
       'process.env.TIMEOUT': JSON.stringify(TIMEOUT),
       'process.env.REALM_PATH': JSON.stringify(REALM_PATH),
       'process.env.TREE': JSON.stringify(TREE),
+      'process.env.WELL_KNOWN': JSON.stringify(WELL_KNOWN),
     }),
   ],
   resolve: {
