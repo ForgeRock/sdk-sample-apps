@@ -17,3 +17,8 @@ reactjs-todo/public/*
 /playwright/.cache/
 .eslintcache
 reactjs-todo/public/*
+**/xcuserdata/
+.gradle/
+.idea/
+.vscode/
+local.properties
