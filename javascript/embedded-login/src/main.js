@@ -13,7 +13,7 @@ import * as forgerock from '@forgerock/javascript-sdk';
 const FATAL = 'Fatal';
 forgerock.Config.set({
   clientId: process.env.WEB_OAUTH_CLIENT, // e.g. 'ForgeRockSDKClient'
-  redirectUri: `${window.location.origin}/callback.html`, // e.g. 'https://sdkapp.example.com:8443/callback'
+  redirectUri: `${window.location.origin}/callback.html`, // e.g. 'https://sdkapp.example.com:8443/callback.html'
   scope: process.env.SCOPE, // e.g. 'openid profile email address phone'
   serverConfig: {
     baseUrl: process.env.AM_URL, // e.g. 'https://myorg.forgeblocks.com/am' or 'https://openam.example.com:8443/openam'
