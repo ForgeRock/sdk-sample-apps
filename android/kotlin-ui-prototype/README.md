@@ -5,15 +5,14 @@
   <hr/>
 </p>
 
-## Samples
+## Kotlin UI Prototype
 
 Ping provides these Android samples to help demonstrate SDK functionality/implementation. They are provided "as is" and are not official products of Ping and are not officially supported.
 
 ### Integrate with PingOne Advanced Identity Cloud / PingAM:
 
-To try out the Ping Android SDK please look at one of our samples:
-
-WIP
+- An example Android project making full use of the Ping SDK with a prototyping UI. Allows to explore the SDK uses in detail with example calls for running Journeys, getting OAuth2.0 tokens, User Info and more. 
+  (https://backstage.forgerock.com/docs/sdks/latest/sdks/tutorials/android/index.html)
 
 
 ### Integrate with PingOne DaVinci:
@@ -22,5 +21,7 @@ WIP
 
 ## Requirements
 
-iOS
 - Latest version of Android Studio
+- Ping Advanced Identity Cloud or Ping AM 7.1 and above
+- Android API level 23+
+

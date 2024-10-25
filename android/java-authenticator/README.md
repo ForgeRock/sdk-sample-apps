@@ -5,22 +5,18 @@
   <hr/>
 </p>
 
-## Samples
+## Authenticator app sample
 
 Ping provides these Android samples to help demonstrate SDK functionality/implementation. They are provided "as is" and are not official products of Ping and are not officially supported.
 
-### Integrate with PingOne Advanced Identity Cloud / PingAM:
+### Integrate with MFA capabilities on PingOne Advanced Identity Cloud / PingAM::
 
-To try out the Ping Android SDK please look at one of our samples:
+- This Authenticator sample app supports registration of multiple accounts and multiple different authentication methods in each account, such as push notifications and one-time passwords.
 
-WIP
-
-
-### Integrate with PingOne DaVinci:
-
-- Samples coming soon
 
 ## Requirements
 
-iOS
 - Latest version of Android Studio
+- Ping Advanced Identity Cloud or Ping AM 7.1 and above
+- Android API level 23+
+- Google Firebase project (google-services.json)

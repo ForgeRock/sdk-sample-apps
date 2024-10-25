@@ -1,6 +1,6 @@
 {
   "project_info": {
-    "project_number": "8735485843",
+    "project_number": "",
     "firebase_url": "https://test-authenticator.firebaseio.com",
     "project_id": "test-authenticator",
     "storage_bucket": "test-authenticator.appspot.com"
@@ -8,27 +8,27 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:8735485843:android:653e06dcc76ae2c3a03c7e",
+        "mobilesdk_app_id": "",
         "android_client_info": {
-          "package_name": "org.forgerock.authenticator.sample"
+          "package_name": ""
         }
       },
       "oauth_client": [
         {
-          "client_id": "8735485843-243sdfsfsdfsdfsdfdsf.apps.googleusercontent.com",
+          "client_id": "",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "afsdtwewwrt5dgdfgdfgfdgfd"
+          "current_key": ""
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "8735485843-243sdfsfsdfsdfsdfdsf.apps.googleusercontent.com",
+              "client_id": "",
               "client_type": 3
             }
           ]

@@ -13,6 +13,10 @@ Ping provides these Android samples to help demonstrate SDK functionality/implem
 
 To try out the Ping Android SDK please look at one of our samples:
 
+- [**Java Authenticator - `/java-authenticator`**](./java-authenticator/)
+  
+  - This Authenticator sample app supports registration of multiple accounts and multiple different authentication methods in each account, such as push notifications and one-time passwords.
+
 - [**Java UI prototype - `/java-ui-prototype`**](./java-ui-prototype/)
   
   - An example Android project making full use of the Ping SDK with a prototyping UI. Allows to explore the SDK uses in detail with example calls for running Journeys, getting OAuth2.0 tokens, User Info and more. 
@@ -42,3 +46,5 @@ Android
 - Latest Android Studio
 - Java 17+
 - Gradle 8.6+
+- Ping Advanced Identity Cloud or Ping AM 7.1 and above
+- Android API level 23+

@@ -5,22 +5,17 @@
   <hr/>
 </p>
 
-## Samples
+# Quickstart app using Kotlin
 
 Ping provides these Android samples to help demonstrate SDK functionality/implementation. They are provided "as is" and are not official products of Ping and are not officially supported.
 
 ### Integrate with PingOne Advanced Identity Cloud / PingAM:
 
-To try out the Ping Android SDK please look at one of our samples:
+- An example Android project written in Kotlin making use of the SDK. The sample supports the OOTB Login Journey with Username and Password. (https://backstage.forgerock.com/docs/sdks/latest/sdks/tutorials/android/index.html)
 
-WIP
-
-
-### Integrate with PingOne DaVinci:
-
-- Samples coming soon
 
 ## Requirements
 
-iOS
 - Latest version of Android Studio
+- Ping Advanced Identity Cloud or Ping AM 7.1 and above
+- Android API level 23+
