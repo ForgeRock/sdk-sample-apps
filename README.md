@@ -7,39 +7,33 @@
 
 ## Samples
 
-ForgeRock provides these samples to help demonstrate SDK functionality/implementation. They are provided "as is" and are not official products of ForgeRock and are not officially supported.
+Ping provides these samples to help demonstrate SDK functionality/implementation. They are provided "as is" and are not official products of Ping and are not officially supported.
 
-To try out the ForgeRock JavaScript SDK please look at one of our samples:
+### Integrate with PingOne Advanced Identity Cloud / PingAM:
 
-- [**Embedded login - `embedded-login`**](./embedded-login/README.md)
+To try out the Ping JavaScript SDK please look at one of our samples under [javascript](./javascript/)
 
-  - A barebones example of how to use the `@forgerock/javascript-sdk` in a vanilla html & javascript app with embedded login.
+To try out the Ping iOS SDK please look at one of our samples under [iOS](./iOS/)
 
-- [**Central login - `central-login`**](./central-login/README.md)
+To try out the Ping Android SDK please look at one of our samples under [android](./android/)
 
-  - A barebones example of how to use the `@forgerock/javascript-sdk` in a vanilla html & javascript app with central login.
+### Integrate with PingOne DaVinci:
 
-- [**React Todo - `reactjs-todo`**](./reactjs-todo/README.md)
-
-  - Todo application that involves authentication and authorization of a user to post Todos with the `@forgerock/javascript-sdk` in ReactJS.
-    The main branch includes many flavors of callbacks, including WebAuthN, embedded login, and social login.
-
-- [**Angular Todo - `angular-todo`**](./angular-todo/README.md)
-  - Todo application that involves authentication and authorization of a user to post Todos with the `@forgerock/javascript-sdk` in Angular.
-    The main branch includes many flavors of callbacks, including WebAuthN, embedded login, and social login.
-
-<!------------------------------------------------------------------------------------------------------------------------------------>
-<!-- DOCS - Link off to the AM-centric documentation at sdks.forgerock.com. -->
+- Samples coming soon
 
 ## Documentation
 
 Documentation for the SDKs is provided on [ForgeRock Backstage](https://backstage.forgerock.com/docs/sdks/latest/index.html), and includes topics such as:
 
 - Introducing the SDK Features
-- Preparing your server for use with the SDKS
+- Preparing your server for use with the SDKs
 - API Reference documentation
 
 ## Requirements
 
+Javascript
 - Please use a modern web browser like Chrome, Safari, or Firefox
 - Node >= 18
+
+iOS
+- Latest Xcode
