@@ -23,7 +23,7 @@ To try out the Ping Android SDK please look at one of our samples under [android
 
 ## Documentation
 
-Documentation for the SDKs is provided on [ForgeRock Backstage](https://backstage.forgerock.com/docs/sdks/latest/index.html), and includes topics such as:
+Detailed [documentation](https://docs.pingidentity.com/sdks/latest/sdks/index.html) is provided, and includes topics such as:
 
 - Introducing the SDK Features
 - Preparing your server for use with the SDKs
