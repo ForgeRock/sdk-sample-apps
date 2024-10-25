@@ -13,6 +13,15 @@ Ping provides these Android samples to help demonstrate SDK functionality/implem
 
 - This Authenticator sample app supports registration of multiple accounts and multiple different authentication methods in each account, such as push notifications and one-time passwords.
 
+### Getting started
+
+To try out the ForgeRock Android SDK sample, perform these steps:
+
+- Clone this repo
+- Setup an Journey instance with OATH and/or Push nodes.
+- Open this Android project in Android Studio.
+- Add your google-services.json to the app folder.
+- On the Run menu, click Run 'app'.
 
 ## Requirements
 
