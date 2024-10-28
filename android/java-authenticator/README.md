@@ -15,7 +15,7 @@ Ping provides these Android samples to help demonstrate SDK functionality/implem
 
 ### Getting started
 
-To try out the ForgeRock Android SDK sample, perform these steps:
+To try out the Ping Android SDK sample, perform these steps:
 
 - Clone this repo
 - Setup an Journey instance with OATH and/or Push nodes.

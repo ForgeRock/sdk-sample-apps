@@ -1,7 +1,7 @@
 {
-  "name": "forgerock-sdk-samples",
+  "name": "ping-sdk-samples",
   "version": "1.0.0",
-  "description": "Sample apps using the ForgeRock SDK for JavaScript",
+  "description": "Sample apps using the Ping SDK for JavaScript",
   "main": "\"\"",
   "author": "",
   "license": "ISC",

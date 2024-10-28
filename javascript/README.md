@@ -32,7 +32,7 @@ To try out the Ping JavaScript SDK please look at one of our samples:
     The main branch includes many flavors of callbacks, including WebAuthN, embedded login, and social login.
 
 
-### Integrate with PingOne DaVinci:
+### Integrate with PingOne:
 
  [**Central login PingOne - `central-login-pingone`**](./javascript/central-login-pingone/README.md)
 
@@ -42,7 +42,7 @@ To try out the Ping JavaScript SDK please look at one of our samples:
 
 ## Documentation
 
-Documentation for the SDKs is provided on [ForgeRock Backstage](https://backstage.forgerock.com/docs/sdks/latest/index.html), and includes topics such as:
+Documentation for the SDKs is provided on [ForgeRock Backstage](https://docs.pingidentity.com/sdks/latest/index.html), and includes topics such as:
 
 - Introducing the SDK Features
 - Preparing your server for use with the SDKs
@@ -50,7 +50,7 @@ Documentation for the SDKs is provided on [ForgeRock Backstage](https://backstag
 
 ## Requirements
 
-Javascript
+JavaScript
 - Please use a modern web browser like Chrome, Safari, or Firefox
 - Node >= 18
 

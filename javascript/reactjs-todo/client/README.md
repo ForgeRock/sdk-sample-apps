@@ -147,4 +147,4 @@ To modify the API server, you'll need a [basic understanding of Node](https://no
 
 ## TypeScript?
 
-The ForgeRock Javascript SDK is developed with TypeScript, so type definitions are available. This sample application does not utilize TypeScript, but if you'd like to see a version of this written in TypeScript, let us know.
+The Ping JavaScript SDK is developed with TypeScript, so type definitions are available. This sample application does not utilize TypeScript, but if you'd like to see a version of this written in TypeScript, let us know.

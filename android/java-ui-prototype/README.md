@@ -12,10 +12,10 @@ Ping provides these Android samples to help demonstrate SDK functionality/implem
 ### Integrate with PingOne Advanced Identity Cloud / PingAM:
 
 - An example Android project making full use of the Ping SDK with a prototyping UI. Allows to explore the SDK uses in detail with example calls for running Journeys, getting OAuth2.0 tokens, User Info and more. 
-  (https://backstage.forgerock.com/docs/sdks/latest/sdks/tutorials/android/index.html)
+  (https://docs.pingidentity.com/sdks/latest/sdks/tutorials/android/index.html)
 
 
-### Integrate with PingOne DaVinci:
+### Integrate with PingOne:
 
 - Samples coming soon
 

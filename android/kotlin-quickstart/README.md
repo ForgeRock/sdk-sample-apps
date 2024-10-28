@@ -11,7 +11,7 @@ Ping provides these Android samples to help demonstrate SDK functionality/implem
 
 ### Integrate with PingOne Advanced Identity Cloud / PingAM:
 
-- An example Android project written in Kotlin making use of the SDK. The sample supports the OOTB Login Journey with Username and Password. (https://backstage.forgerock.com/docs/sdks/latest/sdks/tutorials/android/index.html)
+- An example Android project written in Kotlin making use of the SDK. The sample supports the OOTB Login Journey with Username and Password. (https://docs.pingidentity.com/sdks/latest/sdks/tutorials/android/index.html)
 
 
 ## Requirements

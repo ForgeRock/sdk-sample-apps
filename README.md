@@ -11,13 +11,14 @@ Ping provides these samples to help demonstrate SDK functionality/implementation
 
 ### Integrate with PingOne Advanced Identity Cloud / PingAM:
 
-To try out the Ping JavaScript SDK please look at one of our samples under [javascript](./javascript/)
+We provide samples of integrating with Advanced Identity Cloud and PingAM for the following platforms:
+- [JavaScript](./javascript/)
 
-To try out the Ping iOS SDK please look at one of our samples under [iOS](./iOS/)
+- [iOS](./iOS/)
 
-To try out the Ping Android SDK please look at one of our samples under [android](./android/)
+- [Android](./android/)
 
-### Integrate with PingOne DaVinci:
+### Integrate with PingOne:
 
 - Samples coming soon
 
@@ -31,7 +32,7 @@ Detailed [documentation](https://docs.pingidentity.com/sdks/latest/sdks/index.ht
 
 ## Requirements
 
-Javascript
+JavaScript
 - Please use a modern web browser like Chrome, Safari, or Firefox
 - Node >= 18
 

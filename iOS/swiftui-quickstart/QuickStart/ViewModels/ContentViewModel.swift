@@ -20,7 +20,7 @@ import FRAuth
         do {
             // By default the SDK uses FRAuthConfig.plist file for the configuration.
             // You can also specify the desired config file like this: `FRAuth.configPlistFileName = "DesiredFRAuthConfig"`
-            // You can also specify the configurations dynamically by using FROptions. Please see the docs for more details here: https://backstage.forgerock.com/docs/sdks/latest/ios/configuring/dynamic-configuration.html
+            // You can also specify the configurations dynamically by using FROptions. Please see the docs for more details here: https://docs.pingidentity.com/sdks/latest/ios/configuring/dynamic-configuration.html
             try FRAuth.start()
             print("SDK initialized successfully")
             statusViewModel.status = Status(statusDescription: "SDK ready", statusType: .success)

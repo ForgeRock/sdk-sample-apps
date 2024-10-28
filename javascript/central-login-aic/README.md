@@ -1,6 +1,6 @@
 # Central login
 
-The ForgeRock SDK provides an option for using the Authorization Code Flow (with PKCE) with a centralized login application.
+The Ping SDK provides an option for using the Authorization Code Flow (with PKCE) with a centralized login application.
 
 For a non-authenticated user, use the `login: redirect` parameter of the `TokenManager` class to request OAuth/OIDC tokens. 
 
@@ -18,7 +18,6 @@ npm run start:central-login
 ### Instructions
 
 * [ForgeRock server](#forgerock-server)
-* [PingOne server](#pingone-server)
 
 #### ForgeRock server
 
@@ -51,8 +50,3 @@ npm run start:central-login
    ```
 
 7. In a [supported web browser](../README.md#requirements), navigate to [https://localhost:8443](https://localhost:8443).
-
-
-#### PingOne server
-
-* For instructions on configuring this sample to work with a PingOne server, refer to the [PingOne JavaScript tutorial](https://backstage.forgerock.com/docs/sdks/latest/sdks/tutorials/javascript/index.html#tutorial_steps).
