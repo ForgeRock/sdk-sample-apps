@@ -8,13 +8,10 @@
  * of the MIT license. See the LICENSE file for details.
  */
 
-export const AM_URL = process.env.AM_URL;
 export const API_URL = process.env.API_URL;
 // Yes, the debugger boolean is intentionally reversed
 export const DEBUGGER = process.env.DEBUGGER_OFF === 'true';
-export const JOURNEY_LOGIN = process.env.JOURNEY_LOGIN;
-export const JOURNEY_REGISTER = process.env.JOURNEY_REGISTER;
-export const WEB_OAUTH_CLIENT = process.env.WEB_OAUTH_CLIENT;
-export const REALM_PATH = process.env.REALM_PATH;
-export const CENTRALIZED_LOGIN = process.env.CENTRALIZED_LOGIN;
-export const SESSION_URL = `${AM_URL}json/realms/root/sessions`;
+export const CLIENT_ID = process.env.CLIENT_ID;
+export const REDIRECT_URI = process.env.REDIRECT_URI;
+export const SCOPE = process.env.SCOPE;
+export const BASE_URL = process.env.BASE_URL;

@@ -18,7 +18,6 @@ import Header from './components/layout/header';
 import Home from './views/home';
 import Login from './views/login';
 import Logout from './views/logout';
-import Register from './views/register';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -39,7 +38,6 @@ export default function Router() {
     <BrowserRouter>
       <Routes>
         <Route path="login" element={<Login />} />
-        <Route path="register" element={<Register />} />
         <Route
           path="todos"
           element={

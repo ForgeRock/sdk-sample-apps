@@ -133,7 +133,7 @@ export default function Header() {
         >
           Sign In
         </Link>
-        <Link className="btn btn-primary" to="/register">
+        <Link className="btn btn-primary" to="/login">
           Sign Up
         </Link>
       </div>

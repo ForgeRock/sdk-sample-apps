@@ -11,16 +11,8 @@
 import { Config, TokenStorage } from '@forgerock/javascript-sdk';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-
 import Router from './router';
-import {
-  AM_URL,
-  DEBUGGER,
-  JOURNEY_LOGIN,
-  REALM_PATH,
-  WEB_OAUTH_CLIENT,
-  CENTRALIZED_LOGIN,
-} from './constants';
+import { DEBUGGER, CLIENT_ID, REDIRECT_URI, SCOPE, BASE_URL } from './constants';
 import { AppContext, useGlobalStateMgmt } from './global-state';
 
 /**
@@ -34,37 +26,24 @@ import './styles/index.scss';
  * Summary: Configure the SDK
  * ----------------------------------------------------------------------------
  * Details: Below, you will see the following settings:
- * - clientId: (OAuth 2.0 only) this is the OAuth 2.0 client you created in ForgeRock, such as `ForgeRockSDKClient`
+ * - clientId: (OAuth 2.0 only) this is the OAuth 2.0 client you created in PingOne
  * - redirectUri: (OAuth 2.0 only) this is the URI/URL of this app to which the
  *   OAuth 2.0 flow redirects
  * - scope: (OAuth 2.0 only) these are the OAuth scopes that you will request from
- *   ForgeRock
- * - serverConfig: this includes the baseUrl of your ForgeRock AM, and should
- *   include the deployment path at the end, such as `/am/` or `/openam/`
- * - realmPath: this is the realm to use within ForgeRock. such as `alpha` or `root`
- * - tree: The authentication journey/tree to use, such as `sdkAuthenticationTree`
+ *   PingOne
+ * - serverConfig: this includes the baseUrl of your PingOne environment
  *************************************************************************** */
 if (DEBUGGER) debugger;
 
-const urlParams = new URLSearchParams(window.location.search);
-const centralLoginParam = urlParams.get('centralLogin');
-const journeyParam = urlParams.get('journey');
-
-Config.set({
-  clientId: WEB_OAUTH_CLIENT,
-  redirectUri: `${window.location.origin}/${
-    CENTRALIZED_LOGIN === 'true' || centralLoginParam === 'true'
-      ? 'login?centralLogin=true'
-      : 'callback.html'
-  }`,
-  scope: 'openid profile email',
+const config = {
+  clientId: CLIENT_ID,
+  redirectUri: REDIRECT_URI,
+  scope: SCOPE,
   serverConfig: {
-    baseUrl: AM_URL,
-    timeout: '5000',
+    baseUrl: BASE_URL,
+    wellknown: `${BASE_URL}as/.well-known/openid-configuration`,
   },
-  realmPath: REALM_PATH,
-  tree: `${journeyParam || JOURNEY_LOGIN}`,
-});
+};
 
 /**
  * Initialize the React application
@@ -78,7 +57,8 @@ Config.set({
    * tokens. If we have them, you can cautiously assume the user is
    * authenticated.
    ************************************************************************* */
-  if (DEBUGGER) debugger;
+  await Config.setAsync(config);
+
   let isAuthenticated;
   try {
     isAuthenticated = !!(await TokenStorage.get());

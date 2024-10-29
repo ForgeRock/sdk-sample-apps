@@ -1,6 +1,6 @@
 import { defineConfig, devices } from '@playwright/test';
 
-const url = process.env.PLAYWRIGHT_TEST_BASE_URL || 'https://localhost:8443';
+const url = process.env.PLAYWRIGHT_TEST_BASE_URL || 'http://localhost:8443';
 
 export default defineConfig({
   testDir: 'e2e',
@@ -17,40 +17,31 @@ export default defineConfig({
   },
   webServer: [
     {
-      command: 'npm run start:reactjs-todo',
+      command: 'npm run start',
       url,
       timeout: 120 * 1000,
       reuseExistingServer: !process.env.CI,
-      cwd: '../',
+      // cwd: '../',
       env: {
         API_URL: 'http://localhost:9443',
         DEBUGGER_OFF: 'true',
         DEVELOPMENT: 'false',
-        JOURNEY_LOGIN: 'Login',
-        JOURNEY_REGISTER: 'Registration',
-        PORT: '9443',
-        AM_URL: 'https://openam-sdks.forgeblocks.com/am',
-        REALM_PATH: 'alpha',
-        SCOPE: 'profile me.read email',
-        TIMEOUT: '3000',
-        WEB_OAUTH_CLIENT: 'CentralLoginOAuthClient-',
-        REST_OAUTH_CLIENT: 'RestOAuthClient',
-        REST_OAUTH_SECRET: process.env.REST_OAUTH_SECRET || '',
-        CENTRALIZED_LOGIN: 'false',
+        PORT: '8443'
+
       },
       ignoreHTTPSErrors: true,
     },
   ],
   /* Configure projects for major browsers */
   projects: [
-    {
+     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
-    {
+  /*{
       name: 'firefox',
       grepInvert: /WebAuthN/i,
       use: { ...devices['Desktop Firefox'] },
-    },
+    },*/
   ],
 });
