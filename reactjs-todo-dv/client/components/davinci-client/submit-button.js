@@ -9,14 +9,27 @@
  */
 import React from 'react';
 
-export default function SubmitButton({ collector }) {
+export default function SubmitButton({ collector, submittingForm }) {
   return (
     <button
       type="submit"
       className="btn btn-primary w-100 mb-2"
       value={collector.output.key}
       key={collector.output.key}
+      disabled={submittingForm ? 'disabled' : null}
     >
+      {
+        /**
+         * Render a small spinner during submission calls
+         */
+        submittingForm ? (
+          <span
+            className="spinner-border spinner-border-sm"
+            role="status"
+            aria-hidden="true"
+          ></span>
+        ) : null
+      }
       <span>{collector.output.label}</span>
     </button>
   );
