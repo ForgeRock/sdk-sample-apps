@@ -19,7 +19,7 @@ To try out the Ping Android SDK please look at one of our samples:
 
 - [**Java UI prototype - `/java-ui-prototype`**](./java-ui-prototype/)
   
-  - An example Android project making full use of the Ping SDK with a prototyping UI. Allows to explore the SDK uses in detail with example calls for running Journeys, getting OAuth2.0 tokens, User Info and more. 
+  - An example Android project making full use of the Android SDK with a prototyping UI. Allows to explore the SDK uses in detail with example calls for running Journeys, getting OAuth2.0 tokens, User Info and more. 
   (https://docs.pingidentity.com/sdks/latest/sdks/tutorials/android/index.html)
 
 - [**Java Quickstart - `/java-quickstart`**](./java-quickstart/)
@@ -28,11 +28,11 @@ To try out the Ping Android SDK please look at one of our samples:
 
 - [**Kotlin Quickstart - `/kotlin-quickstart`**](./kotlin-quickstart/)
   
-  - An example Android project written in Kotlin making use of the SDK. The sample supports the OOTB Login Journey with Username and Password. (https://docs.pingidentity.com/sdks/latest/sdks/tutorials/android/index.html)
+  - An example Android project written in Java making use of the SDK. The sample supports the OOTB Login Journey with Username and Password. (https://docs.pingidentity.com/sdks/latest/sdks/tutorials/android/index.html)
 
 - [**Kotlin UI prototype - `/kotlin-ui-prototype`**](./kotlin-ui-prototype/)
   
-  - An example Android project making full use of the Ping SDK with a prototyping UI, written in Kotlin. Allows to explore the SDK uses in detail with example calls for running Journeys, getting OAuth2.0 tokens, User Info and more. 
+  - An example Android project making full use of the Android SDK with a prototyping UI, written in Kotlin. Allows to explore the SDK uses in detail with example calls for running Journeys, getting OAuth2.0 tokens, User Info and more. 
   (https://docs.pingidentity.com/sdks/latest/sdks/tutorials/android/index.html)
 
 

@@ -1,6 +1,6 @@
 # Central login
 
-The Ping SDK provides an option for using the Authorization Code Flow (with PKCE) with a centralized login application.
+The SDK provides an option for using the Authorization Code Flow (with PKCE) with a centralized login application.
 
 For a non-authenticated user, use the `login: redirect` parameter of the `TokenManager` class to request OAuth/OIDC tokens. 
 

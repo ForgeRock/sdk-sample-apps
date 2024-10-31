@@ -11,7 +11,7 @@ Ping provides these Android samples to help demonstrate SDK functionality/implem
 
 ### Integrate with PingOne Advanced Identity Cloud / PingAM:
 
-- An example Android project making full use of the Ping SDK using Android Jetpack. Allows to explore the SDK uses in detail with example calls for running Journeys, getting OAuth2.0 tokens, User Info and more. 
+- An example Android project making full use of the SDK using Android Jetpack. Allows to explore the SDK uses in detail with example calls for running Journeys, getting OAuth2.0 tokens, User Info and more. 
   (https://docs.pingidentity.com/sdks/latest/sdks/tutorials/android/index.html)
 
 

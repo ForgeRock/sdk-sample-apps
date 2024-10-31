@@ -1,7 +1,7 @@
 {
   "name": "ping-sdk-samples",
   "version": "1.0.0",
-  "description": "Sample apps using the Ping SDK for JavaScript",
+  "description": "JavaScript sample apps",
   "main": "\"\"",
   "author": "",
   "license": "ISC",
