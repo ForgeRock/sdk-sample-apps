@@ -31,8 +31,10 @@ export default function DaVinciFlow({ config }) {
    * and index 1 having the "setter" method to set new state values.
    */
   const [, methods] = useContext(AppContext);
-  const [components, setComponents] = useState([]);
+  const [collectors, setCollectors] = useState([]);
   const [pageHeader, setPageHeader] = useState('');
+  const [isSubmittingForm, setIsSubmittingForm] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   // Used for redirection after success
   const navigate = useNavigate();
@@ -51,63 +53,18 @@ export default function DaVinciFlow({ config }) {
   };
 
   const renderError = (errorNode) => {
-    const errorMessage = <ErrorMessage message={errorNode.error.message} key="error-message" />;
-    setComponents([errorMessage]);
+    setErrorMessage(errorNode.error.message);
   };
 
   // Represents the main render function for app
   async function renderForm(nextNode) {
-    const arrFormFields = [];
     // clear form contents
-    setComponents([]);
+    setCollectors([]);
     // Set h1 header
     setPageHeader(nextNode.client?.name || '');
-
     const collectors = client.current.collectors();
-
-    collectors.forEach((collector) => {
-      if (collector.type === 'TextCollector' && collector.name === 'protectsdk') {
-        arrFormFields.push(
-          <Protect
-            collector={collector}
-            updater={client.current.update(collector)}
-            key={`protect-${collector.output.key}`}
-          />,
-        );
-      } else if (collector.type === 'TextCollector') {
-        arrFormFields.push(
-          <TextInput
-            collector={collector}
-            updater={client.current.update(collector)}
-            key={`text-${collector.output.key}`}
-          />,
-        );
-      } else if (collector.type === 'PasswordCollector') {
-        arrFormFields.push(
-          <Password
-            collector={collector}
-            updater={client.current.update(collector)}
-            key={`password-${collector.output.key}`}
-          />,
-        );
-      } else if (collector.type === 'SubmitCollector') {
-        arrFormFields.push(
-          <SubmitButton collector={collector} key={`submit-btn-${collector.output.key}`} />,
-        );
-      } else if (collector.type === 'FlowCollector') {
-        arrFormFields.push(
-          <FlowButton
-            collector={collector}
-            key={`flow-btn-${collector.output.key}`}
-            flow={client.current.flow({ action: collector.output.key })}
-            renderForm={renderForm}
-          />,
-        );
-      }
-    });
-
-    // Save components to state
-    setComponents(arrFormFields);
+    // Save collectors to state
+    setCollectors(collectors);
 
     if (client.current.collectors().find((collector) => collector.name === 'protectsdk')) {
       const newNode = await client.current.next();
@@ -126,6 +83,7 @@ export default function DaVinciFlow({ config }) {
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
+    setIsSubmittingForm(true);
 
     /**
      * We can just call `next` here and not worry about passing any arguments
@@ -172,9 +130,52 @@ export default function DaVinciFlow({ config }) {
   return (
     <form onSubmit={onSubmitHandler}>
       {pageHeader && <h2>{pageHeader}</h2>}
-      {components.map((component) => {
-        return component;
-      })}
+      {errorMessage.length > 0 && <ErrorMessage message={errorMessage} />}
+      {errorMessage.length == 0 &&
+        collectors.map((collector) => {
+          if (collector.type === 'TextCollector' && collector.name === 'protectsdk') {
+            return (
+              <Protect
+                collector={collector}
+                updater={client.current.update(collector)}
+                key={`protect-${collector.output.key}`}
+              />
+            );
+          } else if (collector.type === 'TextCollector') {
+            return (
+              <TextInput
+                collector={collector}
+                updater={client.current.update(collector)}
+                key={`text-${collector.output.key}`}
+              />
+            );
+          } else if (collector.type === 'PasswordCollector') {
+            return (
+              <Password
+                collector={collector}
+                updater={client.current.update(collector)}
+                key={`password-${collector.output.key}`}
+              />
+            );
+          } else if (collector.type === 'SubmitCollector') {
+            return (
+              <SubmitButton
+                collector={collector}
+                key={`submit-btn-${collector.output.key}`}
+                submittingForm={isSubmittingForm}
+              />
+            );
+          } else if (collector.type === 'FlowCollector') {
+            return (
+              <FlowButton
+                collector={collector}
+                key={`flow-btn-${collector.output.key}`}
+                flow={client.current.flow({ action: collector.output.key })}
+                renderForm={renderForm}
+              />
+            );
+          }
+        })}
     </form>
   );
 }
