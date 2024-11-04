@@ -1,22 +1,24 @@
 {
-  "name": "forgerock-sdk-samples",
+  "name": "ping-sdk-samples",
   "version": "1.0.0",
-  "description": "a repo of sample apps using the ForgeRock SDK for JavaScript",
+  "description": "JavaScript sample apps",
   "main": "\"\"",
   "author": "",
   "license": "ISC",
   "workspaces": [
-    "central-login",
-    "embedded-login",
-    "reactjs-todo",
-    "angular-todo",
-    "todo-api"
+    "javascript/central-login-aic",
+    "javascript/central-login-pingone",
+    "javascript/embedded-login",
+    "javascript/reactjs-todo",
+    "javascript/angular-todo",
+    "javascript/todo-api"
   ],
   "scripts": {
     "todo-api": "npm start --workspace todo-api",
     "angular-todo": "npm start --workspace angular-todo",
     "reactjs-todo": "npm start --workspace reactjs-todo",
-    "start:central-login": "npm start --workspace central-login",
+    "start:central-login-aic": "npm start --workspace central-login-aic",
+    "start:central-login-davinci": "npm start --workspace central-login-pingone",
     "start:embedded-login": "npm start --workspace embedded-login",
     "start:angular-todo": "npm-run-all --parallel todo-api angular-todo",
     "start:reactjs-todo": "npm-run-all --parallel todo-api reactjs-todo",
@@ -35,7 +37,7 @@
     "typescript": "^5.2.2"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx, .cjs}": "prettier --write",
-    "*.{html,json}": "prettier --write"
+    "JS/*.{js,jsx,ts,tsx, .cjs}": "prettier --write",
+    "JS/*.{html,json}": "prettier --write"
   }
 }
