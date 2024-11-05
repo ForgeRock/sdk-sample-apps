@@ -11,9 +11,9 @@ import * as forgerock from '@forgerock/javascript-sdk';
  */
 
 const config = await forgerock.Config.setAsync({
-  clientId: process.env.WEB_OAUTH_CLIENT, // e.g. 'ForgeRockSDKClient'
+  clientId: process.env.WEB_OAUTH_CLIENT, // e.g. 'ForgeRockSDKClient' or PingOne Services Client GUID 
   redirectUri: `${window.location.origin}`, // Redirect back to your app, e.g. 'https://sdkapp.example.com:8443'
-  scope: process.env.SCOPE, // e.g. 'openid profile email address phone me.read'
+  scope: process.env.SCOPE, // e.g. 'openid profile email address phone revoke'
   serverConfig: {
     wellknown: process.env.WELL_KNOWN,
     timeout: process.env.TIMEOUT, // 3000 to 5000 is good, this impacts the redirect time to login
@@ -43,8 +43,14 @@ const showUser = (user) => {
 
 const logout = async () => {
   try {
-    await forgerock.FRUser.logout();
-    location.assign(`${document.location.origin}/`);
+    if (process.env.SERVER_TYPE === "PINGONE") {
+      await forgerock.FRUser.logout({
+        logoutRedirectUri: `${window.location.origin}`
+      });
+    } else {
+      await forgerock.FRUser.logout();
+      location.assign(`${document.location.origin}/`);
+    }
   } catch (error) {
     console.error(error);
   }

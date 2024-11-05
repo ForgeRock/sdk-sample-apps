@@ -6,7 +6,6 @@
   "author": "",
   "license": "ISC",
   "workspaces": [
-    "central-login-aic",
     "central-login-pingone",
     "embedded-login",
     "reactjs-todo",
@@ -17,8 +16,7 @@
     "todo-api": "npm start --workspace todo-api",
     "angular-todo": "npm start --workspace angular-todo",
     "reactjs-todo": "npm start --workspace reactjs-todo",
-    "start:central-login-aic": "npm start --workspace central-login-aic",
-    "start:central-login-pingone": "npm start --workspace central-login-pingone",
+    "start:central-login-oidc": "npm start --workspace central-login-oidc",
     "start:embedded-login": "npm start --workspace embedded-login",
     "start:angular-todo": "npm-run-all --parallel todo-api angular-todo",
     "start:reactjs-todo": "npm-run-all --parallel todo-api reactjs-todo",
