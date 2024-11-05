@@ -6,7 +6,7 @@
   "author": "",
   "license": "ISC",
   "workspaces": [
-    "central-login-pingone",
+    "central-login-oidc",
     "embedded-login",
     "reactjs-todo",
     "angular-todo",
