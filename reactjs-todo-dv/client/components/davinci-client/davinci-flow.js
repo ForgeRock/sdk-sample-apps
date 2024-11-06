@@ -38,12 +38,8 @@ export default function DaVinciFlow({ config, flowCompleteCb }) {
   let client = useRef(null);
 
   useEffect(() => {
-    console.log('useEffect');
     (async () => {
-      console.log('useEffect function');
       client.current = await davinci({ config });
-      console.log('client ready', client);
-      console.log('window', window);
       const node = await client.current.start();
 
       if (node.status !== 'success') {
@@ -68,7 +64,6 @@ export default function DaVinciFlow({ config, flowCompleteCb }) {
   };
 
   async function completeFlow(successNode) {
-    console.log('successNode', successNode);
     const code = successNode.client?.authorization?.code || '';
     const state = successNode.client?.authorization?.state || '';
     await TokenManager.getTokens({ query: { code, state } });
@@ -90,7 +85,6 @@ export default function DaVinciFlow({ config, flowCompleteCb }) {
     // Save collectors to state
     setCollectors(collectors);
     // If node is a protect node, move to next node without user interaction
-    console.log('client.current.collectors()', client.current.collectors());
     if (client.current.collectors().find((collector) => collector.name === 'protectsdk')) {
       const newNode = await client.current.next();
       processNewNode(newNode);
