@@ -3,20 +3,20 @@ import * as forgerock from '@forgerock/javascript-sdk';
 /*
  * @forgerock/javascript-sdk
  *
- * index.html
+ * main.js
  *
- * Copyright (c) 2020 ForgeRock. All rights reserved.
+ * Copyright (c) 2024 Ping Identity. All rights reserved.
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
  */
 
 const config = await forgerock.Config.setAsync({
   clientId: process.env.WEB_OAUTH_CLIENT, // e.g. 'ForgeRockSDKClient' or PingOne Services Client GUID 
-  redirectUri: `${window.location.origin}`, // Redirect back to your app, e.g. 'https://sdkapp.example.com:8443'
-  scope: process.env.SCOPE, // e.g. 'openid profile email address phone revoke'
+  redirectUri: `${window.location.origin}`, // Redirect back to your app, e.g. 'https://localhost:8443' or the domain your app is served.
+  scope: process.env.SCOPE, // e.g. 'openid profile email address phone revoke' When using PingOne services `revoke` scope is required
   serverConfig: {
     wellknown: process.env.WELL_KNOWN,
-    timeout: process.env.TIMEOUT, // 3000 to 5000 is good, this impacts the redirect time to login
+    timeout: process.env.TIMEOUT, // Any value between 3000 to 5000 is good, this impacts the redirect time to login. Change that according to your needs.
   }
 });
 
