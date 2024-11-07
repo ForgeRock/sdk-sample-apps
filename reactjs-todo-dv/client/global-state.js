@@ -22,7 +22,13 @@ import { DEBUGGER } from './constants';
  * @param {Object} props.username - User's username
  * @returns {Array} - Global state values and state methods
  */
-export function useGlobalStateMgmt({ email, isAuthenticated, prefersDarkTheme, username }) {
+export function useGlobalStateMgmt({
+  email,
+  isAuthenticated,
+  prefersDarkTheme,
+  username,
+  loginClient,
+}) {
   /**
    * Create state properties for "global" state.
    * Using internal names that differ from external to prevent shadowing.
@@ -119,6 +125,7 @@ export function useGlobalStateMgmt({ email, isAuthenticated, prefersDarkTheme, u
       email: mail,
       theme,
       username: name,
+      client: loginClient,
     },
     {
       setAuthentication: setAuthenticationWrapper,

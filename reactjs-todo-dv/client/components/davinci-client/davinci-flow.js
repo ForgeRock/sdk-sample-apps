@@ -9,7 +9,7 @@
  */
 import React, { useContext, useEffect, useState, useRef } from 'react';
 import { TokenManager, UserManager } from '@forgerock/javascript-sdk';
-import davinci from '@forgerock/davinci-client';
+
 import TextInput from './text-input.js';
 import Password from './password.js';
 import SubmitButton from './submit-button.js';
@@ -22,7 +22,7 @@ import { AppContext } from '../../global-state.js';
  * @function DaVinciFlow - React view for a DaVinci flow
  * @returns {Object} - React component object
  */
-export default function DaVinciFlow({ config, flowCompleteCb }) {
+export default function DaVinciFlow({ davinciClient, flowCompleteCb }) {
   /**
    * Collects the global state for detecting user auth for rendering
    * appropriate navigational items.
@@ -35,15 +35,12 @@ export default function DaVinciFlow({ config, flowCompleteCb }) {
   const [isSubmittingForm, setIsSubmittingForm] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  let client = useRef(null);
-
   useEffect(() => {
     (async () => {
-      client.current = await davinci({ config });
-      const node = await client.current.start();
+      const node = await davinciClient.start();
 
       if (node.status !== 'success') {
-        renderNewNode(node);
+        renderForm(node);
       } else {
         completeFlow(node);
       }
@@ -56,50 +53,58 @@ export default function DaVinciFlow({ config, flowCompleteCb }) {
     /**
      * We can just call `next` here and not worry about passing any arguments
      */
-    const newNode = await client.current.next();
+    const nextNode = await davinciClient.next();
     /**
      * Recursively render the form with the new state
      */
-    processNewNode(newNode);
+    mapRenderer(nextNode);
   };
 
   async function completeFlow(successNode) {
-    const code = successNode.client?.authorization?.code || '';
-    const state = successNode.client?.authorization?.state || '';
+    const clientInfo = davinciClient.getClient();
+
+    let code = '';
+    let state = '';
+
+    if (clientInfo?.status === 'success') {
+      code = clientInfo.authorization?.code || '';
+      state = clientInfo.authorization?.state || '';
+    }
+
     await TokenManager.getTokens({ query: { code, state } });
     const user = await UserManager.getCurrentUser();
     methods.setUser(user.preferred_username);
     methods.setEmail(user.email);
     methods.setAuthentication(true);
-    // Call the callback function
+    // Login flow specific callback
     flowCompleteCb();
   }
 
   // Update the UI with the new node
-  async function renderNewNode(nextNode) {
+  async function renderForm(nextNode) {
     // clear form contents
     setCollectors([]);
     // Set h1 header
     setPageHeader(nextNode.client?.name || '');
-    const collectors = client.current.collectors();
+    const collectors = davinciClient.getCollectors();
     // Save collectors to state
     setCollectors(collectors);
     // If node is a protect node, move to next node without user interaction
-    if (client.current.collectors().find((collector) => collector.name === 'protectsdk')) {
-      const newNode = await client.current.next();
-      processNewNode(newNode);
+    if (davinciClient.getCollectors().find((collector) => collector.name === 'protectsdk')) {
+      const nextNode = await davinciClient.next();
+      mapRenderer(nextNode);
     }
   }
 
-  function processNewNode(newNode) {
-    if (newNode.status === 'next') {
-      renderNewNode(newNode);
-    } else if (newNode.status === 'success') {
-      completeFlow(newNode);
-    } else if (newNode.status === 'error') {
-      setErrorMessage(newNode.error.message);
+  function mapRenderer(nextNode) {
+    if (nextNode.status === 'next') {
+      renderForm(nextNode);
+    } else if (nextNode.status === 'success') {
+      completeFlow(nextNode);
+    } else if (nextNode.status === 'error') {
+      setErrorMessage(nextNode.error.message);
     } else {
-      console.error('Unknown node status', newNode);
+      console.error('Unknown node status', nextNode);
     }
   }
 
@@ -113,7 +118,7 @@ export default function DaVinciFlow({ config, flowCompleteCb }) {
             return (
               <Protect
                 collector={collector}
-                updater={client.current.update(collector)}
+                updater={davinciClient.update(collector)}
                 key={`protect-${collector.output.key}`}
               />
             );
@@ -121,7 +126,7 @@ export default function DaVinciFlow({ config, flowCompleteCb }) {
             return (
               <TextInput
                 collector={collector}
-                updater={client.current.update(collector)}
+                updater={davinciClient.update(collector)}
                 key={`text-${collector.output.key}`}
               />
             );
@@ -129,7 +134,7 @@ export default function DaVinciFlow({ config, flowCompleteCb }) {
             return (
               <Password
                 collector={collector}
-                updater={client.current.update(collector)}
+                updater={davinciClient.update(collector)}
                 key={`password-${collector.output.key}`}
               />
             );
@@ -146,8 +151,8 @@ export default function DaVinciFlow({ config, flowCompleteCb }) {
               <FlowButton
                 collector={collector}
                 key={`flow-btn-${collector.output.key}`}
-                flow={client.current.flow({ action: collector.output.key })}
-                renderForm={renderNewNode}
+                flow={davinciClient.flow({ action: collector.output.key })}
+                renderForm={renderForm}
               />
             );
           }

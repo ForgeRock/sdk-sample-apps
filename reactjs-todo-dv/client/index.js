@@ -9,6 +9,7 @@
  */
 
 import { Config, TokenStorage } from '@forgerock/javascript-sdk';
+import davinciClient from '@forgerock/davinci-client';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import Router from './router';
@@ -57,6 +58,10 @@ const config = {
    * tokens. If we have them, you can cautiously assume the user is
    * authenticated.
    ************************************************************************* */
+
+  // Create a DaVinci client for the login/reg flow
+  const loginClient = await davinciClient({ config });
+
   await Config.setAsync(config);
 
   let isAuthenticated;
@@ -97,6 +102,7 @@ const config = {
       isAuthenticated,
       prefersDarkTheme,
       username,
+      loginClient,
     });
 
     return (
