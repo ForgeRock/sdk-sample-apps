@@ -8,7 +8,6 @@
  * of the MIT license. See the LICENSE file for details.
  */
 import React, { useContext, useEffect, useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { TokenManager, UserManager } from '@forgerock/javascript-sdk';
 import davinci from '@forgerock/davinci-client';
 import TextInput from './text-input.js';
@@ -23,7 +22,7 @@ import { AppContext } from '../../global-state.js';
  * @function DaVinciFlow - React view for a DaVinci flow
  * @returns {Object} - React component object
  */
-export default function DaVinciFlow({ config }) {
+export default function DaVinciFlow({ config, flowCompleteCb }) {
   /**
    * Collects the global state for detecting user auth for rendering
    * appropriate navigational items.
@@ -36,12 +35,35 @@ export default function DaVinciFlow({ config }) {
   const [isSubmittingForm, setIsSubmittingForm] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  // Used for redirection after success
-  const navigate = useNavigate();
-
   let client = useRef(null);
 
-  const renderComplete = async (successNode) => {
+  useEffect(() => {
+    (async () => {
+      client.current = await davinci({ config });
+      const node = await client.current.start();
+
+      if (node.status !== 'success') {
+        renderNewNode(node);
+      } else {
+        completeFlow(node);
+      }
+    })();
+  }, []);
+
+  const onSubmitHandler = async (event) => {
+    event.preventDefault();
+    setIsSubmittingForm(true);
+    /**
+     * We can just call `next` here and not worry about passing any arguments
+     */
+    const newNode = await client.current.next();
+    /**
+     * Recursively render the form with the new state
+     */
+    processNewNode(newNode);
+  };
+
+  async function completeFlow(successNode) {
     const code = successNode.client?.authorization?.code || '';
     const state = successNode.client?.authorization?.state || '';
     await TokenManager.getTokens({ query: { code, state } });
@@ -49,15 +71,12 @@ export default function DaVinciFlow({ config }) {
     methods.setUser(user.preferred_username);
     methods.setEmail(user.email);
     methods.setAuthentication(true);
-    navigate('/');
-  };
+    // Call the callback function
+    flowCompleteCb();
+  }
 
-  const renderError = (errorNode) => {
-    setErrorMessage(errorNode.error.message);
-  };
-
-  // Represents the main render function for app
-  async function renderForm(nextNode) {
+  // Update the UI with the new node
+  async function renderNewNode(nextNode) {
     // clear form contents
     setCollectors([]);
     // Set h1 header
@@ -65,67 +84,24 @@ export default function DaVinciFlow({ config }) {
     const collectors = client.current.collectors();
     // Save collectors to state
     setCollectors(collectors);
-
+    // If node is a protect node, move to next node without user interaction
     if (client.current.collectors().find((collector) => collector.name === 'protectsdk')) {
       const newNode = await client.current.next();
-
-      if (newNode.status === 'next') {
-        return renderForm(newNode);
-      } else if (newNode.status === 'success') {
-        return renderComplete(newNode);
-      } else if (newNode.status === 'error') {
-        return renderError(newNode);
-      } else {
-        console.error('Unknown node status', newNode);
-      }
+      processNewNode(newNode);
     }
   }
 
-  const onSubmitHandler = async (event) => {
-    event.preventDefault();
-    setIsSubmittingForm(true);
-
-    /**
-     * We can just call `next` here and not worry about passing any arguments
-     */
-    const newNode = await client.current.next();
-
-    /**
-     * Recursively render the form with the new state
-     */
+  function processNewNode(newNode) {
     if (newNode.status === 'next') {
-      renderForm(newNode);
+      renderNewNode(newNode);
     } else if (newNode.status === 'success') {
-      return renderComplete(newNode);
+      completeFlow(newNode);
     } else if (newNode.status === 'error') {
-      return renderError(newNode);
+      setErrorMessage(newNode.error.message);
     } else {
       console.error('Unknown node status', newNode);
     }
-  };
-
-  useEffect(() => {
-    (async () => {
-      client.current = await davinci({ config });
-      /**
-       * Optionally subscribe to the store to listen for all store updates
-       * This is useful for debugging and logging
-       * It returns an unsubscribe function that you can call to stop listening
-       */
-      client.current.subscribe(() => {
-        const state = client.current.getState();
-        console.log('Event emitted from store:', state);
-      });
-
-      const node = await client.current.start();
-
-      if (node.status !== 'success') {
-        renderForm(node);
-      } else {
-        renderComplete(node);
-      }
-    })();
-  }, []);
+  }
 
   return (
     <form onSubmit={onSubmitHandler}>
@@ -171,7 +147,7 @@ export default function DaVinciFlow({ config }) {
                 collector={collector}
                 key={`flow-btn-${collector.output.key}`}
                 flow={client.current.flow({ action: collector.output.key })}
-                renderForm={renderForm}
+                renderForm={renderNewNode}
               />
             );
           }
