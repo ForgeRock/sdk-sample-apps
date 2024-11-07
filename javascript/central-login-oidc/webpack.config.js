@@ -1,3 +1,13 @@
+/*
+ * @forgerock/javascript-sdk
+ *
+ * webpack.comfig.js
+ *
+ * Copyright (c) 2024 Ping Identity. All rights reserved.
+ * This software may be modified and distributed under the terms
+ * of the MIT license. See the LICENSE file for details.
+ */
+
 import webpack from 'webpack';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
@@ -11,11 +21,9 @@ const __dirname = path.dirname(__filename);
 
 const WEB_OAUTH_CLIENT = process.env.WEB_OAUTH_CLIENT;
 const SCOPE = process.env.SCOPE;
-const AM_URL = process.env.AM_URL;
 const TIMEOUT = process.env.TIMEOUT;
-const REALM_PATH = process.env.REALM_PATH;
-const TREE = process.env.TREE;
 const WELL_KNOWN = process.env.WELL_KNOWN;
+const SERVER_TYPE = process.env.SERVER_TYPE;
 
 const config = {
   plugins: [
@@ -28,11 +36,9 @@ const config = {
       // Inject all the environment variable into the Webpack build
       'process.env.WEB_OAUTH_CLIENT': JSON.stringify(WEB_OAUTH_CLIENT),
       'process.env.SCOPE': JSON.stringify(SCOPE),
-      'process.env.AM_URL': JSON.stringify(AM_URL),
       'process.env.TIMEOUT': JSON.stringify(TIMEOUT),
-      'process.env.REALM_PATH': JSON.stringify(REALM_PATH),
-      'process.env.TREE': JSON.stringify(TREE),
       'process.env.WELL_KNOWN': JSON.stringify(WELL_KNOWN),
+      'process.env.SERVER_TYPE': JSON.stringify(SERVER_TYPE),
     }),
   ],
   resolve: {
