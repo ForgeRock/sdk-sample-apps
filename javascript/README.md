@@ -13,16 +13,16 @@ Ping provides these samples to help demonstrate SDK functionality/implementation
 
 To try out the Ping JavaScript SDK please look at one of our samples:
 
-- [**Embedded login - `embedded-login`**](./javascript/embedded-login/README.md)
+- [**Embedded login - `embedded-login`**](./embedded-login/README.md)
 
   - A barebones example of how to use the `@forgerock/javascript-sdk` in a vanilla html & javascript app with embedded login. The sample supports the OOTB Login Journey with Username and Password.
 
-- [**React Todo - `reactjs-todo`**](./javascript/reactjs-todo/README.md)
+- [**React Todo - `reactjs-todo`**](./reactjs-todo/README.md)
 
   - Todo application that involves authentication and authorization of a user to post Todos with the `@forgerock/javascript-sdk` in ReactJS.
     The main branch includes many flavors of callbacks, including WebAuthN, embedded login, and social login.
 
-- [**Angular Todo - `angular-todo`**](./javascript/angular-todo/README.md)
+- [**Angular Todo - `angular-todo`**](./angular-todo/README.md)
   
   - Todo application that involves authentication and authorization of a user to post Todos with the `@forgerock/javascript-sdk` in Angular.
     The main branch includes many flavors of callbacks, including WebAuthN, embedded login, and social login.
@@ -33,7 +33,7 @@ To try out the Ping JavaScript SDK please look at one of our samples:
 
 ### Generic OIDC
 
-- [**Central login - `central-login-oidc`**](./javascript/central-login-oidc/README.md)
+- [**Central login - `central-login-oidc`**](./central-login-oidc/README.md)
 
   - A barebones example of how to use the `@forgerock/javascript-sdk` in a vanilla html & javascript app with centralized login with AIC/AM or PingOne services(OIDC Login). Configure the server type on the `.env` file. 
 
