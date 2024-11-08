@@ -97,6 +97,7 @@ export default function DaVinciFlow({ davinciClient, flowCompleteCb }) {
   }
 
   function mapRenderer(nextNode) {
+    setIsSubmittingForm(false);
     if (nextNode.status === 'next') {
       renderForm(nextNode);
     } else if (nextNode.status === 'success') {
