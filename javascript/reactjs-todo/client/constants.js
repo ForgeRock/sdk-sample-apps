@@ -18,3 +18,6 @@ export const WEB_OAUTH_CLIENT = process.env.WEB_OAUTH_CLIENT;
 export const REALM_PATH = process.env.REALM_PATH;
 export const CENTRALIZED_LOGIN = process.env.CENTRALIZED_LOGIN;
 export const SESSION_URL = `${AM_URL}json/realms/root/sessions`;
+export const SERVER_TYPE = process.env.SERVER_TYPE;
+export const SCOPE = process.env.SCOPE;
+export const WELL_KNOWN = process.env.WELL_KNOWN;

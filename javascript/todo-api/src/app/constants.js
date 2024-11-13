@@ -32,3 +32,7 @@ export const CONFIDENTIAL_CLIENT = Buffer.from(
 export const PORT = process.env.PORT || 9443;
 
 export const REALM_PATH = process.env.REALM_PATH;
+
+export const SERVER_TYPE = process.env.SERVER_TYPE;
+
+export const REST_OAUTH_CLIENT = process.env.REST_OAUTH_CLIENT;

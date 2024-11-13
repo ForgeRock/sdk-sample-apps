@@ -75,7 +75,7 @@ export default function Login() {
           setState({
             loadingMessage: 'Redirecting ...',
           });
-          await TokenManager.getTokens({ login: 'redirect', query: { acr_values: 'simpleLogin' } });
+          await TokenManager.getTokens({ login: 'redirect' });
         }
       }
     }
@@ -83,7 +83,7 @@ export default function Login() {
   }, []);
 
   async function authorize(codeParam, stateParam) {
-    await TokenManager.getTokens({ query: { codeParam, stateParam } });
+    await TokenManager.getTokens({ query: { code: codeParam, state: stateParam } });
     const user = await UserManager.getCurrentUser();
     methods.setUser(user.name);
     methods.setEmail(user.email);

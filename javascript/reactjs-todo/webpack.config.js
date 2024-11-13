@@ -18,6 +18,9 @@ module.exports = () => {
   const WEB_OAUTH_CLIENT = process.env.WEB_OAUTH_CLIENT || localEnv.WEB_OAUTH_CLIENT;
   const CENTRALIZED_LOGIN = process.env.CENTRALIZED_LOGIN || localEnv.CENTRALIZED_LOGIN;
   const REALM_PATH = process.env.REALM_PATH || localEnv.REALM_PATH;
+  const SCOPE = process.env.SCOPE || localEnv.SCOPE;
+  const SERVER_TYPE = process.env.SERVER_TYPE || localEnv.SERVER_TYPE;
+  const WELL_KNOWN = process.env.WELL_KNOWN || localEnv.WELL_KNOWN;
 
   return {
     // Point to the top level source file
@@ -111,6 +114,9 @@ module.exports = () => {
         'process.env.WEB_OAUTH_CLIENT': JSON.stringify(WEB_OAUTH_CLIENT),
         'process.env.CENTRALIZED_LOGIN': JSON.stringify(CENTRALIZED_LOGIN),
         'process.env.REALM_PATH': JSON.stringify(REALM_PATH),
+        'process.env.SCOPE': JSON.stringify(SCOPE),
+        'process.env.SERVER_TYPE': JSON.stringify(SERVER_TYPE),
+        'process.env.WELL_KNOWN': JSON.stringify(WELL_KNOWN),
       }),
     ],
   };

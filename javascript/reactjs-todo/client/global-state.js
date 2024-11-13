@@ -52,7 +52,14 @@ export function useGlobalStateMgmt({ email, isAuthenticated, prefersDarkTheme, u
        ********************************************************************* */
       if (DEBUGGER) debugger;
       try {
-        await FRUser.logout();
+        if (process.env.SERVER_TYPE === "PINGONE") {
+          await FRUser.logout({
+            logoutRedirectUri: `${window.location.origin}`
+          });
+        } else {
+          await FRUser.logout();
+          location.assign(`${document.location.origin}/`);
+        }
       } catch (err) {
         console.error(`Error: logout did not successfully complete; ${err}`);
       }

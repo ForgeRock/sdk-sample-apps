@@ -39,7 +39,7 @@ export default function Logout() {
         setUser('');
 
         // Allow for enough time to communicate the action
-        setTimeout(() => navigate('/?action=logout'), 1000);
+        setTimeout(() => navigate('/'), 1000);
       } catch (error) {
         console.error(`Error: logout; ${error}`);
       }

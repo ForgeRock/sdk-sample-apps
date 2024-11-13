@@ -20,6 +20,9 @@ import {
   REALM_PATH,
   WEB_OAUTH_CLIENT,
   CENTRALIZED_LOGIN,
+  SCOPE,
+  SERVER_TYPE,
+  WELL_KNOWN
 } from './constants';
 import { AppContext, useGlobalStateMgmt } from './global-state';
 
@@ -50,21 +53,43 @@ const urlParams = new URLSearchParams(window.location.search);
 const centralLoginParam = urlParams.get('centralLogin');
 const journeyParam = urlParams.get('journey');
 
-Config.set({
-  clientId: WEB_OAUTH_CLIENT,
-  redirectUri: `${window.location.origin}/${
-    CENTRALIZED_LOGIN === 'true' || centralLoginParam === 'true'
-      ? 'login?centralLogin=true'
-      : 'callback.html'
-  }`,
-  scope: 'openid profile email',
-  serverConfig: {
-    baseUrl: AM_URL,
-    timeout: '5000',
-  },
-  realmPath: REALM_PATH,
-  tree: `${journeyParam || JOURNEY_LOGIN}`,
-});
+
+/** *************************************************************************** 
+ * The SDK offers 2 ways of setting the configuration. In the following lines we can see an example for both.
+ * `Config.set` is a synchronous way that works with PingAM and AIC, where the developer provides all the 
+ * necessary configuration options for the server.
+ * `Config.setAsync` is a more modern aynchronous method that allows the discovery of the server endpoints,
+ * by using the `WELL-KNOWN/openid-configuration` endpoint for your server.
+ * This way supports PingAM, PingAIC, PingOne Services and PingFed when used with `Centralized Login` aka OIDC.
+ * *************************************************************************** */
+
+var config;
+if (SERVER_TYPE === "AIC") {
+  config = Config.set({
+    clientId: WEB_OAUTH_CLIENT,
+    redirectUri: `${window.location.origin}/${CENTRALIZED_LOGIN === 'true' || centralLoginParam === 'true'
+        ? 'login?centralLogin=true'
+        : 'callback.html'
+      }`,
+    scope: SCOPE,
+    serverConfig: {
+      baseUrl: AM_URL,
+      timeout: '5000',
+    },
+    realmPath: REALM_PATH,
+    tree: `${journeyParam || JOURNEY_LOGIN}`,
+  });
+} else {
+  config = await Config.setAsync({
+    clientId: WEB_OAUTH_CLIENT, // e.g. PingOne Services Client GUID 
+    redirectUri: `${window.location.origin}/login?centralLogin=true`, // Redirect back to your app, e.g. 'https://localhost:8443/login?centralLogin=true' or the domain your app is served.
+    scope: SCOPE, // e.g. 'openid profile email address phone revoke' When using PingOne services `revoke` scope is required
+    serverConfig: {
+      wellknown: WELL_KNOWN,
+      timeout: '3000', // Any value between 3000 to 5000 is good, this impacts the redirect time to login. Change that according to your needs.
+    }
+  });
+}
 
 /**
  * Initialize the React application
