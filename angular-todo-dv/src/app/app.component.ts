@@ -66,24 +66,18 @@ export class AppComponent implements OnInit {
      * - tree: The authentication journey/tree to use, such as `sdkAuthenticationTree`
      *************************************************************************** */
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const centralLoginParam = urlParams.get('centralLogin');
-    const journeyParam = urlParams.get('journey');
-    Config.set({
-      clientId: environment.WEB_OAUTH_CLIENT,
-      redirectUri: `${window.location.origin}/${
-        environment.CENTRALIZED_LOGIN === 'true' || centralLoginParam === 'true'
-          ? 'login?centralLogin=true'
-          : 'callback.html'
-      }`,
-      scope: 'openid profile email',
+    const config = {
+      clientId: environment.CLIENT_ID,
+      redirectUri: environment.REDIRECT_URI,
+      scope: environment.SCOPE,
       serverConfig: {
-        baseUrl: environment.AM_URL,
-        timeout: 3000, // 9000 or less
+        baseUrl: environment.BASE_URL,
+        wellknown: `${environment.BASE_URL}as/.well-known/openid-configuration`,
       },
-      realmPath: environment.REALM_PATH,
-      tree: `${journeyParam ? journeyParam : environment.JOURNEY_LOGIN}`,
-    });
+    };
+
+    await this.userService.initLoginClient(config);
+    await Config.setAsync(config);
 
     /** *****************************************************************
      * SDK INTEGRATION POINT
