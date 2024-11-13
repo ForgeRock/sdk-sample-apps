@@ -1,10 +1,11 @@
 export const environment = {
-  AM_URL: '$AM_URL',
-  REALM_PATH: '$REALM_PATH',
-  WEB_OAUTH_CLIENT: '$WEB_OAUTH_CLIENT',
-  JOURNEY_LOGIN: '$JOURNEY_LOGIN',
-  JOURNEY_REGISTER: '$JOURNEY_REGISTER',
-  API_URL: '$API_URL',
+  API_URL: 'http://localhost:9443',
+  DEBUGGER_OFF: 'true',
+  DEVELOPMENT: 'false',
+  PORT: '8443',
+  CLIENT_ID: 'cfce748b-b7f4-4b60-972d-189d5ce9adaa',
+  REDIRECT_URI: 'http://localhost:8443/login',
+  SCOPE: 'openid profile email phone',
+  BASE_URL: 'https://auth.pingone.com/5057aeca-1869-4bf1-8cf4-99b7456086a5/',
   production: 'development',
-  CENTRALIZED_LOGIN: '$CENTRALIZED_LOGIN',
 };

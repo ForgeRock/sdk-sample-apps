@@ -9,16 +9,17 @@ let targetPath =
     : 'src/environments/environment.ts';
 
 const envConfigFile = `export const environment = {
-   AM_URL: '${process.env.AM_URL}',
-   REALM_PATH: '${process.env.REALM_PATH}',
-   WEB_OAUTH_CLIENT: '${process.env.WEB_OAUTH_CLIENT}',
-   JOURNEY_LOGIN: '${process.env.JOURNEY_LOGIN}',
-   JOURNEY_REGISTER: '${process.env.JOURNEY_REGISTER}',
-   API_URL: '${process.env.API_URL}',
-   production: '${process.env.NODE_ENV || 'development'}',
-   CENTRALIZED_LOGIN: '${process.env.CENTRALIZED_LOGIN}'
-};
-`;
+  API_URL: '${process.env.API_URL}',
+  DEBUGGER_OFF: '${process.env.DEBUGGER_OFF}',
+  DEVELOPMENT: '${process.env.DEVELOPMENT}',
+  PORT: '${process.env.PORT}',
+  CLIENT_ID: '${process.env.CLIENT_ID}',
+  REDIRECT_URI: '${process.env.REDIRECT_URI}',
+  SCOPE: '${process.env.SCOPE}',
+  BASE_URL: '${process.env.BASE_URL}',
+  production: '${process.env.NODE_ENV || 'development'}'
+};`;
+
 console.log(`The file ${targetPath} will be written with the following content: \n`);
 console.log(envConfigFile);
 writeFile(targetPath, envConfigFile, function (err) {
