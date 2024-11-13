@@ -6,46 +6,41 @@ This sample code is provided "as is" and is not a supported product of ForgeRock
 
 ## Requirements
 
-1. An instance of ForgeRock Access Management (AM), either within a ForgeRock's Identity Cloud tenant, your own private installation or locally installed on your computer
+1. A PingOne tenant with SSO and DaVinci services enabled
 2. Node >= 14.2.0 (recommended: install via [official package installer](https://nodejs.org/en/))
 3. Knowledge of using the Terminal/Command Line
-4. Ability to generate security certs (recommended: mkcert ([installation instructions here](https://github.com/FiloSottile/mkcert#installation))
-5. This project "cloned" to your computer
+4. This project "cloned" to your computer
 
 ## Setup
 
-Once you have the 5 requirements above met, we can build the project.
+Once you have the requirements above met, we can build the project.
 
-### Setup Your AM Instance
+### Setup Your PingOne application
 
-#### Configure CORS
+1. Create a new OIDC Web App
 
-- **Allowed Origins**: `https://localhost:8443`
-- **Allowed Methods**: `GET` `POST`
-- **Allowed headers**: `accept-api-version` `authorization` `content-type` `x-requested-with`
-- **Allow credentials**: enable
+#### Configuration
 
-#### Create Your OAuth Clients
+1. CORS Allowed origins: `https://localhost:8443`
+2. Token Auth Method: None
+3. Signoff URLs: https://localhost:8443/login
+4. Redirect URIs: https://localhost:8443/login
+5. Response Type: Code
+6. Grant Type: Authorization Code
 
-1. Create a public (SPA) OAuth client for the web app: no secret, scopes of `openid profile email`, implicit consent enabled, and no "token authentication endpoint method".
-2. Create a confidential (Node.js) OAuth client for the API server: with a secret, default scope of `am-introspect-all-tokens`, and `client_secret_basic` as the "token authentication endpoint method".
+#### Resources (scopes)
 
-#### Create your Authentication Journeys/Trees
+1. email phone profile
 
-1. Login
-2. Register
+#### Policies
 
-Note: The sample app currently supports the following callbacks only:
+1. DaVinci Policies: Select your DaVinci application
 
-- NameCallback
-- PasswordCallback
-- ChoiceCallback
-- ValidatedCreateUsernameCallback
-- ValidatedCreatePasswordCallback
-- StringAttributeInputCallback
-- BooleanAttributeInputCallback
-- KbaCreateCallback
-- TermsAndConditionsCallback
+### Configure Your `.env` File
+
+Change the name of `.env.example` to `.env` and replace the bracketed values (e.g. `<<<helper-text>>>`) with your values.
+
+Example with annotations:
 
 ### Configure Your `.env` Files
 
@@ -54,27 +49,14 @@ First, in the main directory of the SDK repo, create a file named `.env` by copy
 Here’s a hypothetical example; your values may vary:
 
 ```text
-AM_URL=https://auth.forgerock.com/am
-APP_URL=https://localhost:8443 # in develop we do not use this url for dynamic deployment reasons
 API_URL=http://localhost:9443
 DEBUGGER_OFF=true
-JOURNEY_LOGIN=Login
-JOURNEY_REGISTER=Register
-REALM_PATH=alpha
-WEB_OAUTH_CLIENT=WebOAuthClient
-```
-
-Now, do the same in the `samples/todos-api` directory based on its `.env.example` file. This file will allow the sample's backend to interact with your AM instance to protect the Todos.
-
-As before, here is a hypothetical example; your values may vary:
-
-```text
-AM_URL=https://auth.forgerock.com/am
-DEVELOPMENT=true
-PORT=9443
-REALM_PATH=alpha
-REST_OAUTH_SECRET=changeit!
-REST_OAUTH_CLIENT=RestOAuthClient
+DEVELOPMENT=false
+PORT=8443
+CLIENT_ID=cfce748b-b7f4-4b60-972d-189d5ce9adaa
+REDIRECT_URI=http://localhost:8443/login
+SCOPE="openid profile email phone"
+BASE_URL=https://auth.pingone.com/5057aeca-1869-4bf1-8cf4-99b7456086a5/
 ```
 
 ### Installing Dependencies
