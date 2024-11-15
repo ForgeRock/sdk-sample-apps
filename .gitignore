@@ -22,3 +22,7 @@ reactjs-todo/public/*
 .idea/
 .vscode/
 local.properties
+CURRENT
+LOG
+**/LOG
+**/CURRENT

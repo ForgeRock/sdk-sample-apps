@@ -13,7 +13,7 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import { createServer } from 'http';
 
-import { AM_URL, PORT } from './app/constants.js';
+import { SERVER_URL, PORT } from './app/constants.js';
 import routes from './app/routes.js';
 
 /**
@@ -48,7 +48,7 @@ routes(app);
 /**
  * Attach application to port and listen for requests
  */
-if (!AM_URL) {
+if (!SERVER_URL) {
   createServer(() => null).listen(PORT);
 
   console.error(

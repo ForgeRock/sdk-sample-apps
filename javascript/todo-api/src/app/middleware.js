@@ -10,7 +10,7 @@
 
 import request from 'superagent';
 
-import { AM_URL, CONFIDENTIAL_CLIENT, REALM_PATH, SERVER_TYPE, REST_OAUTH_CLIENT } from './constants.js';
+import { SERVER_URL, CONFIDENTIAL_CLIENT, REALM_PATH, SERVER_TYPE, REST_OAUTH_CLIENT } from './constants.js';
 /**
  * @function auth - Auth middleware for checking the validity of user's auth
  * @param {Object} req - Node.js' req object
@@ -20,7 +20,7 @@ import { AM_URL, CONFIDENTIAL_CLIENT, REALM_PATH, SERVER_TYPE, REST_OAUTH_CLIENT
  */
 export async function auth(req, res, next) {
   let response;
-  let path = `${SERVER_TYPE === 'AIC' ? `${AM_URL}oauth2/realms/root${REALM_PATH === 'root' ? '' : '/realms/' + REALM_PATH}/introspect` : `${AM_URL}as/introspect`}`
+  let path = `${SERVER_TYPE === 'AIC' ? `${SERVER_URL}oauth2/realms/root${REALM_PATH === 'root' ? '' : '/realms/' + REALM_PATH}/introspect` : `${SERVER_URL}as/introspect`}`
   try {
     if (req.headers.authorization) {
       

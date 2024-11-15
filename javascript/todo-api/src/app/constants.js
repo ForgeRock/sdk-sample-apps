@@ -10,13 +10,13 @@
 
 import { Buffer } from 'buffer';
 
-export const AM_URL = (() => {
+export const SERVER_URL = (() => {
   try {
-    const lastChar = process.env.AM_URL.slice(-1);
+    const lastChar = process.env.SERVER_URL.slice(-1);
     if (lastChar !== '/') {
-      return process.env.AM_URL + '/';
+      return process.env.SERVER_URL + '/';
     }
-    return process.env.AM_URL;
+    return process.env.SERVER_URL;
   } catch (err) {
     console.error(
       'AM * ERROR: Missing .env value. Ensure you have an .env file within the dir of this sample app.',

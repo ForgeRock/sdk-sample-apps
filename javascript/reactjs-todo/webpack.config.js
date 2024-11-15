@@ -8,7 +8,7 @@ module.exports = () => {
   const localEnv = dotenv.config().parsed || {};
 
   // Use process environment variables for prod, but fallback to local .env for dev
-  const AM_URL = process.env.AM_URL || localEnv.AM_URL;
+  const SERVER_URL = process.env.SERVER_URL || localEnv.SERVER_URL;
   const APP_URL = process.env.APP_URL || localEnv.APP_URL;
   const API_URL = process.env.API_URL || localEnv.API_URL;
   const DEBUGGER_OFF = process.env.DEBUGGER_OFF || localEnv.DEBUGGER_OFF;
@@ -20,7 +20,7 @@ module.exports = () => {
   const REALM_PATH = process.env.REALM_PATH || localEnv.REALM_PATH;
   const SCOPE = process.env.SCOPE || localEnv.SCOPE;
   const SERVER_TYPE = process.env.SERVER_TYPE || localEnv.SERVER_TYPE;
-  const WELL_KNOWN = process.env.WELL_KNOWN || localEnv.WELL_KNOWN;
+  const WELLKNOWN_URL = process.env.WELLKNOWN_URL || localEnv.WELLKNOWN_URL;
 
   return {
     // Point to the top level source file
@@ -105,7 +105,7 @@ module.exports = () => {
       new MiniCssExtractPlugin(),
       new webpack.DefinePlugin({
         // Inject all the environment variable into the Webpack build
-        'process.env.AM_URL': JSON.stringify(AM_URL),
+        'process.env.SERVER_URL': JSON.stringify(SERVER_URL),
         'process.env.APP_URL': JSON.stringify(APP_URL),
         'process.env.API_URL': JSON.stringify(API_URL),
         'process.env.DEBUGGER_OFF': JSON.stringify(DEBUGGER_OFF),
@@ -116,7 +116,7 @@ module.exports = () => {
         'process.env.REALM_PATH': JSON.stringify(REALM_PATH),
         'process.env.SCOPE': JSON.stringify(SCOPE),
         'process.env.SERVER_TYPE': JSON.stringify(SERVER_TYPE),
-        'process.env.WELL_KNOWN': JSON.stringify(WELL_KNOWN),
+        'process.env.WELLKNOWN_URL': JSON.stringify(WELLKNOWN_URL),
       }),
     ],
   };

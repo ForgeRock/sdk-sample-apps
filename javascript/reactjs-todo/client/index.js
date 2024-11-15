@@ -14,7 +14,7 @@ import ReactDOM from 'react-dom/client';
 
 import Router from './router';
 import {
-  AM_URL,
+  SERVER_URL,
   DEBUGGER,
   JOURNEY_LOGIN,
   REALM_PATH,
@@ -22,7 +22,7 @@ import {
   CENTRALIZED_LOGIN,
   SCOPE,
   SERVER_TYPE,
-  WELL_KNOWN
+  WELLKNOWN_URL
 } from './constants';
 import { AppContext, useGlobalStateMgmt } from './global-state';
 
@@ -73,7 +73,7 @@ if (SERVER_TYPE === "AIC") {
       }`,
     scope: SCOPE,
     serverConfig: {
-      baseUrl: AM_URL,
+      baseUrl: SERVER_URL,
       timeout: '5000',
     },
     realmPath: REALM_PATH,
@@ -85,7 +85,7 @@ if (SERVER_TYPE === "AIC") {
     redirectUri: `${window.location.origin}/login?centralLogin=true`, // Redirect back to your app, e.g. 'https://localhost:8443/login?centralLogin=true' or the domain your app is served.
     scope: SCOPE, // e.g. 'openid profile email address phone revoke' When using PingOne services `revoke` scope is required
     serverConfig: {
-      wellknown: WELL_KNOWN,
+      wellknown: WELLKNOWN_URL,
       timeout: '3000', // Any value between 3000 to 5000 is good, this impacts the redirect time to login. Change that according to your needs.
     }
   });
