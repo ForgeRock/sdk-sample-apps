@@ -3,7 +3,7 @@
  *
  * index.js
  *
- * Copyright (c) 2021 ForgeRock. All rights reserved.
+ * Copyright (c) 2024 Ping Identity. All rights reserved.
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
  */
@@ -37,14 +37,14 @@ import './styles/index.scss';
  * Summary: Configure the SDK
  * ----------------------------------------------------------------------------
  * Details: Below, you will see the following settings:
- * - clientId: (OAuth 2.0 only) this is the OAuth 2.0 client you created in ForgeRock, such as `ForgeRockSDKClient`
+ * - clientId: (OAuth 2.0 only) this is the OAuth 2.0 client you created in Ping, such as `ForgeRockSDKClient`
  * - redirectUri: (OAuth 2.0 only) this is the URI/URL of this app to which the
  *   OAuth 2.0 flow redirects
  * - scope: (OAuth 2.0 only) these are the OAuth scopes that you will request from
- *   ForgeRock
- * - serverConfig: this includes the baseUrl of your ForgeRock AM, and should
+ *   Ping
+ * - serverConfig: this includes the baseUrl of your Ping AM, and should
  *   include the deployment path at the end, such as `/am/` or `/openam/`
- * - realmPath: this is the realm to use within ForgeRock. such as `alpha` or `root`
+ * - realmPath: this is the realm to use within Ping. such as `alpha` or `root`
  * - tree: The authentication journey/tree to use, such as `sdkAuthenticationTree`
  *************************************************************************** */
 if (DEBUGGER) debugger;

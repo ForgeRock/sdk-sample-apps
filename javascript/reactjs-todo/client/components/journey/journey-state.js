@@ -3,7 +3,7 @@
  *
  * state.js
  *
- * Copyright (c) 2021 ForgeRock. All rights reserved.
+ * Copyright (c) 2024 Ping Identity. All rights reserved.
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
  */
@@ -97,7 +97,7 @@ export default function useJourneyHandler({ action, form, resumeUrl }) {
     async function getStep(prev) {
       /**
        * Save previous step information just in case we have a total
-       * form failure due to 400 response from ForgeRock.
+       * form failure due to 400 response from Ping.
        */
       const previousStage = prev?.getStage && prev.getStage();
       const previousCallbacks = prev?.callbacks;

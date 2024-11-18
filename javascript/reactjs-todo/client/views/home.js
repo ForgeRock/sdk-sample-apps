@@ -3,7 +3,7 @@
  *
  * home.js
  *
- * Copyright (c) 2021 ForgeRock. All rights reserved.
+ * Copyright (c) 2024 Ping Identity. All rights reserved.
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
  */
@@ -54,11 +54,11 @@ export default function Home() {
     <div className={`cstm_container container-fluid ${state.theme.textClass}`}>
       {LoginAlert}
       <h1 className={`cstm_head-text text-center ${state.theme.textClass}`}>
-        Protect with ForgeRock; Develop with React.js
+        Protect with Ping; Develop with React.js
       </h1>
 
       <p className={`cstm_subhead-text fs-3 mb-4 fw-bold ${state.theme.textMutedClass}`}>
-        Learn how to develop ForgeRock protected, web apps with the{' '}
+        Learn how to develop Ping protected, web apps with the{' '}
         <a className={`${state.theme.textMutedClass}`} href="https://reactjs.org/">
           React.js
         </a>{' '}
@@ -73,7 +73,7 @@ export default function Home() {
       </p>
       <h2 className={`fs-4 fw-normal pt-3 pb-1 ${state.theme.textClass}`}>About this project</h2>
       <p>
-        The purpose of this sample web app is to demonstrate how the ForgeRock JavaScript SDK is
+        The purpose of this sample web app is to demonstrate how the Ping JavaScript SDK is
         implemented within a fully-functional application using a popular framework. The source code
         for{' '}
         <a href="https://github.com/ForgeRock/forgerock-javascript-sdk/tree/master/samples/reactjs-todos">
