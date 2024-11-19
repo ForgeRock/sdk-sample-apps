@@ -61,10 +61,9 @@ const journeyParam = urlParams.get('journey');
  * `Config.setAsync` is a more modern aynchronous method that allows the discovery of the server endpoints,
  * by using the `WELL-KNOWN/openid-configuration` endpoint for your server.
  * This way supports PingAM, PingAIC, PingOne Services and PingFed when used with `Centralized Login` aka OIDC.
- * *************************************************************************** */
-
-var config;
-if (SERVER_TYPE === "AIC") {
+ * 
+ * The legacy way of setting up the SDK configuration can be found here. It is advised that developers use `Config.setAsync`
+ * 
   config = Config.set({
     clientId: WEB_OAUTH_CLIENT,
     redirectUri: `${window.location.origin}/${CENTRALIZED_LOGIN === 'true' || centralLoginParam === 'true'
@@ -79,17 +78,22 @@ if (SERVER_TYPE === "AIC") {
     realmPath: REALM_PATH,
     tree: `${journeyParam || JOURNEY_LOGIN}`,
   });
-} else {
-  config = await Config.setAsync({
-    clientId: WEB_OAUTH_CLIENT, // e.g. PingOne Services Client GUID 
-    redirectUri: `${window.location.origin}/login?centralLogin=true`, // Redirect back to your app, e.g. 'https://localhost:8443/login?centralLogin=true' or the domain your app is served.
-    scope: SCOPE, // e.g. 'openid profile email address phone revoke' When using PingOne services `revoke` scope is required
-    serverConfig: {
-      wellknown: WELLKNOWN_URL,
-      timeout: '3000', // Any value between 3000 to 5000 is good, this impacts the redirect time to login. Change that according to your needs.
-    }
-  });
-}
+ * *************************************************************************** */
+
+var config;
+config = await Config.setAsync({
+  clientId: WEB_OAUTH_CLIENT, // e.g. PingOne Services Client GUID 
+  redirectUri: `${window.location.origin}/${CENTRALIZED_LOGIN === 'true' || centralLoginParam === 'true'
+    ? 'login?centralLogin=true'
+    : 'callback.html'
+  }`, // Redirect back to your app, e.g. 'https://localhost:8443/login?centralLogin=true' or the domain your app is served.
+  scope: SCOPE, // e.g. 'openid profile email address phone revoke' When using PingOne services `revoke` scope is required
+  serverConfig: {
+    wellknown: WELLKNOWN_URL,
+    timeout: '3000', // Any value between 3000 to 5000 is good, this impacts the redirect time to login. Change that according to your needs.
+  },
+  tree: `${journeyParam || JOURNEY_LOGIN}`
+});
 
 /**
  * Initialize the React application
