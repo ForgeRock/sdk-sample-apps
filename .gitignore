@@ -24,5 +24,7 @@ reactjs-todo/public/*
 local.properties
 CURRENT
 LOG
+CURRENT*
+LOG*
 **/LOG
 **/CURRENT
