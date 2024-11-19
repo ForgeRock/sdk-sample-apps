@@ -11,14 +11,14 @@ Ping provides these samples to help demonstrate SDK functionality/implementation
 
 ### Integrate with PingOne Advanced Identity Cloud / PingAM:
 
-We provide samples of integrating with Advanced Identity Cloud and PingAM for the following platforms:
+We provide samples of integrating with PingOne Advanced Identity Cloud and PingAM for the following platforms:
 - [JavaScript](./javascript/)
 
 - [iOS](./iOS/)
 
 - [Android](./android/)
 
-### Integrate with PingOne:
+### Integrate with PingOne DaVinci:
 
 - Samples coming soon
 
@@ -38,3 +38,9 @@ JavaScript
 
 iOS
 - Latest Xcode
+
+Android
+- Latest Android Studio
+- Java 17+
+- Gradle 8.6+
+- Android API level 23+
