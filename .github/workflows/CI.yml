@@ -1,51 +1,25 @@
-name: 'Continuous Integration'
+name: 'Javascript Continuous Integration'
 
 on:
   - pull_request
 
 jobs:
-  install:
+  install-build-test:
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
         node: [18.19.0, 20.11.1]
-    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
-      - uses: actions/cache@v4
-        id: cache
-        with:
-          path: |
-            node_modules
-          key: ${{ runner.os }}-npm-${{matrix.node}}-${{ hashFiles('**/javascript/package-lock.json') }}
+          cache: 'npm'
+          cache-dependency-path: '**/package-lock.json'
 
       - run: npm ci
-        if: steps.cache.outputs.cache-hit != 'true'
-
-  build-test:
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest]
-        node: [18.19.0, 20.11.1]
-    needs: [install]
-    runs-on: ${{ matrix.os }}
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node }}
-      - uses: actions/cache@v4
-        id: cache
-        with:
-          path: |
-            node_modules
-          key: ${{ runner.os }}-npm-${{matrix.node}}-${{ hashFiles('**/javascript/package-lock.json') }}
-
-      - run: npm ci
-        if: steps.cache.outputs.cache-hit != 'true'
 
       - name: Lint
         run: npm run lint

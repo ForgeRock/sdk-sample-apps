@@ -14,15 +14,12 @@ import ReactDOM from 'react-dom/client';
 
 import Router from './router';
 import {
-  SERVER_URL,
   DEBUGGER,
   JOURNEY_LOGIN,
-  REALM_PATH,
   WEB_OAUTH_CLIENT,
   CENTRALIZED_LOGIN,
   SCOPE,
-  SERVER_TYPE,
-  WELLKNOWN_URL
+  WELLKNOWN_URL,
 } from './constants';
 import { AppContext, useGlobalStateMgmt } from './global-state';
 
@@ -53,7 +50,6 @@ const urlParams = new URLSearchParams(window.location.search);
 const centralLoginParam = urlParams.get('centralLogin');
 const journeyParam = urlParams.get('journey');
 
-
 /** *************************************************************************** 
  * The SDK offers 2 ways of setting the configuration. In the following lines we can see an example for both.
  * `Config.set` is a synchronous way that works with PingAM and AIC, where the developer provides all the 
@@ -80,19 +76,19 @@ const journeyParam = urlParams.get('journey');
   });
  * *************************************************************************** */
 
-var config;
-config = await Config.setAsync({
-  clientId: WEB_OAUTH_CLIENT, // e.g. PingOne Services Client GUID 
-  redirectUri: `${window.location.origin}/${CENTRALIZED_LOGIN === 'true' || centralLoginParam === 'true'
-    ? 'login?centralLogin=true'
-    : 'callback.html'
+await Config.setAsync({
+  clientId: WEB_OAUTH_CLIENT, // e.g. PingOne Services Client GUID
+  redirectUri: `${window.location.origin}/${
+    CENTRALIZED_LOGIN === 'true' || centralLoginParam === 'true'
+      ? 'login?centralLogin=true'
+      : 'callback.html'
   }`, // Redirect back to your app, e.g. 'https://localhost:8443/login?centralLogin=true' or the domain your app is served.
   scope: SCOPE, // e.g. 'openid profile email address phone revoke' When using PingOne services `revoke` scope is required
   serverConfig: {
     wellknown: WELLKNOWN_URL,
     timeout: '3000', // Any value between 3000 to 5000 is good, this impacts the redirect time to login. Change that according to your needs.
   },
-  tree: `${journeyParam || JOURNEY_LOGIN}`
+  tree: `${journeyParam || JOURNEY_LOGIN}`,
 });
 
 /**
