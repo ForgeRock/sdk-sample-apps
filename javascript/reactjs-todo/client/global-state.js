@@ -3,7 +3,7 @@
  *
  * state.js
  *
- * Copyright (c) 2021 ForgeRock. All rights reserved.
+ * Copyright (c) 2024 Ping Identity. All rights reserved.
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
  */
@@ -52,7 +52,14 @@ export function useGlobalStateMgmt({ email, isAuthenticated, prefersDarkTheme, u
        ********************************************************************* */
       if (DEBUGGER) debugger;
       try {
-        await FRUser.logout();
+        if (process.env.SERVER_TYPE === "PINGONE") {
+          await FRUser.logout({
+            logoutRedirectUri: `${window.location.origin}`
+          });
+        } else {
+          await FRUser.logout();
+          location.assign(`${document.location.origin}/`);
+        }
       } catch (err) {
         console.error(`Error: logout did not successfully complete; ${err}`);
       }

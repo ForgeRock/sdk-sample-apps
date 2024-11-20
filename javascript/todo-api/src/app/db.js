@@ -1,3 +1,13 @@
+/*
+ * forgerock-sample-web-react
+ *
+ * db.js
+ *
+ * Copyright (c) 2024 Ping Identity. All rights reserved.
+ * This software may be modified and distributed under the terms
+ * of the MIT license. See the LICENSE file for details.
+ */
+
 import PouchDB from 'pouchdb';
 
 const userDb = new PouchDB('users');
@@ -11,9 +21,9 @@ async function getUser(id) {
 
 export async function initUser(user) {
   try {
-    console.log(`Initialize user ${user.user_id}`);
+    console.log(`Initialize user ${user.sub}`);
     await userDb.put({
-      _id: user.user_id,
+      _id: user.sub,
       todos: [],
     });
   } catch (err) {
@@ -26,12 +36,12 @@ export async function getAll(user) {
   let userData;
 
   try {
-    userData = await getUser(user.user_id);
+    userData = await getUser(user.sub);
   } catch (err) {
     console.log(`Error: retrieving user meta: ${err}`);
-    console.log(`Attempting to initialize user: ${user.user_id}`);
+    console.log(`Attempting to initialize user: ${user.sub}`);
     await initUser(user);
-    userData = await getUser(user.user_id);
+    userData = await getUser(user.sub);
   }
 
   if (userData.todos.length) {
@@ -71,7 +81,7 @@ export async function updateSome(user, data) {
 }
 
 export async function get(user, id) {
-  const userData = await userDb.get(user.user_id);
+  const userData = await userDb.get(user.sub);
   const todo = userData.todos.find((todo) => todo.id === id);
   const item = await todosDb.get(todo.id);
   return item;
@@ -84,7 +94,7 @@ export async function put(user, data, create) {
   } catch (err) {
     console.log(err);
   }
-  const userData = await getUser(user.user_id);
+  const userData = await getUser(user.sub);
 
   if (create) {
     userData.todos.unshift({ id: item.id, rev: item.rev });

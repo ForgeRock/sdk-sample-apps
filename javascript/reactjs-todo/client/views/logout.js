@@ -3,7 +3,7 @@
  *
  * login.js
  *
- * Copyright (c) 2021 ForgeRock. All rights reserved.
+ * Copyright (c) 2024 Ping Identity. All rights reserved.
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
  */
@@ -32,14 +32,14 @@ export default function Logout() {
         /**
          * Logout and clear existing, stored data
          * Note that the setAuthentication method below calls the FRUser.logout
-         * method, ensuring the access artifacts are revoked on ForgeRock.
+         * method, ensuring the access artifacts are revoked on Ping.
          */
         setAuthentication(false);
         setEmail('');
         setUser('');
 
         // Allow for enough time to communicate the action
-        setTimeout(() => navigate('/?action=logout'), 1000);
+        setTimeout(() => navigate('/'), 1000);
       } catch (error) {
         console.error(`Error: logout; ${error}`);
       }

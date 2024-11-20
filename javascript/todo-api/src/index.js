@@ -3,7 +3,7 @@
  *
  * index.mjs
  *
- * Copyright (c) 2021 ForgeRock. All rights reserved.
+ * Copyright (c) 2024 Ping Identity. All rights reserved.
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
  */
@@ -13,7 +13,7 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import { createServer } from 'http';
 
-import { AM_URL, PORT } from './app/constants.js';
+import { SERVER_URL, PORT } from './app/constants.js';
 import routes from './app/routes.js';
 
 /**
@@ -48,7 +48,7 @@ routes(app);
 /**
  * Attach application to port and listen for requests
  */
-if (!AM_URL) {
+if (!SERVER_URL) {
   createServer(() => null).listen(PORT);
 
   console.error(

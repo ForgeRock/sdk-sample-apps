@@ -2,11 +2,11 @@
 
 ## Disclaimers
 
-This sample code is provided "as is" and is not a supported product of ForgeRock. It's purpose is solely to demonstrate how the ForgeRock JavaScript SDK can be implemented within a React application. Also, this is not a demonstration of React itself or instructional for _how_ to build a React app. There are many aspects to routing, state management, tooling and other aspects to building a React app that are outside of the scope of this project. For information about creating a React app, [visit React's official documentation](https://reactjs.org/docs/create-a-new-react-app.html).
+This sample code is provided "as is" and is not a supported product of Ping. It's purpose is solely to demonstrate how the Ping JavaScript SDK can be implemented within a React application. Also, this is not a demonstration of React itself or instructional for _how_ to build a React app. There are many aspects to routing, state management, tooling and other aspects to building a React app that are outside of the scope of this project. For information about creating a React app, [visit React's official documentation](https://reactjs.org/docs/create-a-new-react-app.html).
 
 ## Requirements
 
-1. An instance of ForgeRock's Access Manager (AM), either within a ForgeRock's Identity Cloud tenant, your own private installation or locally installed on your computer
+1. An instance of Ping's Access Manager (AM), either within a Ping's Advanced Identity Cloud tenant, your own private installation or locally installed on your computer
 2. Node >= 14.2.0 (recommended: install via [official package installer](https://nodejs.org/en/))
 3. Knowledge of using the Terminal/Command Line
 4. Ability to generate security certs (recommended: mkcert ([installation instructions here](https://github.com/FiloSottile/mkcert#installation))
@@ -54,7 +54,7 @@ Change the name of `.env.example` to `.env` and replace the bracketed values (e.
 Example with annotations:
 
 ```text
-AM_URL=<<<URL to your AM instance>>>
+SERVER_URL=<<<URL to your AM/ PingOne instance>>>
 APP_URL=https://react.example.com:8443 # in develop we do not use this variable for dynamic deployment reasons
 API_URL=https://api.example.com:9443
 DEBUGGER_OFF=false

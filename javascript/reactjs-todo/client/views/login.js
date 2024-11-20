@@ -3,7 +3,7 @@
  *
  * login.js
  *
- * Copyright (c) 2021 ForgeRock. All rights reserved.
+ * Copyright (c) 2024 Ping Identity. All rights reserved.
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
  */
@@ -75,7 +75,7 @@ export default function Login() {
           setState({
             loadingMessage: 'Redirecting ...',
           });
-          await TokenManager.getTokens({ login: 'redirect', query: { acr_values: 'simpleLogin' } });
+          await TokenManager.getTokens({ login: 'redirect' });
         }
       }
     }
@@ -83,7 +83,7 @@ export default function Login() {
   }, []);
 
   async function authorize(codeParam, stateParam) {
-    await TokenManager.getTokens({ query: { codeParam, stateParam } });
+    await TokenManager.getTokens({ query: { code: codeParam, state: stateParam } });
     const user = await UserManager.getCurrentUser();
     methods.setUser(user.name);
     methods.setEmail(user.email);
