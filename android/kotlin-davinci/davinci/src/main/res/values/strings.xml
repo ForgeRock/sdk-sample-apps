@@ -1,0 +1,33 @@
+<!--
+  ~ Copyright (c) 2024 Ping Identity. All rights reserved.
+  ~
+  ~ This software may be modified and distributed under the terms
+  ~ of the MIT license. See the LICENSE file for details.
+  -->
+
+<resources>
+    <string name="app_name">DaVinci</string>
+    <string name="submit">submit</string>
+
+    <string name="title_cq77vwelou">Sign On</string>
+    <string name="desc_cq77vwelou">Welcome to Ping Identity</string>
+    <string name="title_qwnvng32z3">Password Reset</string>
+    <string name="desc_qwnvng32z3">Enter your username, and we\'ll send password reset instructions to your email address.</string>
+    <string name="title_4dth5sn269">Create Your Profile</string>
+
+    <string name="desc_4dth5sn269">Enter your information to create your account.</string>
+
+    <string name="title_qojn9nsdxh">Verification Code</string>
+    <string name="desc_qojn9nsdxh">We’ve sent a verification code to your email address. Please verify your email to finish setting up your account.</string>
+
+    <string name="title_fkekf3oi8e">Enter New Password</string>
+    <string name="desc_fkekf3oi8e">If you have an active account with a valid email address, you will receive an email with a recovery code which you may enter here, along with a new password.
+    If you do not have an account or email, please contact your administrator to recover your password.</string>
+
+
+    <!-- Facebook Login -->
+    <string name="facebook_app_id">{facebook client id}</string>
+    <string name="fb_login_protocol_scheme">fb{facebook client id}</string>
+    <string name="facebook_client_token">{client token}</string>
+
+</resources>
