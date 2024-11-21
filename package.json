@@ -13,6 +13,7 @@
     "javascript/todo-api"
   ],
   "scripts": {
+    "clean": "npm run clean -ws --if-present; rm -rf node_modules",
     "todo-api": "npm start --workspace todo-api",
     "angular-todo": "npm start --workspace angular-todo",
     "reactjs-todo": "npm start --workspace reactjs-todo",
@@ -23,8 +24,27 @@
     "lint": "npm run lint --workspaces --if-present",
     "prepare": "husky install"
   },
+  "dependencies": {
+    "@angular/animations": "^18.2.12",
+    "@angular/common": "^18.2.12",
+    "@angular/compiler": "^18.2.12",
+    "@angular/core": "^18.2.12",
+    "@angular/forms": "^18.2.12",
+    "@angular/platform-browser": "^18.2.12",
+    "@angular/platform-browser-dynamic": "^18.2.12",
+    "@angular/router": "^18.2.12",
+    "@angular-devkit/build-angular": "^18.2.12",
+    "@angular-eslint/builder": "^18.4.1",
+    "@angular-eslint/eslint-plugin": "18.4.1",
+    "@angular-eslint/eslint-plugin-template": "^18.4.1",
+    "@angular-eslint/schematics": "^18.4.1",
+    "@angular-eslint/template-parser": "^18.4.1",
+    "@angular/cli": "^18.2.12",
+    "@angular/compiler-cli": "^18.2.12"
+  },
   "devDependencies": {
-    "@playwright/test": "^1.41.2",
+    "@playwright/test": "^1.42.0",
+    "playwright": "^1.42.0",
     "@types/node": "^20.11.20",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.11.0",

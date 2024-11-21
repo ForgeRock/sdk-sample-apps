@@ -23,6 +23,7 @@
   },
   "scripts": {
     "build": "webpack",
+    "clean": "rm -rf node_modules",
     "start": "webpack serve",
     "lint": "eslint ."
   },

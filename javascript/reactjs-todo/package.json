@@ -27,6 +27,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "local-web-server": "^4.2.1",
     "mini-css-extract-plugin": "^1.6.0",
+    "playwright": "^1.42.0",
     "postcss": "^8.3.5",
     "postcss-loader": "^6.1.0",
     "prettier": "^2.3.2",
@@ -52,6 +53,7 @@
   },
   "scripts": {
     "build": "webpack",
+    "clean": "rm -rf node_modules",
     "start": "webpack serve --mode development",
     "lint": "eslint .",
     "e2e": "playwright test",
