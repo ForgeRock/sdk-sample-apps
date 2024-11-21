@@ -58,9 +58,8 @@ export class DaVinciFlowComponent implements OnInit {
     }
   }
 
-  updateValue(value: string, collector: Collector): void {
-    const updater = this.davinciClient.update(collector);
-    updater(value);
+  updateCollector(updateFn: (value: string) => void, value: string): void {
+    updateFn(value);
   }
 
   async submitHandler(event: Event): Promise<void> {
