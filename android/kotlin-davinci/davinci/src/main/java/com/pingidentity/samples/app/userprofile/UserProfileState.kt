@@ -14,9 +14,9 @@ import kotlinx.serialization.json.JsonObject
  * The user profile state.
  *
  * @property user The user profile.
- * @property error The OIDC error.
+ * @property error The error.
  */
 data class UserProfileState(
     var user: JsonObject? = null,
-    var error: OidcError? = null,
+    var error: Throwable? = null,
 )
