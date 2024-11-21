@@ -21,7 +21,7 @@ export default defineConfig({
       url,
       timeout: 120 * 1000,
       reuseExistingServer: !process.env.CI,
-      cwd: '../',
+      cwd: '../../',
       env: {
         API_URL: 'http://localhost:9443',
         DEBUGGER_OFF: 'true',

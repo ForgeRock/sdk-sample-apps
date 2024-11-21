@@ -21,3 +21,7 @@ export const SESSION_URL = `${SERVER_URL}json/realms/root/sessions`;
 export const SERVER_TYPE = process.env.SERVER_TYPE;
 export const SCOPE = process.env.SCOPE;
 export const WELLKNOWN_URL = process.env.WELLKNOWN_URL;
+<<<<<<< Updated upstream
+=======
+console.log(WELLKNOWN_URL);
+>>>>>>> Stashed changes

@@ -31,6 +31,7 @@ module.exports = () => {
   const SCOPE = process.env.SCOPE || localEnv.SCOPE;
   const SERVER_TYPE = process.env.SERVER_TYPE || localEnv.SERVER_TYPE;
   const WELLKNOWN_URL = process.env.WELLKNOWN_URL || localEnv.WELLKNOWN_URL;
+  console.log(WELLKNOWN_URL);
 
   return {
     // Point to the top level source file

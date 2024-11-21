@@ -21,7 +21,7 @@ export default defineConfig({
       url,
       timeout: 120 * 1000,
       reuseExistingServer: !process.env.CI,
-      cwd: '../',
+      cwd: '../../',
       env: {
         API_URL: 'http://localhost:9443',
         DEBUGGER_OFF: 'true',
@@ -29,7 +29,9 @@ export default defineConfig({
         JOURNEY_LOGIN: 'Login',
         JOURNEY_REGISTER: 'Registration',
         PORT: '9443',
-        AM_URL: 'https://openam-sdks.forgeblocks.com/am',
+        SERVER_URL: 'https://openam-sdks.forgeblocks.com/am',
+        WELLKNOWN_URL:
+          'https://openam-sdks.forgeblocks.com/am/oauth2/realms/root/realms/alpha/.well-known/openid-configuration',
         REALM_PATH: 'alpha',
         SCOPE: 'profile me.read email',
         TIMEOUT: '3000',

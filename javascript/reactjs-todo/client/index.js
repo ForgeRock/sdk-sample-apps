@@ -75,7 +75,11 @@ const journeyParam = urlParams.get('journey');
     tree: `${journeyParam || JOURNEY_LOGIN}`,
   });
  * *************************************************************************** */
+<<<<<<< Updated upstream
 
+=======
+console.log('we are here');
+>>>>>>> Stashed changes
 await Config.setAsync({
   clientId: WEB_OAUTH_CLIENT, // e.g. PingOne Services Client GUID
   redirectUri: `${window.location.origin}/${
@@ -86,8 +90,12 @@ await Config.setAsync({
   scope: SCOPE, // e.g. 'openid profile email address phone revoke' When using PingOne services `revoke` scope is required
   serverConfig: {
     wellknown: WELLKNOWN_URL,
-    timeout: '3000', // Any value between 3000 to 5000 is good, this impacts the redirect time to login. Change that according to your needs.
+    timeout: 3000, // Any value between 3000 to 5000 is good, this impacts the redirect time to login. Change that according to your needs.
   },
+<<<<<<< Updated upstream
+=======
+  realmPath: 'alpha',
+>>>>>>> Stashed changes
   tree: `${journeyParam || JOURNEY_LOGIN}`,
 });
 

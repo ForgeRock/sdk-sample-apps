@@ -6,8 +6,8 @@ node_modules
 **/dist
 **/build
 .angular
-todo-api/todos/*
-todo-api/users/*
+*/todo-api/todos/*
+*/todo-api/users/*
 reactjs-todo/public/*
 !reactjs-todo/public/index.html
 !reactjs-todo/public/callback.html
