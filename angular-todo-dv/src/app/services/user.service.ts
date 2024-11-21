@@ -25,7 +25,7 @@ export class UserService {
   isAuthenticated = false;
 
   /**
-   * State repreesnting previously retrieved user information
+   * State representing previously retrieved user information
    */
   info?: Record<string, unknown>;
 
