@@ -11,28 +11,36 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pingidentity.davinci.DaVinci
 import com.pingidentity.davinci.module.Oidc
+import com.pingidentity.exception.ApiException
 import com.pingidentity.logger.Logger
 import com.pingidentity.logger.STANDARD
 import com.pingidentity.orchestrate.ContinueNode
+import com.pingidentity.orchestrate.FailureNode
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-val prod = DaVinci {
+/**
+ * The DaVinci instance.
+ */
+val daVinci = DaVinci {
     logger = Logger.STANDARD
+
+    //TODO: Provide here the Server configuration. Add the PingOne server Discovery Endpoint and
+    // the OAuth2.0 client details
 
     // Oidc as module
     module(Oidc) {
-        clientId = "c12743f9-08e8-4420-a624-71bbb08e9fe1"
-        discoveryEndpoint = "https://auth.pingone.ca/02fb4743-189a-4bc7-9d6c-a919edfe6447/as/.well-known/openid-configuration"
-        scopes = mutableSetOf("openid", "email", "address", "phone", "profile")
-        redirectUri = "org.forgerock.demo://oauth2redirect"
-        //storage = dataStore
+        clientId = "<Client ID>"
+        discoveryEndpoint = "<Discovery Endpoint>"
+        scopes = mutableSetOf("<scope1>", "<scope2>", "...")
+        redirectUri = "<Redirect URI>"
     }
 }
 
-val daVinci = prod
-
+/**
+ * The view model for the DaVinci app. Holds the state of the app.
+ */
 class DaVinciViewModel : ViewModel() {
     var state = MutableStateFlow(DaVinciState())
         private set
@@ -40,10 +48,18 @@ class DaVinciViewModel : ViewModel() {
     var loading = MutableStateFlow(false)
         private set
 
+    /**
+     * Initialize the DaVinci flow.
+     */
     init {
         start()
     }
 
+    /**
+     * Call the next node in the DaVinci flow.
+     *
+     * @param current The current node.
+     */
     fun next(current: ContinueNode) {
         loading.update {
             true
@@ -59,23 +75,35 @@ class DaVinciViewModel : ViewModel() {
         }
     }
 
+    /**
+     * Start the DaVinci flow.
+     */
     fun start() {
         loading.update {
             true
         }
         viewModelScope.launch {
-
             val next = daVinci.start()
 
-            state.update {
-                it.copy(prev = next, node = next)
+            if (next is FailureNode) {
+                state.update {
+                    it.copy(error = next.cause)
+                }
+            } else {
+                state.update {
+                    it.copy(prev = next, node = next)
+                }
+                loading.update {
+                    false
+                }
             }
-            loading.update {
-                false
-            }
+
         }
     }
 
+    /**
+     * Refresh the state of the DaVinci flow.
+     */
     fun refresh() {
         state.update {
             it.copy(prev = it.prev, node = it.node)

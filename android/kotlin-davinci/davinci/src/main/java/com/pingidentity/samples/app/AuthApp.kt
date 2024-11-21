@@ -37,6 +37,9 @@ import androidx.navigation.compose.rememberNavController
 import com.pingidentity.samples.app.theme.AppTheme
 import kotlinx.coroutines.launch
 
+/**
+ * The DaVinci app.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AuthApp() {
@@ -109,6 +112,12 @@ fun AuthApp() {
     }
 }
 
+/**
+ * Get the title of the current screen.
+ *
+ * @param backStackEntry The back stack entry.
+ * @return The title of the current screen.
+ */
 fun getTitle(backStackEntry: NavBackStackEntry?): String {
     return backStackEntry?.destination?.route ?: Destinations.DAVINCI
 }

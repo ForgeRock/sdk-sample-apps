@@ -17,6 +17,12 @@ import com.pingidentity.samples.app.token.Token
 import com.pingidentity.samples.app.userprofile.UserProfile
 import com.pingidentity.samples.app.userprofile.UserProfileViewModel
 
+/**
+ * The navigation host.
+ *
+ * @param navController The navigation controller.
+ * @param startDestination The start destination.
+ */
 @Composable
 fun AppNavHost(
     navController: NavHostController,

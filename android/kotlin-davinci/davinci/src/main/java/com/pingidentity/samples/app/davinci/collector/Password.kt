@@ -32,6 +32,12 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.pingidentity.davinci.collector.PasswordCollector
 
+/**
+ * The password field.
+ *
+ * @param field The password collector.
+ * @param onNodeUpdated The callback to be called when the current node is updated.
+ */
 @Composable
 fun Password(
     field: PasswordCollector,

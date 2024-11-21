@@ -17,11 +17,17 @@ import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.sp
 import com.pingidentity.samples.app.R
 
+/**
+ * The font family for the app.
+ */
 private val Montserrat = FontFamily(
     Font(R.font.montserrat_regular),
     Font(R.font.montserrat_medium, FontWeight.W500)
 )
 
+/**
+ * The default text style.
+ */
 @Suppress("DEPRECATION")
 val defaultTextStyle = TextStyle(
     fontFamily = Montserrat,
@@ -34,6 +40,9 @@ val defaultTextStyle = TextStyle(
     )
 )
 
+/**
+ * Text styles for the app.
+ */
 val AppTypography = Typography(
     displayLarge = defaultTextStyle.copy(
         fontSize = 57.sp, lineHeight = 64.sp, letterSpacing = (-0.25).sp

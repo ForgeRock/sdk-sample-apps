@@ -44,9 +44,16 @@ import com.pingidentity.orchestrate.ContinueNode
 import com.pingidentity.orchestrate.ErrorNode
 import com.pingidentity.orchestrate.FailureNode
 import com.pingidentity.orchestrate.SuccessNode
+import com.pingidentity.samples.app.ErrorAlert
 import com.pingidentity.samples.app.R
 import com.pingidentity.samples.app.davinci.collector.ContinueNode
 
+/**
+ * DaVinci flow screen.
+ *
+ * @param daVinciViewModel The view model for the DaVinci app.
+ * @param onSuccess The callback to be called when the DaVinci flow is successfully completed.
+ */
 @Composable
 fun DaVinci(
     daVinciViewModel: DaVinciViewModel = viewModel<DaVinciViewModel>(),
@@ -73,6 +80,15 @@ fun DaVinci(
     )
 }
 
+/**
+ * DaVinci flow screen.
+ *
+ * @param state The state of the DaVinci flow.
+ * @param loading Whether the DaVinci flow is loading.
+ * @param onNodeUpdated The callback to be called when the current node is updated.
+ * @param onNext The callback to be called when the next node is selected.
+ * @param onSuccess The callback to be called when the DaVinci flow is successfully completed.
+ */
 @Composable
 fun DaVinci(
     state: DaVinciState,
@@ -131,9 +147,17 @@ fun DaVinci(
                 else -> {}
             }
         }
+        state.error?.apply {
+            ErrorAlert(throwable = this)
+        }
     }
 }
 
+/**
+ * Render a node.
+ *
+ * @param node The failure node to render.
+ */
 @Composable
 fun Render(node: FailureNode) {
     Row(
@@ -172,6 +196,11 @@ fun Render(node: FailureNode) {
     }
 }
 
+/**
+ * Render a node.
+ *
+ * @param node The error node to render.
+ */
 @Composable
 fun Render(node: ErrorNode) {
     Row(
@@ -210,6 +239,13 @@ fun Render(node: ErrorNode) {
     }
 }
 
+/**
+ * Render a node.
+ *
+ * @param node The continue node to render.
+ * @param onNodeUpdated The callback to be called when the current node is updated.
+ * @param onNext The callback to be called when the next node is triggered.
+ */
 @Composable
 fun Render(
     node: ContinueNode,
@@ -219,6 +255,11 @@ fun Render(
     ContinueNode(node, onNodeUpdated, onNext)
 }
 
+/**
+ * The logo.
+ *
+ * @param modifier The modifier to be applied to the logo.
+ */
 @Composable
 private fun Logo(modifier: Modifier) {
     Row(

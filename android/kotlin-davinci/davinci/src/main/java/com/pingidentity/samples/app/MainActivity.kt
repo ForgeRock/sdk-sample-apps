@@ -13,6 +13,9 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 
+/**
+ * The main activity.
+ */
 class MainActivity : ComponentActivity() {
     private val viewModel: MainViewModel by viewModels()
 

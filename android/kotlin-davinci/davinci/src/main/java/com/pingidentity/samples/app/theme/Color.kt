@@ -9,6 +9,11 @@ package com.pingidentity.samples.app.theme
 
 import androidx.compose.ui.graphics.Color
 
+/**
+ * The app colors.
+ * Generated using: https://m3.material.io/theme-builder
+ */
+
 val md_theme_light_primary = Color(0xFFB3282D)
 val md_theme_light_onPrimary = Color(0xFFFFFFFF)
 val md_theme_light_primaryContainer = Color(0xFFFFDAD7)

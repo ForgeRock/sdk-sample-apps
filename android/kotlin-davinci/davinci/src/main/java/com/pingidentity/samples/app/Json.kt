@@ -9,6 +9,9 @@ package com.pingidentity.samples.app
 
 import kotlinx.serialization.json.Json
 
+/**
+ * The JSON serializer.
+ */
 internal val json: Json = Json {
     prettyPrint = true
     ignoreUnknownKeys = true

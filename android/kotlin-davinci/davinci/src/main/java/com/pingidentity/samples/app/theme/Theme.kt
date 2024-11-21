@@ -13,6 +13,9 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 
+/**
+ * The light theme colors.
+ */
 private val LightColors = lightColorScheme(
     primary = md_theme_light_primary,
     onPrimary = md_theme_light_onPrimary,
@@ -45,7 +48,9 @@ private val LightColors = lightColorScheme(
     scrim = md_theme_light_scrim,
 )
 
-
+/**
+ * The dark theme colors.
+ */
 private val DarkColors = darkColorScheme(
     primary = md_theme_dark_primary,
     onPrimary = md_theme_dark_onPrimary,
@@ -78,6 +83,12 @@ private val DarkColors = darkColorScheme(
     scrim = md_theme_dark_scrim,
 )
 
+/**
+ * The app theme.
+ *
+ * @param useDarkTheme Whether the theme should use dark colors or not.
+ * @param content The content to be rendered within the theme.
+ */
 @Composable
 fun AppTheme(
     useDarkTheme: Boolean = isSystemInDarkTheme(),

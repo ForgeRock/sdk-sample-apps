@@ -13,7 +13,16 @@ import com.pingidentity.davinci.user
 import com.pingidentity.samples.app.davinci.daVinci
 import kotlinx.coroutines.launch
 
+/**
+ * The logout view model.
+ */
 class LogoutViewModel : ViewModel() {
+
+    /**
+     * Logout the user.
+     *
+     * @param onCompleted The callback when the logout is completed.
+     */
     fun logout(onCompleted: () -> Unit) {
         viewModelScope.launch {
             daVinci.user()?.logout()

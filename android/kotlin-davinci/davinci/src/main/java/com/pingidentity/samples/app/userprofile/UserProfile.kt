@@ -28,6 +28,11 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
+/**
+ * The user profile screen.
+ *
+ * @param userProfileViewModel The user profile view model.
+ */
 @Composable
 fun UserProfile(userProfileViewModel: UserProfileViewModel) {
     val state by userProfileViewModel.state.collectAsState()
@@ -71,6 +76,9 @@ fun UserProfile(userProfileViewModel: UserProfileViewModel) {
     }
 }
 
+/**
+ * The JSON serializer.
+ */
 @OptIn(ExperimentalSerializationApi::class)
 val prettyJson =
     Json { // this returns the JsonBuilder

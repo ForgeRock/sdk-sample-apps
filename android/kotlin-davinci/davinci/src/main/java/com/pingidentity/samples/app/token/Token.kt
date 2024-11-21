@@ -30,9 +30,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.pingidentity.samples.app.ErrorAlert
 import com.pingidentity.samples.app.json
 import kotlinx.serialization.encodeToString
 
+/**
+ * The token screen.
+ *
+ * @param tokenViewModel The token view model.
+ */
 @Composable
 fun Token(tokenViewModel: TokenViewModel = viewModel<TokenViewModel>()) {
     val tokenState by tokenViewModel.state.collectAsState()
@@ -94,5 +100,8 @@ fun Token(tokenViewModel: TokenViewModel = viewModel<TokenViewModel>()) {
                 Text(text = "Clear")
             }
         }
+    }
+    tokenState.error?.apply {
+        ErrorAlert(throwable = this)
     }
 }

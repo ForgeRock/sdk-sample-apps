@@ -7,6 +7,9 @@
 
 package com.pingidentity.samples.app
 
+/**
+ * The destinations.
+ */
 object Destinations {
     const val TOKEN_ROUTE = "Access Token"
     const val USER_INFO = "User Info"
