@@ -17,14 +17,13 @@ android {
 
     defaultConfig {
         applicationId = "com.pingidentity.samples.app"
-        minSdk = 24
+        minSdk = 29
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        manifestPlaceholders["appRedirectUriScheme"] = "myapp"
     }
 
     buildTypes {
@@ -69,17 +68,11 @@ dependencies {
     // DaVinci SDK
     implementation("com.pingidentity.sdks:davinci:0.9.2-SNAPSHOT")
 
-    //App Auth is only required for Centralize Login with oidc module
-    implementation(libs.appauth)
-
-    implementation(libs.androidx.datastore.preferences)
-
     implementation(libs.compose.ui)
     implementation(libs.compose.material3)
     implementation(libs.compose.foundation)
 
     // Android Studio Preview support
-    implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.core.splashscreen)
     debugImplementation(libs.androidx.ui.tooling)
     implementation(libs.androidx.activity.compose)
@@ -90,7 +83,4 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
 }

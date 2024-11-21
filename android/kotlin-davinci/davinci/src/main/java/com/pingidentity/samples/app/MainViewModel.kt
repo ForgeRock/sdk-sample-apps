@@ -24,7 +24,6 @@ class MainViewModel : ViewModel() {
         viewModelScope.launch {
             delay(2.toDuration(DurationUnit.SECONDS))
             isLoading.value = false
-
         }
     }
 }

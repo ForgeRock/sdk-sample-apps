@@ -35,8 +35,7 @@ import com.pingidentity.orchestrate.ContinueNode
 fun ContinueNode(
     continueNode: ContinueNode,
     onNodeUpdated: () -> Unit,
-    onStart: () -> Unit,
-    onNext: () -> Unit,
+    onNext: () -> Unit
 ) {
     Row(
         modifier =

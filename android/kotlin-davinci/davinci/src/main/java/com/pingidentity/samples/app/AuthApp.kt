@@ -110,10 +110,5 @@ fun AuthApp() {
 }
 
 fun getTitle(backStackEntry: NavBackStackEntry?): String {
-    var result = backStackEntry?.destination?.route ?: Destinations.ENV_ROUTE
-    if (result.startsWith(Destinations.JOURNEY_ROUTE)) {
-        result =
-            Destinations.JOURNEY_ROUTE + "- ${backStackEntry?.arguments?.getString("name")}"
-    }
-    return result
+    return backStackEntry?.destination?.route ?: Destinations.DAVINCI
 }

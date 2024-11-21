@@ -10,5 +10,5 @@ package com.pingidentity.samples.app
 object Destinations {
     const val TOKEN_ROUTE = "Access Token"
     const val USER_INFO = "User Info"
-    const val DAVINCI = "DAVINCI"
+    const val DAVINCI = "DaVinci"
 }

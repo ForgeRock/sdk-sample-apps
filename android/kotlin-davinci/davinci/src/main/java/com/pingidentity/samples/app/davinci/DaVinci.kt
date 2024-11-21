@@ -69,10 +69,7 @@ fun DaVinci(
         onNext = {
             daVinciViewModel.next(it)
         },
-        onStart = {
-            daVinciViewModel.start()
-        },
-        currentOnSuccess,
+        currentOnSuccess
     )
 }
 
@@ -82,7 +79,6 @@ fun DaVinci(
     loading: Boolean,
     onNodeUpdated: () -> Unit,
     onNext: (ContinueNode) -> Unit,
-    onStart: () -> Unit,
     onSuccess: (() -> Unit)?,
 ) {
     val scroll = rememberScrollState(0)
@@ -106,7 +102,7 @@ fun DaVinci(
 
             when (val node = state.node) {
                 is ContinueNode -> {
-                    Render(node = node, onNodeUpdated, onStart) {
+                    Render(node = node, onNodeUpdated) {
                         onNext(node)
                     }
                 }
@@ -120,7 +116,7 @@ fun DaVinci(
                     Render(node)
                     // Render the previous node
                     if (state.prev is ContinueNode) {
-                        Render(node = state.prev, onNodeUpdated, onStart) {
+                        Render(node = state.prev, onNodeUpdated) {
                             onNext(state.prev)
                         }
                     }
@@ -218,10 +214,9 @@ fun Render(node: ErrorNode) {
 fun Render(
     node: ContinueNode,
     onNodeUpdated: () -> Unit,
-    onStart: () -> Unit,
     onNext: () -> Unit,
 ) {
-    ContinueNode(node, onNodeUpdated, onStart, onNext)
+    ContinueNode(node, onNodeUpdated, onNext)
 }
 
 @Composable

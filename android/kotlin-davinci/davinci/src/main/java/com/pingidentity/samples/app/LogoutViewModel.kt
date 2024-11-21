@@ -16,7 +16,6 @@ import kotlinx.coroutines.launch
 class LogoutViewModel : ViewModel() {
     fun logout(onCompleted: () -> Unit) {
         viewModelScope.launch {
-            //If you are using DaVinci, you can use the DaVinci user object to logout
             daVinci.user()?.logout()
         }
         onCompleted()
