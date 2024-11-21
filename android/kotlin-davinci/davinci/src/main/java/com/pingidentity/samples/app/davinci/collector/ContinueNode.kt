@@ -29,7 +29,6 @@ import com.pingidentity.davinci.collector.TextCollector
 import com.pingidentity.davinci.module.description
 import com.pingidentity.davinci.module.name
 import com.pingidentity.davinci.plugin.collectors
-import com.pingidentity.idp.davinci.IdpCollector
 import com.pingidentity.orchestrate.ContinueNode
 
 @Composable
@@ -96,7 +95,6 @@ fun ContinueNode(
 
                 is TextCollector -> Text(it, onNodeUpdated)
 
-                is IdpCollector -> SocialLoginButton(it, onStart, onNext)
             }
         }
 

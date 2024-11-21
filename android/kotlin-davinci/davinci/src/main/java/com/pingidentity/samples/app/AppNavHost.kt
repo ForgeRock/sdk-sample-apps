@@ -12,8 +12,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.pingidentity.samples.app.centralize.Centralize
-import com.pingidentity.samples.app.centralize.CentralizeLoginViewModel
 import com.pingidentity.samples.app.davinci.DaVinci
 import com.pingidentity.samples.app.token.Token
 import com.pingidentity.samples.app.userprofile.UserProfile
@@ -39,10 +37,6 @@ fun AppNavHost(
         composable(Destinations.USER_INFO) {
             val userProfileViewModel = viewModel<UserProfileViewModel>()
             UserProfile(userProfileViewModel)
-        }
-        composable(Destinations.CENTRALIZE_ROUTE) {
-            val centralizeLoginViewModel = viewModel<CentralizeLoginViewModel>()
-            Centralize(centralizeLoginViewModel)
         }
     }
 }

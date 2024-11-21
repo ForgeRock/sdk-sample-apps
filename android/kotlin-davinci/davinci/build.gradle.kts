@@ -67,7 +67,7 @@ dependencies {
     implementation(composeBom)
 
     // DaVinci SDK
-    implementation("com.pingidentity.sdks:davinci:0.9.1-SNAPSHOT")
+    implementation("com.pingidentity.sdks:davinci:0.9.2-SNAPSHOT")
 
     //App Auth is only required for Centralize Login with oidc module
     implementation(libs.appauth)

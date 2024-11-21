@@ -9,7 +9,8 @@ package com.pingidentity.samples.app.userprofile
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.pingidentity.samples.app.User
+import com.pingidentity.davinci.user
+import com.pingidentity.samples.app.davinci.daVinci
 import com.pingidentity.utils.Result
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -21,7 +22,7 @@ class UserProfileViewModel : ViewModel() {
 
     fun userinfo() {
         viewModelScope.launch {
-            User.user()?.let { user ->
+            daVinci.user()?.let { user ->
                 when (val result = user.userinfo(false)) {
                     is Result.Failure ->
                         state.update { s ->
