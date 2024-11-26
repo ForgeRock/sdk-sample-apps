@@ -36,7 +36,10 @@ To try out the Ping iOS SDK please look at one of our samples:
 
 ### Integrate with PingOne:
 
-- Samples coming soon
+-  [**Davinci using SwiftUI - `/ios/swiftui-davinci`**](./swiftui-davinci/)
+
+    - An example iOS project written in Swift/SwiftUI making use of the SDK. The sample supports the OOTB DaVinci Login flow.
+    
 
 ## Requirements
 
