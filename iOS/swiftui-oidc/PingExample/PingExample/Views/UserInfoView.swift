@@ -23,11 +23,5 @@ struct UserInfoView: View {
                         .padding(.horizontal)
                         .navigationTitle("User Info")
         
-        NextButton(title: "Procced to logout") {
-            Task {
-                FRUser.currentUser?.logout()
-                path.removeLast()
-            }
-        }
     }
 }

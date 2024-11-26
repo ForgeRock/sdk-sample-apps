@@ -23,12 +23,6 @@ struct AccessTokenView: View {
                             .foregroundStyle(.secondary)
                             .padding(.horizontal)
                             .navigationTitle("AccessToken")
-            NextButton(title: "Procced to logout") {
-                Task {
-                    FRUser.currentUser?.logout()
-                    path.removeLast()
-                }
-            }
         }
     }
 }

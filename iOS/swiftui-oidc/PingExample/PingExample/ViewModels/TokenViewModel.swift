@@ -23,13 +23,18 @@ class TokenViewModel: ObservableObject {
     
     func accessToken() async {
         Task { @MainActor in
-            FRUser.currentUser?.getAccessToken(completion: { user, error in
-                if let token = user?.token {
-                    self.accessToken = String(describing: token.value)
-                } else {
-                    self.accessToken = error?.localizedDescription ?? "Error was nil"
-                }
-            })
+            if let user = FRUser.currentUser {
+                user.getAccessToken(completion: { user, error in
+                    if let token = user?.token {
+                        self.accessToken = String(describing: token.value)
+                    } else {
+                        self.accessToken = error?.localizedDescription ?? "Error was nil"
+                    }
+                })
+            } else {
+                self.accessToken = "No user found, need to log in first."
+            }
+            
         }
     }
 }

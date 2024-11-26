@@ -11,20 +11,11 @@
 import Foundation
 import FRAuth
 import UIKit
+import SwiftUI
 
 class OIDCViewModel: ObservableObject {
     
-    private var topViewController: UIViewController? {
-        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-              let keyWindow = windowScene.windows.first(where: { $0.isKeyWindow }),
-              var topController = keyWindow.rootViewController else {
-            return nil
-        }
-        while let presentedViewController = topController.presentedViewController {
-            topController = presentedViewController
-        }
-        return topController
-    }
+    @Published var status: String = ""
     
     public func startOIDC() async throws -> FRUser {
         
@@ -33,15 +24,32 @@ class OIDCViewModel: ObservableObject {
             Task { @MainActor in
                 FRUser.browser()?
                     .set(presentingViewController: self.topViewController!)
-                    .set(browserType: .authSession)
+                    .set(browserType: ConfigurationManager.shared.currentConfigurationViewModel?.getBrowserType() ?? .authSession)
                     .build().login { (user, error) in
                         if let frUser = user {
+                            Task { @MainActor in
+                                self.status = "User is authenticated"
+                            }
                             continuation.resume(returning: frUser)
                         } else {
+                            Task { @MainActor in
+                                self.status = error?.localizedDescription ?? "Error was nil"
+                            }
                             continuation.resume(throwing: error!)
                         }
                     }
             }
         })
     }
+    
+    public func updateStatus() {
+        Task { @MainActor in
+            if let _ = FRUser.currentUser {
+                self.status = "User is authenticated"
+            } else {
+                self.status = "User is logged out"
+            }
+        }
+    }
+        
 }
