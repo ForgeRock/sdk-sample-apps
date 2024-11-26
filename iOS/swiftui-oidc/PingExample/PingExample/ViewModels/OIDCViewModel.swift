@@ -51,5 +51,4 @@ class OIDCViewModel: ObservableObject {
             }
         }
     }
-        
 }

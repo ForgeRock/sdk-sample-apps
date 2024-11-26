@@ -23,6 +23,23 @@ struct AccessTokenView: View {
                             .foregroundStyle(.secondary)
                             .padding(.horizontal)
                             .navigationTitle("AccessToken")
+            Spacer(minLength: 35.0)
+            Button(action: {
+                Task {
+                    self.tokenViewModel.refreshTokens()
+                }
+            }) {
+                Text("Refresh Token")
+            }
+            Spacer(minLength: 35.0)
+            Button(action: {
+                Task {
+                    self.tokenViewModel.revokeTokens()
+                }
+            }) {
+                Text("Revoke Token")
+            }
+            Spacer(minLength: 25.0)
         }
     }
 }

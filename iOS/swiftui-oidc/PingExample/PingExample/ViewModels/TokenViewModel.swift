@@ -37,4 +37,34 @@ class TokenViewModel: ObservableObject {
             
         }
     }
+    
+    public func revokeTokens() {
+        
+        if let user = FRUser.currentUser {
+            user.revokeAccessToken { user, error in
+                Task { @MainActor in
+                    if let _ = user {
+                        self.accessToken = "Token revoked"
+                    } else {
+                        self.accessToken = error?.localizedDescription ?? "Error was nil"
+                    }
+                }
+            }
+        }
+    }
+    
+    public func refreshTokens() {
+        if let user = FRUser.currentUser {
+            user.refresh { user, error in
+                Task { @MainActor in
+                    if let token = user?.token {
+                        self.accessToken = "Token refreshed: \(String(describing: token.value))"
+                    } else {
+                        self.accessToken = error?.localizedDescription ?? "Error was nil"
+                    }
+                }
+            }
+        }
+        
+    }
 }

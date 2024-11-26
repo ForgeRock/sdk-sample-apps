@@ -1,4 +1,5 @@
 import SwiftUI
+import FRAuth
 
 struct ContentView: View {
     
@@ -44,6 +45,7 @@ struct ContentView: View {
                     Button(action: {
                         Task {
                             await logoutViewModel.logout()
+                            self.oidcViewModel.updateStatus()
                         }
                     }) {
                         Text("Logout")
@@ -108,6 +110,9 @@ struct MyApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .onOpenURL { (url) in
+                    let _ = Browser.validateBrowserLogin(url: url)
+                }
         }
     }
 }
