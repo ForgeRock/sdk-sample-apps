@@ -73,7 +73,7 @@ struct InputButton: View {
         .foregroundColor(.white)
         .padding()
         .frame(width: 300, height: 50)
-        .background(Color(red: 163.0/255.0, green: 19.0/255.0, blue: 0.0/255.0)) // Red color
+        .background(Color.themeButtonBackground)
         .cornerRadius(15.0)
         .shadow(radius: 10.0, x: 20, y: 10)
     }
@@ -95,7 +95,7 @@ struct NextButton: View {
         .foregroundColor(.white)
         .padding()
         .frame(width: 300, height: 50)
-        .background(Color.green)
+        .background(Color.themeButtonBackground)
         .cornerRadius(15.0)
         .shadow(radius: 10.0, x: 20, y: 10)
     }
@@ -107,5 +107,9 @@ struct NextButton: View {
 extension Color {
   static var themeTextField: Color {
     return Color(red: 220.0/255.0, green: 230.0/255.0, blue: 230.0/255.0, opacity: 1.0)
+  }
+  
+  static var themeButtonBackground: Color {
+    return Color(red: 163.0/255.0, green: 19.0/255.0, blue: 0.0/255.0) // Red color
   }
 }
