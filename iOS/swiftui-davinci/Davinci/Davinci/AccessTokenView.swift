@@ -1,5 +1,5 @@
 //
-//  AccessToken.swift
+//  AccessTokenView.swift
 //  Davinci
 //
 //  Copyright (c) 2024 Ping Identity. All rights reserved.
@@ -8,14 +8,17 @@
 //  of the MIT license. See the LICENSE file for details.
 //
 
+
 import SwiftUI
 
+/// A view that displays the access token.
 struct AccessTokenView: View {
-  @StateObject var accessToken = TokenViewModel()
+  /// A state object that manages the access token data.
+  @StateObject var tokenViewModel = TokenViewModel()
   
   var body: some View {
     VStack {
-      TextEditor(text: $accessToken.accessToken)
+      TextEditor(text: $tokenViewModel.accessToken)
         .foregroundStyle(.secondary)
         .padding(.horizontal)
         .navigationTitle("AccessToken")
@@ -23,13 +26,3 @@ struct AccessTokenView: View {
   }
 }
 
-struct UserInfoView: View {
-  @StateObject var vm = UserInfoViewModel()
-  
-  var body: some View {
-    TextEditor(text: $vm.userInfo)
-      .foregroundStyle(.secondary)
-      .padding(.horizontal)
-      .navigationTitle("User Info")
-  }
-}

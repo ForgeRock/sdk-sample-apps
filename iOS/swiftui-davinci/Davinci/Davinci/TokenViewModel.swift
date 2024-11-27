@@ -8,18 +8,28 @@
 //  of the MIT license. See the LICENSE file for details.
 //
 
+
 import Foundation
 import PingLogger
 
+/// A view model responsible for managing the access token state.
+/// - This class handles fetching the access token using the DaVinci SDK and logs the results.
+/// - Provides an observable published property for UI updates.
 class TokenViewModel: ObservableObject {
+  /// Published property to hold the current access token.
+  /// - Updates are published to the UI whenever the value changes.
   @Published var accessToken: String = ""
   
+  /// Initializes the `TokenViewModel` and fetches the access token asynchronously.
   init() {
     Task {
       await accessToken()
     }
   }
   
+  /// Fetches the access token using the DaVinci SDK.
+  /// - The method checks for a successful token retrieval and updates the `accessToken` property.
+  /// - Logs the success or failure result using `PingLogger`.
   func accessToken() async {
     let token = await davinci.user()?.token()
     switch token {
@@ -35,47 +45,6 @@ class TokenViewModel: ObservableObject {
       LogManager.standard.e("", error: error)
     case .none:
       break
-    }
-  }
-}
-
-class UserInfoViewModel: ObservableObject {
-  @Published var userInfo: String = ""
-  
-  init() {
-    Task {
-      await fetchUserInfo()
-    }
-  }
-  
-  func fetchUserInfo() async {
-    let userInfo = await davinci.user()?.userinfo(cache: false)
-    switch userInfo {
-    case .success(let userInfoDictionary):
-      await MainActor.run {
-        var userInfoDescription = ""
-        userInfoDictionary.forEach { userInfoDescription += "\($0): \($1)\n" }
-        self.userInfo = userInfoDescription
-      }
-      LogManager.standard.i("UserInfo: \(String(describing: self.userInfo))")
-    case .failure(let error):
-      await MainActor.run {
-        self.userInfo = "Error: \(error.localizedDescription)"
-      }
-      LogManager.standard.e("", error: error)
-    case .none:
-      break
-    }
-  }
-}
-
-class LogOutViewModel: ObservableObject {
-  @Published var logout: String = ""
-  
-  func logout() async {
-    await davinci.user()?.logout()
-    await MainActor.run {
-      logout =  "Logout completed"
     }
   }
 }
