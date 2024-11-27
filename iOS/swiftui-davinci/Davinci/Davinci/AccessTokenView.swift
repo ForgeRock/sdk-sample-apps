@@ -14,11 +14,11 @@ import SwiftUI
 /// A view that displays the access token.
 struct AccessTokenView: View {
   /// A state object that manages the access token data.
-  @StateObject var tokenViewModel = TokenViewModel()
+  @StateObject var accessTokenViewModel = AccessTokenViewModel()
   
   var body: some View {
     VStack {
-      TextEditor(text: $tokenViewModel.accessToken)
+      TextEditor(text: $accessTokenViewModel.accessToken)
         .foregroundStyle(.secondary)
         .padding(.horizontal)
         .navigationTitle("AccessToken")

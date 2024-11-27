@@ -1,5 +1,5 @@
 //
-//  TokenViewModel.swift
+//  AccessTokenViewModel.swift
 //  Davinci
 //
 //  Copyright (c) 2024 Ping Identity. All rights reserved.
@@ -15,7 +15,7 @@ import PingLogger
 /// A view model responsible for managing the access token state.
 /// - This class handles fetching the access token using the DaVinci SDK and logs the results.
 /// - Provides an observable published property for UI updates.
-class TokenViewModel: ObservableObject {
+class AccessTokenViewModel: ObservableObject {
   /// Published property to hold the current access token.
   /// - Updates are published to the UI whenever the value changes.
   @Published var accessToken: String = ""

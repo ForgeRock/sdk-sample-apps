@@ -1,5 +1,5 @@
 //
-//  InputView.swift
+//  CustomViews.swift
 //  Davinci
 //
 //  Copyright (c) 2024 Ping Identity. All rights reserved.
@@ -11,6 +11,8 @@
 import SwiftUI
 import PingDavinci
 
+/// A view representing an input field, either a text field or a secure field.
+/// - Handles user input and updates the corresponding `Collector` object with the entered value.
 struct InputView: View {
   @State var text: String = ""
   let placeholderString: String
@@ -52,6 +54,8 @@ struct InputView: View {
   }
 }
 
+/// A reusable button view that interacts with a `Collector` object.
+/// - Designed to handle submit actions for form fields.
 struct InputButton: View {
   let title: String
   let field: any Collector
@@ -76,6 +80,8 @@ struct InputButton: View {
   }
 }
 
+/// A reusable button view for general "Next" actions.
+/// - Executes a provided action when tapped.
 struct NextButton: View {
   let title: String
   let action: () -> (Void)
@@ -96,6 +102,8 @@ struct NextButton: View {
   }
 }
 
+/// A custom color extension for theme consistency.
+/// - Provides a reusable color for text fields.
 extension Color {
   static var themeTextField: Color {
     return Color(red: 220.0/255.0, green: 230.0/255.0, blue: 230.0/255.0, opacity: 1.0)

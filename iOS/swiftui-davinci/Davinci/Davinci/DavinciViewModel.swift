@@ -21,24 +21,13 @@ import PingOrchestrate
 ///   - Redirect URI
 ///   - Discovery Endpoint
 ///   - Other optional fields
-//public let davinci = DaVinci.createDaVinci { config in
-//  //TODO: Provide here the Server configuration. Add the PingOne server Discovery Endpoint and the OAuth2.0 client details
-//  config.module(OidcModule.config) { oidcValue in
-//    oidcValue.clientId = <#"Client ID"#>
-//    oidcValue.scopes = [<#"scope1"#>, <#"scope2"#>, <#"scope3"#>]
-//    oidcValue.redirectUri = <#"Redirect URI"#>
-//    oidcValue.discoveryEndpoint = <#"Discovery Endpoint"#>
-//  }
-//}
 public let davinci = DaVinci.createDaVinci { config in
-  //config.debug = true
-  
+  //TODO: Provide here the Server configuration. Add the PingOne server Discovery Endpoint and the OAuth2.0 client details
   config.module(OidcModule.config) { oidcValue in
-    oidcValue.clientId = "021b83ce-a9b1-4ad4-8c1d-79e576eeab76"
-    oidcValue.scopes = ["openid", "email", "address", "phone", "profile"]
-    oidcValue.redirectUri = "org.forgerock.demo://oauth2redirect"
-    oidcValue.discoveryEndpoint = "https://auth.pingone.ca/02fb4743-189a-4bc7-9d6c-a919edfe6447/as/.well-known/openid-configuration"
-    oidcValue.refreshThreshold = 270
+    oidcValue.clientId = <#"Client ID"#>
+    oidcValue.scopes = [<#"scope1"#>, <#"scope2"#>, <#"scope3"#>]
+    oidcValue.redirectUri = <#"Redirect URI"#>
+    oidcValue.discoveryEndpoint = <#"Discovery Endpoint"#>
   }
 }
 
