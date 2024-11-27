@@ -13,10 +13,20 @@ import FRAuth
 import UIKit
 import SwiftUI
 
+/*
+ The ConfigurationViewModel class is an ObservableObject that is used to manage the configuration settings for the SDK. The class has the following properties:
+        status: The status of the user.
+ 
+    The class has the following methods:
+        startOIDC(): Starts the Centralized Login process.
+        updateStatus(): Updates the status of the user.
+    
+ */
 class OIDCViewModel: ObservableObject {
     
     @Published var status: String = ""
     
+    /// Start the Centralized Login process. Returns an FRUser object.
     public func startOIDC() async throws -> FRUser {
         
         return try await withCheckedThrowingContinuation({
@@ -42,6 +52,7 @@ class OIDCViewModel: ObservableObject {
         })
     }
     
+    /// Update the status of the user. Authenticated or logged out.
     public func updateStatus() {
         Task { @MainActor in
             if let _ = FRUser.currentUser {

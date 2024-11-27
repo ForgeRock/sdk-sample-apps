@@ -13,6 +13,16 @@ import Foundation
 import FRAuth
 import FRCore
 
+/*
+    The ConfigurationManager class is used to manage the configuration settings for the SDK.
+    The class provides the following functionality:
+       - Load the current configuration
+       - Save the current configuration
+       - Delete the saved configuration
+       - Provide the default configuration
+       - Start the SDK with the current configuration
+ */
+ 
 class ConfigurationManager: ObservableObject {
     static let shared = ConfigurationManager()
     public var user: FRUser?
@@ -25,6 +35,7 @@ class ConfigurationManager: ObservableObject {
         return self.currentConfigurationViewModel!
     }
     
+    /// Start the SDK with the current configuration
     public func startSDK() async throws -> Bool {
         if let currentConfiguration = self.currentConfigurationViewModel {
             let config: [String : Any]
@@ -64,6 +75,7 @@ class ConfigurationManager: ObservableObject {
         }
     }
     
+    /// Save the current configuration
     public func saveConfiguration() {
         if let currentConfiguration = self.currentConfigurationViewModel {
             let encoder = JSONEncoder()
@@ -75,49 +87,32 @@ class ConfigurationManager: ObservableObject {
         }
     }
     
+    /// Delete the saved configuration
     public func deleteSavedConfiguration() {
         let defaults = UserDefaults.standard
         defaults.removeObject(forKey: "CurrentConfiguration")
     }
     
+    /// Provide the default configuration. If empty or not found, provide the placeholder configuration
     public func defaultConfigurationViewModel() -> ConfigurationViewModel {
         let defaults = UserDefaults.standard
         if let savedConfiguration = defaults.object(forKey: "CurrentConfiguration") as? Data {
             let decoder = JSONDecoder()
             if let loadedConfiguration = try? decoder.decode(Configuration.self, from: savedConfiguration) {
-                return ConfigurationViewModel(clientId: loadedConfiguration.clientId, scopes: loadedConfiguration.scopes, redirectUri: loadedConfiguration.redirectUri, signOutUri: loadedConfiguration.signOutUri, discoveryEndpoint: loadedConfiguration.discoveryEndpoint, environment: loadedConfiguration.environment, cookieName: loadedConfiguration.cookieName, browserSeletorType: BrowserSeletorTypes(rawValue: loadedConfiguration.browserType.description) ?? BrowserSeletorTypes.authSession)
+                return ConfigurationViewModel(clientId: loadedConfiguration.clientId, scopes: loadedConfiguration.scopes, redirectUri: loadedConfiguration.redirectUri, signOutUri: loadedConfiguration.signOutUri, discoveryEndpoint: loadedConfiguration.discoveryEndpoint, environment: loadedConfiguration.environment, cookieName: loadedConfiguration.cookieName, browserSeletorType: BrowserSelectorTypes(rawValue: loadedConfiguration.browserType.description) ?? BrowserSelectorTypes.authSession)
             }
         }
         
+        //TODO: Provide here the client configuration. Replace the placeholder with the OAuth2.0 client details
         return ConfigurationViewModel(
-            clientId: "ForgeRockSDKClient",
-            scopes: ["openid", "email", "address", "phone", "profile"],
-            redirectUri: "org.forgerock.demo://oauth2redirect",
-            signOutUri: "org.forgerock.demo://oauth2redirect",
-            discoveryEndpoint: "https://openam-bafaloukas.forgeblocks.com/am/oauth2/realms/alpha/.well-known/openid-configuration",
-            environment: "AIC",
-            cookieName: "386c0d288cac4b9",
+            clientId: "[CLIENT ID]",
+            scopes: ["openid", "email", "address", "phone", "profile"], // Alter the scopes based on your clients configuration
+            redirectUri: "[REDIRECT URI]",
+            signOutUri: "[SIGN OUT URI]",
+            discoveryEndpoint: "[DISCOVERY ENDPOINT URL]",
+            environment: "[ENVIRONMENT - EITHER AIC OR PingOne]",
+            cookieName: "[COOKIE NAME - OPTIONAL (Applicable for AIC only)]",
             browserSeletorType: .authSession
         )
     }
 }
-
-/*
- return ConfigurationViewModel(
- clientId: "ForgeRockSDKClient",
- scopes: ["openid", "email", "address", "phone", "profile"],
- redirectUri: "org.forgerock.demo://oauth2redirect",
- discoveryEndpoint: "https://openam-bafaloukas.forgeblocks.com/am/oauth2/realms/alpha/.well-known/openid-configuration",
- environment: "AIC",
- cookieName: "386c0d288cac4b9"
- )
- Example Values (Please create your own application as described in the documentation):
- return ConfigurationViewModel(
- clientId: "10a80cd7-a844-4cdf-b1c6-7dc2ccdb9769",
- scopes: ["openid", "email", "address", "phone", "profile"],
- redirectUri: "org.forgerock.demo://oauth2redirect",
- discoveryEndpoint: "https://auth.pingone.com/5e508bc0-91e7-409b-8514-783bad6d1811/as/.well-known/openid-configuration",
- environment: "PingOne"
- 
- )
- */

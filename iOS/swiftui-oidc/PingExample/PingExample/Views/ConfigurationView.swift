@@ -16,7 +16,7 @@ struct ConfigurationView: View {
     @State private var scopes: String = ""
     @State private var environments = ["AIC", "PingOne"]
     @State private var selectedEnvironment = "AIC"
-    @State private var selectedBrowserType: BrowserSeletorTypes = .authSession
+    @State private var selectedBrowserType: BrowserSelectorTypes = .authSession
     
     var body: some View {
         Form {
@@ -72,7 +72,7 @@ struct ConfigurationView: View {
             }
             Section(header: Text("Browser Configuration")) {
                 Picker("Browser Configuration: ", selection: $selectedBrowserType) {
-                    ForEach(BrowserSeletorTypes.allCases, id: \.self) { type in
+                    ForEach(BrowserSelectorTypes.allCases, id: \.self) { type in
                         Text(type.rawValue).tag(type.rawValue)
                     }
                 }.onChange(of: selectedBrowserType) { type in

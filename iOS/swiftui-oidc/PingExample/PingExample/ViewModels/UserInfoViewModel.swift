@@ -11,6 +11,11 @@
 import Foundation
 import FRAuth
 
+/*
+ The UserInfoViewModel class is used to manage the user information for the current user.
+    The class provides the following functionality:
+        - Fetches the user information for the current user.
+ */
 class UserInfoViewModel: ObservableObject {
     
     @Published var userInfo: String = ""

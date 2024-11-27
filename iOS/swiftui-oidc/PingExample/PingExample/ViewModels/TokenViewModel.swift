@@ -11,6 +11,13 @@
 import Foundation
 import FRAuth
 
+/*
+ The TokenViewModel class is used to manage the access token for the current user.
+ The class provides the following functionality:
+    - Fetches the access token for the current user.
+    - Revokes the OAuth2.0 tokens for the current user.
+    - Refreshes the OAuth2.0 tokens for the current user.
+ */
 class TokenViewModel: ObservableObject {
     
     @Published var accessToken: String = ""
@@ -21,6 +28,7 @@ class TokenViewModel: ObservableObject {
         }
     }
     
+    /// Fetches the access token for the current user.
     func accessToken() async {
         Task { @MainActor in
             if let user = FRUser.currentUser {
@@ -38,6 +46,7 @@ class TokenViewModel: ObservableObject {
         }
     }
     
+    /// Revokes the OAuth2.0 tokens for the current user.
     public func revokeTokens() {
         
         if let user = FRUser.currentUser {
@@ -53,6 +62,7 @@ class TokenViewModel: ObservableObject {
         }
     }
     
+    /// Refreshes the OAuth2.0 tokens for the current user.
     public func refreshTokens() {
         if let user = FRUser.currentUser {
             user.refresh { user, error in

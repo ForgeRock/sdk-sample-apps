@@ -11,6 +11,26 @@
 
 import Foundation
 import FRAuth
+
+ /*
+    The ConfigurationViewModel class is an ObservableObject that contains the configuration properties for the SDK. The class has the following properties:
+    
+        clientId: The client ID for the SDK.
+        scopes: The scopes for the SDK.
+        redirectUri: The redirect URI for the SDK.
+        signOutUri: The sign-out URI for the SDK.
+        discoveryEndpoint: The discovery endpoint for the SDK.
+        environment: The environment for the SDK.
+        cookieName: The cookie name for the SDK.
+        browserSeletorType: The browser selector type for the SDK.
+  
+    The class has the following methods:
+        getBrowserType(): Returns the browser type for the SDK.
+        saveConfiguration(): Saves the configuration for the SDK.
+        startSDK(): Starts the SDK.
+        resetConfiguration(): Resets the configuration for the SDK.
+ */
+
 class ConfigurationViewModel: ObservableObject {
     
     @Published public var clientId: String
@@ -20,9 +40,9 @@ class ConfigurationViewModel: ObservableObject {
     @Published public var discoveryEndpoint: String
     @Published public var environment: String
     @Published public var cookieName: String?
-    @Published public var browserSeletorType: BrowserSeletorTypes
+    @Published public var browserSeletorType: BrowserSelectorTypes
     
-    public init(clientId: String, scopes: [String], redirectUri: String, signOutUri: String?, discoveryEndpoint: String, environment: String, cookieName: String? = nil, browserSeletorType: BrowserSeletorTypes) {
+    public init(clientId: String, scopes: [String], redirectUri: String, signOutUri: String?, discoveryEndpoint: String, environment: String, cookieName: String? = nil, browserSeletorType: BrowserSelectorTypes) {
         self.clientId = clientId
         self.scopes = scopes
         self.redirectUri = redirectUri
@@ -88,15 +108,15 @@ extension BrowserType: Codable {
        }
 }
 
-enum BrowserSeletorTypes: String, CaseIterable  {
+enum BrowserSelectorTypes: String, CaseIterable  {
     case authSession
     case nativeBrowserApp
     case sfViewController
     case ephemeralAuthSession
     
-    static var asArray: [BrowserSeletorTypes] {return self.allCases}
+    static var asArray: [BrowserSelectorTypes] {return self.allCases}
     
     func asInt() -> Int {
-        return BrowserSeletorTypes.asArray.firstIndex(of: self)!
+        return BrowserSelectorTypes.asArray.firstIndex(of: self)!
     }
 }
