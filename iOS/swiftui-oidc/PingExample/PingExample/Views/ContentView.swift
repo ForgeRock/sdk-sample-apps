@@ -57,9 +57,9 @@ struct ContentView: View {
                 case "Configuration":
                     ConfigurationView(configurationViewModel: $configurationViewModel)
                 case "Token":
-                    AccessTokenView(path: $path)
+                    AccessTokenView(path: $path, accessTokenViewModel: AccessTokenViewModel())
                 case "User":
-                    UserInfoView(path: $path)
+                    UserInfoView(path: $path, userInfoViewModel:  UserInfoViewModel())
                 default:
                     EmptyView()
                 }
@@ -82,25 +82,6 @@ struct ContentView: View {
                     print(String(describing: error))
                 }
             }
-        }
-    }
-}
-
-struct NextButton: View {
-    let title: String
-    let action: () -> (Void)
-    var body: some View {
-        Button(action:  {
-            action()
-        } ) {
-            Text(title)
-                .font(.headline)
-                .foregroundColor(.white)
-                .padding()
-                .frame(width: 300, height: 50)
-                .background(Color.green)
-                .cornerRadius(15.0)
-                .shadow(radius: 10.0, x: 20, y: 10)
         }
     }
 }

@@ -14,9 +14,9 @@ import FRAuth
 /*
  The TokenViewModel class is used to manage the access token for the current user.
  The class provides the following functionality:
-    - Fetches the access token for the current user.
-    - Revokes the OAuth2.0 tokens for the current user.
-    - Refreshes the OAuth2.0 tokens for the current user.
+ - Fetches the access token for the current user.
+ - Revokes the OAuth2.0 tokens for the current user.
+ - Refreshes the OAuth2.0 tokens for the current user.
  */
 class AccessTokenViewModel: ObservableObject {
     
@@ -30,25 +30,30 @@ class AccessTokenViewModel: ObservableObject {
     
     /// Fetches the access token for the current user.
     func accessToken() async {
-        Task { @MainActor in
+        await withCheckedContinuation { continuation in
             if let user = FRUser.currentUser {
                 user.getAccessToken(completion: { user, error in
-                    if let token = user?.token {
-                        self.accessToken = String(describing: token.value)
-                    } else {
-                        self.accessToken = error?.localizedDescription ?? "Error was nil"
+                    Task { @MainActor in
+                        if let token = user?.token {
+                            self.accessToken = String(describing: token.value)
+                        } else {
+                            self.accessToken = error?.localizedDescription ?? "Error was nil"
+                        }
+                        continuation.resume()
                     }
                 })
             } else {
-                self.accessToken = "No user found, need to log in first."
+                Task { @MainActor in
+                    self.accessToken = "No user found, need to log in first."
+                    continuation.resume()
+                }
             }
-            
         }
+        
     }
     
     /// Revokes the OAuth2.0 tokens for the current user.
     public func revokeTokens() {
-        
         if let user = FRUser.currentUser {
             user.revokeAccessToken { user, error in
                 Task { @MainActor in

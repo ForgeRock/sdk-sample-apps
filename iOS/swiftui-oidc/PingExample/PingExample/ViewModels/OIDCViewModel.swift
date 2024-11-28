@@ -28,7 +28,6 @@ class OIDCViewModel: ObservableObject {
     
     /// Start the Centralized Login process. Returns an FRUser object.
     public func startOIDC() async throws -> FRUser {
-        
         return try await withCheckedThrowingContinuation({
             (continuation: CheckedContinuation<FRUser, Error>) in
             Task { @MainActor in

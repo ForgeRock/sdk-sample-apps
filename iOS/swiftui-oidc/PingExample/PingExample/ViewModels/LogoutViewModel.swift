@@ -17,6 +17,7 @@ import UIKit
     The class provides the following functionality:
        - Logs out the current user.
  */
+
 class LogoutViewModel: ObservableObject {
     
     @Published var message: String = ""

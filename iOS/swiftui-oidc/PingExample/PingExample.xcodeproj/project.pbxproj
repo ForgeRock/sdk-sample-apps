@@ -22,7 +22,6 @@
 		ECB75DC62C986663000517C9 /* ConfigurationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB75DC52C986663000517C9 /* ConfigurationViewModel.swift */; };
 		ECFB77D12CAC153300FF02BC /* UserInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECFB77D02CAC152A00FF02BC /* UserInfoView.swift */; };
 		ECFB77D82CAC168500FF02BC /* ConfigurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECFB77D72CAC168000FF02BC /* ConfigurationView.swift */; };
-		ECFB77DA2CAC16A400FF02BC /* LogoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECFB77D92CAC169F00FF02BC /* LogoutView.swift */; };
 		ECFB77DC2CAC16FC00FF02BC /* LogoutViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECFB77DB2CAC16FA00FF02BC /* LogoutViewModel.swift */; };
 		ECFB77DE2CAC172800FF02BC /* UserInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECFB77DD2CAC172200FF02BC /* UserInfoViewModel.swift */; };
 /* End PBXBuildFile section */
@@ -75,7 +74,6 @@
 		ECB75DC72C999368000517C9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		ECFB77D02CAC152A00FF02BC /* UserInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoView.swift; sourceTree = "<group>"; };
 		ECFB77D72CAC168000FF02BC /* ConfigurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationView.swift; sourceTree = "<group>"; };
-		ECFB77D92CAC169F00FF02BC /* LogoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoutView.swift; sourceTree = "<group>"; };
 		ECFB77DB2CAC16FA00FF02BC /* LogoutViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoutViewModel.swift; sourceTree = "<group>"; };
 		ECFB77DD2CAC172200FF02BC /* UserInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -180,7 +178,6 @@
 				3A5441322BCDF10900385131 /* ContentView.swift */,
 				3A3709952BEB038200AA7B51 /* AccessTokenView.swift */,
 				ECFB77D72CAC168000FF02BC /* ConfigurationView.swift */,
-				ECFB77D92CAC169F00FF02BC /* LogoutView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -343,7 +340,6 @@
 				3A8092F62BE9BB6B00AD667F /* AccessTokenViewModel.swift in Sources */,
 				3ACD90E12BE586BC00DABCE6 /* OIDCViewModel.swift in Sources */,
 				ECFB77DC2CAC16FC00FF02BC /* LogoutViewModel.swift in Sources */,
-				ECFB77DA2CAC16A400FF02BC /* LogoutView.swift in Sources */,
 				3A5441332BCDF10900385131 /* ContentView.swift in Sources */,
 				ECB75DC62C986663000517C9 /* ConfigurationViewModel.swift in Sources */,
 				ECB75DC42C986312000517C9 /* ConfigurationManager.swift in Sources */,

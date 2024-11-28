@@ -14,15 +14,17 @@ struct AccessTokenView: View {
     
     @Binding var path: [String]
     
-    @StateObject var accessTokenViewModel = AccessTokenViewModel()
+    @StateObject var accessTokenViewModel: AccessTokenViewModel
     
     var body: some View {
         VStack {
-            
-            TextEditor(text: $accessTokenViewModel.accessToken)
-                            .foregroundStyle(.secondary)
-                            .padding(.horizontal)
-                            .navigationTitle("AccessToken")
+            ScrollView {
+                Text($accessTokenViewModel.accessToken.wrappedValue)
+                    .foregroundStyle(.secondary)
+                    .padding(.horizontal)
+                    .navigationTitle("AccessToken")
+            }
+           
             Spacer(minLength: 35.0)
             Button(action: {
                 Task {

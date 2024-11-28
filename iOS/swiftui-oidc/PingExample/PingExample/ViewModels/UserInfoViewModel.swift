@@ -27,23 +27,26 @@ class UserInfoViewModel: ObservableObject {
     }
     
     func fetchUserInfo() async {
-        if let user = FRUser.currentUser {
-            let _ = user.getUserInfo(completion: { result, error in
-                Task { @MainActor in
-                    if let userInfo = result?.userInfo {
-                        var userInfoDescription = ""
-                        userInfo.forEach { userInfoDescription += "\($0): \($1)\n" }
-                        self.userInfo = userInfoDescription
-                    } else {
-                        self.userInfo = "Error: \(String(describing: error?.localizedDescription))"
+        await withCheckedContinuation { continuation in
+            if let user = FRUser.currentUser {
+                let _ = user.getUserInfo(completion: { result, error in
+                    Task { @MainActor in
+                        if let userInfo = result?.userInfo {
+                            var userInfoDescription = ""
+                            userInfo.forEach { userInfoDescription += "\($0): \($1)\n" }
+                            self.userInfo = userInfoDescription
+                        } else {
+                            self.userInfo = "Error: \(String(describing: error?.localizedDescription))"
+                        }
+                        continuation.resume()
                     }
+                })
+            } else {
+                Task { @MainActor in
+                    self.userInfo = "No user found, need to log in first."
+                    continuation.resume()
                 }
-            })
-        } else {
-            Task { @MainActor in
-                self.userInfo = "No user found, need to log in first."
             }
         }
-        
     }
 }
