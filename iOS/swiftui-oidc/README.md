@@ -20,7 +20,7 @@ This repository contains an example iOS project written in SwiftUI making use of
 ## Getting Started
 
 To try out the iOS OIDC sample, perform these steps:
-1. Configure Ping Services
+1. Configure Ping Services.
    Ensure that you registered an OAuth 2.0 application for native mobile apps in PingOne. More details in this [documentation](https://backstage.forgerock.com/docs/sdks/latest/sdks/serverconfiguration/pingone/create-oauth2-client.html).
 
 2. Alternatively, configure PingAM/AIC. Ensure that you registered an OAuth 2.0 application for native mobile apps in PingAM/AIC. More details in this [documentation](https://backstage.forgerock.com/docs/sdks/latest/sdks/serverconfiguration/onpremise/index.html)
