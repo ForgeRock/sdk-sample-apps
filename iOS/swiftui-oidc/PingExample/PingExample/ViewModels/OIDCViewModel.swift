@@ -14,7 +14,7 @@ import UIKit
 import SwiftUI
 
 /*
- The ConfigurationViewModel class is an ObservableObject that is used to manage the configuration settings for the SDK. The class has the following properties:
+ The OIDCViewModel class is an ObservableObject that is used start the OIDC flow. The class has the following properties:
         status: The status of the user.
  
     The class has the following methods:

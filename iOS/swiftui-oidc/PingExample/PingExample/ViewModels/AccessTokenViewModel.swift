@@ -18,7 +18,7 @@ import FRAuth
     - Revokes the OAuth2.0 tokens for the current user.
     - Refreshes the OAuth2.0 tokens for the current user.
  */
-class TokenViewModel: ObservableObject {
+class AccessTokenViewModel: ObservableObject {
     
     @Published var accessToken: String = ""
     

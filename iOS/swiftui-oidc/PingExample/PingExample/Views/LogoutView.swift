@@ -14,17 +14,17 @@ struct LogoutView: View {
     
     @Binding var path: [String]
     
-    @StateObject private var viewmodel = LogoutViewModel()
+    @StateObject private var logoutViewModel = LogoutViewModel()
     
     var body: some View {
         Spacer()
-        Text(viewmodel.message)
+        Text(logoutViewModel.message)
             .font(.title)
             .navigationBarTitle("Logout", displayMode: .inline)
         
         NextButton(title: "Logout") {
             Task {
-                await viewmodel.logout()
+                await logoutViewModel.logout()
             }
         }
         

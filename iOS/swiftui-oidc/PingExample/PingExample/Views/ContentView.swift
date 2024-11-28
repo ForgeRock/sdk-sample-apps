@@ -55,7 +55,7 @@ struct ContentView: View {
             .navigationDestination(for: String.self) { item in
                 switch item {
                 case "Configuration":
-                    ConfigurationView(viewmodel: $configurationViewModel)
+                    ConfigurationView(configurationViewModel: $configurationViewModel)
                 case "Token":
                     AccessTokenView(path: $path)
                 case "User":

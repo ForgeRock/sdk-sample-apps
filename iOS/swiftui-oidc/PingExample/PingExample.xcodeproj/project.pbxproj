@@ -14,10 +14,8 @@
 		3A5441422BCDF10B00385131 /* PingExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A5441412BCDF10B00385131 /* PingExampleTests.swift */; };
 		3A54414C2BCDF10B00385131 /* PingExampleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A54414B2BCDF10B00385131 /* PingExampleUITests.swift */; };
 		3A54414E2BCDF10B00385131 /* PingExampleUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A54414D2BCDF10B00385131 /* PingExampleUITestsLaunchTests.swift */; };
-		3A8092F62BE9BB6B00AD667F /* TokenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A8092F52BE9BB6B00AD667F /* TokenViewModel.swift */; };
-		3A8532332BE2D5D800F8619D /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A8532322BE2D5D800F8619D /* LoginView.swift */; };
+		3A8092F62BE9BB6B00AD667F /* AccessTokenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A8092F52BE9BB6B00AD667F /* AccessTokenViewModel.swift */; };
 		3ACD90E12BE586BC00DABCE6 /* OIDCViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ACD90E02BE586BC00DABCE6 /* OIDCViewModel.swift */; };
-		3AE945742BF27224007B3381 /* LoginUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE945732BF27223007B3381 /* LoginUtility.swift */; };
 		EC6D19792CEE1E3A00A17CD9 /* FRAuth in Frameworks */ = {isa = PBXBuildFile; productRef = EC6D19782CEE1E3A00A17CD9 /* FRAuth */; };
 		EC6D197B2CEE1E3A00A17CD9 /* FRCore in Frameworks */ = {isa = PBXBuildFile; productRef = EC6D197A2CEE1E3A00A17CD9 /* FRCore */; };
 		ECB75DC42C986312000517C9 /* ConfigurationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB75DC32C986312000517C9 /* ConfigurationManager.swift */; };
@@ -70,10 +68,8 @@
 		3A5441472BCDF10B00385131 /* PingExampleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PingExampleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A54414B2BCDF10B00385131 /* PingExampleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PingExampleUITests.swift; sourceTree = "<group>"; };
 		3A54414D2BCDF10B00385131 /* PingExampleUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PingExampleUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		3A8092F52BE9BB6B00AD667F /* TokenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenViewModel.swift; sourceTree = "<group>"; };
-		3A8532322BE2D5D800F8619D /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		3A8092F52BE9BB6B00AD667F /* AccessTokenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessTokenViewModel.swift; sourceTree = "<group>"; };
 		3ACD90E02BE586BC00DABCE6 /* OIDCViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OIDCViewModel.swift; sourceTree = "<group>"; };
-		3AE945732BF27223007B3381 /* LoginUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginUtility.swift; sourceTree = "<group>"; };
 		ECB75DC32C986312000517C9 /* ConfigurationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationManager.swift; sourceTree = "<group>"; };
 		ECB75DC52C986663000517C9 /* ConfigurationViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigurationViewModel.swift; sourceTree = "<group>"; };
 		ECB75DC72C999368000517C9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -182,7 +178,6 @@
 			children = (
 				ECFB77D02CAC152A00FF02BC /* UserInfoView.swift */,
 				3A5441322BCDF10900385131 /* ContentView.swift */,
-				3A8532322BE2D5D800F8619D /* LoginView.swift */,
 				3A3709952BEB038200AA7B51 /* AccessTokenView.swift */,
 				ECFB77D72CAC168000FF02BC /* ConfigurationView.swift */,
 				ECFB77D92CAC169F00FF02BC /* LogoutView.swift */,
@@ -195,7 +190,7 @@
 			children = (
 				ECB75DC52C986663000517C9 /* ConfigurationViewModel.swift */,
 				3ACD90E02BE586BC00DABCE6 /* OIDCViewModel.swift */,
-				3A8092F52BE9BB6B00AD667F /* TokenViewModel.swift */,
+				3A8092F52BE9BB6B00AD667F /* AccessTokenViewModel.swift */,
 				ECFB77DB2CAC16FA00FF02BC /* LogoutViewModel.swift */,
 				ECFB77DD2CAC172200FF02BC /* UserInfoViewModel.swift */,
 			);
@@ -206,7 +201,6 @@
 			isa = PBXGroup;
 			children = (
 				ECB75DC32C986312000517C9 /* ConfigurationManager.swift */,
-				3AE945732BF27223007B3381 /* LoginUtility.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -346,12 +340,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				ECFB77D12CAC153300FF02BC /* UserInfoView.swift in Sources */,
-				3A8092F62BE9BB6B00AD667F /* TokenViewModel.swift in Sources */,
+				3A8092F62BE9BB6B00AD667F /* AccessTokenViewModel.swift in Sources */,
 				3ACD90E12BE586BC00DABCE6 /* OIDCViewModel.swift in Sources */,
 				ECFB77DC2CAC16FC00FF02BC /* LogoutViewModel.swift in Sources */,
 				ECFB77DA2CAC16A400FF02BC /* LogoutView.swift in Sources */,
-				3AE945742BF27224007B3381 /* LoginUtility.swift in Sources */,
-				3A8532332BE2D5D800F8619D /* LoginView.swift in Sources */,
 				3A5441332BCDF10900385131 /* ContentView.swift in Sources */,
 				ECB75DC62C986663000517C9 /* ConfigurationViewModel.swift in Sources */,
 				ECB75DC42C986312000517C9 /* ConfigurationManager.swift in Sources */,

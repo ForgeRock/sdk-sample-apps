@@ -12,6 +12,8 @@
 import Foundation
 import FRAuth
 import FRCore
+import SwiftUI
+import UIKit
 
 /*
     The ConfigurationManager class is used to manage the configuration settings for the SDK.
@@ -114,5 +116,57 @@ class ConfigurationManager: ObservableObject {
             cookieName: "[COOKIE NAME - OPTIONAL (Applicable for AIC only)]",
             browserSeletorType: .authSession
         )
+    }
+}
+
+//Extensions
+
+extension BrowserType: Codable {
+    var description: String {
+          switch self {
+          case .authSession:
+              return "authSession"
+          case .nativeBrowserApp:
+              return "nativeBrowserApp"
+          case .sfViewController:
+              return "sfViewController"
+          case .ephemeralAuthSession:
+             return "ephemeralAuthSession"
+       default:
+             return "authSession"
+          }
+       }
+}
+
+enum BrowserSelectorTypes: String, CaseIterable  {
+    case authSession
+    case nativeBrowserApp
+    case sfViewController
+    case ephemeralAuthSession
+    
+    static var asArray: [BrowserSelectorTypes] {return self.allCases}
+    
+    func asInt() -> Int {
+        return BrowserSelectorTypes.asArray.firstIndex(of: self)!
+    }
+}
+
+extension ObservableObject {
+    var topViewController: UIViewController? {
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let keyWindow = windowScene.windows.first(where: { $0.isKeyWindow }),
+              var topController = keyWindow.rootViewController else {
+            return nil
+        }
+        while let presentedViewController = topController.presentedViewController {
+            topController = presentedViewController
+        }
+        return topController
+    }
+}
+
+extension Binding {
+     func toUnwrapped<T>(defaultValue: T) -> Binding<T> where Value == Optional<T>  {
+        Binding<T>(get: { self.wrappedValue ?? defaultValue }, set: { self.wrappedValue = $0 })
     }
 }

@@ -90,33 +90,3 @@ struct Configuration: Codable {
     var cookieName: String?
     var browserType: BrowserType
 }
-
-extension BrowserType: Codable {
-    var description: String {
-          switch self {
-          case .authSession:
-              return "authSession"
-          case .nativeBrowserApp:
-              return "nativeBrowserApp"
-          case .sfViewController:
-              return "sfViewController"
-          case .ephemeralAuthSession:
-             return "ephemeralAuthSession"
-       default:
-             return "authSession"
-          }
-       }
-}
-
-enum BrowserSelectorTypes: String, CaseIterable  {
-    case authSession
-    case nativeBrowserApp
-    case sfViewController
-    case ephemeralAuthSession
-    
-    static var asArray: [BrowserSelectorTypes] {return self.allCases}
-    
-    func asInt() -> Int {
-        return BrowserSelectorTypes.asArray.firstIndex(of: self)!
-    }
-}

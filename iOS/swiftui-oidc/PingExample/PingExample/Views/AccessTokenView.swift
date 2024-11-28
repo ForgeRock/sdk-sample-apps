@@ -14,19 +14,19 @@ struct AccessTokenView: View {
     
     @Binding var path: [String]
     
-    @StateObject var tokenViewModel = TokenViewModel()
+    @StateObject var accessTokenViewModel = AccessTokenViewModel()
     
     var body: some View {
         VStack {
             
-            TextEditor(text: $tokenViewModel.accessToken)
+            TextEditor(text: $accessTokenViewModel.accessToken)
                             .foregroundStyle(.secondary)
                             .padding(.horizontal)
                             .navigationTitle("AccessToken")
             Spacer(minLength: 35.0)
             Button(action: {
                 Task {
-                    self.tokenViewModel.refreshTokens()
+                    self.accessTokenViewModel.refreshTokens()
                 }
             }) {
                 Text("Refresh Token")
@@ -34,7 +34,7 @@ struct AccessTokenView: View {
             Spacer(minLength: 35.0)
             Button(action: {
                 Task {
-                    self.tokenViewModel.revokeTokens()
+                    self.accessTokenViewModel.revokeTokens()
                 }
             }) {
                 Text("Revoke Token")

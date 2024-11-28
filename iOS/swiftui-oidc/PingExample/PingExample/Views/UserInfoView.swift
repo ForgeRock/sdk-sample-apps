@@ -14,11 +14,11 @@ import FRAuth
 struct UserInfoView: View {
     @Binding var path: [String]
     
-    @StateObject var vm = UserInfoViewModel()
+    @StateObject var userInfoViewModel = UserInfoViewModel()
     
     var body: some View {
         
-        TextEditor(text: $vm.userInfo)
+        TextEditor(text: $userInfoViewModel.userInfo)
                         .foregroundStyle(.secondary)
                         .padding(.horizontal)
                         .navigationTitle("User Info")
