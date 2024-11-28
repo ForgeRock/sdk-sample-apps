@@ -1,0 +1,15 @@
+{
+  "originHash" : "956d622730eea977a9714ff7bca8e26297309c8b894a7bbf03c3f9f9b8d6d312",
+  "pins" : [
+    {
+      "identity" : "ping-ios-sdk",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ForgeRock/ping-ios-sdk",
+      "state" : {
+        "branch" : "develop",
+        "revision" : "bd17257a36535c14385d206c22d8268c9bd1a14f"
+      }
+    }
+  ],
+  "version" : 3
+}
