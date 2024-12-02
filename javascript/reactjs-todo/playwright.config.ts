@@ -30,6 +30,8 @@ export default defineConfig({
         JOURNEY_REGISTER: 'Registration',
         PORT: '9443',
         SERVER_URL: 'https://openam-sdks.forgeblocks.com/am',
+        WELLKNOWN_URL:
+          'https://openam-sdks.forgeblocks.com/am/oauth2/alpha/.well-known/openid-configuration',
         REALM_PATH: 'alpha',
         SCOPE: 'profile me.read email',
         TIMEOUT: '3000',
