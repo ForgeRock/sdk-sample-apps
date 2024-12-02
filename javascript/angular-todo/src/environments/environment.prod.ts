@@ -1,5 +1,5 @@
 export const environment = {
-  AM_URL: '',
+  SERVER_URL: '',
   REALM_PATH: '',
   WEB_OAUTH_CLIENT: '',
   JOURNEY_LOGIN: '',

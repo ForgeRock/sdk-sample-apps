@@ -9,7 +9,7 @@ let targetPath =
     : 'src/environments/environment.ts';
 
 const envConfigFile = `export const environment = {
-   AM_URL: '${process.env.AM_URL}',
+   SERVER_URL: '${process.env.SERVER_URL}',
    REALM_PATH: '${process.env.REALM_PATH}',
    WEB_OAUTH_CLIENT: '${process.env.WEB_OAUTH_CLIENT}',
    JOURNEY_LOGIN: '${process.env.JOURNEY_LOGIN}',

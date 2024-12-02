@@ -54,7 +54,7 @@ First, in the main directory of the SDK repo, create a file named `.env` by copy
 Here’s a hypothetical example; your values may vary:
 
 ```text
-AM_URL=https://auth.forgerock.com/am
+SERVER_URL=https://auth.forgerock.com/am
 APP_URL=https://localhost:8443 # in develop we do not use this url for dynamic deployment reasons
 API_URL=http://localhost:9443
 DEBUGGER_OFF=true
@@ -69,7 +69,7 @@ Now, do the same in the `samples/todos-api` directory based on its `.env.example
 As before, here is a hypothetical example; your values may vary:
 
 ```text
-AM_URL=https://auth.forgerock.com/am
+SERVER_URL=https://auth.forgerock.com/am
 DEVELOPMENT=true
 PORT=9443
 REALM_PATH=alpha

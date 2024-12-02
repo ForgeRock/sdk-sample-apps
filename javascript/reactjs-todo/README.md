@@ -54,7 +54,7 @@ Change the name of `.env.example` to `.env` and replace the bracketed values (e.
 Example with annotations:
 
 ```text
-AM_URL=<<<URL to your AM instance>>>
+SERVER_URL=<<<URL to your AM instance>>>
 APP_URL=https://localhost:8443 # in develop we do not use this variable for dynamic deployment reasons
 API_URL=http://localhost:9443
 DEBUGGER_OFF=false

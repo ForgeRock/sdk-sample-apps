@@ -76,8 +76,7 @@ const journeyParam = urlParams.get('journey');
   });
  * *************************************************************************** */
 
-let config;
-config = await Config.setAsync({
+await Config.setAsync({
   clientId: WEB_OAUTH_CLIENT, // e.g. PingOne Services Client GUID
   redirectUri: `${window.location.origin}/${
     CENTRALIZED_LOGIN === 'true' || centralLoginParam === 'true'

@@ -8,7 +8,7 @@
  * of the MIT license. See the LICENSE file for details.
  */
 import 'dotenv/config';
-import cors from 'cors';
+import cors from 'cors/lib/index.js';
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import { createServer } from 'http';
