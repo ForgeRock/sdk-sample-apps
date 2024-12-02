@@ -52,9 +52,9 @@ export function useGlobalStateMgmt({ email, isAuthenticated, prefersDarkTheme, u
        ********************************************************************* */
       if (DEBUGGER) debugger;
       try {
-        if (process.env.SERVER_TYPE === "PINGONE") {
+        if (process.env.SERVER_TYPE === 'PINGONE') {
           await FRUser.logout({
-            logoutRedirectUri: `${window.location.origin}`
+            logoutRedirectUri: `${window.location.origin}`,
           });
         } else {
           await FRUser.logout();

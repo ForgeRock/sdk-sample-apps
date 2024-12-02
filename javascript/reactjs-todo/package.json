@@ -53,7 +53,7 @@
   "scripts": {
     "build": "webpack",
     "start": "webpack serve --mode development",
-    "lint": "eslint .",
+    "lint": "eslint . --fix",
     "e2e": "playwright test",
     "e2e:ui": "playwright test --ui"
   },
