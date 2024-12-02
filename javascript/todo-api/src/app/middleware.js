@@ -26,9 +26,16 @@ import {
  */
 export async function auth(req, res, next) {
   let response;
-  const path = `${SERVER_TYPE === 'AIC' ? `${SERVER_URL}oauth2/realms/root${REALM_PATH === 'root' ? '' : '/realms/' + REALM_PATH}/introspect` : `${SERVER_URL}as/introspect`}`;
+  const path = `${
+    SERVER_TYPE === 'AIC'
+      ? `${SERVER_URL}oauth2/realms/root${
+          REALM_PATH === 'root' ? '' : '/realms/' + REALM_PATH
+        }/introspect`
+      : `${SERVER_URL}as/introspect`
+  }`;
   try {
     if (req.headers.authorization) {
+      // eslint-disable-next-line no-unused-vars
       const [_, token] = req.headers.authorization.split(' ');
       console.log(`Token: ${token}`);
       if (SERVER_TYPE === 'AIC') {
