@@ -1,4 +1,4 @@
-name: 'Continuous Integration'
+name: 'JS Continuous Integration'
 
 on:
   - pull_request
@@ -20,7 +20,7 @@ jobs:
         with:
           path: |
             node_modules
-          key: ${{ runner.os }}-npm-${{matrix.node}}-${{ hashFiles('**/javascript/package-lock.json') }}
+          key: ${{ runner.os }}-npm-${{matrix.node}}-${{ hashFiles('package-lock.json') }}
 
       - run: npm ci
         if: steps.cache.outputs.cache-hit != 'true'
@@ -42,7 +42,7 @@ jobs:
         with:
           path: |
             node_modules
-          key: ${{ runner.os }}-npm-${{matrix.node}}-${{ hashFiles('**/javascript/package-lock.json') }}
+          key: ${{ runner.os }}-npm-${{matrix.node}}-${{ hashFiles('package-lock.json') }}
 
       - run: npm ci
         if: steps.cache.outputs.cache-hit != 'true'
