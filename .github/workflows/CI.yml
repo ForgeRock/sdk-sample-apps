@@ -69,7 +69,7 @@ jobs:
         with:
           name: Playwright Results - ${{ runner.os }} - ${{ matrix.node }} - ${{ github.run_attempt }}
           path: |
-            ./reactjs-todo/test-results
-            ./reactjs-todo/playwright-report
-            ./angular-todo/test-results
-            ./angular-todo/playwright-report
+            ./javascrptit/reactjs-todo/test-results
+            ./javascript/reactjs-todo/playwright-report
+            ./javascript/angular-todo/test-results
+            ./javascript/angular-todo/playwright-report
