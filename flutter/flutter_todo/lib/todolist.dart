@@ -54,7 +54,7 @@ class _TodoListState extends State<TodoList> {
   static const platform = MethodChannel('forgerock.com/SampleBridge');
   String header = "";
   String subtitle = "";
-  String API_URL = "http://localhost:9443/todos";
+  String API_URL = "http://10.0.2.2:9443/todos";
   //Lifecycle methods
   @override
   void initState() {

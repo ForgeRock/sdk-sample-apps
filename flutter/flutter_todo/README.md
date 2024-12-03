@@ -32,9 +32,10 @@ To try out the Ping SDKs Flutter sample, perform these steps:
 4. Open the Flutter sample project in VSCode (Flutter Plug installed).
 5. Open the `FRAuthSampleBridge.swift` file within the iOS project.
 6. Locate the `Configuration` struct and replace the placeholder strings in the Oidc module configuration with the values of your registered OAuth 2.0 application.
-7. Launch the app on an iOS Device or a Simulator.
-8. Repeat the same steps for the Android Sample altering the configuration on `FRAuthSampleBridge.java`
-9. Run on an Android Device or Emulator
+7. Open the `todolist.dart` file and edit the `String API_URL`. Point to the IP and Port of the `todo-api` running on your Machine. (For iOS use `localhost` for Android `10.0.2.2` if running locally. Ex: `String API_URL = "http://10.0.2.2:9443/todos";`) 
+8. Launch the app on an iOS Device or a Simulator.
+9. Repeat the same steps for the Android Sample altering the configuration on `FRAuthSampleBridge.java`
+10. Run on an Android Device or Emulator
 
 ## Additional Resources
 Ping SDK Documentation: https://docs.pingidentity.com/sdks/latest/sdks/index.html
