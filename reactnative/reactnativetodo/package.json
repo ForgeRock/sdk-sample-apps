@@ -11,7 +11,28 @@
   },
   "dependencies": {
     "react": "18.3.1",
-    "react-native": "0.76.3"
+    "react-native": "0.76.3",
+
+    "@forgerock/javascript-sdk": "4.6.0",
+    "@react-native-async-storage/async-storage": "^1.15.11",
+    "@react-navigation/bottom-tabs": "6.0.5",
+    "@react-navigation/native": "6.0.2",
+    "@react-navigation/native-stack": "6.1.0",
+    "cookie-parser": "latest",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "native-base": "^3",
+    "pouchdb": "^7.2.2",
+    "react-native-safe-area-context": "latest",
+    "react-native-screens": "latest",
+    "react-native-svg": "latest",
+    "react-native-vector-icons": "latest",
+    "styled-components": "latest",
+    "styled-system": "latest",
+    "superagent": "latest",
+    "uuid": "latest"
+
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
