@@ -58,21 +58,21 @@ import okhttp3.RequestBody;
  */
 class Configuration {
     /** The main authentication journey name. */
-    static String mainAuthenticationJourney = "Login";
+    static String mainAuthenticationJourney = "[YOUR_MAIN_AUTHENTICATION_JOURNEY_NAME]";
     /** The URL of the authentication server. */
-    static String amURL = "https://openam-bafaloukas.forgeblocks.com/am";
+    static String amURL = "[YOUR_AM_URL]";
     /** The name of the cookie used for authentication. */
-    static String cookieName = "386c0d288cac4b9";
+    static String cookieName = "[COOKIE NAME]";
     /** The realm used for authentication. */
-    static String realm = "alpha";
+    static String realm = "[REALM NAME]";
     /** The OAuth client ID. */
-    static String oauthClientId = "iosClient";
+    static String oauthClientId = "[OAUTH_CLIENT_ID]";
     /** The OAuth redirect URI. */
-    static String oauthRedirectURI = "frauth://com.forgerock.ios.frexample";
+    static String oauthRedirectURI = "[OAUTH_REDIRECT_URI]";
     /** The OAuth scopes. */
-    static String oauthScopes = "openid email address phone profile";
+    static String oauthScopes = "[OAUTH_SCOPES]";
     /** The discovery endpoint for OAuth configuration. */
-    static String discoveryEndpoint = "https://openam-bafaloukas.forgeblocks.com/am/oauth2/realms/alpha/.well-known/openid-configuration";
+    static String discoveryEndpoint = "[DISCOVERY_ENDPOINT]";
 }
 
 /**

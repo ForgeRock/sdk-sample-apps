@@ -15,21 +15,21 @@ import Flutter
  */
 struct Configuration {
     /// The main authentication journey name.
-    static let mainAuthenticationJourney = "Login"
+    static let mainAuthenticationJourney = "[YOUR_MAIN_AUTHENTICATION_JOURNEY_NAME]"
     /// The URL of the authentication server.
-    static let amURL = "https://openam-bafaloukas.forgeblocks.com/am"
+    static let amURL = "[YOUR_AM_URL]"
     /// The name of the cookie used for authentication.
-    static let cookieName = "386c0d288cac4b9"
+    static let cookieName = "[COOKIE NAME]"
     /// The realm used for authentication.
-    static let realm = "alpha"
+    static let realm = "[REALM NAME]"
     /// The OAuth client ID.
-    static let oauthClientId = "iosClient"
+    static let oauthClientId = "[OAUTH_CLIENT_ID]"
     /// The OAuth redirect URI.
-    static let oauthRedirectURI = "frauth://com.forgerock.ios.frexample"
+    static let oauthRedirectURI = "[OAUTH_REDIRECT_URI]"
     /// The OAuth scopes.
-    static let oauthScopes = "openid email address phone profile"
+    static let oauthScopes = "[OAUTH_SCOPES]"
     /// The discovery endpoint for OAuth configuration.
-    static let discoveryEndpoint = "https://openam-bafaloukas.forgeblocks.com/am/oauth2/realms/alpha/.well-known/openid-configuration"
+    static let discoveryEndpoint = "[DISCOVERY_ENDPOINT]"
 }
 
 /**
