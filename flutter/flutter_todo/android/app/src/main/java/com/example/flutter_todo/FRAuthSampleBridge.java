@@ -53,28 +53,57 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 
+/**
+ * A class that holds the configuration constants for the authentication journey.
+ */
 class Configuration {
+    /** The main authentication journey name. */
     static String mainAuthenticationJourney = "Login";
+    /** The URL of the authentication server. */
     static String amURL = "https://openam-bafaloukas.forgeblocks.com/am";
+    /** The name of the cookie used for authentication. */
     static String cookieName = "386c0d288cac4b9";
+    /** The realm used for authentication. */
     static String realm = "alpha";
+    /** The OAuth client ID. */
     static String oauthClientId = "iosClient";
+    /** The OAuth redirect URI. */
     static String oauthRedirectURI = "frauth://com.forgerock.ios.frexample";
+    /** The OAuth scopes. */
     static String oauthScopes = "openid email address phone profile";
-    static String discoveryEndpoint = "https://openam-bafaloukas.forgeblocks.com/am/oauth2/realms/alpha/.well-known/openid-configuration" ;
+    /** The discovery endpoint for OAuth configuration. */
+    static String discoveryEndpoint = "https://openam-bafaloukas.forgeblocks.com/am/oauth2/realms/alpha/.well-known/openid-configuration";
 }
-public class FRAuthSampleBridge {
-    Context context;
-    Node currentNode;
-    NodeListener listener;
-    MethodChannel.Result flutterPromise;
 
+/**
+ * A class that bridges the FRAuth functionality to Flutter.
+ */
+public class FRAuthSampleBridge {
+     /** The application context. */
+     Context context;
+     /** The current authentication node. */
+     Node currentNode;
+     /** The node listener. */
+     NodeListener listener;
+     /** The result callback to be called upon completion. */
+     MethodChannel.Result flutterPromise;
+
+   /**
+     * Constructs a new FRAuthSampleBridge.
+     *
+     * @param context The application context.
+     */
     FRAuthSampleBridge(Context context) {
         this.context = context;
     }
 
     private static final String CHANNEL = "forgerock.com/SampleBridge";
 
+    /**
+     * Starts the FRAuth authentication process.
+     *
+     * @param promise The result callback to be called upon completion.
+     */
     public void start(MethodChannel.Result promise) {
         Logger.set(Logger.Level.DEBUG);
         FROptions options = FROptionsBuilder.build(frOptionsBuilder -> {
@@ -106,6 +135,11 @@ public class FRAuthSampleBridge {
         }
     }
 
+    /**
+     * Logs out the current user.
+     *
+     * @param promise The result callback to be called upon completion.
+     */
     public void logout(MethodChannel.Result promise) {
         FRUser user = FRUser.getCurrentUser();
         if (user != null) {
@@ -114,6 +148,11 @@ public class FRAuthSampleBridge {
         }
     }
 
+    /**
+     * Calling login
+     *
+     * @param promise The result callback to be called upon completion.
+     */
     public void login(MethodChannel.Result promise) {
         try {
             authenticate(promise, true);
@@ -122,6 +161,11 @@ public class FRAuthSampleBridge {
         }
     }
 
+    /**
+     * Calling register
+     *
+     * @param promise The result callback to be called upon completion.
+     */
     public void register(MethodChannel.Result promise) {
         try {
             authenticate(promise, false);
@@ -152,6 +196,11 @@ public class FRAuthSampleBridge {
         }
     }
 
+    /**
+     * Retrieves the current user's profile.
+     *
+     * @param result The result callback to be called upon completion.
+     */
     public void getUserInfo(MethodChannel.Result promise) {
         if (FRUser.getCurrentUser() != null) {
             FRUser.getCurrentUser().getUserInfo(new FRListener<UserInfo>() {
@@ -173,6 +222,14 @@ public class FRAuthSampleBridge {
         }
     }
 
+    /**
+     * Calls a specified endpoint.
+     *
+     * @param endpoint The endpoint to call.
+     * @param method The HTTP method to use.
+     * @param payload The payload to send.
+     * @param promise The result callback to be called upon completion.
+     */
     public void callEndpoint(String endpoint, String method, String payload, MethodChannel.Result promise) {
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
                 .followRedirects(false);
@@ -210,6 +267,13 @@ public class FRAuthSampleBridge {
         });
     }
 
+    /**
+     * Proceeds to the next step in the authentication journey.
+     *
+     * @param response The response from the previous step.
+     * @param promise The result callback to be called upon completion.
+     * @throws InterruptedException If the thread is interrupted.
+     */
     public void next(String response, MethodChannel.Result promise) throws InterruptedException {
         this.flutterPromise = promise;
         Gson gson= new Gson();
@@ -287,6 +351,12 @@ public class FRAuthSampleBridge {
         currentNode.next(this.context, listener);
     }
 
+    /**
+     * Authenticates the user.
+     *
+     * @param promise The result callback to be called upon completion.
+     * @param isLogin A boolean indicating whether it is a login operation.
+     */
     public void authenticate(MethodChannel.Result promise, boolean isLogin) {
         this.flutterPromise = promise;
         NodeListener<FRUser> nodeListenerFuture = new NodeListener<FRUser>() {
@@ -333,9 +403,16 @@ public class FRAuthSampleBridge {
     }
 }
 
+/**
+ * Authenticates the user.
+ *
+ * @param promise The result callback to be called upon completion.
+ * @param isLogin A boolean indicating whether it is a login operation.
+ */
 class FRNode {
+    
     List<FRCallback> frCallbacks;
-
+    /** An array of FRCallback objects. */
     private String authId;
     /// Unique UUID String value of initiated AuthService flow
     private String authServiceId;
@@ -417,6 +494,9 @@ class FRNode {
 
 }
 
+/**
+ * A class representing a ForgeRock callback.
+ */
 class FRCallback {
     private String type;
     private String prompt;
@@ -500,18 +580,27 @@ class FRCallback {
     }
 }
 
+/**
+ * A class representing a response from the authentication server.
+ */
 class Response {
     String authId;
     List<RawCallback> callbacks;
     Integer status;
 }
 
+/**
+ * A class representing a raw callback.
+ */
 class RawCallback {
     String type;
     List<RawInput> input;
     Integer _id;
 }
 
+/**
+ * A class representing a raw input.
+ */
 class RawInput {
     String name;
     Object value;

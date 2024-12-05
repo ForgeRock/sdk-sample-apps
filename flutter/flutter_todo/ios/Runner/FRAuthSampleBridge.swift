@@ -10,21 +10,42 @@ import FRAuth
 import FRCore
 import Flutter
 
+/**
+ A struct that holds the configuration constants for the authentication journey.
+ */
 struct Configuration {
+    /// The main authentication journey name.
     static let mainAuthenticationJourney = "Login"
+    /// The URL of the authentication server.
     static let amURL = "https://openam-bafaloukas.forgeblocks.com/am"
+    /// The name of the cookie used for authentication.
     static let cookieName = "386c0d288cac4b9"
+    /// The realm used for authentication.
     static let realm = "alpha"
+    /// The OAuth client ID.
     static let oauthClientId = "iosClient"
+    /// The OAuth redirect URI.
     static let oauthRedirectURI = "frauth://com.forgerock.ios.frexample"
+    /// The OAuth scopes.
     static let oauthScopes = "openid email address phone profile"
+    /// The discovery endpoint for OAuth configuration.
     static let discoveryEndpoint = "https://openam-bafaloukas.forgeblocks.com/am/oauth2/realms/alpha/.well-known/openid-configuration"
 }
 
+/**
+ A class that bridges the FRAuth functionality to Flutter.
+ */
 public class FRAuthSampleBridge {
+    /// The current authentication node.
     var currentNode: Node?
+    /// The URL session used for network requests.
     private let session = URLSession(configuration: .default)
     
+    /**
+     Starts the FRAuth authentication process.
+     
+     - Parameter result: The result callback to be called upon completion.
+     */
     @objc func frAuthStart(result: @escaping FlutterResult) {
         // Set log level according to your needs
         FRLog.setLogLevel([.all])
@@ -44,23 +65,43 @@ public class FRAuthSampleBridge {
         }
     }
     
+    /**
+     Logs in the user.
+     
+     - Parameter result: The result callback to be called upon completion.
+     */
     @objc func login(result: @escaping FlutterResult) {
         FRUser.login { (user, node, error) in
             self.handleNode(user, node, error, completion: result)
         }
     }
     
+    /**
+     Registers a new user.
+     
+     - Parameter result: The result callback to be called upon completion.
+     */
     @objc func register(result: @escaping FlutterResult) {
         FRUser.register { (user, node, error) in
             self.handleNode(user, node, error, completion: result)
         }
     }
     
+    /**
+     Logs out the current user from FRAuth.
+     
+     - Parameter result: The result callback to be called upon completion.
+     */
     @objc func frLogout(result: @escaping FlutterResult) {
         FRUser.currentUser?.logout()
         result("User logged out")
     }
     
+    /**
+     Retrieves the current user's information.
+     
+     - Parameter result: The result callback to be called upon completion.
+     */
     @objc func getUserInfo(result: @escaping FlutterResult) {
         FRUser.currentUser?.getUserInfo(completion: { userInfo, error in
             if (error != nil) {
@@ -82,6 +123,11 @@ public class FRAuthSampleBridge {
         })
     }
     
+    /**
+     Proceeds to the next step in the authentication journey.
+     
+     - Parameter result: The result callback to be called upon completion.
+     */
     @objc func next(_ response: String, completion: @escaping FlutterResult) {
         let decoder = JSONDecoder()
         let jsonData = Data(response.utf8)
@@ -188,6 +234,13 @@ public class FRAuthSampleBridge {
         }
     }
     
+    /**
+     Calls a specified endpoint.
+     
+     - Parameters:
+     - endpoint: The endpoint to call.
+     - completion: The completion callback to be called upon completion.
+     */
     @objc func callEndpoint(_ endpoint: String, method: String, payload: String, completion: @escaping FlutterResult) {
         // Invoke API
         FRUser.currentUser?.getAccessToken { (user, error) in
@@ -223,6 +276,15 @@ public class FRAuthSampleBridge {
         }
     }
     
+    /**
+     Handles the current authentication node.
+     
+     - Parameters:
+     - result: The result of the previous step.
+     - node: The current authentication node.
+     - error: Any error that occurred during the previous step.
+     - completion: The completion callback to be called upon completion.
+     */
     private func handleNode(_ result: Any?, _ node: Node?, _ error: Error?, completion: @escaping FlutterResult) {
         if let node = node {
             self.currentNode = node

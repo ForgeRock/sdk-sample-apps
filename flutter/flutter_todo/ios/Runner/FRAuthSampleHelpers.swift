@@ -23,20 +23,25 @@ extension Dictionary {
 }
 
 extension Array {
-  
-  /// Convert Array to JSON string
-  /// - Throws: exception if Array cannot be converted to JSON data or when data cannot be converted to UTF8 string
-  /// - Returns: JSON string
-  func toJson() throws -> String {
-      let data = try JSONSerialization.data(withJSONObject: self, options: [])
-      if let string = String(data: data, encoding: .utf8) {
-          return string
-      }
-      throw NSError(domain: "Array", code: 1, userInfo: ["message": "Data cannot be converted to .utf8 string"])
-  }
+    
+    /// Convert Array to JSON string
+    /// - Throws: exception if Array cannot be converted to JSON data or when data cannot be converted to UTF8 string
+    /// - Returns: JSON string
+    func toJson() throws -> String {
+        let data = try JSONSerialization.data(withJSONObject: self, options: [])
+        if let string = String(data: data, encoding: .utf8) {
+            return string
+        }
+        throw NSError(domain: "Array", code: 1, userInfo: ["message": "Data cannot be converted to .utf8 string"])
+    }
 }
 
 extension String {
+    /**
+     Converts a JSON string to a dictionary.
+     
+     - Returns: A dictionary representation of the JSON string, or nil if the conversion fails.
+     */
     func convertToDictionary() -> [String: Any]? {
         if let data = self.data(using: .utf8) {
             do {
