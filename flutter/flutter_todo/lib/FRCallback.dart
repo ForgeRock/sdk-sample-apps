@@ -1,9 +1,11 @@
 //  FRCallback.dart
 //
-//  Copyright (c) 2022 ForgeRock. All rights reserved.
+//
+//  Copyright (c) 2022-2024 Ping Identity. All rights reserved.
 //
 //  This software may be modified and distributed under the terms
 //  of the MIT license. See the LICENSE file for details.
+//
 
 /*
 The FRCallback class is native Dart class replicating the structure of the SDKs Callback objects.
