@@ -24,7 +24,7 @@
   "scripts": {
     "build": "webpack",
     "start": "webpack serve",
-    "lint": "eslint ."
+    "lint": "eslint . --fix"
   },
   "author": "",
   "license": "ISC"

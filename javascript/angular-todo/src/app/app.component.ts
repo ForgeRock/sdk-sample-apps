@@ -25,10 +25,7 @@ export class AppComponent implements OnInit {
   title = 'angular-todo-prototype';
   loading = false;
 
-  constructor(
-    public userService: UserService,
-    private router: Router,
-  ) {
+  constructor(public userService: UserService, private router: Router) {
     const navStart = router.events.pipe(
       filter((evt) => evt instanceof NavigationStart),
     ) as Observable<NavigationStart>;
@@ -78,7 +75,7 @@ export class AppComponent implements OnInit {
       }`,
       scope: 'openid profile email',
       serverConfig: {
-        baseUrl: environment.AM_URL,
+        baseUrl: environment.SERVER_URL,
         timeout: 3000, // 9000 or less
       },
       realmPath: environment.REALM_PATH,

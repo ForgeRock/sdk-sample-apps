@@ -8,9 +8,10 @@
     "build": "npm run setup && ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "lint": "ng lint",
+    "lint": "ng lint --fix",
     "e2e": "playwright test",
-    "e2e:ui": "playwright test --ui"
+    "e2e:ui": "playwright test --ui",
+    "clean": "rimraf node_modules,dist"
   },
   "private": true,
   "dependencies": {

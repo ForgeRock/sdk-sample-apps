@@ -16,7 +16,7 @@ forgerock.Config.set({
   redirectUri: `${window.location.origin}/callback.html`, // e.g. 'https://sdkapp.example.com:8443/callback.html'
   scope: process.env.SCOPE, // e.g. 'openid profile email address phone'
   serverConfig: {
-    baseUrl: process.env.AM_URL, // e.g. 'https://myorg.forgeblocks.com/am' or 'https://openam.example.com:8443/openam'
+    baseUrl: process.env.SERVER_URL, // e.g. 'https://myorg.forgeblocks.com/am' or 'https://openam.example.com:8443/openam'
     timeout: parseInt(process.env.TIMEOUT), // 90000 or less
   },
   realmPath: process.env.REALM_PATH, // e.g. 'alpha' or 'root'

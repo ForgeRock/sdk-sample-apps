@@ -56,7 +56,7 @@ export default async function routes(app) {
     await db.put(req.user, {
       _id: ref._id,
       _rev: ref._rev,
-      completed: completed,
+      completed,
       owner: req.user.user_id,
       title: req.body.title || ref.title,
     });

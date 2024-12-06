@@ -10,14 +10,14 @@ import * as forgerock from '@forgerock/javascript-sdk';
  * of the MIT license. See the LICENSE file for details.
  */
 
-const config = await forgerock.Config.setAsync({
-  clientId: process.env.WEB_OAUTH_CLIENT, // e.g. 'ForgeRockSDKClient' or PingOne Services Client GUID 
+await forgerock.Config.setAsync({
+  clientId: process.env.WEB_OAUTH_CLIENT, // e.g. 'ForgeRockSDKClient' or PingOne Services Client GUID
   redirectUri: `${window.location.origin}`, // Redirect back to your app, e.g. 'https://localhost:8443' or the domain your app is served.
   scope: process.env.SCOPE, // e.g. 'openid profile email address phone revoke' When using PingOne services `revoke` scope is required
   serverConfig: {
     wellknown: process.env.WELL_KNOWN,
     timeout: process.env.TIMEOUT, // Any value between 3000 to 5000 is good, this impacts the redirect time to login. Change that according to your needs.
-  }
+  },
 });
 
 // Show only the view for this handler
@@ -43,9 +43,9 @@ const showUser = (user) => {
 
 const logout = async () => {
   try {
-    if (process.env.SERVER_TYPE === "PINGONE") {
+    if (process.env.SERVER_TYPE === 'PINGONE') {
       await forgerock.FRUser.logout({
-        logoutRedirectUri: `${window.location.origin}`
+        logoutRedirectUri: `${window.location.origin}`,
       });
     } else {
       await forgerock.FRUser.logout();
@@ -62,8 +62,8 @@ const authorize = async (code, state) => {
    * the URL will include code and state query parameters that need to
    * be passed in to complete the OAuth flow giving the user access
    */
-  console.log("State:" + state + " code:" + code);
-  
+  console.log('State:' + state + ' code:' + code);
+
   await forgerock.TokenManager.getTokens({ query: { code, state } });
   const user = await forgerock.UserManager.getCurrentUser();
   showUser(user);
