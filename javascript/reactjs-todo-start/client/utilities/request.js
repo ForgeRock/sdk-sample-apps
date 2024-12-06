@@ -32,7 +32,8 @@ export default async function apiRequest(resource, method, data) {
      * fetch method.
      *********************************************************************** */
     if (DEBUGGER) debugger;
-    const response = await HttpClient.request({
+    // Use HttpClient instead of fetch to include the access token  
+    const response = await fetch(`${API_URL}/${resource}`, {
       url: `${API_URL}/${resource}`,
       init: {
         body: data && JSON.stringify(data),

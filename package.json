@@ -9,6 +9,7 @@
     "javascript/central-login-oidc",
     "javascript/embedded-login",
     "javascript/reactjs-todo",
+    "javascript/reactjs-todo-start",
     "javascript/angular-todo",
     "javascript/todo-api"
   ],
@@ -20,6 +21,7 @@
     "start:embedded-login": "npm start --workspace embedded-login",
     "start:angular-todo": "npm-run-all --parallel todo-api angular-todo",
     "start:reactjs-todo": "npm-run-all --parallel todo-api reactjs-todo",
+    "start:reactjs-todo-start": "npm-run-all --parallel todo-api reactjs-todo-start",
     "lint": "npm run lint --workspaces --if-present",
     "prepare": "husky install"
   },

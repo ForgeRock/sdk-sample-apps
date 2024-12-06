@@ -54,14 +54,21 @@ Change the name of `.env.example` to `.env` and replace the bracketed values (e.
 Example with annotations:
 
 ```text
-AM_URL=<<<URL to your AM instance>>>
-APP_URL=https://localhost:8443 # in develop we do not use this variable for dynamic deployment reasons
-API_URL=http://localhost:9443
-DEBUGGER_OFF=false
-JOURNEY_LOGIN=Login
-JOURNEY_REGISTER=Registration
-REALM_PATH=<<<Realm path of AM>>>
-WEB_OAUTH_CLIENT=<<<Your Web OAuth client name/ID>>>
+SERVER_URL=$SERVER_URL
+SCOPE=$SCOPE
+API_URL=$API_URL
+DEBUGGER_OFF=true
+DEVELOPMENT=$DEVELOPMENT
+JOURNEY_LOGIN=$JOURNEY_LOGIN
+JOURNEY_REGISTER=$JOURNEY_REGISTER
+PORT=$PORT
+REALM_PATH=$REALM_PATH
+REST_OAUTH_CLIENT=$REST_OAUTH_CLIENT
+REST_OAUTH_SECRET=$REST_OAUTH_SECRET
+WEB_OAUTH_CLIENT=$WEB_OAUTH_CLIENT
+CENTRALIZED_LOGIN=$CENTRALIZED_LOGIN
+SERVER_TYPE=$SERVER_TYPE
+WELLKNOWN_URL=$WELLKNOWN_URL
 ```
 
 ### Installing Dependencies and Run Build
@@ -79,7 +86,7 @@ Now, run the below commands to start the processes needed for building the appli
 
 ```sh
 # In one terminal window, run the following watch command from the root of the repository
-npm run start:reactjs-todo
+npm run start:reactjs-todo-start
 ```
 
 Now, you should be able to visit `https://localhost:8443`, which is your web app or client (the Relying Party in OAuth terms). This client will make requests to your AM instance, (the Authorization Server in OAuth terms), which will be running on whatever domain you set, and `http://localhost:9443` as the REST API for your todos (the Resource Server).
@@ -92,9 +99,20 @@ You will likely have to accept the security certificate exceptions for both your
 
 This project has a debugging statements that can be activated which causes the app to pause execution at each SDK integration point. It will have a comment above the `debugger` statement explaining the purpose of the integration.
 
-If you'd like to use this feature as a learning tool, [open the live app](https://fr-react-todos.crbrl.io/) and then open the developer tools of your browser. Rerun the app with the developer tools open, and it will automatically pause at these points of integration.
-
 For local development, if you want to turn these debuggers off, you can set the environment variable of `DEBUGGER_OFF` to true.
+
+### Integration points
+
+You can search the project for `SDK INTEGRATION POINT`. The project contains details on all the expected integration points of the SDK. Fill in the missing code to get the complete experience. Required integration points:
+
+1. `index.js` Import the SDK and implement the `isAuthenticated` check
+2. `journey-state.js` Import the SDK and the `getTokens`, `getCurrentUser` and `next` calls
+3. `route.js` Ask for the `currentUser`
+4. `form.js` Import the SDK and implement the callback handling code
+5. `global-state.js` Implement the logout logic
+6. `request.js` Replace `fetch` with `HTTPClient`
+
+At any point you can open the [complete project](../reactjs-todo/) to see the completed code 
 
 ## Modifying This Project
 

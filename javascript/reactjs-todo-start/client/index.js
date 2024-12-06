@@ -8,7 +8,13 @@
  * of the MIT license. See the LICENSE file for details.
  */
 
-import { Config, TokenStorage } from '@forgerock/javascript-sdk';
+/** ***************************************************************************
+ * SDK INTEGRATION POINT
+ * ----------------------------------------------------------------------------
+ * Details: Below, you will see the following settings:
+ * Import the SDK
+ *************************************************************************** */
+
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
@@ -78,7 +84,7 @@ const journeyParam = urlParams.get('journey');
     realmPath: REALM_PATH,
     tree: `${journeyParam || JOURNEY_LOGIN}`,
   });
- * *************************************************************************** */
+ 
 
 var config;
 config = await Config.setAsync({
@@ -94,6 +100,8 @@ config = await Config.setAsync({
   },
   tree: `${journeyParam || JOURNEY_LOGIN}`
 });
+* *************************************************************************** */
+
 
 /**
  * Initialize the React application
@@ -109,11 +117,7 @@ config = await Config.setAsync({
    ************************************************************************* */
   if (DEBUGGER) debugger;
   let isAuthenticated;
-  try {
-    isAuthenticated = !!(await TokenStorage.get());
-  } catch (err) {
-    console.error(`Error: token retrieval for hydration; ${err}`);
-  }
+  // Check if the user is authenticated
 
   /**
    * Pull custom values from outside of the app to (re)hydrate state.

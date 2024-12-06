@@ -27,12 +27,19 @@ import Unknown from './unknown';
 import Button from './button';
 import TextOutput from './text-output';
 import Confirmation from './confirmation';
-import { FRWebAuthn, WebAuthnStepType, FRAuth, CallbackType } from '@forgerock/javascript-sdk';
 import WebAuthn from './web-authn';
 import KeyIcon from '../../components/icons/key-icon';
 import NewUserIcon from '../../components/icons/new-user-icon';
 import FingerPrintIcon from '../../components/icons/finger-print-icon';
 import IdentityProvider from './identity-provider';
+
+/** ***************************************************************************
+ * SDK INTEGRATION POINT
+ * ----------------------------------------------------------------------------
+ * Details: Below, you will see the following settings:
+ * Import the SDK you will need FRWebAuthn, WebAuthnStepType, FRAuth, CallbackType
+
+ *************************************************************************** */
 
 /**
  * @function Form - React component for managing the user authentication journey
@@ -124,27 +131,7 @@ export default function Form({ action, bottomMessage, followUp, topMessage, jour
      ********************************************************************* */
     if (DEBUGGER) debugger;
     switch (cb.getType()) {
-      case 'ChoiceCallback':
-        return <Choice callback={cb} inputName={name} key={name} />;
-      case 'NameCallback':
-      case 'ValidatedCreateUsernameCallback':
-      case 'StringAttributeInputCallback':
-        return <Text callback={cb} inputName={name} key={name} />;
-      case 'PasswordCallback':
-      case 'ValidatedCreatePasswordCallback':
-        return <Password callback={cb} inputName={name} key={name} />;
-      case 'BooleanAttributeInputCallback':
-        return <Boolean callback={cb} inputName={name} key={name} />;
-      case 'TermsAndConditionsCallback':
-        return <TermsConditions callback={cb} inputName={name} key={name} />;
-      case 'KbaCreateCallback':
-        return <Kba callback={cb} inputName={name} key={name} />;
-      case 'TextOutputCallback':
-        return <TextOutput callback={cb} key={`textOutput-${idx}`} />; // For TextOutput callbacks, 'input' field comes empty which leads to a unique-key-prop error
-      case 'ConfirmationCallback':
-        return <Confirmation callback={cb} inputName={name} key={name} />;
-      case 'SelectIdPCallback':
-        return <IdentityProvider callback={cb} inputName={name} key={name} />;
+      // Fill in all the cases for the different callback types
       default:
         // If current callback is not supported, render a warning message
         return <Unknown callback={cb} key={`unknown-${idx}`} />;

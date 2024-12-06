@@ -51,18 +51,7 @@ export function useGlobalStateMgmt({ email, isAuthenticated, prefersDarkTheme, u
        * APIs are called and we get a 401 response.
        ********************************************************************* */
       if (DEBUGGER) debugger;
-      try {
-        if (process.env.SERVER_TYPE === "PINGONE") {
-          await FRUser.logout({
-            logoutRedirectUri: `${window.location.origin}`
-          });
-        } else {
-          await FRUser.logout();
-          location.assign(`${document.location.origin}/`);
-        }
-      } catch (err) {
-        console.error(`Error: logout did not successfully complete; ${err}`);
-      }
+      // Use the FRUser.logout to logout the user. Note the difference between PINGONE & AIC
     }
     setAuthentication(value);
   }

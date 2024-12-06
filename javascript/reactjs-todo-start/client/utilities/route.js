@@ -50,7 +50,7 @@ function useAuthValidation(auth, setAuth) {
            * ensure valid tokens before continuing, but it's optional.
            ***************************************************************** */
           if (DEBUGGER) debugger;
-          await UserManager.getCurrentUser();
+          // Ask for the current user
           setValid('valid');
         } catch (err) {
           console.info(`Info: route validation; ${err}`);

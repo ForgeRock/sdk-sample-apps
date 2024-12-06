@@ -54,14 +54,21 @@ Change the name of `.env.example` to `.env` and replace the bracketed values (e.
 Example with annotations:
 
 ```text
-AM_URL=<<<URL to your AM instance>>>
-APP_URL=https://localhost:8443 # in develop we do not use this variable for dynamic deployment reasons
-API_URL=http://localhost:9443
-DEBUGGER_OFF=false
-JOURNEY_LOGIN=Login
-JOURNEY_REGISTER=Registration
-REALM_PATH=<<<Realm path of AM>>>
-WEB_OAUTH_CLIENT=<<<Your Web OAuth client name/ID>>>
+SERVER_URL=$SERVER_URL
+SCOPE=$SCOPE
+API_URL=$API_URL
+DEBUGGER_OFF=true
+DEVELOPMENT=$DEVELOPMENT
+JOURNEY_LOGIN=$JOURNEY_LOGIN
+JOURNEY_REGISTER=$JOURNEY_REGISTER
+PORT=$PORT
+REALM_PATH=$REALM_PATH
+REST_OAUTH_CLIENT=$REST_OAUTH_CLIENT
+REST_OAUTH_SECRET=$REST_OAUTH_SECRET
+WEB_OAUTH_CLIENT=$WEB_OAUTH_CLIENT
+CENTRALIZED_LOGIN=$CENTRALIZED_LOGIN
+SERVER_TYPE=$SERVER_TYPE
+WELLKNOWN_URL=$WELLKNOWN_URL
 ```
 
 ### Installing Dependencies and Run Build
@@ -91,8 +98,6 @@ You will likely have to accept the security certificate exceptions for both your
 ## Learn About Integration Touchpoints
 
 This project has a debugging statements that can be activated which causes the app to pause execution at each SDK integration point. It will have a comment above the `debugger` statement explaining the purpose of the integration.
-
-If you'd like to use this feature as a learning tool, [open the live app](https://fr-react-todos.crbrl.io/) and then open the developer tools of your browser. Rerun the app with the developer tools open, and it will automatically pause at these points of integration.
 
 For local development, if you want to turn these debuggers off, you can set the environment variable of `DEBUGGER_OFF` to true.
 

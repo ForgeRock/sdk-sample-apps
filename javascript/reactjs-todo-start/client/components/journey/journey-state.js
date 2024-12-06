@@ -8,7 +8,13 @@
  * of the MIT license. See the LICENSE file for details.
  */
 
-import { FRAuth, TokenManager, UserManager } from '@forgerock/javascript-sdk';
+/** ***************************************************************************
+ * SDK INTEGRATION POINT
+ * ----------------------------------------------------------------------------
+ * Details: Below, you will see the following settings:
+ * Import the SDK you will need FRAuth, TokenManager, UserManager
+ *************************************************************************** */
+
 import { useEffect, useState } from 'react';
 
 import { DEBUGGER } from '../../constants';
@@ -65,7 +71,7 @@ export default function useJourneyHandler({ action, form, resumeUrl }) {
        ************************************************************************* */
       if (DEBUGGER) debugger;
       try {
-        await TokenManager.getTokens({ forceRenew: true });
+        // Call get tokens
       } catch (err) {
         console.info(`Error: get tokens; ${err}`);
       }
@@ -80,7 +86,7 @@ export default function useJourneyHandler({ action, form, resumeUrl }) {
        ********************************************************************* */
       if (DEBUGGER) debugger;
       try {
-        const user = await UserManager.getCurrentUser();
+        const user = // Call get current user
         setUser(user);
       } catch (err) {
         console.error(`Error: get current user; ${err}`);
@@ -116,7 +122,7 @@ export default function useJourneyHandler({ action, form, resumeUrl }) {
         if (resumeUrl) {
           nextStep = await FRAuth.resume(resumeUrl);
         } else {
-          nextStep = await FRAuth.next(prev, { tree: form.tree });
+          // Call next with previous step "FRAuth.next(prev, { tree: form.tree })"
         }
         setStepCount((current) => current + 1);
       } catch (err) {
@@ -159,7 +165,7 @@ export default function useJourneyHandler({ action, form, resumeUrl }) {
         if (DEBUGGER) debugger;
         let newStep;
         try {
-          newStep = await FRAuth.next(null, { tree: form.tree });
+          // Call next with  no step (null) to get a fresh authId. 
         } catch (err) {
           console.error(`Error: failure in new step request; ${err}`);
 
