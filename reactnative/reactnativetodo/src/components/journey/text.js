@@ -8,8 +8,9 @@
  * of the MIT license. See the LICENSE file for details.
  */
 
-import { FormControl, Input } from 'native-base';
+import { FormControl } from 'native-base';
 import React from 'react';
+import {TextInput} from 'react-native';
 
 /*
  * Please ensure you have created an .env.js from the
@@ -44,14 +45,10 @@ export default function Text({ callback }) {
   return (
     <FormControl isRequired={isRequired} isInvalid={error}>
       <FormControl.Label mb={0}>{label}</FormControl.Label>
-      <Input
-        autoCapitalize="none"
-        autoComplete="off"
-        autoCorrect={false}
-        onChangeText={setText}
-        size="lg"
-        type="text"
-      />
+      <TextInput
+          autoCapitalize="none"
+          onChangeText= {setText}
+        />
       <FormControl.ErrorMessage>
         {error.length ? error : ''}
       </FormControl.ErrorMessage>
