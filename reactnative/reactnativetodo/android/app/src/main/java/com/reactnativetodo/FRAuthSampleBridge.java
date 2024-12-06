@@ -46,6 +46,8 @@ import org.forgerock.android.auth.callback.StringAttributeInputCallback;
 import org.forgerock.android.auth.callback.TermsAndConditionsCallback;
 import org.forgerock.android.auth.callback.ValidatedPasswordCallback;
 import org.forgerock.android.auth.callback.ValidatedUsernameCallback;
+import org.forgerock.android.auth.callback.WebAuthnAuthenticationCallback;
+import org.forgerock.android.auth.callback.WebAuthnRegistrationCallback;
 import org.forgerock.android.auth.exception.AuthenticationRequiredException;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -189,6 +191,32 @@ public class FRAuthSampleBridge extends ReactContextBaseJavaModule {
                     }
                     if ((currentCallbackType.equals("ChoiceCallback")) && i==j) {
                         currentNode.getCallback(ChoiceCallback.class).setSelectedIndex((Integer) input.value);
+                    }
+                    if ((currentCallbackType.equals("WebAuthnRegistrationCallback")) && i==j) {
+                        currentNode.getCallback(WebAuthnRegistrationCallback.class).register(context, currentNode, new FRListener<Void>() {
+                            @Override
+                            public void onSuccess(Void result) {
+                                Logger.warn("WebAuthnRegistrationCallback", "WebAuthn Registration Succeeded");
+                            }
+
+                            @Override
+                            public void onException(Exception e) {
+                                Logger.warn("WebAuthnRegistrationCallback", e, "WebAuthn Registration Failed");
+                            }
+                        });
+                    }
+                    if ((currentCallbackType.equals("WebAuthnAuthenticationCallback")) && i==j) {
+                        currentNode.getCallback(WebAuthnAuthenticationCallback.class).authenticate(context, currentNode, new FRListener<Void>() {
+                            @Override
+                            public void onSuccess(Void result) {
+                                Logger.warn("WebAuthnAuthenticationCallback", "WebAuthnAuthentication  Succeeded");
+                            }
+
+                            @Override
+                            public void onException(Exception e) {
+                                Logger.warn("WebAuthnAuthenticationCallback", e, "WebAuthnAuthentication Failed");
+                            }
+                        });
                     }
                     if ((currentCallbackType.equals("KbaCreateCallback")) && i==j) {
                         for (RawInput rawInput : callback.input) {

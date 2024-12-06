@@ -8,10 +8,9 @@
  * of the MIT license. See the LICENSE file for details.
  */
 
-import { Button, FormControl, Input } from 'native-base';
-import React, { useState } from 'react';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-
+import React, {useState} from 'react';
+import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
+import {StyleSheet, TextInput} from 'react-native';
 /*
  * Please ensure you have created an .env.js from the
  * .env.example.js template!
@@ -79,30 +78,44 @@ export default function Password({ callback }) {
   const isRequired = callback.isRequired ? callback.isRequired() : false;
 
   return (
-    <FormControl isRequired={isRequired} isInvalid={error}>
-      <FormControl.Label mb={0}>{label}</FormControl.Label>
-      <Input
-        type={show ? 'text' : 'password'}
-        size="lg"
-        onChangeText={setPassword}
-        InputRightElement={
-          <Button
-            size="xs"
-            rounded="none"
-            w="1/6"
-            h="full"
-            backgroundColor="muted.200"
-            onPress={handleClick}
-          >
-            {show ? (
-              <Icon name="eye-off" size={18} />
-            ) : (
-              <Icon name="eye" size={18} />
-            )}
-          </Button>
-        }
-      />
-      <FormControl.ErrorMessage>{error}</FormControl.ErrorMessage>
-    </FormControl>
+    <SafeAreaProvider>
+      <SafeAreaView>
+        <TextInput
+          secureTextEntry={true}
+          autoCapitalize="none"
+          style={styles.input}
+          onChangeText= {setPassword}
+        />
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
+const styles = StyleSheet.create({
+  container: {
+    marginVertical: 10,
+  },
+  label: {
+    fontSize: 16,
+    marginBottom: 5,
+    color: '#333',
+  },
+  required: {
+    color: 'red',
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    padding: 10,
+    fontSize: 16,
+    backgroundColor: '#fff',
+  },
+  inputError: {
+    borderColor: 'red',
+  },
+  errorText: {
+    marginTop: 5,
+    fontSize: 14,
+    color: 'red',
+  },
+});

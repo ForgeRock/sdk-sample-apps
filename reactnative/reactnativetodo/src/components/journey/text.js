@@ -8,8 +8,9 @@
  * of the MIT license. See the LICENSE file for details.
  */
 
-import { FormControl, Input } from 'native-base';
 import React from 'react';
+import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
+import {StyleSheet, TextInput} from 'react-native';
 
 /*
  * Please ensure you have created an .env.js from the
@@ -24,7 +25,7 @@ import { handleFailedPolicies } from './utilities';
  * @param {Object} props.callback - The callback object from AM
  * @returns {Object} - React component object
  */
-export default function Text({ callback }) {
+export default function TextInputField({ callback }) {
   /********************************************************************
    * JAVASCRIPT SDK INTEGRATION POINT
    * Summary: Utilize Callback methods
@@ -35,26 +36,55 @@ export default function Text({ callback }) {
    *  in our own application and leverage the SDK to do so
    *  *************************************************************** */
   if (!DEBUGGER_OFF) debugger;
+  
+
   const error = handleFailedPolicies(
     callback.getFailedPolicies ? callback.getFailedPolicies() : [],
   );
   const isRequired = callback.isRequired ? callback.isRequired() : false;
   const label = callback.getPrompt();
   const setText = (text) => callback.setInputValue(text);
+
   return (
-    <FormControl isRequired={isRequired} isInvalid={error}>
-      <FormControl.Label mb={0}>{label}</FormControl.Label>
-      <Input
-        autoCapitalize="none"
-        autoComplete="off"
-        autoCorrect={false}
-        onChangeText={setText}
-        size="lg"
-        type="text"
-      />
-      <FormControl.ErrorMessage>
-        {error.length ? error : ''}
-      </FormControl.ErrorMessage>
-    </FormControl>
+    <SafeAreaProvider>
+      <SafeAreaView>
+        <TextInput
+          autoCapitalize="none"
+          style={styles.input}
+          onChangeText= {setText}
+        />
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
+
+ const styles = StyleSheet.create({
+  container: {
+    marginVertical: 10,
+  },
+  label: {
+    fontSize: 16,
+    marginBottom: 5,
+    color: '#333',
+  },
+  required: {
+    color: 'red',
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    padding: 10,
+    fontSize: 16,
+    backgroundColor: '#fff',
+  },
+  inputError: {
+    borderColor: 'red',
+  },
+  errorText: {
+    marginTop: 5,
+    fontSize: 14,
+    color: 'red',
+  },
+});
+

@@ -9,9 +9,14 @@
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* reactnativetodoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* reactnativetodoTests.m */; };
 		0C80B921A6F3F58F76C31292 /* libPods-reactnativetodo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-reactnativetodo.a */; };
-		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		3A571F822D026576002E2831 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3A571F812D026576002E2831 /* AppDelegate.mm */; };
+		3AB0458B2D020E3900C49650 /* FRAuthSampleBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB045882D020E3900C49650 /* FRAuthSampleBridge.swift */; };
+		3AB0458C2D020E3900C49650 /* FRAuthSampleStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB0458A2D020E3900C49650 /* FRAuthSampleStructs.swift */; };
+		3AB0458D2D020E3900C49650 /* FRAuthSampleHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB045892D020E3900C49650 /* FRAuthSampleHelpers.swift */; };
+		3AB045902D02368500C49650 /* FRAuthConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3AB0458E2D02368500C49650 /* FRAuthConfig.plist */; };
+		3AB045912D02368500C49650 /* FRAuthSampleBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AB0458F2D02368500C49650 /* FRAuthSampleBridge.m */; };
 		5CFD640CEF6640F11DCCB901 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
 		7699B88040F8A987B510C191 /* libPods-reactnativetodo-reactnativetodoTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-reactnativetodo-reactnativetodoTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
@@ -32,13 +37,19 @@
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* reactnativetodoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = reactnativetodoTests.m; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* reactnativetodo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = reactnativetodo.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = reactnativetodo/AppDelegate.h; sourceTree = "<group>"; };
-		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = reactnativetodo/AppDelegate.mm; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = reactnativetodo/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = reactnativetodo/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = reactnativetodo/main.m; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = reactnativetodo/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		19F6CBCC0A4E27FBF8BF4A61 /* libPods-reactnativetodo-reactnativetodoTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-reactnativetodo-reactnativetodoTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3A571F802D026576002E2831 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = reactnativetodo/AppDelegate.h; sourceTree = "<group>"; };
+		3A571F812D026576002E2831 /* AppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = reactnativetodo/AppDelegate.mm; sourceTree = "<group>"; };
+		3AB045872D020DC300C49650 /* reactnativetodo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "reactnativetodo-Bridging-Header.h"; sourceTree = "<group>"; };
+		3AB045882D020E3900C49650 /* FRAuthSampleBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FRAuthSampleBridge.swift; path = reactnativetodo/FRAuthSampleBridge.swift; sourceTree = "<group>"; };
+		3AB045892D020E3900C49650 /* FRAuthSampleHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FRAuthSampleHelpers.swift; path = reactnativetodo/FRAuthSampleHelpers.swift; sourceTree = "<group>"; };
+		3AB0458A2D020E3900C49650 /* FRAuthSampleStructs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FRAuthSampleStructs.swift; path = reactnativetodo/FRAuthSampleStructs.swift; sourceTree = "<group>"; };
+		3AB0458E2D02368500C49650 /* FRAuthConfig.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = FRAuthConfig.plist; path = reactnativetodo/FRAuthConfig.plist; sourceTree = "<group>"; };
+		3AB0458F2D02368500C49650 /* FRAuthSampleBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = FRAuthSampleBridge.m; path = reactnativetodo/FRAuthSampleBridge.m; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-reactnativetodo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-reactnativetodo.debug.xcconfig"; path = "Target Support Files/Pods-reactnativetodo/Pods-reactnativetodo.debug.xcconfig"; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-reactnativetodo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-reactnativetodo.release.xcconfig"; path = "Target Support Files/Pods-reactnativetodo/Pods-reactnativetodo.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-reactnativetodo-reactnativetodoTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-reactnativetodo-reactnativetodoTests.debug.xcconfig"; path = "Target Support Files/Pods-reactnativetodo-reactnativetodoTests/Pods-reactnativetodo-reactnativetodoTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -88,13 +99,19 @@
 		13B07FAE1A68108700A75B9A /* reactnativetodo */ = {
 			isa = PBXGroup;
 			children = (
-				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
-				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
+				3A571F802D026576002E2831 /* AppDelegate.h */,
+				3A571F812D026576002E2831 /* AppDelegate.mm */,
+				3AB0458E2D02368500C49650 /* FRAuthConfig.plist */,
+				3AB0458F2D02368500C49650 /* FRAuthSampleBridge.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */,
+				3AB045872D020DC300C49650 /* reactnativetodo-Bridging-Header.h */,
+				3AB045882D020E3900C49650 /* FRAuthSampleBridge.swift */,
+				3AB045892D020E3900C49650 /* FRAuthSampleHelpers.swift */,
+				3AB0458A2D020E3900C49650 /* FRAuthSampleStructs.swift */,
 			);
 			name = reactnativetodo;
 			sourceTree = "<group>";
@@ -209,7 +226,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 1610;
 					};
 				};
 			};
@@ -244,6 +261,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3AB045902D02368500C49650 /* FRAuthConfig.plist in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				5CFD640CEF6640F11DCCB901 /* PrivacyInfo.xcprivacy in Resources */,
@@ -396,7 +414,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
+				3AB0458B2D020E3900C49650 /* FRAuthSampleBridge.swift in Sources */,
+				3AB0458C2D020E3900C49650 /* FRAuthSampleStructs.swift in Sources */,
+				3A571F822D026576002E2831 /* AppDelegate.mm in Sources */,
+				3AB0458D2D020E3900C49650 /* FRAuthSampleHelpers.swift in Sources */,
+				3AB045912D02368500C49650 /* FRAuthSampleBridge.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -470,6 +492,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9QSE66762D;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = reactnativetodo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
@@ -483,8 +506,9 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.pingidentity.PingExample;
 				PRODUCT_NAME = reactnativetodo;
+				SWIFT_OBJC_BRIDGING_HEADER = "reactnativetodo-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -498,6 +522,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9QSE66762D;
 				INFOPLIST_FILE = reactnativetodo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -510,8 +535,9 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.pingidentity.PingExample;
 				PRODUCT_NAME = reactnativetodo;
+				SWIFT_OBJC_BRIDGING_HEADER = "reactnativetodo-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -586,13 +612,11 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
+				SWIFT_OBJC_BRIDGING_HEADER = "reactnativetodo-Bridging-Header.h";
 				USE_HERMES = true;
 			};
 			name = Debug;
@@ -658,12 +682,10 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "reactnativetodo-Bridging-Header.h";
 				USE_HERMES = true;
 				VALIDATE_PRODUCT = YES;
 			};
