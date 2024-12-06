@@ -10,6 +10,7 @@
 
 import { Button, FormControl, Input } from 'native-base';
 import React, { useState } from 'react';
+import {TextInput} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 /*
@@ -81,28 +82,48 @@ export default function Password({ callback }) {
   return (
     <FormControl isRequired={isRequired} isInvalid={error}>
       <FormControl.Label mb={0}>{label}</FormControl.Label>
-      <Input
-        type={show ? 'text' : 'password'}
-        size="lg"
-        onChangeText={setPassword}
-        InputRightElement={
-          <Button
-            size="xs"
-            rounded="none"
-            w="1/6"
-            h="full"
-            backgroundColor="muted.200"
-            onPress={handleClick}
-          >
-            {show ? (
-              <Icon name="eye-off" size={18} />
-            ) : (
-              <Icon name="eye" size={18} />
-            )}
-          </Button>
-        }
+        <TextInput
+        secureTextEntry={true}
+        autoCapitalize="none"
+        onChangeText= {setPassword}
       />
       <FormControl.ErrorMessage>{error}</FormControl.ErrorMessage>
     </FormControl>
   );
+}
+
+
+
+
+
+
+
+
+
+
+function handlePasswordFailures(arr = []) {
+  return arr.reduce((prev, curr) => {
+    let failureObj;
+    try {
+      failureObj = JSON.parse(curr);
+    } catch (err) {
+      console.log('Parsing failure for password');
+    }
+
+    switch (failureObj.policyRequirement) {
+      case 'LENGTH_BASED':
+        prev = `${prev}${prev ? '\n' : ''}Ensure password contains more than ${
+          failureObj.params['min-password-length']
+        } characters. `;
+        break;
+      case 'CHARACTER_SET':
+        prev = `${prev}${
+          prev ? '\n' : ''
+        }Ensure password contains 1 of each: capital letter, number and special character. `;
+        break;
+      default:
+        prev = `${prev}Please check this value for correctness.`;
+    }
+    return prev;
+  }, '');
 }

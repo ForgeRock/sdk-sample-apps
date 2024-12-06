@@ -14,7 +14,7 @@ import Choice from './choice';
 import KBA from './kba';
 import Password from './password';
 import TermsAndConditions from './boolean';
-import Text from './text';
+import TextInputField from './text';
 import Unknown from './unknown';
 
 /**
@@ -39,7 +39,7 @@ export function mapCallbacksToComponents(cb, idx) {
     case 'NameCallback':
     case 'ValidatedCreateUsernameCallback':
     case 'StringAttributeInputCallback':
-      return <Text callback={cb} key={name} />;
+      return <TextInputField callback={cb} key={name} />;
     case 'PasswordCallback':
     case 'ValidatedCreatePasswordCallback':
       return <Password callback={cb} key={name} />;
