@@ -12,7 +12,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 
 import Router from './router';
-import { AM_URL, APP_URL, JOURNEY_LOGIN, REALM_PATH, WEB_OAUTH_CLIENT } from './constants';
+import { WELLKNOWN_URL, APP_URL, JOURNEY_LOGIN, WEB_OAUTH_CLIENT } from './constants';
 import { AppContext, useGlobalStateMgmt } from './global-state';
 
 /**
@@ -21,16 +21,18 @@ import { AppContext, useGlobalStateMgmt } from './global-state';
  */
 import './styles/index.scss';
 
-Config.set({
-  clientId: WEB_OAUTH_CLIENT,
-  redirectUri: `${APP_URL}/callback`,
-  scope: 'openid profile email',
+const urlParams = new URLSearchParams(window.location.search);
+const journeyParam = urlParams.get('journey');
+
+await Config.setAsync({
+  clientId: WEB_OAUTH_CLIENT, // e.g. PingOne Services Client GUID
+  redirectUri: `${window.location.origin}/callback`, // Redirect back to your app, e.g. 'https://localhost:8443/login?centralLogin=true' or the domain your app is served.
+  scope: "openid profile email address phone", // e.g. 'openid profile email address phone'
   serverConfig: {
-    baseUrl: AM_URL,
-    timeout: '5000',
+    wellknown: WELLKNOWN_URL,
+    timeout: '3000', // Any value between 3000 to 5000 is good, this impacts the redirect time to login. Change that according to your needs.
   },
-  realmPath: REALM_PATH,
-  tree: JOURNEY_LOGIN,
+  tree: `${journeyParam || JOURNEY_LOGIN}`,
 });
 
 /**

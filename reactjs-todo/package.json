@@ -32,7 +32,7 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
-    "@forgerock/javascript-sdk": "^4.2.0",
+    "@forgerock/javascript-sdk": "^4.6.0",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
