@@ -29,6 +29,6 @@ export const CONFIDENTIAL_CLIENT = Buffer.from(
   `${process.env.REST_OAUTH_CLIENT}:${process.env.REST_OAUTH_SECRET}`,
 ).toString('base64');
 
-export const PORT = process.env.PORT || 9443;
+export const SERVER_PORT = process.env.SERVER_PORT || 9443;
 
 export const REALM_PATH = process.env.REALM_PATH;
