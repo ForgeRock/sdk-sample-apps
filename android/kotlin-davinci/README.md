@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://github.com/ForgeRock/sdk-sample-apps">
-    <img src="https://cdn.forgerock.com/logo/interim/Logo-PingIdentity-ForgeRock-Hor-FullColor.svg" alt="Logo">
+    <img src="https://www.pingidentity.com/content/dam/picr/nav/Ping-Logo-2.svg" alt="Ping Identity Logo">
   </a>
   <hr/>
 </p>
