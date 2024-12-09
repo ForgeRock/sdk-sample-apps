@@ -1,4 +1,4 @@
-# React JS Todo Sample App
+# NodeJS Todo-API
 
 ## Disclaimers
 
@@ -30,16 +30,6 @@ Once you have the 5 requirements above met, we can build the project.
 1. Create a public (SPA) OAuth client for the web app: no secret, scopes of `openid profile email`, implicit consent enabled, and no "token authentication endpoint method".
 2. Create a confidential (Node.js) OAuth client for the API server: with a secret, default scope of `am-introspect-all-tokens`, and `client_secret_basic` as the "token authentication endpoint method".
 
-#### Create your Authentication Journeys/Trees
-
-1. Login
-2. Register
-
-Note: The sample app currently supports the following callbacks only:
-
-- NameCallback
-- PasswordCallback
-
 ### Configure Your `.env` File
 
 Change the name of `.env.example` to `.env` and replace the bracketed values (e.g. `<<<helper-text>>>`) with your values.
@@ -47,14 +37,12 @@ Change the name of `.env.example` to `.env` and replace the bracketed values (e.
 Example with annotations:
 
 ```text
-APP_URL=https://localhost:8443 # in develop we do not use this variable for dynamic deployment reasons
-API_URL=http://localhost:9443
-DEBUGGER_OFF=true
-JOURNEY_LOGIN=Login
-JOURNEY_REGISTER=Registration
-PORT="8443"
-WEB_OAUTH_CLIENT=<<<Your Web OAuth client name/ID>>>
-WELLKNOWN_URL= "The `.well-known/openid-configuration` for your tenant. Notice this is realm specific 
+AM_URL= "[Your PingAM or AIC tenant URL]"
+DEVELOPMENT="true"
+PORT="[The port you want the API to run (default 9443)]"
+REALM_PATH="[Your realm path]"
+REST_OAUTH_CLIENT="[Confidential Client ID]"
+REST_OAUTH_SECRET="[Confidential Client Secret]"
 ```
 
 ### Installing Dependencies and Run Build
@@ -72,10 +60,10 @@ Now, run the below commands to start the processes needed for building the appli
 
 ```sh
 # In one terminal window, run the following watch command from the root of the repository
-npm start -w reactjs-todo
+npm start -w todo-api
 ```
 
-Now, you should be able to visit `https://localhost:8443`, which is your web app or client (the Relying Party in OAuth terms). This client will make requests to your AM instance, (the Authorization Server in OAuth terms), which will be running on whatever domain you set, and `http://localhost:9443` as the REST API for your todos (the Resource Server).
+Now, calling `http://localhost:9443` as the REST API for your todos (the Resource Server), should running and can be used from the Sample Applications.
 
 ### Accept Cert Exceptions
 
@@ -85,29 +73,7 @@ You will likely have to accept the security certificate exceptions for both your
 
 This project has a debugging statements that can be activated which causes the app to pause execution at each SDK integration point. It will have a comment above the `debugger` statement explaining the purpose of the integration.
 
-If you'd like to use this feature as a learning tool, [open the live app](https://fr-react-todos.crbrl.io/) and then open the developer tools of your browser. Rerun the app with the developer tools open, and it will automatically pause at these points of integration.
-
 For local development, if you want to turn these debuggers off, you can set the environment variable of `DEBUGGER_OFF` to true.
-
-## Modifying This Project
-
-### React Client
-
-To modify the client portion of this project, you'll need to be familiar with the following React patterns:
-
-1. [Functional components and composition](https://reactjs.org/docs/components-and-props.html)
-2. [Hooks (including custom hooks)](https://reactjs.org/docs/hooks-intro.html)
-3. [Context API](https://reactjs.org/docs/hooks-reference.html#usecontext)
-4. [React Router](https://reactrouter.com/)
-
-You'll also want a [basic understanding of Webpack](https://webpack.js.org/concepts/) and the following:
-
-1. [Babel transformation for React](https://webpack.js.org/loaders/babel-loader/#root)
-2. [Plugins for Sass-to-CSS processing](https://webpack.js.org/loaders/sass-loader/#root)
-
-#### Styling and CSS
-
-We heavily leveraged [Twitter Bootstrap](https://getbootstrap.com/) and [it's utility classes](https://getbootstrap.com/docs/5.0/utilities/api/), but you will see classes with the prefix `cstm_`. These are custom classes, hence the `cstm` shorthand, and they are explicitly used to denote an additional style application on top of Bootstrap's styling.
 
 ### REST API Server
 
