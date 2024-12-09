@@ -3,7 +3,8 @@
  *
  * index.js
  *
- * Copyright (c) 2021 ForgeRock. All rights reserved.
+ *
+ * Copyright (c) 2024 Ping Identity. All rights reserved.
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
  */
@@ -30,7 +31,7 @@ await Config.setAsync({
   scope: "openid profile email address phone", // e.g. 'openid profile email address phone'
   serverConfig: {
     wellknown: WELLKNOWN_URL,
-    timeout: '3000', // Any value between 3000 to 5000 is good, this impacts the redirect time to login. Change that according to your needs.
+    timeout: 3000, // Any value between 3000 to 5000 is good, this impacts the redirect time to login. Change that according to your needs.
   },
   tree: `${journeyParam || JOURNEY_LOGIN}`,
 });

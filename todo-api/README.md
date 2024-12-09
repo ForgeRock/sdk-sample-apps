@@ -2,7 +2,8 @@
 
 ## Disclaimers
 
-This sample code is provided "as is" and is not a supported product of Ping. It's purpose is solely to demonstrate how the Ping JavaScript SDK can be implemented within a React application. Also, this is not a demonstration of React itself or instructional for _how_ to build a React app. There are many aspects to routing, state management, tooling and other aspects to building a React app that are outside of the scope of this project. For information about creating a React app, [visit React's official documentation](https://reactjs.org/docs/create-a-new-react-app.html).
+This sample code is provided "as is" and is not a supported product of Ping. 
+This is a very simple Node.js server that provides the API support for the todo application, providing the CRUD functionality for persisting the todos for the client application. Many conventions and patterns found within this app are not for production use, and should be viewed with caution.
 
 ## Requirements
 
