@@ -18,9 +18,11 @@ struct UserInfoView: View {
   @StateObject var userInfoViewModel = UserInfoViewModel()
   
   var body: some View {
-    TextEditor(text: $userInfoViewModel.userInfo)
-      .foregroundStyle(.secondary)
-      .padding(.horizontal)
-      .navigationTitle("User Info")
+    ScrollView {
+        Text($userInfoViewModel.userInfo.wrappedValue)
+          .foregroundStyle(.secondary)
+          .padding(.horizontal)
+          .navigationTitle("User Info")
+    }
   }
 }
