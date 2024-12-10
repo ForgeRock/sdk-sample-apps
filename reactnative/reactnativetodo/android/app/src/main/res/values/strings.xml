@@ -16,7 +16,7 @@
 
   <string name="asset_statements" translatable="false">
 [{
-  \"include\": \"https://openam-forgerrock-sdks.forgeblocks.com/.well-known/assetlinks.json\"
+  \"include\": \"https://openam-sdks.forgeblocks.com/.well-known/assetlinks.json\"
 }]
 </string>
 
@@ -25,7 +25,8 @@
   <string name="forgerock_account_name" translatable="false">Demo User</string>
 
   <!-- AM Tree Details -->
-  <string name="forgerock_auth_service" translatable="false">SimpleLogin</string>
+  <string name="forgerock_auth_service" translatable="false">jey-webAuthn</string>
+   <string name="forgerock_registration_service" translatable="false">registration-jey</string>
   <!-- TODO: Remove or change this placeholder text -->
   <string name="hello_blank_fragment">Hello blank fragment</string>
 
