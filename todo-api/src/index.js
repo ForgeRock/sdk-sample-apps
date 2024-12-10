@@ -3,7 +3,8 @@
  *
  * index.mjs
  *
- * Copyright (c) 2021 ForgeRock. All rights reserved.
+ *
+ * Copyright (c) 2024 Ping Identity. All rights reserved.
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
  */
@@ -13,7 +14,7 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import { createServer } from 'http';
 
-import { AM_URL, PORT } from './app/constants.js';
+import { AM_URL, SERVER_PORT } from './app/constants.js';
 import routes from './app/routes.js';
 
 /**
@@ -49,7 +50,7 @@ routes(app);
  * Attach application to port and listen for requests
  */
 if (!AM_URL) {
-  createServer(() => null).listen(PORT);
+  createServer(() => null).listen(SERVER_PORT);
 
   console.error(
     'ERROR: Missing .env value. Ensure you have an .env file within the dir of this sample app.',
@@ -61,7 +62,7 @@ if (!AM_URL) {
 } else {
   // Prod uses Nginx, so run regular server
   console.log('Creating Node HTTP server');
-  createServer(app).listen(PORT, '0.0.0.0');
+  createServer(app).listen(SERVER_PORT, '0.0.0.0');
 
-  console.log(`Node server listening on port: ${PORT}.`);
+  console.log(`Node server listening on port: ${SERVER_PORT}.`);
 }
