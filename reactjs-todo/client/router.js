@@ -3,7 +3,8 @@
  *
  * router.js
  *
- * Copyright (c) 2021 ForgeRock. All rights reserved.
+ *
+ * Copyright (c) 2024 Ping Identity. All rights reserved.
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
  */
@@ -17,7 +18,6 @@ import Home from './views/home';
 import Login from './views/login';
 import Logout from './views/logout';
 import Register from './views/register';
-import { ProtectedRoute } from './utilities/route';
 import Todos from './views/todos';
 
 function ScrollToTop() {
@@ -43,11 +43,11 @@ export default function Router() {
         <Route
           path="todos"
           element={
-            <ProtectedRoute>
+            <>
               <Header />
               <Todos />
               <Footer />
-            </ProtectedRoute>
+            </>
           }
         />
         <Route path="logout" element={<Logout />} />
