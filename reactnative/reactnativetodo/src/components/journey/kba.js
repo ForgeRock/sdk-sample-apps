@@ -1,12 +1,10 @@
 /*
- * forgerock-react-native-sample
+ * Copyright (c) 2024 Ping Identity. All rights reserved.
  *
- * kba.js
- *
- * Copyright (c) 2021 ForgeRock. All rights reserved.
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
  */
+
 
 import { FormControl, Input, Select } from 'native-base';
 import React, { useState } from 'react';
@@ -16,6 +14,7 @@ import React, { useState } from 'react';
  * .env.example.js template!
  */
 import { DEBUGGER_OFF } from '../../../.env';
+import { TextInput } from 'react-native';
 
 /**
  * @function KBA - React component used for handling "knowledge based answers"
@@ -56,7 +55,7 @@ export default function KBA({ callback }) {
           <Select.Item label={question} key={question} value={question} />
         ))}
       </Select>
-      <Input
+      <TextInput
         onChangeText={(itemValue) => callback.setAnswer(itemValue)}
         size="lg"
       />

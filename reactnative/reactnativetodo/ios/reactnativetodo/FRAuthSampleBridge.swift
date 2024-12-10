@@ -238,40 +238,45 @@ public class FRAuthSampleBridge: NSObject {
        * completes the journey/tree as success or failure, OR it returns another
        * `node` with more callbacks to handle.
        ************************************************************************* */
-      node.next(completion: { (user: FRUser?, node, error) in
-        if let node = node {
-          /**
-           * Process our new node (aka "step") and resolve the promise
-           */
-          self.handleNode(user, node, error, resolve: resolve, rejecter: reject)
-        } else {
-          if let error = error {
-            reject("Error", "LoginFailure", error)
-            return
-          }
-          print("User --------->: \(String(describing: user.debugDescription))")
-          
-          /**
-           * This journey/tree has completed without error, resolve promise with user tokens
-           */
-          let encoder = JSONEncoder()
-          encoder.outputFormatting = .prettyPrinted
-          if let user = user,
-            let token = user.token,
-            let data = try? encoder.encode(token),
-            let jsonAccessToken = String(data: data, encoding: .utf8) {
-
-            resolve(["type": "LoginSuccess", "tokens": jsonAccessToken])
-          } else {
-            resolve(["type": "LoginSuccess", "tokens": ""])
-          }
-        }
-      })
+      next(node: node, resolve: resolve, rejecter: reject)
 
     } else {
           print("UnkownError --------->")
       reject("Error", "UnkownError", nil)
     }
+  }
+  
+  func next(node: Node, resolve: @escaping RCTPromiseResolveBlock,
+            rejecter reject: @escaping RCTPromiseRejectBlock) {
+    node.next(completion: { (user: FRUser?, node, error) in
+      if let node = node {
+        /**
+         * Process our new node (aka "step") and resolve the promise
+         */
+        self.handleNode(user, node, error, resolve: resolve, rejecter: reject)
+      } else {
+        if let error = error {
+          reject("Error", "LoginFailure", error)
+          return
+        }
+        print("User --------->: \(String(describing: user.debugDescription))")
+        
+        /**
+         * This journey/tree has completed without error, resolve promise with user tokens
+         */
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        if let user = user,
+          let token = user.token,
+          let data = try? encoder.encode(token),
+          let jsonAccessToken = String(data: data, encoding: .utf8) {
+
+          resolve(["type": "LoginSuccess", "tokens": jsonAccessToken])
+        } else {
+          resolve(["type": "LoginSuccess", "tokens": ""])
+        }
+      }
+    })
   }
 
   /**
@@ -405,13 +410,7 @@ public class FRAuthSampleBridge: NSObject {
 
     if let node = node {
       self.currentNode = node
-      let frNode = FRNode(node: node)
-      do {
-        resolve(try frNode.resolve())
-      }
-      catch {
-        reject("Error", "Serialization of node failed", error)
-      }
+      extract(node: node, resolve: resolve, rejecter: reject)
     } else {
       if let error = error {
         FRLog.e(String(describing: error))
@@ -422,5 +421,43 @@ public class FRAuthSampleBridge: NSObject {
         reject("Error", errorMsg, nil)
       }
     }
+  }
+  
+  func extract(node: Node, resolve: @escaping RCTPromiseResolveBlock,
+               rejecter reject: @escaping RCTPromiseRejectBlock) {
+    for (outerIndex, nodeCallback) in node.callbacks.enumerated() {
+        if let thisCallback = nodeCallback as? WebAuthnRegistrationCallback {
+          DispatchQueue.main.async {
+          thisCallback.register(node: node, usePasskeysIfAvailable: true, onSuccess: { (attestation) in
+            
+            self.next(node: node, resolve: resolve, rejecter: reject)
+            
+          }) { (error) in
+            self.next(node: node, resolve: resolve, rejecter: reject)
+          }
+          
+        }
+          return
+      }
+      if let thisCallback = nodeCallback as? WebAuthnAuthenticationCallback{
+        DispatchQueue.main.async {
+          thisCallback.authenticate(node: node, usePasskeysIfAvailable: true, onSuccess: { (attestation) in
+            self.next(node: node, resolve: resolve, rejecter: reject)
+          }) { (error) in
+            self.next(node: node, resolve: resolve, rejecter: reject)
+          }
+          
+        }
+        return
+      }
+    }
+    let frNode = FRNode(node: node)
+    do {
+      resolve(try frNode.resolve())
+    }
+    catch {
+      reject("Error", "Serialization of node failed", error)
+    }
+    
   }
 }
