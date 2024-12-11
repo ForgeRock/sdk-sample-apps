@@ -18,10 +18,12 @@ struct AccessTokenView: View {
   
   var body: some View {
     VStack {
-      TextEditor(text: $accessTokenViewModel.accessToken)
-        .foregroundStyle(.secondary)
-        .padding(.horizontal)
-        .navigationTitle("AccessToken")
+      ScrollView {
+          Text($accessTokenViewModel.accessToken.wrappedValue)
+            .foregroundStyle(.secondary)
+            .padding(.horizontal)
+            .navigationTitle("Access Token")
+      }
     }
   }
 }
