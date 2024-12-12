@@ -11,3 +11,4 @@ todo-api/users/*
 !reactjs-todo/public/index.html
 !reactjs-todo/public/callback/*
 reactjs-todo/public/*
+node_modules

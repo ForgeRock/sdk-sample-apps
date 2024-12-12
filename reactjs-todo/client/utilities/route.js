@@ -10,7 +10,7 @@
 
 import React, { useContext, useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
-import { UserManager } from '@forgerock/javascript-sdk';
+import { TokenStorage } from '@forgerock/javascript-sdk';
 
 import Loading from '../components/utilities/loading';
 import { AppContext } from '../global-state';
@@ -39,7 +39,7 @@ function useAuthValidation(auth, setAuth) {
          * If we they have been authenticated, validate that assumption
          */
         try {
-          await UserManager.getCurrentUser();
+          await TokenStorage.get();
           setValid('valid');
         } catch (err) {
           console.info(`Info: route validation; ${err}`);

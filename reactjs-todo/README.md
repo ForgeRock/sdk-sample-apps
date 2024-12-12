@@ -49,10 +49,6 @@ Note: The sample app currently supports the following callbacks only:
 npm install
 ```
 
-### Accept Cert Exceptions
-
-You will likely have to accept the security certificate exceptions for both your React app and the Node.js server. To accept the cert form the Node.js server, you can visit `http://localhost:9443/healthcheck` in your browser. Once you receive "OK", your Node.js server is running on the correct domain and port, and the cert is accepted.
-
 ## Learn About Integration Touchpoints
 
 This project has a debugging statements that can be activated which causes the app to pause execution at each SDK integration point. It will have a comment above the `debugger` statement explaining the purpose of the integration.
@@ -69,18 +65,21 @@ Add your relevant values to this new file as it will provide all the important c
 
 Here’s an example; your values may vary:
 ```sh
-AM_URL=https://openam-forgerock-sdks.forgeblocks.com/am
-API_URL=http://localhost:9443
-DEBUGGER_OFF=true
-DEVELOPMENT=true
-JOURNEY_LOGIN=sdkUsernamePasswordJourney
-JOURNEY_REGISTER=Registration
-REALM_PATH=alpha
-WEB_OAUTH_CLIENT=sdkPublicClient
-PORT=8443
-REST_OAUTH_CLIENT=sdkConfidentialClient
-REST_OAUTH_SECRET=ch4ng3it!
+APP_URL="http://localhost:8443"
+API_URL="http://localhost:9443"
+DEBUGGER_OFF="true"
+DEVELOPMENT="true"
+JOURNEY_LOGIN="Login"
+JOURNEY_REGISTER="Registration"
+PORT="8443"
+REST_OAUTH_CLIENT="Confidential_SDK_Client"
+REST_OAUTH_SECRET="Password1!"
+WEB_OAUTH_CLIENT="ForgeRockSDKClient"
+WELLKNOWN_URL="https://openam-forgerock-sdks.forgeblocks.com/am/oauth2/realms/alpha/.well-known/openid-configuration"
 ```
+
+The `WELLKNOWN_URL` is the `openid-configuration` for your tenant. Notice that this is `realm` specific and should beused in the following format:
+`https://[FQDN]/am/oauth2/realms/[REALM_NAME]/.well-known/openid-configuration`
 
 ### Configure the API server app
 Copy the `.env.example` file in the `sdk-sample-apps/todo-api` folder and save it with the name `.env` within this same directory.
@@ -106,6 +105,20 @@ or using npm Workspaces
 ```sh
 npm run start:reactjs-todo
 ```
+
+or on separate terminal windows
+```sh
+npm run reactjs-todo
+```
+
+and on another terminal
+```sh
+npm run todo-api
+```
+
+### Accept Cert Exceptions
+
+You will likely have to accept the security certificate exceptions for both your React app and the Node.js server. To accept the cert form the Node.js server, you can visit `http://localhost:9443/healthcheck` in your browser. Once you receive "OK", your Node.js server is running on the correct domain and port, and the cert is accepted.
 
 ### Implementing the Ping SDK
 #### Step 1. Configure the SDK to your server
@@ -255,10 +268,10 @@ Finally, check for the presence of the step.callbacks, and if they exist, map ov
 +     return <Alert message={step.payload.message} />;
 +  }
 ```
-Refresh the page, and you should now have a dynamic form that reacts to the callbacks returned from our initial call to ForgeRock.
+Refresh the page, and you should now have a dynamic form that reacts to the callbacks returned from our initial call to Ping AIC.
 
 #### Step 3. Handling the login form submission
-Since a form that can’t submit anything isn’t very useful, we’ll now handle the submission of the user input values to ForgeRock. First, let’s edit the current form element, `<form className="cstm_form">`, and add an onSubmit handler with a simple, inline function.
+Since a form that can’t submit anything isn’t very useful, we’ll now handle the submission of the user input values to Ping AIC. First, let’s edit the current form element, `<form className="cstm_form">`, and add an onSubmit handler with a simple, inline function.
 
 ```sh
 @@ collapsed @@
@@ -312,9 +325,9 @@ Let’s take a look at the component for rendering the username input. Open up t
     );
   }
 ```
-The two important items to focus on are the `callback.getInputValue()` and the `callback.setInputValue()`. The `getInputValue` retrieves any existing value that may be provided by ForgeRock, and the `setInputValue` sets the user’s input on the callback while they are typing (i.e. onChange). Since the callback is passed from the Form to the components by "reference" (not by "value"), any mutation of the callback object within the Text (or Password) component is also contained within the step object in Form.
+The two important items to focus on are the `callback.getInputValue()` and the `callback.setInputValue()`. The `getInputValue` retrieves any existing value that may be provided by Ping AIC, and the `setInputValue` sets the user’s input on the callback while they are typing (i.e. onChange). Since the callback is passed from the Form to the components by "reference" (not by "value"), any mutation of the callback object within the Text (or Password) component is also contained within the step object in Form.
 
-Now that the form is rendering and submitting, add conditions to the Form component for handling the success and error response from ForgeRock. This condition handles the success result of the authentication journey. Back to the `form.js` file add the following:
+Now that the form is rendering and submitting, add conditions to the Form component for handling the success and error response from Ping AIC. This condition handles the success result of the authentication journey. Back to the `form.js` file add the following:
 
 ```sh
 @@ collapsed @@
