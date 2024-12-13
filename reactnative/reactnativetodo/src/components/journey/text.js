@@ -6,7 +6,7 @@
  */
 
 import { FormControl } from 'native-base';
-import React from 'react';
+import React , {useState} from 'react';
 import {TextInput} from 'react-native';
 
 /*
@@ -22,7 +22,7 @@ import { handleFailedPolicies } from './utilities';
  * @param {Object} props.callback - The callback object from AM
  * @returns {Object} - React component object
  */
-export default function Text({ callback }) {
+export default function Text({ callback, state, setState }) {
   /********************************************************************
    * JAVASCRIPT SDK INTEGRATION POINT
    * Summary: Utilize Callback methods
@@ -38,13 +38,17 @@ export default function Text({ callback }) {
   );
   const isRequired = callback.isRequired ? callback.isRequired() : false;
   const label = callback.getPrompt();
-  const setText = (text) => callback.setInputValue(text);
+  const setText = (text) => {
+    callback.setInputValue(text);
+    setState(text);
+  };
   return (
     <FormControl isRequired={isRequired} isInvalid={error}>
       <FormControl.Label mb={0}>{label}</FormControl.Label>
       <TextInput
           autoCapitalize="none"
-          onChangeText= {setText}
+          onChangeText= {value => setText(value)}
+          value={state}
         />
       <FormControl.ErrorMessage>
         {error.length ? error : ''}

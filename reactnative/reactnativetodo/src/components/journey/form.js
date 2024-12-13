@@ -13,7 +13,7 @@ import {
   Spinner,
   Text,
 } from 'native-base';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import Alert from '../utilities/alert';
@@ -25,7 +25,7 @@ import { mapCallbacksToComponents } from './utilities';
 
 export default function Form({ action, bottomMessage, children }) {
   const [_, methods] = useContext(AppContext);
-
+  const [inputValue, setInputValue] = useState('');
   /**
    * Call custom hook to handle the state and error management as well
    * as request orchestration for the iterative process between a client
@@ -103,11 +103,13 @@ export default function Form({ action, bottomMessage, children }) {
                * Map over the callbacks in renderStep and render the appropriate
                * component for each one using the mapper.js utility.
                */
-              renderStep.callbacks.map(mapCallbacksToComponents)
+              renderStep.callbacks.map((cb, idx) => mapCallbacksToComponents(cb, idx, inputValue, setInputValue))
+
             }
             <Button
               onPress={() => {
                 // Indicate form processing
+                setInputValue('');
                 setProcessingForm(true);
                 // set currently rendered step as step to be submitted
                 setSubmissionStep(renderStep);

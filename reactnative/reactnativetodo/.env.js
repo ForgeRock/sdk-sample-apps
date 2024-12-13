@@ -3,7 +3,7 @@
  */
 const AM_URL = 'https://openam-sdks.forgeblocks.com/am';
 const API_PORT = 9443;
-const API_BASE_URL = 'http://localhost';
+const API_BASE_URL = 'http://10.0.2.2'; // http://10.0.2.2
 const DEBUGGER_OFF = false;
 const REALM_PATH = 'alpha';
 const REST_OAUTH_CLIENT = 'AndroidTest';

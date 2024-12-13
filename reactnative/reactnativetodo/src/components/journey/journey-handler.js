@@ -58,6 +58,8 @@ export default function useJourneyHandler({ type }) {
   // User state
   const [user, setUser] = useState(null);
 
+  const [inputValue, setInputValue] = useState('');
+
   /**
    * Since we have API calls to AM, we need to handle these requests as side-effects.
    * This will allow the view to render, but update/re-render after the request completes.
