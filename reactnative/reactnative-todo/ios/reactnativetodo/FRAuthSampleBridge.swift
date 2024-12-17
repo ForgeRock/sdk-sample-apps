@@ -1,8 +1,5 @@
-/**
- * FRAuthSampleBridge.m
- * reactnativetodo
- *
- * Copyright (c) 2021 ForgeRock. All rights reserved.
+/*
+ * Copyright (c) 2024 Ping Identity. All rights reserved.
  *
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
@@ -55,8 +52,9 @@ public class FRAuthSampleBridge: NSObject {
        * so we add a slight delay to ensure no other SDK methods are called before
        * the SDK is ready.
        ************************************************************************* */
-     
-      try FRAuth.start()
+      let config = Configuration()
+      let options = FROptions(url: config.amURL, realm: config.realm, cookieName: config.cookieName, authServiceName: config.mainAuthenticationJourney, oauthClientId: config.oauthClientId, oauthRedirectUri: config.oauthRedirectURI, oauthScope: config.oauthScopes)
+      try FRAuth.start(options: options)
             
       DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
         /**

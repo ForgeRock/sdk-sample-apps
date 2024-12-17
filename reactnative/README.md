@@ -9,15 +9,15 @@
 
 This repository contains React Native sample apps provided by **Ping Identity** to demonstrate SDK functionality and implementation. These samples are for demonstration purposes only, are provided **"as is"**, and are not official Ping products nor supported by Ping.
 
-The sample app uses a **bridgeless** or **bridging architecture** to integrate **Ping SDKs** with React Native. It relies on the [`../javascript/todo-api/`](../javascript/todo-api/) project for backend storage, specifically for a simple **To-Do** list example.
+The sample app uses a **bridging architecture** to integrate **Ping SDKs** with React Native. you can also modify the code to use  **bridgeless** architecture as well. The apps rely on the  [`../javascript/todo-api/`](../javascript/todo-api/) project for backend storage, specifically for a simple **To-Do** list example.
 
 ---
 
 ## Requirements
 
 - **Xcode**: Latest version recommended
-- **Android Studio**: Latest version recommended
-- **Node.js**: Latest version recommended
+- **Android Studio**: Latest version recommended with Java 17
+- **Node.js**: >= 18
 - **Visual Studio Code**: Latest version recommended
 - **PingAM** or **AIC** for authentication
 
@@ -30,39 +30,55 @@ The sample app uses a **bridgeless** or **bridging architecture** to integrate *
 > **Note**: Before starting, complete the [React Native Environment Setup](https://reactnative.dev/docs/environment-setup) through the **"Creating a new application"** step.
 
 1. **Configure PingAM/AIC**:
-    - Register an **OAuth 2.0 application** for native mobile apps in **PingAM/AIC**. Refer to the official [Server Configuration Guide](https://backstage.forgerock.com/docs/sdks/latest/sdks/serverconfiguration/onpremise/index.html) for more details.
+    - Register an **OAuth 2.0 application** for native mobile apps in **PingAM/AIC**. Refer to the official [Server Configuration Guide](https://docs.pingidentity.com/sdks/latest/sdks/configure-your-server.html) for more details.
 
-2. **Set Up the Backend**:
-    - Configure the `todo-api` `.env` file.
-    - Run the backend using:
-      ```bash
-      npm start --workspace todo-api
-      ```
-
-3. **Clone the Repository**:
+2. **Clone the Repository**:
     ```bash
     git clone https://github.com/ForgeRock/sdk-sample-apps.git
     ```
 
-4. **Open the React Native Project** in Visual Studio Code.
+3. **Open the React Native Project** in Visual Studio Code.
 
-5. **Configure iOS**:
-    - Open the `FRAuthSampleBridge.swift` file.
-    - Locate `FRAuth.plist` and replace placeholder strings with your **OAuth 2.0 application** details.
-
-6. **Configure Android**:
-    - Open the `FRAuthSampleBridge.kt` file.
-    - Locate `Strings.xml` and update placeholder strings with your **OAuth 2.0 application** details.
-
-7. **Set API Base URL**:
-    - Edit `.env.js` and set `API_BASE_URL` to the IP and port of your `todo-api` backend:
-      - For **iOS**: Use `localhost`
-      - For **Android**: Use `10.0.2.2`
-      ```javascript
-      const API_URL = "http://10.0.2.2:9443/todos";
+4. **Set Up the Backend**:
+    - Configure the [`../javascript/todo-api/`](../javascript/todo-api/) `.env` file.
+    - This todo Api will introspect the token sent from the reactnative application
+    - Run the backend using:
+      ```bash
+      cd sdk-sample-apps/javascript
+      npm start --workspace todo-api
       ```
 
-8. **Run the App**:
+5. **Set API Base URL in the React Native Project to connect your ToDo Backend**:
+   - Edit `.env.js` and set `API_BASE_URL` and `API_PORT` to connect your backend.
+     - For example:
+     - **iOS**: Use `http://localhost`  for running in Simulator 
+     - **Android**: Use `http://10.0.2.2`  for running in Emulator
+     ```javascript
+     const API_BASE_URL = "http://10.0.2.2";
+     const API_PORT = 9443;
+     ```
+
+6. **Configure iOS and Android**:
+   - **iOS**: Update `Configuration.swift` with your **OAuth 2.0** details.  
+   - **Android**: Update `Configuration.kt` with your **OAuth 2.0** details.
+  
+### Example Configuration Variables for Android/iOS
+
+Update the following environment variables in `configuration.kt` for Android and `configuration.swift` for iOS dynamically:
+
+| Variable                         | Description                                    | Example Value for iOS/Android                                      |
+|-----------------------------------|------------------------------------------------|----------------------------------------------------|
+| `oauthClientId`          | OAuth 2.0 Client ID                            | `AndroidTest` / `iOSClient`                        |
+| `oauthRedirectURI`       | OAuth 2.0 Redirect URI                         | `org.ping.demo:/oauth2redirect` / `myapp://oauth2redirect` |
+| `amURL`                      | PingAM Instance URL                            | `https://openam-xvc.forgeblock.com/am`             |
+| `cookieName`              | PingAM Cookie Name                             | `5421aeddf91aa20`                                  |
+| `realm`                    | PingAM Realm                                   | `alpha`                                            |
+| `mainAuthenticationJourney`             | Authentication Service Name                    | `webAuthn`                                         |
+| `registrationServiceName`     | Registration Service Name                      | `registration`                                     |
+
+---
+
+7. **Run the App**:
     - Launch on an **iOS device/simulator** or **Android device/emulator**.
 
 ### Step 2: Start the Metro Server
@@ -83,7 +99,7 @@ yarn start
 
 Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
 
-#### For Android
+### For Android
 
 ```bash
 # using npm

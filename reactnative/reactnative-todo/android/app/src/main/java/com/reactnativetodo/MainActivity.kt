@@ -12,6 +12,10 @@ import com.facebook.react.ReactActivityDelegate
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.fabricEnabled
 import com.facebook.react.defaults.DefaultReactActivityDelegate
 
+/**
+ * MainActivity is the entry point for the Android application. It is responsible for
+ * initializing the React Native host and loading the main component for the app.
+ */
 class MainActivity : ReactActivity() {
 
   /**

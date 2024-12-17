@@ -5,8 +5,6 @@
  * of the MIT license. See the LICENSE file for details.
  */
 
-
-
 import React, { useContext, useEffect, useReducer } from 'react';
 import { VStack, Box, Heading, ScrollView, Text } from 'native-base';
 

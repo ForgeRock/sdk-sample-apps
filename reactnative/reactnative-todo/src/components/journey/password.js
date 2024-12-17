@@ -90,15 +90,6 @@ export default function Password({ callback }) {
   );
 }
 
-
-
-
-
-
-
-
-
-
 function handlePasswordFailures(arr = []) {
   return arr.reduce((prev, curr) => {
     let failureObj;
