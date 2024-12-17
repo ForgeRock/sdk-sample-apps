@@ -19,15 +19,19 @@ import com.facebook.react.defaults.DefaultReactNativeHost
 import com.facebook.react.soloader.OpenSourceMergedSoMapping
 import com.facebook.soloader.SoLoader
 
+/**
+ * MainApplication is the entry point for the Android application. It is responsible for
+ * initializing the React Native host and loading the native entry point for the app.
+ */
 class MainApplication : Application(), ReactApplication {
 
   override val reactNativeHost: ReactNativeHost =
       object : DefaultReactNativeHost(this) {
         override fun getPackages(): List<ReactPackage> =
             PackageList(this).packages.apply {
-                add(DevicePackage())
               // Packages that cannot be autolinked yet can be added manually here, for example:
               // add(MyReactNativePackage())
+               add(DevicePackage())
             }
 
         override fun getJSMainModuleName(): String = "index"

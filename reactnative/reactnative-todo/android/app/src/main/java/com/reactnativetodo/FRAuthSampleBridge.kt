@@ -25,6 +25,8 @@ import com.google.gson.JsonObject
 import org.forgerock.android.auth.AccessToken
 import org.forgerock.android.auth.FRAuth
 import org.forgerock.android.auth.FRListener
+import org.forgerock.android.auth.FROptions
+import org.forgerock.android.auth.FROptionsBuilder
 import org.forgerock.android.auth.FRUser
 import org.forgerock.android.auth.Logger
 import org.forgerock.android.auth.Node
@@ -52,7 +54,10 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.util.concurrent.Semaphore
 
-
+/**
+ * FRAuthSampleBridge is a React Native bridge module that provides access to the ForgeRock SDK
+ * from JavaScript.
+ */
 @ReactModule(name = "FRAuthSampleBridge")
 class FRAuthSampleBridge internal constructor(var context: ReactApplicationContext) :
     ReactContextBaseJavaModule(context) {
@@ -64,20 +69,49 @@ class FRAuthSampleBridge internal constructor(var context: ReactApplicationConte
         return "FRAuthSampleBridge"
     }
 
-
+    /**
+     * Initializes the ForgeRock SDK with the provided configuration.
+     * @param promise A promise that resolves when the SDK is initialized.
+     */
     @ReactMethod
     fun start(promise: Promise) {
         Logger.set(Logger.Level.DEBUG)
-        FRAuth.start(this.context)
+
+        val config = Configuration()
+        val options = FROptionsBuilder.build {
+            server {
+                url = config.amURL
+                realm = config.realm
+                cookieName = config.cookieName
+            }
+            oauth {
+                oauthClientId = config.oauthClientId
+                oauthRedirectUri = config.oauthRedirectURI
+                oauthScope = config.oauthScopes
+            }
+            service {
+                authServiceName = config.mainAuthenticationJourney
+                registrationServiceName = config.registrationServiceName
+            }
+        }
+
+        FRAuth.start(this.context, options)
         promise.resolve("SDK Initialized")
     }
 
+    /**
+     * Logs out the current user.
+     */
     @ReactMethod
     fun logout() {
         val user = FRUser.getCurrentUser()
         user?.logout()
     }
 
+    /**
+     * Logs in the user.
+     * @param promise A promise that resolves when the user is logged in.
+     */
     @ReactMethod
     fun login(promise: Promise) {
         try {
@@ -87,6 +121,10 @@ class FRAuthSampleBridge internal constructor(var context: ReactApplicationConte
         }
     }
 
+    /**
+     * Registers a new user.
+     * @param promise A promise that resolves when the user is registered.
+     */
     @ReactMethod
     fun register(promise: Promise) {
         try {
@@ -96,6 +134,10 @@ class FRAuthSampleBridge internal constructor(var context: ReactApplicationConte
         }
     }
 
+    /**
+     * Retrieves the current user's access token.
+     * @param promise A promise that resolves with the access token.
+     */
     @ReactMethod
     fun getAccessToken(promise: Promise?) {
         this.reactNativePromise = promise
@@ -120,6 +162,10 @@ class FRAuthSampleBridge internal constructor(var context: ReactApplicationConte
         }
     }
 
+    /**
+     * Retrieves the current user's ID token.
+     * @param promise A promise that resolves with the User Info.
+     */
     @ReactMethod
     fun getUserInfo(promise: Promise) {
         if (FRUser.getCurrentUser() != null) {
@@ -152,6 +198,10 @@ class FRAuthSampleBridge internal constructor(var context: ReactApplicationConte
         }
     }
 
+    /**
+     * Retrieves the next node in the authentication flow.
+     * @param promise A promise that resolves either with the next node or an error.
+     */
     @ReactMethod
     @Throws(InterruptedException::class)
     fun next(response: String?, promise: Promise) {
@@ -253,6 +303,11 @@ class FRAuthSampleBridge internal constructor(var context: ReactApplicationConte
 
     }
 
+    /**
+     * Authenticates the user.
+     * @param promise A promise that resolves when the user is authenticated.
+     * @param isLogin A boolean that indicates whether the user is logging in or registering.
+     */
     fun authenticate(promise: Promise?, isLogin: Boolean) {
         this.reactNativePromise = promise
         val nodeListenerFuture: NodeListener<FRUser?> = object : NodeListener<FRUser?> {
@@ -294,6 +349,11 @@ class FRAuthSampleBridge internal constructor(var context: ReactApplicationConte
         }
     }
 
+    /**
+     * Executes the current node.
+     * @param currentNode The current node.
+     * @param contextRef The React Native context.
+     */
     fun execute(currentNode: Node, contextRef: ReactApplicationContext) {
         for (i in currentNode.callbacks.indices) {
             val nodeCallback: Any = currentNode.callbacks[i]
@@ -465,6 +525,9 @@ class FRAuthSampleBridge internal constructor(var context: ReactApplicationConte
     }
 }
 
+/**
+ * Configuration is a data class that holds the configuration values for the ForgeRock SDK.
+ */
 class FRNode(node: Node) {
 
     private var frCallbacks  = mutableListOf<FRCallback>()
@@ -516,6 +579,9 @@ class FRNode(node: Node) {
     }
 }
 
+/**
+ * FRCallback is a data class that holds the Callback values for the ForgeRock SDK.
+ */
 class FRCallback(callback: Callback) {
     var type: String = callback.type
     var prompt: String? = null
@@ -547,18 +613,27 @@ class FRCallback(callback: Callback) {
     }
 }
 
+/**
+ * Configuration is a data class that holds the Response values for the ForgeRock SDK.
+ */
 internal class Response {
     var authId: String? = null
     var callbacks: List<RawCallback>? = null
     var status: Int? = null
 }
 
+/**
+ * Configuration is a data class that holds the RawCallback values for the ForgeRock SDK.
+ */
 internal class RawCallback {
     var type: String? = null
     var input: List<RawInput>? = null
     var _id: Int? = null
 }
 
+/**
+ * Configuration is a data class that holds the RawInput values for the ForgeRock SDK.
+ */
 internal class RawInput {
     var name: String? = null
     var value: Any? = null
