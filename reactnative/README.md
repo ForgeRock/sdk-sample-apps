@@ -1,13 +1,13 @@
 <p align="center">
   <a href="https://github.com/ForgeRock/sdk-sample-apps">
-    <img src="https://cdn.forgerock.com/logo/interim/Logo-PingIdentity-ForgeRock-Hor-FullColor.svg" alt="Ping Identity Logo">
+    <img src="https://www.pingidentity.com/content/dam/picr/nav/Ping-Logo-2.svg" alt="Ping Identity Logo">
   </a>
   <hr/>
 </p>
 
 # Ping SDKs Sample App Using React Native
 
-This repository contains React Native sample apps provided by **Ping Identity** to demonstrate SDK functionality and implementation. These samples are for demonstration purposes only, are provided **"as is"**, and are not official Ping products nor supported by Ping.
+_This repository contains React Native sample apps provided by **Ping Identity** to demonstrate SDK functionality and implementation. These samples are for demonstration purposes only, are provided **"as is"**, and are not official Ping products nor supported by Ping._
 
 The sample app uses a **bridging architecture** to integrate **Ping SDKs** with React Native. you can also modify the code to use  **bridgeless** architecture as well. The apps rely on the  [`../javascript/todo-api/`](../javascript/todo-api/) project for backend storage, specifically for a simple **To-Do** list example.
 
