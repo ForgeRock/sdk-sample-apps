@@ -55,3 +55,4 @@ vite.config.*.timestamp*
 code
 terminalOutput
 outputs/*
+/.idea/
