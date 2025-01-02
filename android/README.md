@@ -1,15 +1,27 @@
 <p align="center">
   <a href="https://github.com/ForgeRock/sdk-sample-apps">
-    <img src="https://cdn.forgerock.com/logo/interim/Logo-PingIdentity-ForgeRock-Hor-FullColor.svg" alt="Logo">
+    <img src="https://www.pingidentity.com/content/dam/picr/nav/Ping-Logo-2.svg" alt="Ping Identity Logo">
   </a>
   <hr/>
 </p>
 
 ## Samples
 
-Ping provides these Android samples to help demonstrate SDK functionality/implementation. They are provided "as is" and are not official products of Ping and are not officially supported.
+_Ping provides these Android samples to help demonstrate SDK functionality/implementation. They are provided "as is" and are not official products of Ping and are not officially supported._
 
-### Integrate with PingOne Advanced Identity Cloud / PingAM:
+The Ping SDK for Android enables you to integrate your Android application with Ping services.
+
+There are two UI deployment options:
+- Embedded:
+  - With this option, each app has to have its own login User Interface (UI). 
+  - Users  authenticate natively to your application.
+- OIDC (Redirect) Login:
+  - Often referred to as centralized login, with this option you reuse a central UI (such as hosted pages for PingOne Advanced Identity Cloud or the Login Widget for PingOne/PingOne DaVinci) your own web application for login requests in multiple apps and sites. 
+  - User's are redirected via a browser to a central place for authentication.
+
+We provide samples that demonstrate both methods.
+
+### Integrate with Auth Journeys - PingOne Advanced Identity Cloud / PingAM:
 
 To try out the Ping Android SDK please look at one of our samples:
 
@@ -36,9 +48,33 @@ To try out the Ping Android SDK please look at one of our samples:
   (https://docs.pingidentity.com/sdks/latest/sdks/tutorials/android/index.html)
 
 
-### Integrate with PingOne:
+### Integrate with flows - PingOne DaVinci:
 
-- Samples coming soon
+- [**Kotlin DaVinci - `/kotlin-davinci`**](./kotlin-davinci/)
+  - An example Android project making use of the OOTB PingOne Sign on With Sessions flow in DaVinci environments and found in the marketplace.       Demonstrates use cases such as user authentication, registration, and account recovery.
+
+    (https://docs.pingidentity.com/sdks/latest/davinci/tutorials/android/index.html)
+
+### OIDC Login:
+
+- [**Kotlin Central Login OIDC - `/kotlin-central-login-oidc`**](./kotlin-central-login-oidc/)
+  - A sample app
+    that demonstrates the functionality
+    of using the Ping SDK for Android for OIDC (redirect) authentication.
+    Can be used with PingOne Advanced Identity Cloud,
+    PingOne, PingOne DaVinci (via a PingOne application),
+    PingAM, and PingFederate.
+    (https://docs.pingidentity.com/sdks/latest/oidc/index.html)
+
+
+## Documentation
+
+Detailed [documentation](https://docs.pingidentity.com/sdks) is provided, and includes topics such as:
+
+- Tutorial walkthroughs for each server
+- Integrating functionality such as PingOne Protect, WebAuthn, and more
+- Code snippets
+- API Reference documentation
 
 ## Requirements
 
