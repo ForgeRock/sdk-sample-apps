@@ -72,8 +72,6 @@ DEVELOPMENT="true"
 JOURNEY_LOGIN="Login"
 JOURNEY_REGISTER="Registration"
 PORT="8443"
-REST_OAUTH_CLIENT="Confidential_SDK_Client"
-REST_OAUTH_SECRET="Password1!"
 WEB_OAUTH_CLIENT="ForgeRockSDKClient"
 WELLKNOWN_URL="https://openam-forgerock-sdks.forgeblocks.com/am/oauth2/realms/alpha/.well-known/openid-configuration"
 ```
@@ -98,27 +96,26 @@ REST_OAUTH_SECRET=ch4ng3it!
 
 ### Build and run the projects
 
-```sh
-npm-run-all --parallel todo-api reactjs-todo
-```
-or using npm Workspaces
+Using npm Workspaces, open a terminal window and type the following (recommended):
 ```sh
 npm run start:reactjs-todo
 ```
 
 or on separate terminal windows
+To run the ReactJS todo Sample run the following
 ```sh
 npm run reactjs-todo
 ```
 
-and on another terminal
+and on another terminal window, 
+To run the TODO API, run the following:
 ```sh
 npm run todo-api
 ```
 
 ### Accept Cert Exceptions
 
-You will likely have to accept the security certificate exceptions for both your React app and the Node.js server. To accept the cert form the Node.js server, you can visit `http://localhost:9443/healthcheck` in your browser. Once you receive "OK", your Node.js server is running on the correct domain and port, and the cert is accepted.
+You will likely have to accept the security certificate exceptions for both your React app and the Node.js server. To accept the cert form the Node.js server, you can visit `http://localhost:9443/healthcheck` in your browser and `https://localhost:8443/` for the ReactJS app. Once you receive "OK", your Node.js server is running on the correct domain and port, and the cert is accepted.
 
 ### Implementing the Ping SDK
 #### Step 1. Configure the SDK to your server
@@ -151,7 +148,7 @@ The configuration object you will use in this instance will pull most of its val
   Config.setAsync(
 +   {
 +     clientId: WEB_OAUTH_CLIENT,
-+     redirectUri: `${window.location.origin}/callback`
++     redirectUri: `${window.location.origin}/callback`,
 +     scope: 'openid profile email address',
 +     serverConfig: {
 +       wellknown: WELLKNOWN_URL,
