@@ -64,7 +64,7 @@ jobs:
         env:
           REST_OAUTH_SECRET: ${{ secrets.REST_OAUTH_SECRET }}
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: Playwright Results - ${{ runner.os }} - ${{ matrix.node }} - ${{ github.run_attempt }}
