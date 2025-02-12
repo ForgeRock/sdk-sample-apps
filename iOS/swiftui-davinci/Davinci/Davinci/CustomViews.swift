@@ -2,83 +2,15 @@
 //  CustomViews.swift
 //  Davinci
 //
-//  Copyright (c) 2024 Ping Identity. All rights reserved.
+//  Copyright (c) 2024 - 2025 Ping Identity. All rights reserved.
 //
 //  This software may be modified and distributed under the terms
 //  of the MIT license. See the LICENSE file for details.
 //
 
+
 import SwiftUI
 import PingDavinci
-
-/// A view representing an input field, either a text field or a secure field.
-/// - Handles user input and updates the corresponding `Collector` object with the entered value.
-struct InputView: View {
-  @State var text: String = ""
-  let placeholderString: String
-  var secureField: Bool = false
-  let field: any Collector
-  
-  var body: some View {
-    VStack(alignment: .leading) {
-      if secureField {
-        SecureField(placeholderString, text: $text)
-          .padding()
-          .background(Color.themeTextField)
-          .textContentType(.oneTimeCode)
-          .disableAutocorrection(true)
-          .autocapitalization(.none)
-          .cornerRadius(20.0)
-          .shadow(radius: 10.0, x: 20, y: 10)
-          .onChange(of: text) { newValue in
-            if let field = field as? PasswordCollector {
-              field.value = newValue
-            }
-          }
-      } else {
-        TextField(placeholderString, text: $text)
-          .padding()
-          .background(Color.themeTextField)
-          .disableAutocorrection(true)
-          .textContentType(.oneTimeCode)
-          .autocapitalization(.none)
-          .cornerRadius(20.0)
-          .shadow(radius: 10.0, x: 20, y: 10)
-          .onChange(of: text) { newValue in
-            if let field = field as? TextCollector {
-              field.value = newValue
-            }
-          }
-      }
-    }.padding([.leading, .trailing], 27.5)
-  }
-}
-
-/// A reusable button view that interacts with a `Collector` object.
-/// - Designed to handle submit actions for form fields.
-struct InputButton: View {
-  let title: String
-  let field: any Collector
-  let action: () -> (Void)
-  
-  var body: some View {
-    Button(action:  {
-      if let field = field as? SubmitCollector {
-        field.value = field.key
-      }
-      action()
-    } ) {
-      Text(title)
-        .font(.headline)
-        .foregroundColor(.white)
-        .padding()
-        .frame(width: 300, height: 50)
-        .background(Color.themeButtonBackground)
-        .cornerRadius(15.0)
-        .shadow(radius: 10.0, x: 20, y: 10)
-    }
-  }
-}
 
 /// A reusable button view for general "Next" actions.
 /// - Executes a provided action when tapped.
@@ -98,6 +30,32 @@ struct NextButton: View {
         .background(Color.themeButtonBackground)
         .cornerRadius(15.0)
         .shadow(radius: 10.0, x: 20, y: 10)
+    }
+  }
+}
+
+/// A view for displaying the header of a node.
+struct HeaderView: View {
+  var name: String = ""
+  
+  var body: some View {
+    VStack {
+      Text(name)
+        .font(.title)
+        .foregroundStyle(Color.gray)
+    }
+  }
+}
+
+/// A view for displaying the description of a node.
+struct DescriptionView: View {
+  var name: String = ""
+  
+  var body: some View {
+    VStack {
+      Text(name)
+        .font(.subheadline)
+        .foregroundStyle(Color.gray)
     }
   }
 }
