@@ -2,7 +2,7 @@
 //  LogOutView.swift
 //  Davinci
 //
-//  Copyright (c) 2024 Ping Identity. All rights reserved.
+//  Copyright (c) 2024 - 2025 Ping Identity. All rights reserved.
 //
 //  This software may be modified and distributed under the terms
 //  of the MIT license. See the LICENSE file for details.
@@ -19,16 +19,14 @@ struct LogOutView: View {
   @StateObject private var logoutViewModel =  LogOutViewModel()
   
   var body: some View {
-    Text("Logout")
-      .font(.title)
-      .navigationBarTitle("Logout", displayMode: .inline)
-    
+    Spacer()
     NextButton(title: "Procced to logout") {
       Task {
         await logoutViewModel.logout()
         path.removeLast()
-        path.append("Davinci")
+        path.append("DaVinci")
       }
     }
+    .navigationTitle("Logout")
   }
 }
