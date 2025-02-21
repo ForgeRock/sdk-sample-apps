@@ -19,12 +19,11 @@ test('React - Login with WebAuthN', async ({ browser, page }) => {
     await page.goto('https://localhost:8443/?journey=TEST_WebAuthn-Registration');
     await page.getByRole('link', { name: 'Sign In', exact: true }).click();
 
-    await page.getByLabel('User Name').fill('demouser');
-    await page.getByLabel('Password').fill('j56eKtae*1');
+    await page.getByLabel('User Name').fill('user01');
+    await page.getByLabel('Password').fill('Password1!');
     await page.getByLabel('Password').press('Enter');
 
-    await expect(page.getByText('Welcome back, Demo User!')).toBeVisible();
-
+    await expect(page.getByText('Welcome back, user01 user01!')).toBeVisible();
     await cdpSession.send('WebAuthn.removeVirtualAuthenticator', {
       authenticatorId: authenticator.authenticatorId,
     });

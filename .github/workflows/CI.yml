@@ -1,7 +1,7 @@
 name: 'JS Continuous Integration'
 
 on:
-  push:
+  pull_request:
     paths:
       - 'javascript/**/*'
 
@@ -36,6 +36,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest]
         node: [18.19.0, 20.11.1]
+        shardIndex: [1, 2, 3, 4] # Split tests into 4 shards
     needs: [install]
     runs-on: ${{ matrix.os }}
     defaults:
@@ -61,15 +62,17 @@ jobs:
 
       - run: npx playwright install
 
-      - name: E2E
-        run: npm run e2e -ws --if-present
+      - name: E2E Tests - Shard ${{ matrix.shardIndex }} of 4
+        run: |
+          cd reactjs-todo && npm run e2e -- --shard=${{ matrix.shardIndex }}/4
+          cd ../angular-todo && npm run e2e -- --shard=${{ matrix.shardIndex }}/4
         env:
           REST_OAUTH_SECRET: ${{ secrets.REST_OAUTH_SECRET }}
 
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: Playwright Results - ${{ runner.os }} - ${{ matrix.node }} - ${{ github.run_attempt }}
+          name: Playwright Results - ${{ runner.os }} - ${{ matrix.node }} - Shard ${{ matrix.shardIndex }} - ${{ github.run_attempt }}
           path: |
             ./javascript/reactjs-todo/test-results
             ./javascript/reactjs-todo/playwright-report
