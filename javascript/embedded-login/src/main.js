@@ -17,7 +17,7 @@ forgerock.Config.set({
   scope: process.env.SCOPE, // e.g. 'openid profile email address phone'
   serverConfig: {
     baseUrl: process.env.SERVER_URL, // e.g. 'https://myorg.forgeblocks.com/am' or 'https://openam.example.com:8443/openam'
-    timeout: parseInt(process.env.TIMEOUT), // 90000 or less
+    timeout: 3000, // 90000 or less
   },
   realmPath: process.env.REALM_PATH, // e.g. 'alpha' or 'root'
   tree: process.env.TREE, // e.g. 'sdkAuthenticationTree' or 'Login'

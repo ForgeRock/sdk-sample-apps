@@ -1,13 +1,16 @@
 name: 'JS Continuous Integration'
 
 on:
-  - pull_request
+  pull_request:
+    paths:
+      - 'javascript/**/*'
 
 jobs:
-  install:
+  pr:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
+        shardIndex: [1, 2, 3, 4] # Split tests into 4 shards
         node: [18.19.0, 20.11.1]
     runs-on: ${{ matrix.os }}
     defaults:
@@ -27,31 +30,6 @@ jobs:
 
       - run: npm ci
         working-directory: ./javascript
-        if: steps.cache.outputs.cache-hit != 'true'
-
-  build-test:
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest]
-        node: [18.19.0, 20.11.1]
-    needs: [install]
-    runs-on: ${{ matrix.os }}
-    defaults:
-      run:
-        working-directory: ./javascript
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node }}
-      - uses: actions/cache@v4
-        id: cache
-        with:
-          path: |
-            node_modules
-          key: ${{ runner.os }}-npm-${{matrix.node}}-${{ hashFiles('package-lock.json') }}
-
-      - run: npm ci
         if: steps.cache.outputs.cache-hit != 'true'
 
       - name: Lint
@@ -59,17 +37,20 @@ jobs:
 
       - run: npx playwright install
 
-      - name: E2E
-        run: npm run e2e -ws --if-present
+      - name: E2E Tests - Shard ${{ matrix.shardIndex }} of 4
+        run: |
+          cd reactjs-todo && npm run e2e -- --shard=${{ matrix.shardIndex }}/4
+          cd ../angular-todo && npm run e2e -- --shard=${{ matrix.shardIndex }}/4
         env:
           REST_OAUTH_SECRET: ${{ secrets.REST_OAUTH_SECRET }}
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: Playwright Results - ${{ runner.os }} - ${{ matrix.node }} - ${{ github.run_attempt }}
+          name: Playwright Results - ${{ runner.os }} - ${{ matrix.node }} - Shard ${{ matrix.shardIndex }} - ${{ github.run_attempt }}
           path: |
             ./javascript/reactjs-todo/test-results
             ./javascript/reactjs-todo/playwright-report
             ./javascript/angular-todo/test-results
             ./javascript/angular-todo/playwright-report
+
