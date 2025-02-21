@@ -1,7 +1,9 @@
 name: 'JS Continuous Integration'
 
 on:
-  - pull_request
+  push:
+    paths:
+      - 'javascript/**/*'
 
 jobs:
   install:
