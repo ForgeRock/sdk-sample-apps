@@ -10,34 +10,8 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
-        node: [18.19.0, 20.11.1]
-    runs-on: ${{ matrix.os }}
-    defaults:
-      run:
-        working-directory: ./javascript
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node }}
-      - uses: actions/cache@v4
-        id: cache
-        with:
-          path: |
-            node_modules
-          key: ${{ runner.os }}-npm-${{matrix.node}}-${{ hashFiles('package-lock.json') }}
-
-      - run: npm ci
-        working-directory: ./javascript
-        if: steps.cache.outputs.cache-hit != 'true'
-
-  build-test:
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest]
-        node: [18.19.0, 20.11.1]
         shardIndex: [1, 2, 3, 4] # Split tests into 4 shards
-    needs: [install]
+        node: [18.19.0, 20.11.1]
     runs-on: ${{ matrix.os }}
     defaults:
       run:
@@ -55,6 +29,7 @@ jobs:
           key: ${{ runner.os }}-npm-${{matrix.node}}-${{ hashFiles('package-lock.json') }}
 
       - run: npm ci
+        working-directory: ./javascript
         if: steps.cache.outputs.cache-hit != 'true'
 
       - name: Lint
@@ -78,3 +53,4 @@ jobs:
             ./javascript/reactjs-todo/playwright-report
             ./javascript/angular-todo/test-results
             ./javascript/angular-todo/playwright-report
+
