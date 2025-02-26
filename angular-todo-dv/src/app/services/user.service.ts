@@ -9,7 +9,7 @@
  */
 
 import { Injectable } from '@angular/core';
-import davinciClient from '@forgerock/davinci-client';
+import { davinci } from '@forgerock/davinci-client';
 import { UserManager } from '@forgerock/javascript-sdk';
 
 /**
@@ -32,7 +32,7 @@ export class UserService {
   loginClient: unknown = null;
 
   async initLoginClient(config: unknown): Promise<void> {
-    this.loginClient = await davinciClient({ config });
+    this.loginClient = await davinci({ config });
   }
 
   async populateUserInfo(): Promise<void> {
