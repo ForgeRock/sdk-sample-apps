@@ -59,6 +59,7 @@ export class DaVinciFlowComponent implements OnInit {
   }
 
   updateCollector(updateFn: (value: string) => void, value: string): void {
+    console.log('updateFn', value);
     updateFn(value);
   }
 
@@ -66,6 +67,7 @@ export class DaVinciFlowComponent implements OnInit {
     event.preventDefault();
     this.isSubmittingForm = true;
 
+    console.log('submitForm');
     const nextNode = await this.davinciClient.next();
     this.mapRenderer(nextNode);
   }
@@ -102,6 +104,7 @@ export class DaVinciFlowComponent implements OnInit {
   }
 
   async onFlowButtonClicked(collector: Collector) {
+    console.log('onFlowButtonClicked', collector);
     const flow = this.davinciClient.flow({ action: collector.output.key });
     const node = await flow(collector.output.key);
     this.renderForm(node);
@@ -109,7 +112,7 @@ export class DaVinciFlowComponent implements OnInit {
 
   mapRenderer(nextNode: any): void {
     this.isSubmittingForm = false;
-    if (nextNode.status === 'next') {
+    if (nextNode.status === 'continue') {
       this.renderForm(nextNode);
     } else if (nextNode.status === 'success') {
       this.completeFlow();

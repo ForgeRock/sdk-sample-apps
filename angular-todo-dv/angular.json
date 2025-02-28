@@ -55,7 +55,7 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "port": 8443,
-            "ssl": true,
+            "ssl": false,
             "open": true,
             "allowedHosts": [".example.com", "localhost"]
           },
