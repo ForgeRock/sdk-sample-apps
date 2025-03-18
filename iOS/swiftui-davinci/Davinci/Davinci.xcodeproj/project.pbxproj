@@ -20,6 +20,18 @@
 		A51C18EC2CF5247200A78241 /* PingOidc in Frameworks */ = {isa = PBXBuildFile; productRef = A51C18EB2CF5247200A78241 /* PingOidc */; };
 		A51C18EE2CF5247200A78241 /* PingOrchestrate in Frameworks */ = {isa = PBXBuildFile; productRef = A51C18ED2CF5247200A78241 /* PingOrchestrate */; };
 		A51C18F02CF5247200A78241 /* PingStorage in Frameworks */ = {isa = PBXBuildFile; productRef = A51C18EF2CF5247200A78241 /* PingStorage */; };
+		A5A5F8582D5CE16A0053BF24 /* RadioButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5F8552D5CE16A0053BF24 /* RadioButtonView.swift */; };
+		A5A5F8592D5CE16A0053BF24 /* ErrorMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5F8512D5CE16A0053BF24 /* ErrorMessageView.swift */; };
+		A5A5F85A2D5CE16A0053BF24 /* PasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5F8542D5CE16A0053BF24 /* PasswordView.swift */; };
+		A5A5F85B2D5CE16A0053BF24 /* ComboBoxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5F84F2D5CE16A0053BF24 /* ComboBoxView.swift */; };
+		A5A5F85C2D5CE16A0053BF24 /* DropdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5F8502D5CE16A0053BF24 /* DropdownView.swift */; };
+		A5A5F85D2D5CE16A0053BF24 /* LabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5F8532D5CE16A0053BF24 /* LabelView.swift */; };
+		A5A5F85E2D5CE16A0053BF24 /* CheckBoxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5F84E2D5CE16A0053BF24 /* CheckBoxView.swift */; };
+		A5A5F85F2D5CE16A0053BF24 /* FlowButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5F8522D5CE16A0053BF24 /* FlowButtonView.swift */; };
+		A5A5F8602D5CE16A0053BF24 /* SubmitButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5F8562D5CE16A0053BF24 /* SubmitButtonView.swift */; };
+		A5A5F8612D5CE16A0053BF24 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5F8572D5CE16A0053BF24 /* TextView.swift */; };
+		A5A5F8632D5CE29D0053BF24 /* ContinueNodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5F8622D5CE29D0053BF24 /* ContinueNodeView.swift */; };
+		A5A5F8652D5CE4A60053BF24 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5F8642D5CE4A60053BF24 /* ErrorView.swift */; };
 		A5EED25A2CF7B10E0064B168 /* LogOutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5EED2592CF7B10E0064B168 /* LogOutView.swift */; };
 		A5EED25C2CF7B5480064B168 /* UserInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5EED25B2CF7B5480064B168 /* UserInfoView.swift */; };
 		A5EED25E2CF7B8F80064B168 /* UserInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5EED25D2CF7B8F80064B168 /* UserInfoViewModel.swift */; };
@@ -49,6 +61,18 @@
 		3A8092F52BE9BB6B00AD667F /* AccessTokenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessTokenViewModel.swift; sourceTree = "<group>"; };
 		3A8532322BE2D5D800F8619D /* DavinciView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DavinciView.swift; sourceTree = "<group>"; };
 		3ACD90E02BE586BC00DABCE6 /* DavinciViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DavinciViewModel.swift; sourceTree = "<group>"; };
+		A5A5F84E2D5CE16A0053BF24 /* CheckBoxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckBoxView.swift; sourceTree = "<group>"; };
+		A5A5F84F2D5CE16A0053BF24 /* ComboBoxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComboBoxView.swift; sourceTree = "<group>"; };
+		A5A5F8502D5CE16A0053BF24 /* DropdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropdownView.swift; sourceTree = "<group>"; };
+		A5A5F8512D5CE16A0053BF24 /* ErrorMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorMessageView.swift; sourceTree = "<group>"; };
+		A5A5F8522D5CE16A0053BF24 /* FlowButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowButtonView.swift; sourceTree = "<group>"; };
+		A5A5F8532D5CE16A0053BF24 /* LabelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelView.swift; sourceTree = "<group>"; };
+		A5A5F8542D5CE16A0053BF24 /* PasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordView.swift; sourceTree = "<group>"; };
+		A5A5F8552D5CE16A0053BF24 /* RadioButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButtonView.swift; sourceTree = "<group>"; };
+		A5A5F8562D5CE16A0053BF24 /* SubmitButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitButtonView.swift; sourceTree = "<group>"; };
+		A5A5F8572D5CE16A0053BF24 /* TextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
+		A5A5F8622D5CE29D0053BF24 /* ContinueNodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContinueNodeView.swift; sourceTree = "<group>"; };
+		A5A5F8642D5CE4A60053BF24 /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
 		A5EED2592CF7B10E0064B168 /* LogOutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogOutView.swift; sourceTree = "<group>"; };
 		A5EED25B2CF7B5480064B168 /* UserInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoView.swift; sourceTree = "<group>"; };
 		A5EED25D2CF7B8F80064B168 /* UserInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoViewModel.swift; sourceTree = "<group>"; };
@@ -91,16 +115,19 @@
 		3A54412F2BCDF10900385131 /* Davinci */ = {
 			isa = PBXGroup;
 			children = (
-				3A5441322BCDF10900385131 /* ContentView.swift */,
-				3A8532322BE2D5D800F8619D /* DavinciView.swift */,
-				3ACD90E02BE586BC00DABCE6 /* DavinciViewModel.swift */,
+				A5A5F84D2D5CE1450053BF24 /* Collectors */,
 				3A3709952BEB038200AA7B51 /* AccessTokenView.swift */,
 				3A8092F52BE9BB6B00AD667F /* AccessTokenViewModel.swift */,
-				A5EED25B2CF7B5480064B168 /* UserInfoView.swift */,
-				A5EED25D2CF7B8F80064B168 /* UserInfoViewModel.swift */,
+				3A5441322BCDF10900385131 /* ContentView.swift */,
+				A5A5F8622D5CE29D0053BF24 /* ContinueNodeView.swift */,
+				3A8092F32BE99F0F00AD667F /* CustomViews.swift */,
+				3A8532322BE2D5D800F8619D /* DavinciView.swift */,
+				3ACD90E02BE586BC00DABCE6 /* DavinciViewModel.swift */,
+				A5A5F8642D5CE4A60053BF24 /* ErrorView.swift */,
 				A5EED2592CF7B10E0064B168 /* LogOutView.swift */,
 				A5EED25F2CF7B9380064B168 /* LogOutViewModel.swift */,
-				3A8092F32BE99F0F00AD667F /* CustomViews.swift */,
+				A5EED25B2CF7B5480064B168 /* UserInfoView.swift */,
+				A5EED25D2CF7B8F80064B168 /* UserInfoViewModel.swift */,
 				3A5441342BCDF10B00385131 /* Assets.xcassets */,
 				3A5441362BCDF10B00385131 /* Preview Content */,
 			);
@@ -120,6 +147,23 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A5A5F84D2D5CE1450053BF24 /* Collectors */ = {
+			isa = PBXGroup;
+			children = (
+				A5A5F84E2D5CE16A0053BF24 /* CheckBoxView.swift */,
+				A5A5F84F2D5CE16A0053BF24 /* ComboBoxView.swift */,
+				A5A5F8502D5CE16A0053BF24 /* DropdownView.swift */,
+				A5A5F8512D5CE16A0053BF24 /* ErrorMessageView.swift */,
+				A5A5F8522D5CE16A0053BF24 /* FlowButtonView.swift */,
+				A5A5F8532D5CE16A0053BF24 /* LabelView.swift */,
+				A5A5F8542D5CE16A0053BF24 /* PasswordView.swift */,
+				A5A5F8552D5CE16A0053BF24 /* RadioButtonView.swift */,
+				A5A5F8562D5CE16A0053BF24 /* SubmitButtonView.swift */,
+				A5A5F8572D5CE16A0053BF24 /* TextView.swift */,
+			);
+			path = Collectors;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -205,7 +249,19 @@
 				3A8532332BE2D5D800F8619D /* DavinciView.swift in Sources */,
 				3A5441332BCDF10900385131 /* ContentView.swift in Sources */,
 				3A8092F42BE99F0F00AD667F /* CustomViews.swift in Sources */,
+				A5A5F8582D5CE16A0053BF24 /* RadioButtonView.swift in Sources */,
+				A5A5F8592D5CE16A0053BF24 /* ErrorMessageView.swift in Sources */,
+				A5A5F85A2D5CE16A0053BF24 /* PasswordView.swift in Sources */,
+				A5A5F85B2D5CE16A0053BF24 /* ComboBoxView.swift in Sources */,
+				A5A5F85C2D5CE16A0053BF24 /* DropdownView.swift in Sources */,
+				A5A5F85D2D5CE16A0053BF24 /* LabelView.swift in Sources */,
+				A5A5F85E2D5CE16A0053BF24 /* CheckBoxView.swift in Sources */,
+				A5A5F85F2D5CE16A0053BF24 /* FlowButtonView.swift in Sources */,
+				A5A5F8632D5CE29D0053BF24 /* ContinueNodeView.swift in Sources */,
+				A5A5F8602D5CE16A0053BF24 /* SubmitButtonView.swift in Sources */,
+				A5A5F8612D5CE16A0053BF24 /* TextView.swift in Sources */,
 				3A3709962BEB038200AA7B51 /* AccessTokenView.swift in Sources */,
+				A5A5F8652D5CE4A60053BF24 /* ErrorView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
