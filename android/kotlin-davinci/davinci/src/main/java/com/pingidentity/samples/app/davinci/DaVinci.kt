@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Ping Identity. All rights reserved.
+ * Copyright (c) 2024 - 2025 Ping Identity. All rights reserved.
  *
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
@@ -9,6 +9,7 @@ package com.pingidentity.samples.app.davinci
 
 import android.util.Log
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -33,27 +34,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.pingidentity.davinci.module.details
 import com.pingidentity.orchestrate.ContinueNode
 import com.pingidentity.orchestrate.ErrorNode
 import com.pingidentity.orchestrate.FailureNode
 import com.pingidentity.orchestrate.SuccessNode
-import com.pingidentity.samples.app.ErrorAlert
+import com.pingidentity.samples.app.Alert
 import com.pingidentity.samples.app.R
 import com.pingidentity.samples.app.davinci.collector.ContinueNode
 
-/**
- * DaVinci flow screen.
- *
- * @param daVinciViewModel The view model for the DaVinci app.
- * @param onSuccess The callback to be called when the DaVinci flow is successfully completed.
- */
 @Composable
 fun DaVinci(
     daVinciViewModel: DaVinciViewModel = viewModel<DaVinciViewModel>(),
@@ -76,25 +75,20 @@ fun DaVinci(
         onNext = {
             daVinciViewModel.next(it)
         },
-        currentOnSuccess
+        onStart = {
+            daVinciViewModel.start()
+        },
+        currentOnSuccess,
     )
 }
 
-/**
- * DaVinci flow screen.
- *
- * @param state The state of the DaVinci flow.
- * @param loading Whether the DaVinci flow is loading.
- * @param onNodeUpdated The callback to be called when the current node is updated.
- * @param onNext The callback to be called when the next node is selected.
- * @param onSuccess The callback to be called when the DaVinci flow is successfully completed.
- */
 @Composable
 fun DaVinci(
     state: DaVinciState,
     loading: Boolean,
     onNodeUpdated: () -> Unit,
     onNext: (ContinueNode) -> Unit,
+    onStart: () -> Unit,
     onSuccess: (() -> Unit)?,
 ) {
     val scroll = rememberScrollState(0)
@@ -103,7 +97,7 @@ fun DaVinci(
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .fillMaxSize().verticalScroll(scroll)
-   ) {
+    ) {
         if (loading) {
             CircularProgressIndicator()
         }
@@ -118,7 +112,7 @@ fun DaVinci(
 
             when (val node = state.node) {
                 is ContinueNode -> {
-                    Render(node = node, onNodeUpdated) {
+                    Render(node = node, onNodeUpdated, onStart) {
                         onNext(node)
                     }
                 }
@@ -132,7 +126,7 @@ fun DaVinci(
                     Render(node)
                     // Render the previous node
                     if (state.prev is ContinueNode) {
-                        Render(node = state.prev, onNodeUpdated) {
+                        Render(node = state.prev, onNodeUpdated, onStart) {
                             onNext(state.prev)
                         }
                     }
@@ -147,17 +141,9 @@ fun DaVinci(
                 else -> {}
             }
         }
-        state.error?.apply {
-            ErrorAlert(throwable = this)
-        }
     }
 }
 
-/**
- * Render a node.
- *
- * @param node The failure node to render.
- */
 @Composable
 fun Render(node: FailureNode) {
     Row(
@@ -196,13 +182,16 @@ fun Render(node: FailureNode) {
     }
 }
 
-/**
- * Render a node.
- *
- * @param node The error node to render.
- */
 @Composable
 fun Render(node: ErrorNode) {
+    var showAlert by remember { mutableStateOf(false) }
+
+    if (showAlert) {
+        Alert(node) {
+            showAlert = false
+        }
+    }
+
     Row(
         modifier =
         Modifier
@@ -217,7 +206,10 @@ fun Render(node: ErrorNode) {
             modifier =
             Modifier
                 .fillMaxWidth()
-                .padding(8.dp),
+                .padding(8.dp)
+                .clickable {
+                    showAlert = true
+                },
             shape = MaterialTheme.shapes.medium,
         ) {
             Row(
@@ -239,27 +231,16 @@ fun Render(node: ErrorNode) {
     }
 }
 
-/**
- * Render a node.
- *
- * @param node The continue node to render.
- * @param onNodeUpdated The callback to be called when the current node is updated.
- * @param onNext The callback to be called when the next node is triggered.
- */
 @Composable
 fun Render(
     node: ContinueNode,
     onNodeUpdated: () -> Unit,
+    onStart: () -> Unit,
     onNext: () -> Unit,
 ) {
-    ContinueNode(node, onNodeUpdated, onNext)
+    ContinueNode(node, onNodeUpdated, onStart, onNext)
 }
 
-/**
- * The logo.
- *
- * @param modifier The modifier to be applied to the logo.
- */
 @Composable
 private fun Logo(modifier: Modifier) {
     Row(
