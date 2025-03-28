@@ -2,6 +2,9 @@
 activityCompose = "1.9.3"
 agp = "8.7.1"
 coreSplashscreen = "1.0.1"
+datastore = "1.0.0" # DataStorageTest failed when using 1.1.1 https://issuetracker.google.com/issues/337870543
+davinci = "1.1.0"
+externalIdp = "1.1.0"
 kotlin = "2.0.0"
 compose = "1.7.4"
 compose-material3 = "1.3.0"
@@ -15,6 +18,7 @@ composeBom = "2024.10.00"
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
+androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navVersion" }
 androidx-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
@@ -23,6 +27,8 @@ compose-foundation = { module = "androidx.compose.foundation:foundation", versio
 compose-material3 = { module = "androidx.compose.material3:material3", version.ref = "compose-material3" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+davinci = { module = "com.pingidentity.sdks:davinci", version.ref = "davinci" }
+external-idp = { module = "com.pingidentity.sdks:external-idp", version.ref = "externalIdp" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 
