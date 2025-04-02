@@ -1,10 +1,15 @@
-import { ActionCollector } from '@forgerock/davinci-client/types';
+import type { IdpCollector } from '@forgerock/davinci-client/types';
 
-export default function submitButtonComponent(formEl: HTMLFormElement, collector: ActionCollector) {
-  const link = document.createElement('a');
+export default function submitButtonComponent(
+  formEl: HTMLFormElement,
+  collector: IdpCollector,
+  updater: () => void,
+) {
+  const button = document.createElement('button');
+  console.log('collector', collector);
+  button.value = collector.output.label;
+  button.innerHTML = collector.output.label;
+  button.onclick = () => updater();
 
-  link.innerText = collector.output.label;
-  link.href = collector.output?.url || '';
-
-  formEl?.appendChild(link);
+  formEl?.appendChild(button);
 }
