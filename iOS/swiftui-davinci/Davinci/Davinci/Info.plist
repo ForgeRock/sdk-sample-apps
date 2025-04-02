@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>[Enter-Google-URL-Scheme]</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>[Enter-FB-URL-Scheme]</string>
+			</array>
+		</dict>
+	</array>
+	<key>FacebookAppID</key>
+	<string>[Enter Facebook App ID]</string>
+	<key>FacebookClientToken</key>
+	<string>[Enter FB Client Token]</string>
+	<key>GIDClientID</key>
+	<string>[Enter Google Client ID]</string>
+	<key>GIDServerClientID</key>
+	<string>[Enter Google Server Client ID]</string>
+</dict>
+</plist>

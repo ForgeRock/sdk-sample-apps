@@ -2,7 +2,7 @@
 //  ComboBoxView.swift
 //  Davinci
 //
-//  Copyright (c) 2025 Ping Identity. All rights reserved.
+//  Copyright (c) 2025 Ping Identity Corporation. All rights reserved.
 //
 //  This software may be modified and distributed under the terms
 //  of the MIT license. See the LICENSE file for details.
@@ -12,6 +12,20 @@
 import SwiftUI
 import PingDavinci
 
+/// A SwiftUI view that presents a dropdown menu with multi-selection capabilities.
+///
+/// The ComboBoxView provides a compact way to select multiple options from a dropdown menu.
+/// It manages selection state and validation, presenting error messages when validation fails.
+///
+/// Properties:
+/// - field: The MultiSelectCollector containing options, label, and selection state
+/// - onNodeUpdated: A callback function that notifies the parent when the field value changes
+/// - expanded: State variable that tracks whether the dropdown is expanded
+/// - selectedOptions: State variable that tracks the currently selected options
+/// - isValid: State variable that tracks the validation state of the field
+///
+/// The view shows selected values as a comma-separated list in the main button
+/// and validates the selection when required.
 struct ComboBoxView: View {
     let field: MultiSelectCollector
     var onNodeUpdated: () -> Void
