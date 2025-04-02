@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --port 5829",
     "build": "vite build",
     "preview": "vite preview"
   },
@@ -12,7 +12,7 @@
     "vite": "^5.4.9"
   },
   "dependencies": {
-    "@forgerock/davinci-client": "^0.1.3",
+    "@forgerock/davinci-client": "^1.1.0-beta.1",
     "@forgerock/javascript-sdk": "^4.6.0"
   }
 }

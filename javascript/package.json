@@ -6,7 +6,14 @@
   "author": "",
   "license": "ISC",
   "workspaces": [
-    "./*"
+    "./angular-todo/",
+    "./central-login-oidc/",
+    "./embedded-login/",
+    "./embedded-login-davinci/",
+    "./reactjs-todo/",
+    "./reactjs-todo-davinci/",
+    "./reactjs-todo/",
+    "./todo-api/"
   ],
   "scripts": {
     "todo-api": "npm start --workspace todo-api",
