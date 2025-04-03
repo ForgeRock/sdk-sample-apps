@@ -1,4 +1,3 @@
-// eslint-disable
 import './style.css';
 
 import { Config, FRUser, TokenManager } from '@forgerock/javascript-sdk';
@@ -33,8 +32,7 @@ const continueToken = urlParams.get('continueToken');
   let resumed;
 
   if (continueToken) {
-    await davinciClient.resume({ continueToken });
-    resumed = davinciClient.getNode();
+    resumed = await davinciClient.resume({ continueToken });
   } else {
     await Config.setAsync(config);
   }
