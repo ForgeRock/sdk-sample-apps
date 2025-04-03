@@ -12,6 +12,7 @@
 import SwiftUI
 /// A view model responsible for managing the logout functionality.
 /// - Handles the logout process for the user and updates the state for UI display.
+@MainActor
 class LogOutViewModel: ObservableObject {
     /// A published property that holds the status of the logout process.
     /// - Updated with a completion message when logout is successful.

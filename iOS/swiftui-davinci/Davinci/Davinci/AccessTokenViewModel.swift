@@ -15,6 +15,7 @@ import PingLogger
 /// A view model responsible for managing the access token state.
 /// - This class handles fetching the access token using the DaVinci SDK and logs the results.
 /// - Provides an observable published property for UI updates.
+@MainActor
 class AccessTokenViewModel: ObservableObject {
     /// Published property to hold the current access token.
     /// - Updates are published to the UI whenever the value changes.

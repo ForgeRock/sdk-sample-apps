@@ -38,6 +38,7 @@ public let davinci = DaVinci.createDaVinci { config in
 ///   - Progressing to the next node in the flow
 ///   - Maintaining the current and previous flow state
 ///   - Handling loading states
+@MainActor
 class DavinciViewModel: ObservableObject {
     /// Published property that holds the current state node data.
     @Published public var state: DavinciState = DavinciState()
@@ -132,6 +133,7 @@ class DavinciState {
 
 
 /// A view model for managing validation state across form fields.
+@MainActor
 public class ValidationViewModel: ObservableObject {
     /// Indicates whether validation should be performed on the current form fields.
     @Published var shouldValidate = false
