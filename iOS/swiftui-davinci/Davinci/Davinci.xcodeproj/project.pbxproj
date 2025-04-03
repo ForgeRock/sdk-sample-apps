@@ -15,11 +15,33 @@
 		3A8092F62BE9BB6B00AD667F /* AccessTokenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A8092F52BE9BB6B00AD667F /* AccessTokenViewModel.swift */; };
 		3A8532332BE2D5D800F8619D /* DavinciView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A8532322BE2D5D800F8619D /* DavinciView.swift */; };
 		3ACD90E12BE586BC00DABCE6 /* DavinciViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ACD90E02BE586BC00DABCE6 /* DavinciViewModel.swift */; };
+		A51313CD2D9C6C640086F846 /* PingBrowser in Frameworks */ = {isa = PBXBuildFile; productRef = A51313CC2D9C6C640086F846 /* PingBrowser */; };
+		A51313CF2D9C6C640086F846 /* PingDavinci in Frameworks */ = {isa = PBXBuildFile; productRef = A51313CE2D9C6C640086F846 /* PingDavinci */; };
+		A51313D12D9C6C640086F846 /* PingExternal-idp in Frameworks */ = {isa = PBXBuildFile; productRef = A51313D02D9C6C640086F846 /* PingExternal-idp */; };
+		A51313D32D9C6C640086F846 /* PingLogger in Frameworks */ = {isa = PBXBuildFile; productRef = A51313D22D9C6C640086F846 /* PingLogger */; };
+		A51313D52D9C6C640086F846 /* PingOidc in Frameworks */ = {isa = PBXBuildFile; productRef = A51313D42D9C6C640086F846 /* PingOidc */; };
+		A51313D72D9C6C640086F846 /* PingOrchestrate in Frameworks */ = {isa = PBXBuildFile; productRef = A51313D62D9C6C640086F846 /* PingOrchestrate */; };
+		A51313D92D9C6C640086F846 /* PingStorage in Frameworks */ = {isa = PBXBuildFile; productRef = A51313D82D9C6C640086F846 /* PingStorage */; };
 		A51C18E82CF5247200A78241 /* PingDavinci in Frameworks */ = {isa = PBXBuildFile; productRef = A51C18E72CF5247200A78241 /* PingDavinci */; };
 		A51C18EA2CF5247200A78241 /* PingLogger in Frameworks */ = {isa = PBXBuildFile; productRef = A51C18E92CF5247200A78241 /* PingLogger */; };
 		A51C18EC2CF5247200A78241 /* PingOidc in Frameworks */ = {isa = PBXBuildFile; productRef = A51C18EB2CF5247200A78241 /* PingOidc */; };
 		A51C18EE2CF5247200A78241 /* PingOrchestrate in Frameworks */ = {isa = PBXBuildFile; productRef = A51C18ED2CF5247200A78241 /* PingOrchestrate */; };
 		A51C18F02CF5247200A78241 /* PingStorage in Frameworks */ = {isa = PBXBuildFile; productRef = A51C18EF2CF5247200A78241 /* PingStorage */; };
+		A51E622B2D9C4F9F005164D9 /* SocialButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51E622A2D9C4F9D005164D9 /* SocialButtonView.swift */; };
+		A52877782D9C71C400B4885D /* PingBrowser in Frameworks */ = {isa = PBXBuildFile; productRef = A52877772D9C71C400B4885D /* PingBrowser */; };
+		A528777A2D9C71C400B4885D /* PingDavinci in Frameworks */ = {isa = PBXBuildFile; productRef = A52877792D9C71C400B4885D /* PingDavinci */; };
+		A528777C2D9C71C400B4885D /* PingExternal-idp in Frameworks */ = {isa = PBXBuildFile; productRef = A528777B2D9C71C400B4885D /* PingExternal-idp */; };
+		A528777E2D9C71C400B4885D /* PingLogger in Frameworks */ = {isa = PBXBuildFile; productRef = A528777D2D9C71C400B4885D /* PingLogger */; };
+		A52877802D9C71C400B4885D /* PingOidc in Frameworks */ = {isa = PBXBuildFile; productRef = A528777F2D9C71C400B4885D /* PingOidc */; };
+		A52877822D9C71C400B4885D /* PingOrchestrate in Frameworks */ = {isa = PBXBuildFile; productRef = A52877812D9C71C400B4885D /* PingOrchestrate */; };
+		A52877842D9C71C400B4885D /* PingStorage in Frameworks */ = {isa = PBXBuildFile; productRef = A52877832D9C71C400B4885D /* PingStorage */; };
+		A575847A2D9DD9EC00AFD754 /* PingBrowser in Frameworks */ = {isa = PBXBuildFile; productRef = A57584792D9DD9EC00AFD754 /* PingBrowser */; };
+		A575847C2D9DD9EC00AFD754 /* PingDavinci in Frameworks */ = {isa = PBXBuildFile; productRef = A575847B2D9DD9EC00AFD754 /* PingDavinci */; };
+		A575847E2D9DD9EC00AFD754 /* PingExternal-idp in Frameworks */ = {isa = PBXBuildFile; productRef = A575847D2D9DD9EC00AFD754 /* PingExternal-idp */; };
+		A57584802D9DD9EC00AFD754 /* PingLogger in Frameworks */ = {isa = PBXBuildFile; productRef = A575847F2D9DD9EC00AFD754 /* PingLogger */; };
+		A57584822D9DD9EC00AFD754 /* PingOidc in Frameworks */ = {isa = PBXBuildFile; productRef = A57584812D9DD9EC00AFD754 /* PingOidc */; };
+		A57584842D9DD9EC00AFD754 /* PingOrchestrate in Frameworks */ = {isa = PBXBuildFile; productRef = A57584832D9DD9EC00AFD754 /* PingOrchestrate */; };
+		A57584862D9DD9EC00AFD754 /* PingStorage in Frameworks */ = {isa = PBXBuildFile; productRef = A57584852D9DD9EC00AFD754 /* PingStorage */; };
 		A5A5F8582D5CE16A0053BF24 /* RadioButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5F8552D5CE16A0053BF24 /* RadioButtonView.swift */; };
 		A5A5F8592D5CE16A0053BF24 /* ErrorMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5F8512D5CE16A0053BF24 /* ErrorMessageView.swift */; };
 		A5A5F85A2D5CE16A0053BF24 /* PasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5F8542D5CE16A0053BF24 /* PasswordView.swift */; };
@@ -61,6 +83,9 @@
 		3A8092F52BE9BB6B00AD667F /* AccessTokenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessTokenViewModel.swift; sourceTree = "<group>"; };
 		3A8532322BE2D5D800F8619D /* DavinciView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DavinciView.swift; sourceTree = "<group>"; };
 		3ACD90E02BE586BC00DABCE6 /* DavinciViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DavinciViewModel.swift; sourceTree = "<group>"; };
+		A51E622A2D9C4F9D005164D9 /* SocialButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialButtonView.swift; sourceTree = "<group>"; };
+		A528778C2D9D858F00B4885D /* Davinci.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Davinci.entitlements; sourceTree = "<group>"; };
+		A528778D2D9D893800B4885D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		A5A5F84E2D5CE16A0053BF24 /* CheckBoxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckBoxView.swift; sourceTree = "<group>"; };
 		A5A5F84F2D5CE16A0053BF24 /* ComboBoxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComboBoxView.swift; sourceTree = "<group>"; };
 		A5A5F8502D5CE16A0053BF24 /* DropdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropdownView.swift; sourceTree = "<group>"; };
@@ -85,10 +110,31 @@
 			buildActionMask = 2147483647;
 			files = (
 				A51C18EA2CF5247200A78241 /* PingLogger in Frameworks */,
+				A51313D52D9C6C640086F846 /* PingOidc in Frameworks */,
+				A51313D92D9C6C640086F846 /* PingStorage in Frameworks */,
 				A51C18EE2CF5247200A78241 /* PingOrchestrate in Frameworks */,
+				A52877802D9C71C400B4885D /* PingOidc in Frameworks */,
+				A575847A2D9DD9EC00AFD754 /* PingBrowser in Frameworks */,
+				A57584802D9DD9EC00AFD754 /* PingLogger in Frameworks */,
+				A52877782D9C71C400B4885D /* PingBrowser in Frameworks */,
 				A51C18EC2CF5247200A78241 /* PingOidc in Frameworks */,
+				A51313D32D9C6C640086F846 /* PingLogger in Frameworks */,
+				A51313D12D9C6C640086F846 /* PingExternal-idp in Frameworks */,
+				A52877822D9C71C400B4885D /* PingOrchestrate in Frameworks */,
+				A575847E2D9DD9EC00AFD754 /* PingExternal-idp in Frameworks */,
+				A57584822D9DD9EC00AFD754 /* PingOidc in Frameworks */,
+				A528777E2D9C71C400B4885D /* PingLogger in Frameworks */,
 				A51C18E82CF5247200A78241 /* PingDavinci in Frameworks */,
+				A52877842D9C71C400B4885D /* PingStorage in Frameworks */,
 				A51C18F02CF5247200A78241 /* PingStorage in Frameworks */,
+				A57584862D9DD9EC00AFD754 /* PingStorage in Frameworks */,
+				A528777C2D9C71C400B4885D /* PingExternal-idp in Frameworks */,
+				A51313CD2D9C6C640086F846 /* PingBrowser in Frameworks */,
+				A57584842D9DD9EC00AFD754 /* PingOrchestrate in Frameworks */,
+				A51313CF2D9C6C640086F846 /* PingDavinci in Frameworks */,
+				A51313D72D9C6C640086F846 /* PingOrchestrate in Frameworks */,
+				A528777A2D9C71C400B4885D /* PingDavinci in Frameworks */,
+				A575847C2D9DD9EC00AFD754 /* PingDavinci in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -115,6 +161,8 @@
 		3A54412F2BCDF10900385131 /* Davinci */ = {
 			isa = PBXGroup;
 			children = (
+				A528778D2D9D893800B4885D /* Info.plist */,
+				A528778C2D9D858F00B4885D /* Davinci.entitlements */,
 				A5A5F84D2D5CE1450053BF24 /* Collectors */,
 				3A3709952BEB038200AA7B51 /* AccessTokenView.swift */,
 				3A8092F52BE9BB6B00AD667F /* AccessTokenViewModel.swift */,
@@ -160,6 +208,7 @@
 				A5A5F8532D5CE16A0053BF24 /* LabelView.swift */,
 				A5A5F8542D5CE16A0053BF24 /* PasswordView.swift */,
 				A5A5F8552D5CE16A0053BF24 /* RadioButtonView.swift */,
+				A51E622A2D9C4F9D005164D9 /* SocialButtonView.swift */,
 				A5A5F8562D5CE16A0053BF24 /* SubmitButtonView.swift */,
 				A5A5F8572D5CE16A0053BF24 /* TextView.swift */,
 			);
@@ -212,7 +261,7 @@
 			);
 			mainGroup = 3A5441242BCDF10900385131;
 			packageReferences = (
-				A51C18E62CF5247200A78241 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */,
+				A57584782D9DD9EC00AFD754 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */,
 			);
 			productRefGroup = 3A54412E2BCDF10900385131 /* Products */;
 			projectDirPath = "";
@@ -250,6 +299,7 @@
 				3A5441332BCDF10900385131 /* ContentView.swift in Sources */,
 				3A8092F42BE99F0F00AD667F /* CustomViews.swift in Sources */,
 				A5A5F8582D5CE16A0053BF24 /* RadioButtonView.swift in Sources */,
+				A51E622B2D9C4F9F005164D9 /* SocialButtonView.swift in Sources */,
 				A5A5F8592D5CE16A0053BF24 /* ErrorMessageView.swift in Sources */,
 				A5A5F85A2D5CE16A0053BF24 /* PasswordView.swift in Sources */,
 				A5A5F85B2D5CE16A0053BF24 /* ComboBoxView.swift in Sources */,
@@ -394,12 +444,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Davinci/Davinci.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Davinci/Preview Content\"";
 				DEVELOPMENT_TEAM = 9QSE66762D;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Davinci/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Davinci;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -412,10 +464,10 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = "0.9.0-beta2";
-				PRODUCT_BUNDLE_IDENTIFIER = com.pingidentity.Davinci;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pingidentity.PingExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -425,12 +477,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Davinci/Davinci.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Davinci/Preview Content\"";
 				DEVELOPMENT_TEAM = 9QSE66762D;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Davinci/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Davinci;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -443,10 +497,10 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = "0.9.0-beta2";
-				PRODUCT_BUNDLE_IDENTIFIER = com.pingidentity.Davinci;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pingidentity.PingExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -475,7 +529,31 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		A51313CB2D9C6C640086F846 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ForgeRock/ping-ios-sdk";
+			requirement = {
+				branch = "SDKS-3920-update-dependency-managers-6";
+				kind = branch;
+			};
+		};
 		A51C18E62CF5247200A78241 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ForgeRock/ping-ios-sdk";
+			requirement = {
+				branch = develop;
+				kind = branch;
+			};
+		};
+		A52877762D9C71C400B4885D /* XCRemoteSwiftPackageReference "ping-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ForgeRock/ping-ios-sdk";
+			requirement = {
+				branch = "SDKS-3920-update-dependency-managers-6";
+				kind = branch;
+			};
+		};
+		A57584782D9DD9EC00AFD754 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ForgeRock/ping-ios-sdk";
 			requirement = {
@@ -486,6 +564,41 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		A51313CC2D9C6C640086F846 /* PingBrowser */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A51313CB2D9C6C640086F846 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;
+			productName = PingBrowser;
+		};
+		A51313CE2D9C6C640086F846 /* PingDavinci */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A51313CB2D9C6C640086F846 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;
+			productName = PingDavinci;
+		};
+		A51313D02D9C6C640086F846 /* PingExternal-idp */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A51313CB2D9C6C640086F846 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;
+			productName = "PingExternal-idp";
+		};
+		A51313D22D9C6C640086F846 /* PingLogger */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A51313CB2D9C6C640086F846 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;
+			productName = PingLogger;
+		};
+		A51313D42D9C6C640086F846 /* PingOidc */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A51313CB2D9C6C640086F846 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;
+			productName = PingOidc;
+		};
+		A51313D62D9C6C640086F846 /* PingOrchestrate */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A51313CB2D9C6C640086F846 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;
+			productName = PingOrchestrate;
+		};
+		A51313D82D9C6C640086F846 /* PingStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A51313CB2D9C6C640086F846 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;
+			productName = PingStorage;
+		};
 		A51C18E72CF5247200A78241 /* PingDavinci */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = A51C18E62CF5247200A78241 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;
@@ -509,6 +622,76 @@
 		A51C18EF2CF5247200A78241 /* PingStorage */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = A51C18E62CF5247200A78241 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;
+			productName = PingStorage;
+		};
+		A52877772D9C71C400B4885D /* PingBrowser */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A52877762D9C71C400B4885D /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;
+			productName = PingBrowser;
+		};
+		A52877792D9C71C400B4885D /* PingDavinci */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A52877762D9C71C400B4885D /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;
+			productName = PingDavinci;
+		};
+		A528777B2D9C71C400B4885D /* PingExternal-idp */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A52877762D9C71C400B4885D /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;
+			productName = "PingExternal-idp";
+		};
+		A528777D2D9C71C400B4885D /* PingLogger */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A52877762D9C71C400B4885D /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;
+			productName = PingLogger;
+		};
+		A528777F2D9C71C400B4885D /* PingOidc */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A52877762D9C71C400B4885D /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;
+			productName = PingOidc;
+		};
+		A52877812D9C71C400B4885D /* PingOrchestrate */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A52877762D9C71C400B4885D /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;
+			productName = PingOrchestrate;
+		};
+		A52877832D9C71C400B4885D /* PingStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A52877762D9C71C400B4885D /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;
+			productName = PingStorage;
+		};
+		A57584792D9DD9EC00AFD754 /* PingBrowser */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A57584782D9DD9EC00AFD754 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;
+			productName = PingBrowser;
+		};
+		A575847B2D9DD9EC00AFD754 /* PingDavinci */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A57584782D9DD9EC00AFD754 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;
+			productName = PingDavinci;
+		};
+		A575847D2D9DD9EC00AFD754 /* PingExternal-idp */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A57584782D9DD9EC00AFD754 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;
+			productName = "PingExternal-idp";
+		};
+		A575847F2D9DD9EC00AFD754 /* PingLogger */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A57584782D9DD9EC00AFD754 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;
+			productName = PingLogger;
+		};
+		A57584812D9DD9EC00AFD754 /* PingOidc */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A57584782D9DD9EC00AFD754 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;
+			productName = PingOidc;
+		};
+		A57584832D9DD9EC00AFD754 /* PingOrchestrate */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A57584782D9DD9EC00AFD754 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;
+			productName = PingOrchestrate;
+		};
+		A57584852D9DD9EC00AFD754 /* PingStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A57584782D9DD9EC00AFD754 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;
 			productName = PingStorage;
 		};
 /* End XCSwiftPackageProductDependency section */

@@ -2,7 +2,7 @@
 //  RadioButtonView.swift
 //  Davinci
 //
-//  Copyright (c) 2025 Ping Identity. All rights reserved.
+//  Copyright (c) 2025 Ping Identity Corporation. All rights reserved.
 //
 //  This software may be modified and distributed under the terms
 //  of the MIT license. See the LICENSE file for details.
@@ -12,6 +12,20 @@
 import SwiftUI
 import PingDavinci
 
+/// A SwiftUI view that presents radio button options for single-selection.
+///
+/// The RadioButtonView presents a group of radio buttons, allowing users to select
+/// exactly one option from a list. It manages selection state and validation,
+/// displaying error messages when validation fails.
+///
+/// Properties:
+/// - field: The SingleSelectCollector containing options, label, and selection state
+/// - onNodeUpdated: A callback function that notifies the parent when the field value changes
+/// - selectedOption: State variable that tracks the currently selected option
+/// - isValid: State variable that tracks the validation state of the field
+///
+/// The view updates validation state when ValidationViewModel triggers validation
+/// and when a new selection is made.
 struct RadioButtonView: View {
     var field: SingleSelectCollector
     var onNodeUpdated: () -> Void

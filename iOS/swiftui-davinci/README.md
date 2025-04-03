@@ -16,7 +16,7 @@ Ping provides these iOS samples to help demonstrate SDK functionality/implementa
 ## Requirements
 
 - Xcode: Latest version recommended
-- Ping One DaVinci
+- PingOne DaVinci
 - iOS 16.6 or higher
 
 ## Getting Started
