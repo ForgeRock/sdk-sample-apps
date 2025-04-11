@@ -47,5 +47,8 @@
   "lint-staged": {
     "*.{js,jsx,ts,tsx, .cjs}": "prettier --write",
     "*.{html,json}": "prettier --write"
+  },
+  "dependencies": {
+    "@forgerock/davinci-client": "^1.1.0-beta.4"
   }
 }
