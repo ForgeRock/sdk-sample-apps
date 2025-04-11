@@ -23,6 +23,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders["appRedirectUriScheme"] = "myapp"
 
     }
 
@@ -66,7 +67,10 @@ dependencies {
     implementation(composeBom)
 
     // DaVinci SDK
-    implementation("com.pingidentity.sdks:davinci:0.9.2-SNAPSHOT")
+    implementation(libs.davinci)
+    implementation(libs.external.idp)
+
+    implementation(libs.androidx.datastore.preferences)
 
     implementation(libs.compose.ui)
     implementation(libs.compose.material3)
