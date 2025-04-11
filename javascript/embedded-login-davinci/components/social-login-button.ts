@@ -1,6 +1,6 @@
 import type { IdpCollector } from '@forgerock/davinci-client/types';
 
-export default function submitButtonComponent(
+export default function idpCollectorButton(
   formEl: HTMLFormElement,
   collector: IdpCollector,
   updater: () => void,

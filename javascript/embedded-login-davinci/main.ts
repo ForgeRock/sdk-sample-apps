@@ -4,13 +4,11 @@ import { Config, FRUser, TokenManager } from '@forgerock/javascript-sdk';
 import { davinci } from '@forgerock/davinci-client';
 
 import usernameComponent from './components/text.js';
-('./components/text.js');
 import passwordComponent from './components/password.js';
 import submitButtonComponent from './components/submit-button.js';
 import protect from './components/protect.js';
 import flowLinkComponent from './components/flow-link.js';
-import socialLoginComponent from './components/social-login-button.js';
-import { ContinueNode } from '@forgerock/davinci-client/types';
+import idpCollectorButton from './components/social-login-button.js';
 
 console.log(import.meta.env);
 
@@ -33,9 +31,8 @@ const continueToken = urlParams.get('continueToken');
 
   if (continueToken) {
     resumed = await davinciClient.resume({ continueToken });
-  } else {
-    await Config.setAsync(config);
   }
+  await Config.setAsync(config);
 
   if (davinciClient) {
     davinciClient.subscribe(() => {
@@ -135,7 +132,7 @@ const continueToken = urlParams.get('continueToken');
       } else if (collector.type === 'IdpCollector') {
         // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         collector;
-        socialLoginComponent(formEl, collector, davinciClient.externalIdp(collector));
+        idpCollectorButton(formEl, collector, davinciClient.externalIdp(collector));
       } else if (collector.type === 'FlowCollector') {
         flowLinkComponent(
           formEl,
