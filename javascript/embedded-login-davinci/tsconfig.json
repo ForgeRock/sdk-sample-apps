@@ -1,0 +1,7 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "bundler",
+    "module": "ES2022"
+
+  }
+}
