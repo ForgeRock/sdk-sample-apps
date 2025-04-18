@@ -26,7 +26,8 @@ import './styles/index.scss';
  * SDK INTEGRATION POINT
  * Summary: Configure the SDK
  * ----------------------------------------------------------------------------
- * Details: Below, you will see the following settings:
+ * Details: The config generator below will create the following settings which
+ * can be passed to the SDK's Config.setAsync() method to initalize the SDK:
  * - clientId: (OAuth 2.0 only) this is the OAuth 2.0 client you created in PingOne
  * - redirectUri: (OAuth 2.0 only) this is the URI/URL of this app to which the
  *   OAuth 2.0 flow redirects

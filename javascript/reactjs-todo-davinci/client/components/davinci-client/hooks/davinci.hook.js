@@ -15,7 +15,7 @@ import createClient from './create-client.utils.js';
  * @function useDavinci - Custom React hook that manages the DaVinci flow state
  * @returns {Object} - An array with state at index 0 and setter methods at index 1
  */
-export default function useDavinci(setCode) {
+export default function useDavinci() {
   // Create local state to manage DaVinci flows
   const [davinciClient, setDavinciClient] = useState(null);
   const [node, setNode] = useState(null);

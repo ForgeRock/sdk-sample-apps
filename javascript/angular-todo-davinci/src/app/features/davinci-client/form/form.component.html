@@ -1,0 +1,111 @@
+<!--
+ping-sample-web-angular-davinci
+
+form.component.html
+
+Copyright (c) 2025 Ping Identity Corporation. All rights reserved.
+This software may be modified and distributed under the terms
+of the MIT license. See the LICENSE file for details.
+-->
+
+<!-- 
+Render conditions for presenting appropriate views to user.
+ First, we need to handle no "node", which means we are waiting for
+ the initial response from PingOne for authentication.
+
+ Once we have a node, we then need to ensure we don't already have a
+ success or failure. If we have a node but don't have a success or
+ failure, we will likely have collectors that we will need to present
+ to the user in their render component form. 
+ -->
+
+<form (submit)="submitHandler($event)">
+  @if (formAction) {
+    <div class="cstm_form-icon text-center mb-3">
+      @switch (formAction) {
+        @case ('SIGNON') {
+          <app-key-icon size="72px" />
+        }
+        @case ('REGISTER') {
+          <app-new-user-icon size="72px" />
+        }
+        @default {}
+      }
+    </div>
+  }
+  @if (!node || node.status === 'start') {
+    <!-- 
+    Since there is no node information we need to call DaVinci to retrieve the
+      instructions for rendering the login form. 
+      -->
+    <app-loading message="Checking your session..."></app-loading>
+  } @else if (node.status === 'success') {
+    <!-- 
+    Since we have successfully authenticated, show a success message to
+    user while we complete the process and redirect to home page.
+    -->
+    <app-alert type="success" message="Success! You're logged in."></app-alert>
+  } @else if (node.status === 'continue' && collectors.length) {
+    <!-- 
+    The node to render has collectors, so we need to collect additional
+    data from user.
+    -->
+    @if (formName && !hasProtectCollector(collectors)) {
+      <h1 class="text-center fs-2 mb-3">{{ formName }}</h1>
+    }
+
+    <!-- 
+    Iterate over the collectors and render the appropriate
+    component for each one.
+    -->
+    @for (collector of collectors; track collector) {
+      @if (collector.type === 'TextCollector' && collector.name === 'protectsdk') {
+        <app-protect
+          [label]="collector.output.label"
+          [update]="updater(collector)"
+          [submitProtect]="submitProtectCallback"
+        />
+      } @else {
+        @switch (collector.type) {
+          @case ('TextCollector') {
+            <app-text-input
+              [key]="collector.output.key"
+              [label]="collector.output.label"
+              [update]="updater(collector)"
+            />
+          }
+          @case ('PasswordCollector') {
+            <app-password
+              [key]="collector.output.key"
+              [label]="collector.output.label"
+              [update]="updater(collector)"
+            />
+          }
+          @case ('SubmitCollector') {
+            <app-submit-button
+              [key]="collector.output.key"
+              [label]="collector.output.label"
+              [submittingForm]="isSubmittingForm"
+            />
+          }
+          @case ('FlowCollector') {
+            <app-flow-link [collector]="collector" [startNewFlow]="startNewFlowCallback" />
+          }
+          @default {
+            <app-unknown [collector]="collector" />
+          }
+        }
+      }
+    }
+  } @else if (node.status === 'error') {
+    <!-- 
+    Something went wrong, show an error message to the user.
+    -->
+    <app-alert type="error" [message]="errorMessage" />
+  } @else {
+    <!-- 
+    Just in case things blow up.
+    -->
+    <app-alert type="error" message="Unknown node status" />
+  }
+</form>
