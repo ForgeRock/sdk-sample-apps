@@ -3,9 +3,8 @@ export const environment = {
   DEBUGGER_OFF: '',
   DEVELOPMENT: '',
   PORT: '',
-  CLIENT_ID: '',
-  REDIRECT_URI: '',
+  WEB_OAUTH_CLIENT: '',
   SCOPE: '',
-  BASE_URL: '',
+  WELLKNOWN_URL: '',
   production: '',
 };

@@ -47,7 +47,7 @@ import { ActionIconComponent } from './icons/action-icon/action-icon.component';
 import { GoogleIconComponent } from './icons/google-icon/google-icon.component';
 import { AppleIconComponent } from './icons/apple-icon/apple-icon.component';
 import { FingerPrintIconComponent } from './icons/finger-print-icon/finger-print-icon.component';
-import { DaVinciFlowComponent } from './features/davinci-client/davinci-flow/davinci-flow.component';
+import { DavinciFormComponent } from './features/davinci-client/form/form.component';
 
 @NgModule({
   declarations: [
@@ -55,7 +55,7 @@ import { DaVinciFlowComponent } from './features/davinci-client/davinci-flow/dav
     LoginComponent,
     HomeComponent,
     TodosComponent,
-    DaVinciFlowComponent,
+    DavinciFormComponent,
     ErrorMessageComponent,
     FlowButtonComponent,
     PasswordComponent,

@@ -9,7 +9,10 @@
  */
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { TokenManager } from '@forgerock/javascript-sdk';
+import { DavinciService } from '../../../services/davinci.service';
 import { UserService } from '../../../services/user.service';
+import createConfig from '../../../../utilities/create-config';
+import { DaVinciConfig } from '@forgerock/davinci-client/types';
 
 interface Collector {
   category: string;
@@ -30,10 +33,10 @@ interface Collector {
 }
 
 @Component({
-  selector: 'app-davinci-flow',
-  templateUrl: './davinci-flow.component.html',
+  selector: 'app-davinci-form',
+  templateUrl: './form.component.html',
 })
-export class DaVinciFlowComponent implements OnInit {
+export class DavinciFormComponent implements OnInit {
   @Output() flowComplete = new EventEmitter<void>();
 
   // TODO: Get proper typings and delete this and the next line
@@ -45,10 +48,13 @@ export class DaVinciFlowComponent implements OnInit {
   pageHeader = '';
   errorMessage = '';
 
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly davinciService: DavinciService, private readonly userService: UserService) {}
 
   async ngOnInit(): Promise<void> {
-    this.davinciClient = this.userService.loginClient;
+    const config: DaVinciConfig = createConfig();
+    await this.davinciService.initDavinciClient(config);
+    this.davinciClient = this.davinciService.client;
+
     const node = await this.davinciClient.start();
 
     if (node.status !== 'success') {

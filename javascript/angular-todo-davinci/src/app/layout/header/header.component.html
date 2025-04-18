@@ -24,7 +24,7 @@ of the MIT license. See the LICENSE file for details.
       <!--
         Show simple navigation with login / register links, or links relevant to current route
       -->
-      <ng-container [ngTemplateOutlet]="userService.info ? navigation : loginOrRegister">
+      <ng-container [ngTemplateOutlet]="userService.info ? navigation : login">
         <ng-template #navigation>
           <!--
             Show navigation links relevant to the current route
@@ -93,17 +93,15 @@ of the MIT license. See the LICENSE file for details.
           </div>
         </ng-template>
 
-        <ng-template #loginOrRegister>
+        <ng-template #login>
           <ul class="navbar-nav d-flex align-items-stretch me-auto"></ul>
           <div class="d-flex py-3">
             <a
               [routerLink]="'/login'"
-              [queryParams]="{ centralLogin, journey }"
               class="cstm_login-link py-2 px-3 mx-1"
             >
               Sign In
             </a>
-            <a class="btn btn-primary" [routerLink]="'/login'"> Sign Up </a>
           </div>
         </ng-template>
       </ng-container>

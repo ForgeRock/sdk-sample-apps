@@ -11,12 +11,14 @@
 import { OnInit } from '@angular/core';
 import { Component } from '@angular/core';
 import { Config, UserManager } from '@forgerock/javascript-sdk';
-import { environment } from '../environments/environment';
+import { AsyncConfigOptions } from '@forgerock/javascript-sdk/src/config/interfaces';
 import { UserService } from './services/user.service';
 import { Router } from '@angular/router';
 import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart } from '@angular/router';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import createConfig from '../utilities/create-config';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -66,17 +68,7 @@ export class AppComponent implements OnInit {
      * - tree: The authentication journey/tree to use, such as `sdkAuthenticationTree`
      *************************************************************************** */
 
-    const config = {
-      clientId: environment.CLIENT_ID,
-      redirectUri: environment.REDIRECT_URI,
-      scope: environment.SCOPE,
-      serverConfig: {
-        baseUrl: environment.BASE_URL,
-        wellknown: `${environment.BASE_URL}as/.well-known/openid-configuration`,
-      },
-    };
-
-    await this.userService.initLoginClient(config);
+    const config: AsyncConfigOptions = createConfig();
     await Config.setAsync(config);
 
     /** *****************************************************************

@@ -13,10 +13,9 @@ const envConfigFile = `export const environment = {
   DEBUGGER_OFF: '${process.env.DEBUGGER_OFF}',
   DEVELOPMENT: '${process.env.DEVELOPMENT}',
   PORT: '${process.env.PORT}',
-  CLIENT_ID: '${process.env.CLIENT_ID}',
-  REDIRECT_URI: '${process.env.REDIRECT_URI}',
+  WEB_OAUTH_CLIENT: '${process.env.WEB_OAUTH_CLIENT}',
   SCOPE: '${process.env.SCOPE}',
-  BASE_URL: '${process.env.BASE_URL}',
+  WELLKNOWN_URL: '${process.env.WELLKNOWN_URL}',
   production: '${process.env.NODE_ENV || 'development'}'
 };`;
 
