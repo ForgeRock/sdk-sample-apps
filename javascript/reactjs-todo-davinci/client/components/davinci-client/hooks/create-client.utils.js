@@ -12,7 +12,7 @@ import { davinci } from '@forgerock/davinci-client';
 import createConfig from '../../../utilities/create-config.js';
 
 /**
- * @function createClient - Custom React hook that returns the DaVinci client
+ * @function createClient - Utility function for creating a DaVinci client
  * @returns {Object} - Either a DaVinci client if it has been initialized or null
  */
 export default async function createClient() {
