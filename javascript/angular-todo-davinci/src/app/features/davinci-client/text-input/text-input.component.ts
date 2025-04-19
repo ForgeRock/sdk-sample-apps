@@ -11,8 +11,9 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
-  selector: 'app-text-input',
-  templateUrl: './text-input.component.html',
+    selector: 'app-text-input',
+    templateUrl: './text-input.component.html',
+    standalone: true,
 })
 export class TextInputComponent {
   @Input() key: string;

@@ -11,8 +11,9 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-apple-icon',
-  templateUrl: './apple-icon.component.html',
+    selector: 'app-apple-icon',
+    templateUrl: './apple-icon.component.html',
+    standalone: true,
 })
 export class AppleIconComponent {
   @Input() size = '24px';

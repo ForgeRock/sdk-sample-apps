@@ -8,19 +8,34 @@
  * of the MIT license. See the LICENSE file for details.
  */
 
-import { OnInit } from '@angular/core';
+import { OnInit, inject } from '@angular/core';
 import { Component } from '@angular/core';
 import { Todo } from '../../features/todo/todo';
 import { TodoService } from '../../services/todo.service';
+import { HeaderComponent } from '../../layout/header/header.component';
+import { FormsModule } from '@angular/forms';
+import { NgTemplateOutlet } from '@angular/common';
+import { TodoComponent } from '../../features/todo/todo.component';
+import { FooterComponent } from '../../layout/footer/footer.component';
 
 /**
  * Used to display a page to list Todos and allow the user to interact with them
  */
 @Component({
-  selector: 'app-todos',
-  templateUrl: './todos.component.html',
+    selector: 'app-todos',
+    templateUrl: './todos.component.html',
+    standalone: true,
+    imports: [
+    HeaderComponent,
+    FormsModule,
+    NgTemplateOutlet,
+    TodoComponent,
+    FooterComponent
+],
 })
 export class TodosComponent implements OnInit {
+  private todoService = inject(TodoService);
+
   /**
    * The existing Todos
    */
@@ -40,12 +55,6 @@ export class TodosComponent implements OnInit {
    * A Todo marked for deletion
    */
   deleteTodo?: Todo;
-
-  /**
-   * Initialise with the shared Todo service
-   * @param todoService - The shared Todo service
-   */
-  constructor(private todoService: TodoService) {}
 
   /**
    * Retrieve Todos on load

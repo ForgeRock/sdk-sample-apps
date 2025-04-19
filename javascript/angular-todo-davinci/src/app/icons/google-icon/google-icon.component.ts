@@ -11,8 +11,9 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-google-icon',
-  templateUrl: './google-icon.component.html',
+    selector: 'app-google-icon',
+    templateUrl: './google-icon.component.html',
+    standalone: true,
 })
 export class GoogleIconComponent {
   @Input() size = '24px';

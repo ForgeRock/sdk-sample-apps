@@ -12,12 +12,13 @@ of the MIT license. See the LICENSE file for details.
   class="btn btn-primary w-100 mb-2"
   [value]="key"
   [disabled]="submittingForm ? 'disabled' : null"
->
-  <span
-    *ngIf="submittingForm"
-    class="spinner-border spinner-border-sm"
-    role="status"
-    aria-hidden="true"
-  ></span>
+  >
+  @if (submittingForm) {
+    <span
+      class="spinner-border spinner-border-sm"
+      role="status"
+      aria-hidden="true"
+    ></span>
+  }
   <span>{{ label }}</span>
 </button>

@@ -13,15 +13,14 @@ of the MIT license. See the LICENSE file for details.
     <app-back-home></app-back-home>
     <div class="card shadow-sm p-5 mb-2 w-100">
       <div class="cstm_form-icon align-self-center mb-3">
-        <ng-container *ngIf="!isWebAuthn; else fingerPrint">
+        @if (!isWebAuthn) {
           <app-key-icon size="72px"></app-key-icon>
-        </ng-container>
+        } @else {
+          <app-finger-print-icon size="72px"></app-finger-print-icon>
+        }
       </div>
       <app-davinci-form (flowComplete)="onCompleteFlow()"></app-davinci-form>
     </div>
   </div>
 </div>
 
-<ng-template #fingerPrint>
-  <app-finger-print-icon size="72px"></app-finger-print-icon>
-</ng-template>

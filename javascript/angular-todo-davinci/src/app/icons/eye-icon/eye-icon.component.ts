@@ -9,10 +9,13 @@
  */
 
 import { Component, Input } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
 
 @Component({
-  selector: 'app-eye-icon',
-  templateUrl: './eye-icon.component.html',
+    selector: 'app-eye-icon',
+    templateUrl: './eye-icon.component.html',
+    standalone: true,
+    imports: [NgTemplateOutlet],
 })
 export class EyeIconComponent {
   @Input() visible = true;

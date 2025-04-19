@@ -11,8 +11,9 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-verified-icon',
-  templateUrl: './verified-icon.component.html',
+    selector: 'app-verified-icon',
+    templateUrl: './verified-icon.component.html',
+    standalone: true,
 })
 export class VerifiedIconComponent {
   @Input() size = '24px';

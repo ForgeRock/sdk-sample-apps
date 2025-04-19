@@ -8,24 +8,26 @@
  * of the MIT license. See the LICENSE file for details.
  */
 
-import { OnInit } from '@angular/core';
+import { OnInit, inject } from '@angular/core';
 import { Component } from '@angular/core';
 import { FRUser } from '@forgerock/javascript-sdk';
 import { Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
+import { LoadingComponent } from '../../utilities/loading/loading.component';
 
 /**
  * Used to log the user out whilst a spinner and message are displayed
  */
 @Component({
-  selector: 'app-logout',
-  templateUrl: './logout.component.html',
+    selector: 'app-logout',
+    templateUrl: './logout.component.html',
+    standalone: true,
+    imports: [LoadingComponent],
 })
 export class LogoutComponent implements OnInit {
-  constructor(
-    private router: Router,
-    public userService: UserService,
-  ) {}
+  private router = inject(Router);
+  userService = inject(UserService);
+
 
   /**
    * As soon as this component loads we want to log the user out

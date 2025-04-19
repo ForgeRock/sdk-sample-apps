@@ -11,17 +11,13 @@
 import { NgModule } from '@angular/core';
 import { Routes } from '@angular/router';
 import { RouterModule } from '@angular/router';
-import { HomeComponent } from './views/home/home.component';
-import { LoginComponent } from './views/login/login.component';
-import { TodosComponent } from './views/todos/todos.component';
 import { AuthGuard } from './auth/auth.guard';
-import { LogoutComponent } from './features/logout/logout.component';
 
 const routes: Routes = [
-  { path: 'home', component: HomeComponent },
-  { path: 'login', component: LoginComponent },
-  { path: 'todos', canActivate: [AuthGuard], component: TodosComponent },
-  { path: 'logout', component: LogoutComponent },
+  { path: 'home', loadComponent: () => import('./views/home/home.component').then(m => m.HomeComponent) },
+  { path: 'login', loadComponent: () => import('./views/login/login.component').then(m => m.LoginComponent) },
+  { path: 'todos', canActivate: [AuthGuard], loadComponent: () => import('./views/todos/todos.component').then(m => m.TodosComponent) },
+  { path: 'logout', loadComponent: () => import('./features/logout/logout.component').then(m => m.LogoutComponent) },
   { path: '', redirectTo: '/home', pathMatch: 'full' }, // redirect to `first-component`
 ];
 

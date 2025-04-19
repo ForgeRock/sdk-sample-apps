@@ -11,8 +11,9 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-action-icon',
-  templateUrl: './action-icon.component.html',
+    selector: 'app-action-icon',
+    templateUrl: './action-icon.component.html',
+    standalone: true,
 })
 export class ActionIconComponent {
   @Input() size = '24px';

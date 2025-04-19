@@ -11,19 +11,23 @@ of the MIT license. See the LICENSE file for details.
 <app-header></app-header>
 <div>
   <!--
-    Display a personalised welcome if the user is authenticated
+  Display a personalised welcome if the user is authenticated
   -->
-  <div *ngIf="userService.info">
-    <div class="cstm_container container-fluid" *ngIf="userService.info">
-      <p class="alert alert-success d-flex align-items-center mt-5" role="alert">
-        <app-verified-icon size="36px"></app-verified-icon>
-        <span class="ps-2">
-          Welcome back, {{ userService.info.name }}!
-          <a class="cstm_verified-alert-link" [routerLink]="'/todos'"> Manage your todos here </a>
-        </span>
-      </p>
+  @if (userService.info) {
+    <div>
+      @if (userService.info) {
+        <div class="cstm_container container-fluid">
+          <p class="alert alert-success d-flex align-items-center mt-5" role="alert">
+            <app-verified-icon size="36px"></app-verified-icon>
+            <span class="ps-2">
+              Welcome back, {{ userService.info.name }}!
+              <a class="cstm_verified-alert-link" [routerLink]="'/todos'"> Manage your todos here </a>
+            </span>
+          </p>
+        </div>
+      }
     </div>
-  </div>
+  }
 
   <div class="cstm_container container-fluid">
     <h1 class="cstm_head-text text-center">Protect with ForgeRock; Develop with Angular</h1>
@@ -44,24 +48,26 @@ of the MIT license. See the LICENSE file for details.
       for
       <a
         href="https://github.com/ForgeRock/forgerock-javascript-sdk/tree/master/samples/angular-todo"
-      >
+        >
         this project can be found on Github
       </a>
       and run locally for experimentation. For more on our SDKs,
       <a href="https://sdks.forgerock.com/"> you can find our official SDK documentation here. </a>
     </p>
 
-    <!-- 
-      Display prompts to sign in or register if the user is not authenticated
-     -->
-    <div *ngIf="!userService.info">
-      <h2 class="fs-4 fw-normal pt-3 pb-1">Getting started</h2>
-      <p>
-        To use this app,
-        <a [routerLink]="'/register'">create an account now</a>! Already have an account?
-        <a [routerLink]="'/login'">Sign in</a> to get things done!
-      </p>
-    </div>
+    <!--
+    Display prompts to sign in or register if the user is not authenticated
+    -->
+    @if (!userService.info) {
+      <div>
+        <h2 class="fs-4 fw-normal pt-3 pb-1">Getting started</h2>
+        <p>
+          To use this app,
+          <a [routerLink]="'/register'">create an account now</a>! Already have an account?
+          <a [routerLink]="'/login'">Sign in</a> to get things done!
+        </p>
+      </div>
+    }
   </div>
 </div>
 <app-footer></app-footer>

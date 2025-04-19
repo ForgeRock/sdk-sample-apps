@@ -15,7 +15,7 @@ of the MIT license. See the LICENSE file for details.
 
   <div class="card shadow-sm mb-5">
     <!--
-      Allow the user to easily create a new Todo
+    Allow the user to easily create a new Todo
     -->
     <form (ngSubmit)="create(newTodo)" #newTodoForm="ngForm" class="p-3 d-flex" ngNativeValidate>
       <div class="cstm_todos-input cstm_form-floating form-floating flex-grow-1">
@@ -27,33 +27,34 @@ of the MIT license. See the LICENSE file for details.
           required=""
           [(ngModel)]="newTodo.title"
           name="title"
-        />
+          />
         <label for="newTodo">What needs doing?</label>
       </div>
       <button type="submit" class="btn btn-primary ms-2">Create</button>
     </form>
 
     <!--
-      Display list of existing Todos
+    Display list of existing Todos
     -->
     <ng-container [ngTemplateOutlet]="todos.length > 0 ? todolist : empty">
       <ng-template #todolist>
         <ul class="list-group list-group-flush">
           <!--
-            For each Todo observe their outputs for completed, edit or delete events.
+          For each Todo observe their outputs for completed, edit or delete events.
           -->
-          <app-todo
-            *ngFor="let todo of todos"
-            [todo]="todo"
-            (completed)="complete(todo)"
-            (edit)="setEditTodo(todo)"
-            (delete)="setDeleteTodo(todo)"
-          ></app-todo>
+          @for (todo of todos; track todo) {
+            <app-todo
+              [todo]="todo"
+              (completed)="complete(todo)"
+              (edit)="setEditTodo(todo)"
+              (delete)="setDeleteTodo(todo)"
+            ></app-todo>
+          }
         </ul>
 
         <!--
-          If a child Todo component has indicated that it is ready for editing, display a modal allowing the user to edit and submit or cancel.
-          This is triggered from the Todo component using the modal ID.
+        If a child Todo component has indicated that it is ready for editing, display a modal allowing the user to edit and submit or cancel.
+        This is triggered from the Todo component using the modal ID.
         -->
         <div
           class="modal fade"
@@ -62,52 +63,56 @@ of the MIT license. See the LICENSE file for details.
           tabIndex="-1"
           aria-modal="true"
           role="dialog"
-        >
+          >
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
                 <h4 class="modal-title">Edit Todo</h4>
               </div>
-              <form class="modal-body" (ngSubmit)="update(editTodo)" *ngIf="editTodo">
-                <div class="cstm_todos-input cstm_form-floating form-floating flex-grow-1">
-                  <input
-                    id="editTodo"
-                    type="text"
-                    class="cstm_form-control form-control bg-transparent"
-                    [defaultValue]="editTodo.title"
-                    [(ngModel)]="editTodo.title"
-                    required="required"
-                  />
-                  <label for="editTodo">Update todo text</label>
+              @if (editTodo) {
+                <form class="modal-body" (ngSubmit)="update(editTodo)">
+                  <div class="cstm_todos-input cstm_form-floating form-floating flex-grow-1">
+                    <input
+                      id="editTodo"
+                      type="text"
+                      class="cstm_form-control form-control bg-transparent"
+                      [defaultValue]="editTodo.title"
+                      [(ngModel)]="editTodo.title"
+                      required="required"
+                      />
+                    <label for="editTodo">Update todo text</label>
+                  </div>
+                </form>
+              }
+              @if (editTodo) {
+                <div class="modal-footer">
+                  <button
+                    id="closeEditModalBtn"
+                    type="button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#editModal"
+                    class="btn btn-secondary"
+                    >
+                    Close
+                  </button>
+                  <button
+                    type="button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#editModal"
+                    class="btn btn-primary"
+                    (click)="update(editTodo)"
+                    >
+                    Update Todo
+                  </button>
                 </div>
-              </form>
-              <div class="modal-footer" *ngIf="editTodo">
-                <button
-                  id="closeEditModalBtn"
-                  type="button"
-                  data-bs-toggle="modal"
-                  data-bs-target="#editModal"
-                  class="btn btn-secondary"
-                >
-                  Close
-                </button>
-                <button
-                  type="button"
-                  data-bs-toggle="modal"
-                  data-bs-target="#editModal"
-                  class="btn btn-primary"
-                  (click)="update(editTodo)"
-                >
-                  Update Todo
-                </button>
-              </div>
+              }
             </div>
           </div>
         </div>
 
         <!--
-          If a child Todo component has indicated that it is ready for deletion, display a modal asking for confirmation that they meant to do this.
-          This is triggered from the Todo component using the modal ID.
+        If a child Todo component has indicated that it is ready for deletion, display a modal asking for confirmation that they meant to do this.
+        This is triggered from the Todo component using the modal ID.
         -->
         <div
           class="modal fade"
@@ -116,7 +121,7 @@ of the MIT license. See the LICENSE file for details.
           tabIndex="-1"
           aria-modal="true"
           role="dialog"
-        >
+          >
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-body pt-4 px-4">
@@ -128,19 +133,20 @@ of the MIT license. See the LICENSE file for details.
                   data-bs-toggle="modal"
                   data-bs-target="#deleteModal"
                   class="btn btn-secondary"
-                >
+                  >
                   Close
                 </button>
-                <button
-                  *ngIf="deleteTodo"
-                  type="button"
-                  data-bs-toggle="modal"
-                  data-bs-target="#deleteModal"
-                  class="btn btn-danger"
-                  (click)="delete(deleteTodo)"
-                >
-                  Delete Todo
-                </button>
+                @if (deleteTodo) {
+                  <button
+                    type="button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#deleteModal"
+                    class="btn btn-danger"
+                    (click)="delete(deleteTodo)"
+                    >
+                    Delete Todo
+                  </button>
+                }
               </div>
             </div>
           </div>
@@ -148,7 +154,7 @@ of the MIT license. See the LICENSE file for details.
       </ng-template>
 
       <!--
-        No Todos to show
+      No Todos to show
       -->
       <ng-template #empty>
         <ul class="list-group list-group-flush mb-1">

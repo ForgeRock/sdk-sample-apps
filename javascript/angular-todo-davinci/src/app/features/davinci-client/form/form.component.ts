@@ -7,12 +7,20 @@
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
  */
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, inject } from '@angular/core';
 import { TokenManager } from '@forgerock/javascript-sdk';
 import { DavinciService } from '../../../services/davinci.service';
 import { UserService } from '../../../services/user.service';
 import createConfig from '../../../../utilities/create-config';
 import { DaVinciConfig } from '@forgerock/davinci-client/types';
+import { FormsModule } from '@angular/forms';
+
+import { ErrorMessageComponent } from '../error-message/error-message.component';
+import { ProtectComponent } from '../protect/protect.component';
+import { TextInputComponent } from '../text-input/text-input.component';
+import { PasswordComponent } from '../password/password.component';
+import { SubmitButtonComponent } from '../submit-button/submit-button.component';
+import { FlowButtonComponent } from '../flow-button/flow-button.component';
 
 interface Collector {
   category: string;
@@ -33,10 +41,23 @@ interface Collector {
 }
 
 @Component({
-  selector: 'app-davinci-form',
-  templateUrl: './form.component.html',
+    selector: 'app-davinci-form',
+    templateUrl: './form.component.html',
+    standalone: true,
+    imports: [
+    FormsModule,
+    ErrorMessageComponent,
+    ProtectComponent,
+    TextInputComponent,
+    PasswordComponent,
+    SubmitButtonComponent,
+    FlowButtonComponent
+],
 })
 export class DavinciFormComponent implements OnInit {
+  private readonly davinciService = inject(DavinciService);
+  private readonly userService = inject(UserService);
+
   @Output() flowComplete = new EventEmitter<void>();
 
   // TODO: Get proper typings and delete this and the next line
@@ -47,8 +68,6 @@ export class DavinciFormComponent implements OnInit {
   collectors: Collector[] = [];
   pageHeader = '';
   errorMessage = '';
-
-  constructor(private readonly davinciService: DavinciService, private readonly userService: UserService) {}
 
   async ngOnInit(): Promise<void> {
     const config: DaVinciConfig = createConfig();

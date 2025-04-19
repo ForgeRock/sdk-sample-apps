@@ -11,8 +11,9 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-todos-icon',
-  templateUrl: './todos-icon.component.html',
+    selector: 'app-todos-icon',
+    templateUrl: './todos-icon.component.html',
+    standalone: true,
 })
 export class TodosIconComponent {
   @Input() size = '24px';

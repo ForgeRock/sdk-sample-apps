@@ -10,13 +10,22 @@
 
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Todo } from './todo';
+import { NgClass } from '@angular/common';
+import { TodoIconComponent } from '../../icons/todo-icon/todo-icon.component';
+import { ActionIconComponent } from '../../icons/action-icon/action-icon.component';
 
 /**
  * Used to display a Todo retrieved from the backend, handles user interaction with an existing Todo
  */
 @Component({
-  selector: 'app-todo',
-  templateUrl: './todo.component.html',
+    selector: 'app-todo',
+    templateUrl: './todo.component.html',
+    standalone: true,
+    imports: [
+    NgClass,
+    TodoIconComponent,
+    ActionIconComponent
+],
 })
 export class TodoComponent {
   /**

@@ -9,7 +9,7 @@
  * of the MIT license. See the LICENSE file for details.
  */
 
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
 import { UserService } from '../services/user.service';
 import { TokenStorage, UserManager } from '@forgerock/javascript-sdk';
@@ -18,10 +18,9 @@ import { TokenStorage, UserManager } from '@forgerock/javascript-sdk';
   providedIn: 'root',
 })
 export class AuthGuard {
-  constructor(
-    public userService: UserService,
-    private router: Router,
-  ) {}
+  userService = inject(UserService);
+  private router = inject(Router);
+
 
   /**
    * Extends CanActivate to protect selected routes from unauthenticated access

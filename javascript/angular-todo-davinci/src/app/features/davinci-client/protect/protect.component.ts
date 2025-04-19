@@ -11,8 +11,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
-  selector: 'app-protect',
-  templateUrl: './protect.component.html',
+    selector: 'app-protect',
+    templateUrl: './protect.component.html',
+    standalone: true,
 })
 export class ProtectComponent implements OnInit {
   @Input() label = '';

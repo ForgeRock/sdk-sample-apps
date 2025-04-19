@@ -11,8 +11,9 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-home-icon',
-  templateUrl: './home-icon.component.html',
+    selector: 'app-home-icon',
+    templateUrl: './home-icon.component.html',
+    standalone: true,
 })
 export class HomeIconComponent {
   @Input() size = '24px';

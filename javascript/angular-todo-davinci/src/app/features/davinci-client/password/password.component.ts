@@ -9,10 +9,13 @@
  */
 
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { EyeIconComponent } from '../../../icons/eye-icon/eye-icon.component';
 
 @Component({
-  selector: 'app-password',
-  templateUrl: './password.component.html',
+    selector: 'app-password',
+    templateUrl: './password.component.html',
+    standalone: true,
+    imports: [EyeIconComponent],
 })
 export class PasswordComponent {
   @Input() key: string;

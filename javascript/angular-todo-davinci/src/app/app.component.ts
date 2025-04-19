@@ -8,29 +8,38 @@
  * of the MIT license. See the LICENSE file for details.
  */
 
-import { OnInit } from '@angular/core';
+import { OnInit, inject } from '@angular/core';
 import { Component } from '@angular/core';
 import { Config, UserManager } from '@forgerock/javascript-sdk';
 import { AsyncConfigOptions } from '@forgerock/javascript-sdk/src/config/interfaces';
 import { UserService } from './services/user.service';
-import { Router } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart } from '@angular/router';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import createConfig from '../utilities/create-config';
 
+import { LoadingComponent } from './utilities/loading/loading.component';
+
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    standalone: true,
+    imports: [
+    RouterOutlet,
+    LoadingComponent
+],
 })
 export class AppComponent implements OnInit {
+  userService = inject(UserService);
+  private router = inject(Router);
+
   title = 'angular-todo-prototype';
   loading = false;
 
-  constructor(
-    public userService: UserService,
-    private router: Router,
-  ) {
+  constructor() {
+    const router = this.router;
+
     const navStart = router.events.pipe(
       filter((evt) => evt instanceof NavigationStart),
     ) as Observable<NavigationStart>;

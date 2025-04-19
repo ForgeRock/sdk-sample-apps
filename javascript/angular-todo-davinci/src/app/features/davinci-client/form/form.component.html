@@ -8,38 +8,47 @@ This software may be modified and distributed under the terms
 of the MIT license. See the LICENSE file for details.
 -->
 <form (submit)="submitHandler($event)">
-  <h2 *ngIf="pageHeader">{{ pageHeader }}</h2>
-  <app-error-message *ngIf="errorMessage" [message]="errorMessage" />
-  <ng-container *ngIf="collectors.length">
-    <ng-container *ngFor="let collector of collectors">
-      <app-protect
-        *ngIf="collector.type === 'TextCollector' && collector.name === 'protectsdk'"
-        [label]="collector.output.label"
-        (protectProfile)="updateCollector(davinciClient.update(collector), $event)"
-      />
-      <app-text-input
-        *ngIf="collector.type === 'TextCollector' && collector.name !== 'protectsdk'"
-        [key]="collector.output.key"
-        [label]="collector.output.label"
-        (valueUpdated)="updateCollector(davinciClient.update(collector), $event)"
-      />
-      <app-password
-        *ngIf="collector.type === 'PasswordCollector'"
-        [key]="collector.output.key"
-        [label]="collector.output.label"
-        (valueUpdated)="updateCollector(davinciClient.update(collector), $event)"
-      />
-      <app-submit-button
-        *ngIf="collector.type === 'SubmitCollector'"
-        [key]="collector.output.key"
-        [label]="collector.output.label"
-        [submittingForm]="isSubmittingForm"
-      />
-      <app-flow-button
-        *ngIf="collector.type === 'FlowCollector'"
-        [label]="collector.output.label"
-        (clicked)="onFlowButtonClicked(collector)"
-      />
-    </ng-container>
-  </ng-container>
+  @if (pageHeader) {
+    <h2>{{ pageHeader }}</h2>
+  }
+  @if (errorMessage) {
+    <app-error-message [message]="errorMessage" />
+  }
+  @if (collectors.length) {
+    @for (collector of collectors; track collector) {
+      @if (collector.type === 'TextCollector' && collector.name === 'protectsdk') {
+        <app-protect
+          [label]="collector.output.label"
+          (protectProfile)="updateCollector(davinciClient.update(collector), $event)"
+          />
+      }
+      @if (collector.type === 'TextCollector' && collector.name !== 'protectsdk') {
+        <app-text-input
+          [key]="collector.output.key"
+          [label]="collector.output.label"
+          (valueUpdated)="updateCollector(davinciClient.update(collector), $event)"
+          />
+      }
+      @if (collector.type === 'PasswordCollector') {
+        <app-password
+          [key]="collector.output.key"
+          [label]="collector.output.label"
+          (valueUpdated)="updateCollector(davinciClient.update(collector), $event)"
+          />
+      }
+      @if (collector.type === 'SubmitCollector') {
+        <app-submit-button
+          [key]="collector.output.key"
+          [label]="collector.output.label"
+          [submittingForm]="isSubmittingForm"
+          />
+      }
+      @if (collector.type === 'FlowCollector') {
+        <app-flow-button
+          [label]="collector.output.label"
+          (clicked)="onFlowButtonClicked(collector)"
+          />
+      }
+    }
+  }
 </form>
