@@ -8,7 +8,8 @@
  * of the MIT license. See the LICENSE file for details.
  */
 
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { Updater } from '@forgerock/davinci-client/types';
 
 @Component({
     selector: 'app-text-input',
@@ -18,9 +19,9 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 export class TextInputComponent {
   @Input() key: string;
   @Input() label: string;
-  @Output() valueUpdated = new EventEmitter<string>();
+  @Input() update: Updater | null = null;
 
-  onChange(event: Event): void {
-    this.valueUpdated.emit((event.target as HTMLInputElement).value);
+  onBlur(event: Event): void {
+    this.update((event.target as HTMLInputElement).value);
   }
 }

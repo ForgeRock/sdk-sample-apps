@@ -8,8 +8,9 @@
  * of the MIT license. See the LICENSE file for details.
  */
 
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { EyeIconComponent } from '../../../icons/eye-icon/eye-icon.component';
+import { Updater } from '@forgerock/davinci-client/types';
 
 @Component({
     selector: 'app-password',
@@ -20,7 +21,7 @@ import { EyeIconComponent } from '../../../icons/eye-icon/eye-icon.component';
 export class PasswordComponent {
   @Input() key: string;
   @Input() label: string;
-  @Output() valueUpdated = new EventEmitter<string>();
+  @Input() update: Updater | null = null;
 
   isVisible = false;
 
@@ -28,7 +29,7 @@ export class PasswordComponent {
     this.isVisible = !this.isVisible;
   }
 
-  updateValue(event: Event): void {
-    this.valueUpdated.emit((event.target as HTMLInputElement).value);
+  onBlur(event: Event): void {
+    this.update((event.target as HTMLInputElement).value);
   }
 }

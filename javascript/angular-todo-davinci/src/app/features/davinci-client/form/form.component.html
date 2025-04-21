@@ -1,54 +1,61 @@
 <!--
 angular-todo-prototype
 
-davinci-flow.component.html
+form.component.html
 
 Copyright (c) 2021 ForgeRock. All rights reserved.
 This software may be modified and distributed under the terms
 of the MIT license. See the LICENSE file for details.
 -->
-<form (submit)="submitHandler($event)">
-  @if (pageHeader) {
-    <h2>{{ pageHeader }}</h2>
-  }
-  @if (errorMessage) {
-    <app-error-message [message]="errorMessage" />
-  }
-  @if (collectors.length) {
-    @for (collector of collectors; track collector) {
+
+<form (submit)="submitHandler($event)">  
+  @if (!node() || node().status === 'start') {
+    <p>Checking your session...</p>
+  } @else if (node().status === 'success') {
+    <p>Success, you're logged in.</p>
+  } @else if (node().status === 'continue' && collectors().length) {
+    @if (formName()) {
+      <h2>{{ formName() }}</h2>
+    }
+    @for (collector of collectors(); track collector) {
       @if (collector.type === 'TextCollector' && collector.name === 'protectsdk') {
         <app-protect
           [label]="collector.output.label"
-          (protectProfile)="updateCollector(davinciClient.update(collector), $event)"
+          [update]="updater()(collector)"
+          [submitProtect]="submitProtectCallback"
           />
-      }
-      @if (collector.type === 'TextCollector' && collector.name !== 'protectsdk') {
-        <app-text-input
-          [key]="collector.output.key"
-          [label]="collector.output.label"
-          (valueUpdated)="updateCollector(davinciClient.update(collector), $event)"
-          />
-      }
-      @if (collector.type === 'PasswordCollector') {
-        <app-password
-          [key]="collector.output.key"
-          [label]="collector.output.label"
-          (valueUpdated)="updateCollector(davinciClient.update(collector), $event)"
-          />
-      }
-      @if (collector.type === 'SubmitCollector') {
-        <app-submit-button
-          [key]="collector.output.key"
-          [label]="collector.output.label"
-          [submittingForm]="isSubmittingForm"
-          />
-      }
-      @if (collector.type === 'FlowCollector') {
-        <app-flow-button
-          [label]="collector.output.label"
-          (clicked)="onFlowButtonClicked(collector)"
-          />
+      } @else {
+        @switch (collector.type) {
+          @case ('TextCollector'){
+            <app-text-input
+              [key]="collector.output.key"
+              [label]="collector.output.label"
+              [update]="updater()(collector)"
+              />
+          } 
+          @case ('PasswordCollector'){
+            <app-password
+              [key]="collector.output.key"
+              [label]="collector.output.label"
+              (update)="updater()(collector)"
+              />
+          }
+          @case ('SubmitCollector'){
+            <app-submit-button
+              [key]="collector.output.key"
+              [label]="collector.output.label"
+              [submittingForm]="isSubmittingForm"
+              />
+          }
+          @default {
+            <p>Unknown collector</p>
+          }
+        }
       }
     }
+  } @else if (node().status === 'error') {
+    <app-error-message [message]="errorMessage()" />
+  } @else {
+    <app-error-message message="Unknown node status" />
   }
 </form>
