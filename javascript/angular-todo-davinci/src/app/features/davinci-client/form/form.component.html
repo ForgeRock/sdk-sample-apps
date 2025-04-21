@@ -9,13 +9,26 @@ of the MIT license. See the LICENSE file for details.
 -->
 
 <form (submit)="submitHandler($event)">
+  @if (formAction()) {
+    <div class="cstm_form-icon text-center mb-3">
+      @switch (formAction()) {
+        @case ('SIGNON') {
+          <app-key-icon size="72px" />
+        }
+        @case ('REGISTER') {
+          <app-new-user-icon size="72px" />
+        }
+        @default {}
+      }
+    </div>
+  }
   @if (!node() || node().status === 'start') {
-    <p>Checking your session...</p>
+    <app-loading message="Checking your session..."></app-loading>
   } @else if (node().status === 'success') {
-    <p>Success, you're logged in.</p>
+    <app-alert type="success" message="Success! You're logged in."></app-alert>
   } @else if (node().status === 'continue' && collectors().length) {
-    @if (formName()) {
-      <h2>{{ formName() }}</h2>
+    @if (formName() && !hasProtectCollector(collectors())) {
+      <h1 class="text-center fs-2 mb-3">{{ formName() }}</h1>
     }
     @for (collector of collectors(); track collector) {
       @if (collector.type === 'TextCollector' && collector.name === 'protectsdk') {
@@ -37,7 +50,7 @@ of the MIT license. See the LICENSE file for details.
             <app-password
               [key]="collector.output.key"
               [label]="collector.output.label"
-              (update)="updater()(collector)"
+              [update]="updater()(collector)"
             />
           }
           @case ('SubmitCollector') {
@@ -47,15 +60,18 @@ of the MIT license. See the LICENSE file for details.
               [submittingForm]="isSubmittingForm"
             />
           }
+          @case ('FlowCollector') {
+            <app-flow-link [collector]="collector" [startNewFlow]="startNewFlow" />
+          }
           @default {
-            <p>Unknown collector</p>
+            <app-unknown [collector]="collector" />
           }
         }
       }
     }
   } @else if (node().status === 'error') {
-    <app-error-message [message]="errorMessage()" />
+    <app-alert type="error" [message]="errorMessage()" />
   } @else {
-    <app-error-message message="Unknown node status" />
+    <app-alert type="error" message="Unknown node status" />
   }
 </form>

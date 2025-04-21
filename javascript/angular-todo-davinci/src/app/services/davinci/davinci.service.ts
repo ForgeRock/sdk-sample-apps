@@ -24,7 +24,7 @@ import {
 
 @Injectable()
 export class DavinciService {
-  private readonly client: WritableSignal<DaVinciClient | null> = signal(null);
+  private client: WritableSignal<DaVinciClient | null> = signal(null);
   readonly node: WritableSignal<DaVinciNode | null> = signal(null);
   collectors: Signal<Collectors[]> = computed(() => {
     if (this.node()?.status === 'continue') {
@@ -123,7 +123,7 @@ export class DavinciService {
    * @function startNewFlow - Starts a new DaVinci flow from a flow collector
    * @returns {Promise<void>}
    */
-  async startNewFlow(collector: FlowCollector) {
+  startNewFlowCallback = async (collector: FlowCollector) => {
     /** *********************************************************************
      * SDK INTEGRATION POINT
      * Summary: Start a new DaVinci flow from a flow collector
@@ -148,5 +148,5 @@ export class DavinciService {
     } else {
       console.error('Missing client to start new flow');
     }
-  }
+  };
 }

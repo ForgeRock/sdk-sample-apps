@@ -10,28 +10,21 @@
  */
 
 import { Injectable, inject } from '@angular/core';
-import { ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
-import { UserService } from '../services/user.service';
+import { UrlTree, Router } from '@angular/router';
 import { TokenStorage, UserManager } from '@forgerock/javascript-sdk';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthGuard {
-  userService = inject(UserService);
-  private router = inject(Router);
+  private readonly router = inject(Router);
 
   /**
    * Extends CanActivate to protect selected routes from unauthenticated access
    *
-   * @param next - Route that the user is trying to access
-   * @param state - Router state
    * @returns Promise - Boolean or route to redirect the user to
    */
-  async canActivate(
-    next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot,
-  ): Promise<true | UrlTree> {
+  async canActivate(): Promise<true | UrlTree> {
     const loginUrl = this.router.parseUrl('/login');
     try {
       // Assume user is likely authenticated if there are tokens

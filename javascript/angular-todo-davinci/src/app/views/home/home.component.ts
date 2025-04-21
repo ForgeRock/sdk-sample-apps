@@ -26,5 +26,8 @@ import { FooterComponent } from '../../layout/footer/footer.component';
   imports: [HeaderComponent, VerifiedIconComponent, RouterLink, FooterComponent],
 })
 export class HomeComponent {
-  userService = inject(UserService);
+  private readonly userService = inject(UserService);
+
+  username = this.userService.username;
+  isAuthenticated = this.userService.isAuthenticated;
 }

@@ -13,21 +13,16 @@ of the MIT license. See the LICENSE file for details.
   <!--
   Display a personalised welcome if the user is authenticated
   -->
-  @if (userService.info) {
-    <div>
-      @if (userService.info) {
-        <div class="cstm_container container-fluid">
-          <p class="alert alert-success d-flex align-items-center mt-5" role="alert">
-            <app-verified-icon size="36px"></app-verified-icon>
-            <span class="ps-2">
-              Welcome back, {{ userService.info.name }}!
-              <a class="cstm_verified-alert-link" [routerLink]="'/todos'">
-                Manage your todos here
-              </a>
-            </span>
-          </p>
-        </div>
-      }
+
+  @if (isAuthenticated) {
+    <div class="cstm_container container-fluid">
+      <p class="alert alert-success d-flex align-items-center mt-5" role="alert">
+        <app-verified-icon size="36px"></app-verified-icon>
+        <span class="ps-2">
+          Welcome back, {{ username }}!
+          <a class="cstm_verified-alert-link" [routerLink]="'/todos'"> Manage your todos here </a>
+        </span>
+      </p>
     </div>
   }
 
@@ -60,7 +55,7 @@ of the MIT license. See the LICENSE file for details.
     <!--
     Display prompts to sign in or register if the user is not authenticated
     -->
-    @if (!userService.info) {
+    @if (!isAuthenticated) {
       <div>
         <h2 class="fs-4 fw-normal pt-3 pb-1">Getting started</h2>
         <p>

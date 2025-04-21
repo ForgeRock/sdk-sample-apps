@@ -11,7 +11,7 @@
 import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { UserService } from '../../services/user.service';
-import { NgClass, NgTemplateOutlet } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { ForgerockIconComponent } from '../../icons/forgerock-icon/forgerock-icon.component';
 import { AngularIconComponent } from '../../icons/angular-icon/angular-icon.component';
 import { HomeIconComponent } from '../../icons/home-icon/home-icon.component';
@@ -30,13 +30,17 @@ import { AccountIconComponent } from '../../icons/account-icon/account-icon.comp
     NgClass,
     ForgerockIconComponent,
     AngularIconComponent,
-    NgTemplateOutlet,
     HomeIconComponent,
     TodosIconComponent,
     AccountIconComponent,
   ],
 })
 export class HeaderComponent {
-  userService = inject(UserService);
-  router = inject(Router);
+  private readonly routerService = inject(Router);
+  private readonly userService = inject(UserService);
+
+  router = this.routerService;
+  isAuthenticated = this.userService.isAuthenticated;
+  username = this.userService.username;
+  email = this.userService.email;
 }

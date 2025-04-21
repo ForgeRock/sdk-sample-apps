@@ -9,9 +9,6 @@
  */
 
 import { Injectable } from '@angular/core';
-import { davinci } from '@forgerock/davinci-client';
-import { DaVinciConfig } from '@forgerock/davinci-client/types';
-import { UserManager } from '@forgerock/javascript-sdk';
 
 /**
  * Used to share user state between components
@@ -28,17 +25,6 @@ export class UserService {
   /**
    * State representing previously retrieved user information
    */
-  info?: Record<string, unknown>;
-
-  loginClient: unknown = null;
-
-  async initLoginClient(config: DaVinciConfig): Promise<void> {
-    this.loginClient = await davinci({ config });
-  }
-
-  async populateUserInfo(): Promise<void> {
-    const info = (await UserManager.getCurrentUser()) as Record<string, unknown>;
-    this.isAuthenticated = true;
-    this.info = info;
-  }
+  username: string = '';
+  email: string = '';
 }

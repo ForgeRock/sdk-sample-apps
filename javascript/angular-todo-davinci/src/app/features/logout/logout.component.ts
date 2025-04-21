@@ -11,7 +11,6 @@
 import { OnInit, inject } from '@angular/core';
 import { Component } from '@angular/core';
 import { FRUser } from '@forgerock/javascript-sdk';
-import { Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { LoadingComponent } from '../../utilities/loading/loading.component';
 
@@ -25,8 +24,7 @@ import { LoadingComponent } from '../../utilities/loading/loading.component';
   imports: [LoadingComponent],
 })
 export class LogoutComponent implements OnInit {
-  private router = inject(Router);
-  userService = inject(UserService);
+  private readonly userService = inject(UserService);
 
   /**
    * As soon as this component loads we want to log the user out
@@ -49,19 +47,12 @@ export class LogoutComponent implements OnInit {
        * APIs are called and we get a 401 response, but here we respond to user
        * input clicking logout.
        ********************************************************************* */
-      await FRUser.logout();
-      this.userService.info = undefined;
+      await FRUser.logout({ logoutRedirectUri: window.location.origin });
+      this.userService.username = '';
+      this.userService.email = '';
       this.userService.isAuthenticated = false;
-      setTimeout(() => this.redirectToHome(), 1000);
     } catch (err) {
       console.error(`Error: logout did not successfully complete; ${err}`);
     }
-  }
-
-  /**
-   * Redirect the user to the home page
-   */
-  redirectToHome() {
-    this.router.navigateByUrl('/home');
   }
 }

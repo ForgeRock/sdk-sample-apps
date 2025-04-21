@@ -14,7 +14,6 @@ import { Todo } from '../../features/todo/todo';
 import { TodoService } from '../../services/todo.service';
 import { HeaderComponent } from '../../layout/header/header.component';
 import { FormsModule } from '@angular/forms';
-import { NgTemplateOutlet } from '@angular/common';
 import { TodoComponent } from '../../features/todo/todo.component';
 import { FooterComponent } from '../../layout/footer/footer.component';
 
@@ -25,10 +24,10 @@ import { FooterComponent } from '../../layout/footer/footer.component';
   selector: 'app-todos',
   templateUrl: './todos.component.html',
   standalone: true,
-  imports: [HeaderComponent, FormsModule, NgTemplateOutlet, TodoComponent, FooterComponent],
+  imports: [HeaderComponent, FormsModule, TodoComponent, FooterComponent],
 })
 export class TodosComponent implements OnInit {
-  private todoService = inject(TodoService);
+  private readonly todoService = inject(TodoService);
 
   /**
    * The existing Todos

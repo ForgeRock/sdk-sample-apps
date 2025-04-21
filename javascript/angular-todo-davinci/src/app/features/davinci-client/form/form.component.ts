@@ -9,14 +9,23 @@
  */
 import { Component, EventEmitter, OnInit, Output, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-// import { UserService } from '../../../services/user.service';
+import { Router } from '@angular/router';
+import { UserService } from '../../../services/user.service';
 import { DavinciService } from '../../../services/davinci/davinci.service';
-import { ErrorMessageComponent } from '../error-message/error-message.component';
+import { OAuthService } from '../../../services/oauth.service';
+
 import { ProtectComponent } from '../protect/protect.component';
 import { TextInputComponent } from '../text-input/text-input.component';
 import { PasswordComponent } from '../password/password.component';
 import { SubmitButtonComponent } from '../submit-button/submit-button.component';
-import { FlowButtonComponent } from '../flow-button/flow-button.component';
+import { FlowButtonComponent } from '../flow-link/flow-link.component';
+import { LoadingComponent } from '../../../utilities/loading/loading.component';
+import { AlertComponent } from '../alert/alert.component';
+import { UnknownComponent } from '../unknown/unknown.component';
+import { KeyIconComponent } from '../../../icons/key-icon/key-icon.component';
+import { NewUserIconComponent } from '../../../icons/new-user-icon/new-user-icon.component';
+
+import { SuccessNode } from '@forgerock/davinci-client/types';
 
 @Component({
   selector: 'app-davinci-form',
@@ -24,31 +33,70 @@ import { FlowButtonComponent } from '../flow-button/flow-button.component';
   standalone: true,
   imports: [
     FormsModule,
-    ErrorMessageComponent,
     ProtectComponent,
     TextInputComponent,
     PasswordComponent,
     SubmitButtonComponent,
     FlowButtonComponent,
+    LoadingComponent,
+    AlertComponent,
+    UnknownComponent,
+    KeyIconComponent,
+    NewUserIconComponent,
   ],
-  providers: [DavinciService],
+  providers: [DavinciService, OAuthService],
 })
 export class DavinciFormComponent implements OnInit {
-  // private readonly userService = inject(UserService);
   private readonly davinciService = inject(DavinciService);
+  private readonly oauthService = inject(OAuthService);
+  private readonly userService = inject(UserService);
+  private readonly router = inject(Router);
 
   @Output() flowComplete = new EventEmitter<void>();
 
   node = this.davinciService.node;
   collectors = this.davinciService.collectors;
   updater = this.davinciService.updater;
+  startNewFlow = this.davinciService.startNewFlowCallback;
   formName = this.davinciService.formName;
   formAction = this.davinciService.formAction;
   errorMessage = this.davinciService.errorMessage;
   isSubmittingForm = false;
 
-  async ngOnInit(): Promise<void> {
-    await this.davinciService.initDavinci();
+  private finalizeAuthState(user: Record<string, string>): void {
+    /**
+     * Set user state/info in UserService
+     */
+    this.userService.username = `${user.given_name ?? ''} ${user.family_name ?? ''}`;
+    this.userService.email = user.email ?? '';
+    this.userService.isAuthenticated = true;
+  }
+
+  private async handleSuccess(node: SuccessNode): Promise<void> {
+    try {
+      const code = node.client?.authorization?.code ?? '';
+      const state = node.client?.authorization?.state ?? '';
+      const user = await this.oauthService.handleOAuth({ code, state });
+      console.log('user', user);
+      user && this.finalizeAuthState(user as Record<string, string>);
+
+      // Redirect back to the home page
+      this.router.navigateByUrl('/home');
+    } catch (error) {
+      console.error('Error handling success:', error);
+      this.userService.isAuthenticated = false;
+    }
+  }
+
+  /**
+   * @function hasProtectCollector - Determines if there is a Protect SDK collector
+   * @param {Object} collectors - An array of collectors from DaVinci
+   * @returns {boolean} - True if there is a Protect SDK collector otherwise false
+   */
+  hasProtectCollector(collectors) {
+    return collectors?.some(
+      (collector) => collector.type === 'TextCollector' && collector.name === 'protectsdk',
+    );
   }
 
   /**
@@ -63,12 +111,11 @@ export class DavinciFormComponent implements OnInit {
     event.preventDefault();
     this.isSubmittingForm = true;
 
-    console.log('submitForm');
-    // const nextNode = await this.davinciClient.next();
-    // this.mapRenderer(nextNode);
-
     try {
       await this.davinciService.setNext();
+      if (this.node().status === 'success') {
+        this.handleSuccess(this.node() as SuccessNode);
+      }
     } catch (error) {
       console.error(error);
     } finally {
@@ -76,23 +123,12 @@ export class DavinciFormComponent implements OnInit {
     }
   }
 
-  async completeFlow(): Promise<void> {
-    // const clientInfo = this.davinciService.client()?.getClient();
-    // let code = '';
-    // let state = '';
-    // if (clientInfo?.status === 'success') {
-    //   code = clientInfo.authorization?.code || '';
-    //   state = clientInfo.authorization?.state || '';
-    // }
-    // await TokenManager.getTokens({ query: { code, state } });
-    // await this.userService.populateUserInfo();
-    // this.flowComplete.emit();
-  }
+  async ngOnInit(): Promise<void> {
+    await this.davinciService.initDavinci();
+    console.log('intial node', this.node());
 
-  // async onFlowButtonClicked(collector: Collector) {
-  //   console.log('onFlowButtonClicked', collector);
-  //   const flow = this.davinciClient.flow({ action: collector.output.key });
-  //   const node = await flow(collector.output.key);
-  //   this.renderForm(node);
-  // }
+    if (this.node().status === 'success') {
+      this.handleSuccess(this.node() as SuccessNode);
+    }
+  }
 }

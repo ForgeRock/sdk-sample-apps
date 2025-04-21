@@ -28,10 +28,9 @@ import { LoadingComponent } from './utilities/loading/loading.component';
   imports: [RouterOutlet, LoadingComponent],
 })
 export class AppComponent implements OnInit {
-  userService = inject(UserService);
-  private router = inject(Router);
+  private readonly userService = inject(UserService);
+  private readonly router = inject(Router);
 
-  title = 'angular-todo-prototype';
   loading = false;
 
   constructor() {
@@ -88,9 +87,11 @@ export class AppComponent implements OnInit {
      ***************************************************************** */
     try {
       // Assume user is likely authenticated if there are tokens
-      const info = (await UserManager.getCurrentUser()) as Record<string, unknown>;
+      const user = (await UserManager.getCurrentUser()) as Record<string, unknown>;
       this.userService.isAuthenticated = true;
-      this.userService.info = info;
+      this.userService.username = `${user.given_name ?? ''} ${user.family_name ?? ''}`;
+      this.userService.email = `${user.email ?? ''}`;
+      console.log('Here:', user);
     } catch (err) {
       // User likely not authenticated
       console.log(err);
