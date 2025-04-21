@@ -10,12 +10,11 @@
 
 import { Component, Input } from '@angular/core';
 
-
 @Component({
-    selector: 'app-submit-button',
-    templateUrl: './submit-button.component.html',
-    standalone: true,
-    imports: [],
+  selector: 'app-submit-button',
+  templateUrl: './submit-button.component.html',
+  standalone: true,
+  imports: [],
 })
 export class SubmitButtonComponent {
   @Input() key: string;

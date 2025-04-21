@@ -22,13 +22,10 @@ import createConfig from '../utilities/create-config';
 import { LoadingComponent } from './utilities/loading/loading.component';
 
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    standalone: true,
-    imports: [
-    RouterOutlet,
-    LoadingComponent
-],
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  standalone: true,
+  imports: [RouterOutlet, LoadingComponent],
 })
 export class AppComponent implements OnInit {
   userService = inject(UserService);

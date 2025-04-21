@@ -22,16 +22,10 @@ import { FooterComponent } from '../../layout/footer/footer.component';
  * Used to display a page to list Todos and allow the user to interact with them
  */
 @Component({
-    selector: 'app-todos',
-    templateUrl: './todos.component.html',
-    standalone: true,
-    imports: [
-    HeaderComponent,
-    FormsModule,
-    NgTemplateOutlet,
-    TodoComponent,
-    FooterComponent
-],
+  selector: 'app-todos',
+  templateUrl: './todos.component.html',
+  standalone: true,
+  imports: [HeaderComponent, FormsModule, NgTemplateOutlet, TodoComponent, FooterComponent],
 })
 export class TodosComponent implements OnInit {
   private todoService = inject(TodoService);

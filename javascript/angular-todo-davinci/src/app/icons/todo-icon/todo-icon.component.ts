@@ -12,10 +12,10 @@ import { Component, Input } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 
 @Component({
-    selector: 'app-todo-icon',
-    templateUrl: './todo-icon.component.html',
-    standalone: true,
-    imports: [NgTemplateOutlet],
+  selector: 'app-todo-icon',
+  templateUrl: './todo-icon.component.html',
+  standalone: true,
+  imports: [NgTemplateOutlet],
 })
 export class TodoIconComponent {
   @Input() size = '24px';

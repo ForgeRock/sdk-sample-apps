@@ -19,23 +19,23 @@ import { SubmitButtonComponent } from '../submit-button/submit-button.component'
 import { FlowButtonComponent } from '../flow-button/flow-button.component';
 
 @Component({
-    selector: 'app-davinci-form',
-    templateUrl: './form.component.html',
-    standalone: true,
-    imports: [
+  selector: 'app-davinci-form',
+  templateUrl: './form.component.html',
+  standalone: true,
+  imports: [
     FormsModule,
     ErrorMessageComponent,
     ProtectComponent,
     TextInputComponent,
     PasswordComponent,
     SubmitButtonComponent,
-    FlowButtonComponent
-],
-providers: [DavinciService],
+    FlowButtonComponent,
+  ],
+  providers: [DavinciService],
 })
 export class DavinciFormComponent implements OnInit {
   // private readonly userService = inject(UserService);
-  private readonly davinciService  = inject(DavinciService);
+  private readonly davinciService = inject(DavinciService);
 
   @Output() flowComplete = new EventEmitter<void>();
 
@@ -55,9 +55,9 @@ export class DavinciFormComponent implements OnInit {
    * @function submitProtect - Handles Protect collector submission
    * @returns {Promise<void>}
    */
-  submitProtectCallback = async(): Promise<void> => {
+  submitProtectCallback = async (): Promise<void> => {
     await this.davinciService.setNext();
-  }
+  };
 
   async submitHandler(event: Event): Promise<void> {
     event.preventDefault();
@@ -72,23 +72,19 @@ export class DavinciFormComponent implements OnInit {
     } catch (error) {
       console.error(error);
     } finally {
-      this.isSubmittingForm = false
+      this.isSubmittingForm = false;
     }
   }
 
   async completeFlow(): Promise<void> {
     // const clientInfo = this.davinciService.client()?.getClient();
-
     // let code = '';
     // let state = '';
-
     // if (clientInfo?.status === 'success') {
     //   code = clientInfo.authorization?.code || '';
     //   state = clientInfo.authorization?.state || '';
     // }
-
     // await TokenManager.getTokens({ query: { code, state } });
-
     // await this.userService.populateUserInfo();
     // this.flowComplete.emit();
   }

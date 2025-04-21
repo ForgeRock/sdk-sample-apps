@@ -12,9 +12,9 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Updater } from '@forgerock/davinci-client/types';
 
 @Component({
-    selector: 'app-protect',
-    templateUrl: './protect.component.html',
-    standalone: true,
+  selector: 'app-protect',
+  templateUrl: './protect.component.html',
+  standalone: true,
 })
 export class ProtectComponent implements OnInit {
   @Input() label: string = '';

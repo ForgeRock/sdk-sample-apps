@@ -8,7 +8,7 @@ This software may be modified and distributed under the terms
 of the MIT license. See the LICENSE file for details.
 -->
 
-<form (submit)="submitHandler($event)">  
+<form (submit)="submitHandler($event)">
   @if (!node() || node().status === 'start') {
     <p>Checking your session...</p>
   } @else if (node().status === 'success') {
@@ -23,29 +23,29 @@ of the MIT license. See the LICENSE file for details.
           [label]="collector.output.label"
           [update]="updater()(collector)"
           [submitProtect]="submitProtectCallback"
-          />
+        />
       } @else {
         @switch (collector.type) {
-          @case ('TextCollector'){
+          @case ('TextCollector') {
             <app-text-input
               [key]="collector.output.key"
               [label]="collector.output.label"
               [update]="updater()(collector)"
-              />
-          } 
-          @case ('PasswordCollector'){
+            />
+          }
+          @case ('PasswordCollector') {
             <app-password
               [key]="collector.output.key"
               [label]="collector.output.label"
               (update)="updater()(collector)"
-              />
+            />
           }
-          @case ('SubmitCollector'){
+          @case ('SubmitCollector') {
             <app-submit-button
               [key]="collector.output.key"
               [label]="collector.output.label"
               [submittingForm]="isSubmittingForm"
-              />
+            />
           }
           @default {
             <p>Unknown collector</p>

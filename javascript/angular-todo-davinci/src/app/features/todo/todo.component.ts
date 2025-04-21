@@ -18,14 +18,10 @@ import { ActionIconComponent } from '../../icons/action-icon/action-icon.compone
  * Used to display a Todo retrieved from the backend, handles user interaction with an existing Todo
  */
 @Component({
-    selector: 'app-todo',
-    templateUrl: './todo.component.html',
-    standalone: true,
-    imports: [
-    NgClass,
-    TodoIconComponent,
-    ActionIconComponent
-],
+  selector: 'app-todo',
+  templateUrl: './todo.component.html',
+  standalone: true,
+  imports: [NgClass, TodoIconComponent, ActionIconComponent],
 })
 export class TodoComponent {
   /**

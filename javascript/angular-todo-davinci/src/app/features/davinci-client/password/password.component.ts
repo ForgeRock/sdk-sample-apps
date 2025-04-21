@@ -13,10 +13,10 @@ import { EyeIconComponent } from '../../../icons/eye-icon/eye-icon.component';
 import { Updater } from '@forgerock/davinci-client/types';
 
 @Component({
-    selector: 'app-password',
-    templateUrl: './password.component.html',
-    standalone: true,
-    imports: [EyeIconComponent],
+  selector: 'app-password',
+  templateUrl: './password.component.html',
+  standalone: true,
+  imports: [EyeIconComponent],
 })
 export class PasswordComponent {
   @Input() key: string;

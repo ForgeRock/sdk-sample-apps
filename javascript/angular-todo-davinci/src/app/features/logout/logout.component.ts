@@ -19,15 +19,14 @@ import { LoadingComponent } from '../../utilities/loading/loading.component';
  * Used to log the user out whilst a spinner and message are displayed
  */
 @Component({
-    selector: 'app-logout',
-    templateUrl: './logout.component.html',
-    standalone: true,
-    imports: [LoadingComponent],
+  selector: 'app-logout',
+  templateUrl: './logout.component.html',
+  standalone: true,
+  imports: [LoadingComponent],
 })
 export class LogoutComponent implements OnInit {
   private router = inject(Router);
   userService = inject(UserService);
-
 
   /**
    * As soon as this component loads we want to log the user out

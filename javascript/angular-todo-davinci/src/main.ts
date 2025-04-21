@@ -20,6 +20,5 @@ if (environment.production) {
 }
 
 bootstrapApplication(AppComponent, {
-    providers: [importProvidersFrom(BrowserModule, AppRoutingModule, FormsModule)]
-})
-  .catch((err) => console.error(err));
+  providers: [importProvidersFrom(BrowserModule, AppRoutingModule, FormsModule)],
+}).catch((err) => console.error(err));

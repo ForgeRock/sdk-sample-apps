@@ -23,15 +23,15 @@ A single todo included as a child component in the parent list
         type="checkbox"
         [checked]="todo.completed"
         (change)="setComplete(todo)"
-        />
+      />
       <label
         [for]="todo._id"
         class="cstm_todo-label col d-flex align-items-center fs-5 w-100 p-3"
-      [ngClass]="{
-        'cstm_todo-label_incomplete': !todo.completed,
-        'cstm_todo-label_complete': todo.completed
-      }"
-        >
+        [ngClass]="{
+          'cstm_todo-label_incomplete': !todo.completed,
+          'cstm_todo-label_complete': todo.completed,
+        }"
+      >
         <app-todo-icon [completed]="todo.completed" [size]="'36px'"></app-todo-icon>
         <span aria-label="todo title text">{{ todo.title }}</span>
       </label>
@@ -45,13 +45,13 @@ A single todo included as a child component in the parent list
         class="cstm_dropdown-actions btn h-auto"
         data-bs-toggle="dropdown"
         [id]="'todo_action_' + todo._id"
-        >
+      >
         <app-action-icon></app-action-icon>
       </button>
       <ul
         class="dropdown-menu dropdown-menu-end shadow-sm"
         aria-labelledby="'todo_action_' + todo._id"
-        >
+      >
         <li>
           <!--
           Mark this for editing
@@ -61,7 +61,7 @@ A single todo included as a child component in the parent list
             data-bs-toggle="modal"
             data-bs-target="#editModal"
             (click)="setEdit(todo)"
-            >
+          >
             Edit
           </button>
         </li>
@@ -76,7 +76,7 @@ A single todo included as a child component in the parent list
             data-bs-target="#deleteModal"
             (click)="setDelete(todo)"
             id="deleteButton"
-            >
+          >
             Delete
           </button>
         </li>

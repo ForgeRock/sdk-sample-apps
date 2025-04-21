@@ -9,6 +9,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint --fix",
+    "prettier": "prettier --write \"src/**/*.{ts,html,json}\"",
     "e2e": "playwright test",
     "e2e:ui": "playwright test --ui",
     "clean": "rimraf node_modules,dist"

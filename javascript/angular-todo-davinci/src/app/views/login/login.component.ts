@@ -22,15 +22,10 @@ import { FingerPrintIconComponent } from '../../icons/finger-print-icon/finger-p
  * Used to show a login page
  */
 @Component({
-    selector: 'app-login',
-    templateUrl: './login.component.html',
-    standalone: true,
-    imports: [
-    BackHomeComponent,
-    KeyIconComponent,
-    DavinciFormComponent,
-    FingerPrintIconComponent
-],
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  standalone: true,
+  imports: [BackHomeComponent, KeyIconComponent, DavinciFormComponent, FingerPrintIconComponent],
 })
 export class LoginComponent implements OnInit {
   userService = inject(UserService);

@@ -20,15 +20,10 @@ import { FooterComponent } from '../../layout/footer/footer.component';
  * Used to show a home page with information about the application, and links to sign in or register or a personalised welcome
  */
 @Component({
-    selector: 'app-home',
-    templateUrl: './home.component.html',
-    standalone: true,
-    imports: [
-    HeaderComponent,
-    VerifiedIconComponent,
-    RouterLink,
-    FooterComponent
-],
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  standalone: true,
+  imports: [HeaderComponent, VerifiedIconComponent, RouterLink, FooterComponent],
 })
 export class HomeComponent {
   userService = inject(UserService);

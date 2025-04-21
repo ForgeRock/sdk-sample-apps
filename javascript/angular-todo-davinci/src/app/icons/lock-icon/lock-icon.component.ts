@@ -11,9 +11,9 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
-    selector: 'app-lock-icon',
-    templateUrl: './lock-icon.component.html',
-    standalone: true,
+  selector: 'app-lock-icon',
+  templateUrl: './lock-icon.component.html',
+  standalone: true,
 })
 export class LockIconComponent {
   @Input() size = '24px';

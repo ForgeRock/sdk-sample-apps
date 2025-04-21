@@ -16,9 +16,9 @@ import { LeftArrowIconComponent } from '../../icons/left-arrow-icon/left-arrow-i
  * Used to provide a link to take the user to the root of the application
  */
 @Component({
-    selector: 'app-back-home',
-    templateUrl: './back-home.component.html',
-    standalone: true,
-    imports: [RouterLink, LeftArrowIconComponent],
+  selector: 'app-back-home',
+  templateUrl: './back-home.component.html',
+  standalone: true,
+  imports: [RouterLink, LeftArrowIconComponent],
 })
 export class BackHomeComponent {}

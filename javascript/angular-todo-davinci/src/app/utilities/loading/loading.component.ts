@@ -14,9 +14,9 @@ import { Component, Input } from '@angular/core';
  * Used to show a spinner and message during loading / processing steps
  */
 @Component({
-    selector: 'app-loading',
-    templateUrl: './loading.component.html',
-    standalone: true,
+  selector: 'app-loading',
+  templateUrl: './loading.component.html',
+  standalone: true,
 })
 export class LoadingComponent {
   /**

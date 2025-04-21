@@ -22,19 +22,19 @@ import { AccountIconComponent } from '../../icons/account-icon/account-icon.comp
  * Used to show a navigation bar with router links and user info
  */
 @Component({
-    selector: 'app-header',
-    templateUrl: './header.component.html',
-    standalone: true,
-    imports: [
-        RouterLink,
-        NgClass,
-        ForgerockIconComponent,
-        AngularIconComponent,
-        NgTemplateOutlet,
-        HomeIconComponent,
-        TodosIconComponent,
-        AccountIconComponent,
-    ],
+  selector: 'app-header',
+  templateUrl: './header.component.html',
+  standalone: true,
+  imports: [
+    RouterLink,
+    NgClass,
+    ForgerockIconComponent,
+    AngularIconComponent,
+    NgTemplateOutlet,
+    HomeIconComponent,
+    TodosIconComponent,
+    AccountIconComponent,
+  ],
 })
 export class HeaderComponent {
   userService = inject(UserService);

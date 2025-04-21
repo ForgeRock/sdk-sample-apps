@@ -11,26 +11,34 @@
 import { computed, Injectable, Signal, signal, WritableSignal } from '@angular/core';
 import createClient from './davinci.utils';
 import { DaVinciClient, DaVinciNode } from './davinci.types';
-import { Collectors, ContinueNode, ErrorNode, FlowCollector, PasswordCollector, TextCollector, Updater, ValidatedTextCollector } from '@forgerock/davinci-client/types';
+import {
+  Collectors,
+  ContinueNode,
+  ErrorNode,
+  FlowCollector,
+  PasswordCollector,
+  TextCollector,
+  Updater,
+  ValidatedTextCollector,
+} from '@forgerock/davinci-client/types';
 
 @Injectable()
-
 export class DavinciService {
   private readonly client: WritableSignal<DaVinciClient | null> = signal(null);
   readonly node: WritableSignal<DaVinciNode | null> = signal(null);
   collectors: Signal<Collectors[]> = computed(() => {
     if (this.node()?.status === 'continue') {
       return this.client()?.getCollectors() ?? [];
-  } else return [];
-})
+    } else return [];
+  });
   formName: Signal<string> = computed(() => {
     if (this.node()?.status === 'continue') {
       return (this.node() as ContinueNode)?.client.name ?? '';
     } else {
       return '';
     }
-});
-formAction: Signal<string> = computed(() => {
+  });
+  formAction: Signal<string> = computed(() => {
     if (this.node()?.status === 'continue') {
       return (this.node() as ContinueNode)?.client.action ?? '';
     } else {
@@ -44,26 +52,28 @@ formAction: Signal<string> = computed(() => {
       return '';
     }
   });
-updater: Signal<((collector: TextCollector | ValidatedTextCollector | PasswordCollector) => Updater) | null> = computed(() => {
-  if (this.client() && this.node()?.status === 'continue') {
-    return (collector) => this.updaterFunction(this.client(), collector);
-  } else{
-    return null;
-  }
-});
+  updater: Signal<
+    ((collector: TextCollector | ValidatedTextCollector | PasswordCollector) => Updater) | null
+  > = computed(() => {
+    if (this.client() && this.node()?.status === 'continue') {
+      return (collector) => this.updaterFunction(this.client(), collector);
+    } else {
+      return null;
+    }
+  });
 
   /**
    * @function initDavinci - Initialize the DaVinci flow
    * @returns {Promise<void>}
-  */
- async initDavinci(): Promise<void> {
-   /** *********************************************************************
-    * SDK INTEGRATION POINT
-    * Summary: Initialize the Davinci client and flow
-    * ----------------------------------------------------------------------
-    * Details: Start the DaVinci flow to get the first node for rendering the form.
-    ********************************************************************* */
-   try {
+   */
+  async initDavinci(): Promise<void> {
+    /** *********************************************************************
+     * SDK INTEGRATION POINT
+     * Summary: Initialize the Davinci client and flow
+     * ----------------------------------------------------------------------
+     * Details: Start the DaVinci flow to get the first node for rendering the form.
+     ********************************************************************* */
+    try {
       if (!this.client() || !this.node()) {
         const davinciClient = await createClient();
         const initialNode = (await davinciClient?.start()) ?? null;
@@ -72,7 +82,7 @@ updater: Signal<((collector: TextCollector | ValidatedTextCollector | PasswordCo
         this.node.set(initialNode);
       }
     } catch (error) {
-        console.error('Error initializing DaVinci: ', error);
+      console.error('Error initializing DaVinci: ', error);
     }
   }
 
@@ -80,7 +90,10 @@ updater: Signal<((collector: TextCollector | ValidatedTextCollector | PasswordCo
    * @function updater - Gets the DaVinci client updater function for a collector
    * @returns {function} - A function to call with the updated value for the collector's input
    */
-  updaterFunction(client: DaVinciClient, collector: TextCollector | ValidatedTextCollector | PasswordCollector): Updater {
+  updaterFunction(
+    client: DaVinciClient,
+    collector: TextCollector | ValidatedTextCollector | PasswordCollector,
+  ): Updater {
     return client.update(collector);
   }
 

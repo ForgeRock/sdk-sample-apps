@@ -27,7 +27,7 @@ of the MIT license. See the LICENSE file for details.
           required=""
           [(ngModel)]="newTodo.title"
           name="title"
-          />
+        />
         <label for="newTodo">What needs doing?</label>
       </div>
       <button type="submit" class="btn btn-primary ms-2">Create</button>
@@ -63,7 +63,7 @@ of the MIT license. See the LICENSE file for details.
           tabIndex="-1"
           aria-modal="true"
           role="dialog"
-          >
+        >
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
@@ -79,7 +79,7 @@ of the MIT license. See the LICENSE file for details.
                       [defaultValue]="editTodo.title"
                       [(ngModel)]="editTodo.title"
                       required="required"
-                      />
+                    />
                     <label for="editTodo">Update todo text</label>
                   </div>
                 </form>
@@ -92,7 +92,7 @@ of the MIT license. See the LICENSE file for details.
                     data-bs-toggle="modal"
                     data-bs-target="#editModal"
                     class="btn btn-secondary"
-                    >
+                  >
                     Close
                   </button>
                   <button
@@ -101,7 +101,7 @@ of the MIT license. See the LICENSE file for details.
                     data-bs-target="#editModal"
                     class="btn btn-primary"
                     (click)="update(editTodo)"
-                    >
+                  >
                     Update Todo
                   </button>
                 </div>
@@ -121,7 +121,7 @@ of the MIT license. See the LICENSE file for details.
           tabIndex="-1"
           aria-modal="true"
           role="dialog"
-          >
+        >
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-body pt-4 px-4">
@@ -133,7 +133,7 @@ of the MIT license. See the LICENSE file for details.
                   data-bs-toggle="modal"
                   data-bs-target="#deleteModal"
                   class="btn btn-secondary"
-                  >
+                >
                   Close
                 </button>
                 @if (deleteTodo) {
@@ -143,7 +143,7 @@ of the MIT license. See the LICENSE file for details.
                     data-bs-target="#deleteModal"
                     class="btn btn-danger"
                     (click)="delete(deleteTodo)"
-                    >
+                  >
                     Delete Todo
                   </button>
                 }

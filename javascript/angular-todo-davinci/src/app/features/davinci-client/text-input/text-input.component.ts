@@ -12,9 +12,9 @@ import { Component, Input } from '@angular/core';
 import { Updater } from '@forgerock/davinci-client/types';
 
 @Component({
-    selector: 'app-text-input',
-    templateUrl: './text-input.component.html',
-    standalone: true,
+  selector: 'app-text-input',
+  templateUrl: './text-input.component.html',
+  standalone: true,
 })
 export class TextInputComponent {
   @Input() key: string;

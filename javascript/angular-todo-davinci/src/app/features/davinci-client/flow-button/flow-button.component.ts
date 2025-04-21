@@ -11,9 +11,9 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
-    selector: 'app-flow-button',
-    templateUrl: './flow-button.component.html',
-    standalone: true,
+  selector: 'app-flow-button',
+  templateUrl: './flow-button.component.html',
+  standalone: true,
 })
 export class FlowButtonComponent {
   @Input() label = '';

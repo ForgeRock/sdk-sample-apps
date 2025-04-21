@@ -14,10 +14,24 @@ import { RouterModule } from '@angular/router';
 import { AuthGuard } from './auth/auth.guard';
 
 const routes: Routes = [
-  { path: 'home', loadComponent: () => import('./views/home/home.component').then(m => m.HomeComponent) },
-  { path: 'login', loadComponent: () => import('./views/login/login.component').then(m => m.LoginComponent) },
-  { path: 'todos', canActivate: [AuthGuard], loadComponent: () => import('./views/todos/todos.component').then(m => m.TodosComponent) },
-  { path: 'logout', loadComponent: () => import('./features/logout/logout.component').then(m => m.LogoutComponent) },
+  {
+    path: 'home',
+    loadComponent: () => import('./views/home/home.component').then((m) => m.HomeComponent),
+  },
+  {
+    path: 'login',
+    loadComponent: () => import('./views/login/login.component').then((m) => m.LoginComponent),
+  },
+  {
+    path: 'todos',
+    canActivate: [AuthGuard],
+    loadComponent: () => import('./views/todos/todos.component').then((m) => m.TodosComponent),
+  },
+  {
+    path: 'logout',
+    loadComponent: () =>
+      import('./features/logout/logout.component').then((m) => m.LogoutComponent),
+  },
   { path: '', redirectTo: '/home', pathMatch: 'full' }, // redirect to `first-component`
 ];
 

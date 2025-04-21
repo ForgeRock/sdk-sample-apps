@@ -21,7 +21,6 @@ export class AuthGuard {
   userService = inject(UserService);
   private router = inject(Router);
 
-
   /**
    * Extends CanActivate to protect selected routes from unauthenticated access
    *
