@@ -1,7 +1,7 @@
 /*
  * angular-todo-prototype
  *
- * forgerock-icon.component.ts
+ * ping-icon.component.ts
  *
  * Copyright (c) 2021 ForgeRock. All rights reserved.
  * This software may be modified and distributed under the terms
@@ -11,10 +11,10 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-forgerock-icon',
-  templateUrl: './forgerock-icon.component.html',
+  selector: 'app-ping-icon',
+  templateUrl: './ping-icon.component.html',
   standalone: true,
 })
-export class ForgerockIconComponent {
+export class PingIconComponent {
   @Input() size = '24px';
 }

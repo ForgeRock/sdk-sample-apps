@@ -12,7 +12,7 @@ import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { NgClass } from '@angular/common';
-import { ForgerockIconComponent } from '../../icons/forgerock-icon/forgerock-icon.component';
+import { PingIconComponent } from '../../icons/ping-icon/ping-icon.component';
 import { AngularIconComponent } from '../../icons/angular-icon/angular-icon.component';
 import { HomeIconComponent } from '../../icons/home-icon/home-icon.component';
 import { TodosIconComponent } from '../../icons/todos-icon/todos-icon.component';
@@ -28,7 +28,7 @@ import { AccountIconComponent } from '../../icons/account-icon/account-icon.comp
   imports: [
     RouterLink,
     NgClass,
-    ForgerockIconComponent,
+    PingIconComponent,
     AngularIconComponent,
     HomeIconComponent,
     TodosIconComponent,

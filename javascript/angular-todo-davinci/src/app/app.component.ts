@@ -54,23 +54,21 @@ export class AppComponent implements OnInit {
   }
 
   /**
-   * Initialise the SDK and try to load the user when the app loads
+   * Initialize the SDK and try to load the user when the app loads
    */
   async ngOnInit(): Promise<void> {
     /** ***************************************************************************
      * SDK INTEGRATION POINT
      * Summary: Configure the SDK
      * ----------------------------------------------------------------------------
-     * Details: Below, you will see the following settings:
-     * - clientId: (OAuth 2.0 only) this is the OAuth 2.0 client you created in ForgeRock, such as `ForgeRockSDKClient`
-     * - redirectUri: (OAuth 2.0 only) this is the URI/URL of this app to which the
-     *   OAuth 2.0 flow redirects
-     * - scope: (OAuth 2.0 only) these are the OAuth scopes that you will request from
-     *   ForgeRock
-     * - serverConfig: this includes the baseUrl of your ForgeRock AM, and should
-     *   include the deployment path at the end, such as `/am/` or `/openam/`
-     * - realmPath: this is the realm to use within ForgeRock. such as `alpha` or `root`
-     * - tree: The authentication journey/tree to use, such as `sdkAuthenticationTree`
+    * Details: The config generator below will create the following settings which
+    * can be passed to the SDK's Config.setAsync() method to initalize the SDK:
+    * - clientId: (OAuth 2.0 only) this is the OAuth 2.0 client you created in PingOne
+    * - redirectUri: (OAuth 2.0 only) this is the URI/URL of this app to which the
+    *   OAuth 2.0 flow redirects
+    * - scope: (OAuth 2.0 only) these are the OAuth scopes that you will request from
+    *   PingOne
+    * - serverConfig: this includes the wellknown URL of your PingOne environment
      *************************************************************************** */
 
     const config: AsyncConfigOptions = createConfig();
@@ -86,12 +84,11 @@ export class AppComponent implements OnInit {
      * ensure valid tokens before continuing, but it's optional.
      ***************************************************************** */
     try {
-      // Assume user is likely authenticated if there are tokens
+      // The user is authenticated if we can get the user info
       const user = (await UserManager.getCurrentUser()) as Record<string, unknown>;
       this.userService.isAuthenticated = true;
       this.userService.username = `${user.given_name ?? ''} ${user.family_name ?? ''}`;
       this.userService.email = `${user.email ?? ''}`;
-      console.log('Here:', user);
     } catch (err) {
       // User likely not authenticated
       console.log(err);

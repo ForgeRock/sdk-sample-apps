@@ -13,8 +13,6 @@ import createClient from './davinci.utils';
 import { DaVinciClient, DaVinciNode } from './davinci.types';
 import {
   Collectors,
-  ContinueNode,
-  ErrorNode,
   FlowCollector,
   PasswordCollector,
   TextCollector,
@@ -27,27 +25,31 @@ export class DavinciService {
   private client: WritableSignal<DaVinciClient | null> = signal(null);
   readonly node: WritableSignal<DaVinciNode | null> = signal(null);
   collectors: Signal<Collectors[]> = computed(() => {
-    if (this.node()?.status === 'continue') {
-      return this.client()?.getCollectors() ?? [];
+    const currentNode = this.node();
+    if (currentNode?.status === 'continue') {
+      return this.client().getCollectors() ?? [];
     } else return [];
   });
   formName: Signal<string> = computed(() => {
-    if (this.node()?.status === 'continue') {
-      return (this.node() as ContinueNode)?.client.name ?? '';
+    const currentNode = this.node();
+    if (currentNode?.status === 'continue') {
+      return currentNode.client.name ?? '';
     } else {
       return '';
     }
   });
   formAction: Signal<string> = computed(() => {
-    if (this.node()?.status === 'continue') {
-      return (this.node() as ContinueNode)?.client.action ?? '';
+    const currentNode = this.node();
+    if (currentNode?.status === 'continue') {
+      return currentNode.client.action ?? '';
     } else {
       return '';
     }
   });
   errorMessage: Signal<string> = computed(() => {
-    if (this.node()?.status === 'error') {
-      return (this.node() as ErrorNode)?.error.message ?? '';
+    const currentNode = this.node();
+    if (currentNode?.status === 'error') {
+      return currentNode.error.message ?? '';
     } else {
       return '';
     }
@@ -55,7 +57,8 @@ export class DavinciService {
   updater: Signal<
     ((collector: TextCollector | ValidatedTextCollector | PasswordCollector) => Updater) | null
   > = computed(() => {
-    if (this.client() && this.node()?.status === 'continue') {
+    const currentNode = this.node();
+    if (this.client() && currentNode?.status === 'continue') {
       return (collector) => this.updaterFunction(this.client(), collector);
     } else {
       return null;

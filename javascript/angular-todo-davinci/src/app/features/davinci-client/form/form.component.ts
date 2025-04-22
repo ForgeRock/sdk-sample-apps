@@ -113,8 +113,9 @@ export class DavinciFormComponent implements OnInit {
 
     try {
       await this.davinciService.setNext();
-      if (this.node().status === 'success') {
-        this.handleSuccess(this.node() as SuccessNode);
+      const currentNode = this.node();
+      if (currentNode?.status === 'success') {
+        this.handleSuccess(currentNode);
       }
     } catch (error) {
       console.error(error);
@@ -127,8 +128,9 @@ export class DavinciFormComponent implements OnInit {
     await this.davinciService.initDavinci();
     console.log('intial node', this.node());
 
-    if (this.node().status === 'success') {
-      this.handleSuccess(this.node() as SuccessNode);
+    const currentNode = this.node();
+    if (currentNode?.status === 'success') {
+      this.handleSuccess(currentNode);
     }
   }
 }
