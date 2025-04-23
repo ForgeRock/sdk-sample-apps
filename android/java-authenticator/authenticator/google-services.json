@@ -1,37 +1,26 @@
 {
   "project_info": {
-    "project_number": "",
-    "firebase_url": "https://test-authenticator.firebaseio.com",
-    "project_id": "test-authenticator",
-    "storage_bucket": "test-authenticator.appspot.com"
+    "project_number": "425224784438",
+    "project_id": "acme-authenticator-c2d88",
+    "storage_bucket": "acme-authenticator-c2d88.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "",
+        "mobilesdk_app_id": "1:425224784438:android:56870e9c9484be9b816697",
         "android_client_info": {
-          "package_name": ""
+          "package_name": "org.forgerock.authenticator.sample"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": ""
+          "current_key": "AIzaSyACtwpp8SibmOgIMottpiqS4Evm5KUcDgs"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

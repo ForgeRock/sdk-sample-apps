@@ -10,6 +10,18 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/action_delete_token"
+        android:icon="@android:drawable/ic_menu_delete"
+        android:title="@string/title_menu_item_delete_token"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_refresh_token"
+        android:icon="@android:drawable/ic_menu_rotate"
+        android:title="@string/title_menu_item_refresh_token"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/action_scan"
         android:icon="@android:drawable/ic_menu_add"
         android:title="@string/title_menu_item_scan_qr_code"

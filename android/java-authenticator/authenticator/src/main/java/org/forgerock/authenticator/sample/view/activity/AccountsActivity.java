@@ -35,8 +35,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.firebase.messaging.FirebaseMessaging;
+
 import org.forgerock.android.auth.Account;
 import org.forgerock.android.auth.FRAListener;
+import org.forgerock.android.auth.Logger;
 import org.forgerock.android.auth.Mechanism;
 import org.forgerock.android.auth.exception.DuplicateMechanismException;
 import org.forgerock.authenticator.sample.R;
@@ -185,6 +188,12 @@ public class AccountsActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_delete_token:
+                deleteToken();
+                return true;
+            case R.id.action_refresh_token:
+                getNewToken();
+                return true;
             case R.id.action_scan:
                 startActivity(new Intent(this, AddMechanismActivity.class));
                 return true;
@@ -192,6 +201,46 @@ public class AccountsActivity extends AppCompatActivity {
                 super.onOptionsItemSelected(item);
         }
         return false;
+    }
+
+    private void deleteToken() {
+        final Activity thisActivity = this;
+        String token = authenticatorModel.getPushDeviceToken().getTokenId();
+        Logger.warn("TEST", "DELETE TOKEN: %s", token);
+        FirebaseMessaging.getInstance().deleteToken()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(thisActivity, String.format("Token deleted"), Toast.LENGTH_LONG).show();
+                    } else {
+                        System.err.println("Failed to retrieve token: " + task.getException().getMessage());
+                    }
+                });
+    }
+
+    private void getNewToken() {
+        final Activity thisActivity = this;
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        String token = task.getResult();
+                        Logger.warn("TEST", "NEW TOKEN: %s", token);
+                        Toast.makeText(thisActivity, String.format("Update FCM token: %s",
+                                token), Toast.LENGTH_LONG).show();
+                        authenticatorModel.updateFcmToken(token, new FRAListener<Void>() {
+                            @Override
+                            public void onSuccess(Void result) {
+
+                            }
+
+                            @Override
+                            public void onException(Exception e) {
+
+                            }
+                        });
+                    } else {
+                        System.err.println("Failed to retrieve token: " + task.getException().getMessage());
+                    }
+                });
     }
 
     @Override

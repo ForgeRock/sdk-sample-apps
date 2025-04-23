@@ -11,6 +11,8 @@
     <!-- Accounts activity  -->
     <string name="no_accounts">No accounts registered</string>
     <string name="account_title">My Accounts</string>
+    <string name="title_menu_item_refresh_token">Refresh Token</string>
+    <string name="title_menu_item_delete_token">Delete Token</string>
     <string name="title_menu_item_scan_qr_code">Scan QR code</string>
     <string name="account_locked">This account is locked by the following Policy: "%1$s"</string>
 

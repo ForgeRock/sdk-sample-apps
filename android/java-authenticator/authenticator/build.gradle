@@ -48,7 +48,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // ForgeRock Authenticator SDK
-    implementation ('org.forgerock:forgerock-authenticator:4.5.0')
+    implementation ('org.forgerock:forgerock-authenticator:4.8.0-SNAPSHOT')
 
     // Loading images dynamically
     implementation 'com.squareup.picasso:picasso:2.5.2'

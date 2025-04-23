@@ -17,6 +17,7 @@ import org.forgerock.android.auth.Account;
 import org.forgerock.android.auth.FRAClient;
 import org.forgerock.android.auth.FRAListener;
 import org.forgerock.android.auth.Mechanism;
+import org.forgerock.android.auth.PushDeviceToken;
 import org.forgerock.android.auth.PushNotification;
 import org.forgerock.android.auth.exception.AuthenticatorException;
 import org.forgerock.android.auth.exception.InvalidNotificationException;
@@ -97,6 +98,23 @@ public class AuthenticatorModel {
 
         // Retrieve the accounts on initialization
         getAllAccounts();
+    }
+
+
+    /**
+     * Get the Push device token stored in the SDK
+     * @return the Push device token
+     */
+    public PushDeviceToken getPushDeviceToken() {
+        return fraClient.getPushDeviceToken();
+    }
+
+    /**
+     * Update the FCM token
+     * @param fcmToken the new FCM token
+     */
+    public void updateFcmToken(String fcmToken, FRAListener<Void> listener) {
+        fraClient.updateDeviceToken(fcmToken, listener);
     }
 
     /**
