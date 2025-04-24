@@ -2,8 +2,9 @@ import { test, expect } from '@playwright/test';
 
 const BASE_URL = 'http://localhost:8443';
 
-test.describe('React - Davinci Todo', () => {
+test.describe('Angular - Davinci Todo', () => {
   test.describe.configure({ mode: 'default' }); // Don't run these tests in parallel
+
   async function goToTodosPage(page) {
     // Log in and go to the todos page
     await page.goto(BASE_URL);
@@ -21,7 +22,7 @@ test.describe('React - Davinci Todo', () => {
   }
 
   async function cleanupTodos(page) {
-    const dropdowns = await page.locator('ul > li > div > button');
+    const dropdowns = await page.locator('ul > app-todo > li > div > button');
     const numDropdowns = await dropdowns?.count();
     if (numDropdowns) {
       for (let i = 0; i < numDropdowns; i++) {
@@ -53,7 +54,7 @@ test.describe('React - Davinci Todo', () => {
     await page.locator('#account_dropdown').click();
     await page.getByRole('link', { name: 'Sign Out' }).click();
     await page.waitForURL(BASE_URL + '/logout');
-    await page.waitForURL(BASE_URL);
+    await page.waitForURL(BASE_URL + '/home');
     await expect(page.getByText('Welcome back')).not.toBeVisible();
     await expect(page.getByText('Protect with Ping')).toBeVisible();
 
@@ -71,7 +72,7 @@ test.describe('React - Davinci Todo', () => {
     await expect(page.getByText(todoText)).toBeVisible();
 
     // Delete the todo
-    await page.locator('ul > li > div > button').first().click(); // Select the first todo item's dropdown
+    await page.locator('ul > app-todo > li > div > button').first().click(); // Select the first todo item's dropdown
     await page.getByRole('button', { name: 'Delete' }).click();
     await page.getByRole('button', { name: 'Delete Todo' }).click();
     await expect(page.getByText(todoText)).not.toBeVisible();
@@ -86,7 +87,7 @@ test.describe('React - Davinci Todo', () => {
     await page.getByRole('button', { name: 'Create' }).click();
 
     // Edit the todo
-    await page.locator('ul > li > div > button').first().click(); // Select the first todo item's dropdown
+    await page.locator('ul > app-todo > li > div > button').first().click(); // Select the first todo item's dropdown
     await page.getByRole('button', { name: 'Edit' }).click();
     await page.getByLabel('Update todo text').fill(updatedTodoText);
     await page.getByRole('button', { name: 'Update Todo' }).click();

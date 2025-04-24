@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 const BASE_URL = 'http://localhost:8443';
 
-test.describe('React - DaVinci Logout', () => {
+test.describe('Angular - DaVinci Logout', () => {
   test('Login then logout, pass', async ({ page }) => {
     // Login
     await page.goto(BASE_URL);

@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 const BASE_URL = 'http://localhost:8443';
 
-test.describe('React - DaVinci Login', () => {
+test.describe('Angular - DaVinci Login', () => {
   test('Login with valid credentials, pass', async ({ page }) => {
     await page.goto(BASE_URL);
     await page.getByRole('link', { name: 'Sign In', exact: true }).click();

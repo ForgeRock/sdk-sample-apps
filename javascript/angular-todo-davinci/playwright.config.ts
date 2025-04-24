@@ -1,6 +1,6 @@
 import { defineConfig, devices } from '@playwright/test';
 
-const url = process.env.PLAYWRIGHT_TEST_BASE_URL || 'https://localhost:8443';
+const url = process.env.PLAYWRIGHT_TEST_BASE_URL || 'http://localhost:8443';
 
 export default defineConfig({
   testDir: 'e2e',
@@ -17,26 +17,33 @@ export default defineConfig({
   },
   webServer: [
     {
-      command: 'npm run start:angular-todo',
+      cwd: './',
+      command: 'npm run start',
       url,
       timeout: 120 * 1000,
       reuseExistingServer: !process.env.CI,
-      cwd: '../',
       env: {
         API_URL: 'http://localhost:9443',
         DEBUGGER_OFF: 'true',
         DEVELOPMENT: 'false',
-        JOURNEY_LOGIN: 'Login',
-        JOURNEY_REGISTER: 'Registration',
+        PORT: '8443',
+        WEB_OAUTH_CLIENT: "724ec718-c41c-4d51-98b0-84a583f450f9",
+        SCOPE: "openid profile email phone name revoke",
+        WELLKNOWN_URL: "https://auth.pingone.ca/02fb4743-189a-4bc7-9d6c-a919edfe6447/as/.well-known/openid-configuration",
+      },
+      ignoreHTTPSErrors: true,
+    },
+    {
+      cwd: '../todo-api/',
+      command: 'npm run start',
+      url: 'http://localhost:9443/healthcheck',
+      timeout: 120 * 1000,
+      reuseExistingServer: !process.env.CI,
+      env: {
         PORT: '9443',
-        AM_URL: 'https://openam-sdks.forgeblocks.com/am',
-        REALM_PATH: 'alpha',
-        SCOPE: 'profile me.read email',
-        TIMEOUT: '3000',
-        WEB_OAUTH_CLIENT: 'CentralLoginOAuthClient-',
-        REST_OAUTH_CLIENT: 'RestOAuthClient',
-        REST_OAUTH_SECRET: process.env.REST_OAUTH_SECRET as string,
-        CENTRALIZED_LOGIN: 'false',
+        SERVER_TYPE: "PINGONE",
+        SERVER_URL: "https://auth.pingone.ca/02fb4743-189a-4bc7-9d6c-a919edfe6447",
+        REST_OAUTH_CLIENT: "724ec718-c41c-4d51-98b0-84a583f450f9",
       },
       ignoreHTTPSErrors: true,
     },
