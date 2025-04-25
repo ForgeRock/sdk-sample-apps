@@ -22,7 +22,9 @@ test.describe('Angular - Davinci Todo', () => {
   }
 
   async function cleanupTodos(page) {
-    const dropdowns = await page.locator('ul li > div > button');
+    // const dropdowns = await page.locator('ul li > div > button');
+    const dropdowns = await page.getByLabel('More actions');
+    console.log('dropdowns', dropdowns);
     const numDropdowns = await dropdowns?.count();
     if (numDropdowns) {
       for (let i = 0; i < numDropdowns; i++) {
@@ -72,7 +74,7 @@ test.describe('Angular - Davinci Todo', () => {
     await expect(page.getByText(todoText)).toBeVisible();
 
     // Delete the todo
-    await page.locator('ul li > div > button').first().click(); // Select the first todo item's dropdown
+    await page.getByLabel('More actions').first().click(); // Select the first todo item's dropdown
     await page.getByRole('button', { name: 'Delete' }).click();
     await page.getByRole('button', { name: 'Delete Todo' }).click();
     await expect(page.getByText(todoText)).not.toBeVisible();
@@ -87,7 +89,7 @@ test.describe('Angular - Davinci Todo', () => {
     await page.getByRole('button', { name: 'Create' }).click();
 
     // Edit the todo
-    await page.locator('ul li > div > button').first().click(); // Select the first todo item's dropdown
+    await page.getByLabel('More actions').first().click(); // Select the first todo item's dropdown
     await page.getByRole('button', { name: 'Edit' }).click();
     await page.getByLabel('Update todo text').fill(updatedTodoText);
     await page.getByRole('button', { name: 'Update Todo' }).click();
