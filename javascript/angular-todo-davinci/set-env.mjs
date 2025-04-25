@@ -10,7 +10,6 @@ let targetPath =
 
 const envConfigFile = `export const environment = {
   API_URL: '${process.env.API_URL}',
-  DEBUGGER_OFF: '${process.env.DEBUGGER_OFF}',
   DEVELOPMENT: '${process.env.DEVELOPMENT}',
   PORT: '${process.env.PORT}',
   WEB_OAUTH_CLIENT: '${process.env.WEB_OAUTH_CLIENT}',

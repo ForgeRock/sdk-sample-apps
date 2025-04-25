@@ -20,8 +20,20 @@ import {
   ValidatedTextCollector,
 } from '@forgerock/davinci-client/types';
 
+/**
+ * Used to manage DaVinci flows
+ */
 @Injectable()
 export class DavinciService {
+  /***********************************************************************
+   * SDK INTEGRATION POINT
+   * Summary: Create state needed to render the form
+   * ----------------------------------------------------------------------
+   * Details: Whenever the node changes we will get the updated client
+   * info and extract data needed to render the form. We take advantage of
+   * computed values to prevent unnecessary re-renders of the form when the
+   * node and collectors change.
+   ************************************************************************* */
   private client: WritableSignal<DaVinciClient | null> = signal(null);
   readonly node: WritableSignal<DaVinciNode | null> = signal(null);
   collectors: Signal<Collectors[]> = computed(() => {

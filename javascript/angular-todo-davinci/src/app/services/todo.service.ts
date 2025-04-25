@@ -9,16 +9,14 @@
  */
 
 import { Injectable } from '@angular/core';
-import { Todo } from '../features/todo/todo';
+import { Todo } from '../features/todo/todo.types';
 import { environment } from '../../environments/environment';
 import { HttpClient } from '@forgerock/javascript-sdk';
 
 /**
  * Used to define interactions with the backend
  */
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class TodoService {
   /**
    * Send a request to retrieve all Todos for the current user
@@ -66,7 +64,7 @@ export class TodoService {
   }
 
   /**
-   * Send a request using the ForgeRock JS SDK Http Client
+   * Send a request using the JS SDK Http Client
    * @param resource - The url for the request
    * @param method - The method for the request
    * @param data - The body for the request

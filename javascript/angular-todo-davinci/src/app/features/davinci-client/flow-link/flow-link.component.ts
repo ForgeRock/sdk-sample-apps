@@ -10,7 +10,6 @@
 
 import { Component, Input } from '@angular/core';
 import { FlowCollector } from '@forgerock/davinci-client/types';
-// import { FlowCollector } from '@forgerock/davinci-client/types';
 
 @Component({
   selector: 'app-flow-link',

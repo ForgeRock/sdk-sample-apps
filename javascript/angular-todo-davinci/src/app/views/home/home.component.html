@@ -11,9 +11,8 @@ of the MIT license. See the LICENSE file for details.
 <app-header></app-header>
 <div>
   <!--
-  Display a personalised welcome if the user is authenticated
+  Display a personalised welcome banner if the user is authenticated
   -->
-
   @if (isAuthenticated) {
     <div class="cstm_container container-fluid">
       <p class="alert alert-success d-flex align-items-center mt-5" role="alert">
@@ -27,7 +26,7 @@ of the MIT license. See the LICENSE file for details.
   }
 
   <div class="cstm_container container-fluid">
-    <h1 class="cstm_head-text text-center">Protect with Ping<br/>Develop with Angular</h1>
+    <h1 class="cstm_head-text text-center">Protect with Ping<br />Develop with Angular</h1>
 
     <p class="cstm_subhead-text fs-3 mb-4 fw-bold text-muted">
       Learn how to develop Ping Identity protected, web apps with the
@@ -37,23 +36,28 @@ of the MIT license. See the LICENSE file for details.
         JavaScript SDK
       </a>
       , and the
-      <a class="text-muted" href="https://github.com/ForgeRock/ping-javascript-sdk/tree/main/packages/davinci-client">
+      <a
+        class="text-muted"
+        href="https://github.com/ForgeRock/ping-javascript-sdk/tree/main/packages/davinci-client"
+      >
         DaVinci Client
       </a>
       .
     </p>
     <h2 class="fs-4 fw-normal pt-3 pb-1">About this project</h2>
     <p>
-      The purpose of this sample web app is to demonstrate how the Ping JavaScript SDK with DaVinci is
-      implemented within a fully-functional application using a popular framework. The source code
-      for
+      The purpose of this sample web app is to demonstrate how the Ping JavaScript SDK with DaVinci
+      is implemented within a fully-functional application using a popular framework. The source
+      code for
       <a
         href="https://github.com/ForgeRock/sdk-sample-apps/tree/main/javascript/angular-todo-davinci"
       >
         this project can be found on Github
       </a>
       and run locally for experimentation. For more on our SDKs,
-      <a href="https://docs.pingidentity.com/sdks/latest/index.html"> you can find our official SDK documentation here. </a>
+      <a href="https://docs.pingidentity.com/sdks/latest/index.html">
+        you can find our official SDK documentation here.
+      </a>
     </p>
 
     <!--

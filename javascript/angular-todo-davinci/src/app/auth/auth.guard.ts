@@ -27,8 +27,6 @@ export class AuthGuard {
   async canActivate(): Promise<true | UrlTree> {
     const loginUrl = this.router.parseUrl('/login');
     try {
-      // Assume user is likely authenticated if there are tokens
-
       /** *****************************************************************
        * SDK INTEGRATION POINT
        * Summary: Optional client-side route access validation
@@ -43,6 +41,8 @@ export class AuthGuard {
       if (tokens === undefined || info === undefined) {
         return loginUrl;
       }
+
+      // Assume user is likely authenticated if there are tokens
       return true;
     } catch (err) {
       // User likely not authenticated

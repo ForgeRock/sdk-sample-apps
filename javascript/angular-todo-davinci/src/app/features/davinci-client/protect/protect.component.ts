@@ -12,6 +12,14 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Updater } from '@forgerock/davinci-client/types';
 import { LoadingComponent } from '../../../utilities/loading/loading.component';
 
+/**
+ * The protect collector is sent with the first node of the flow, but
+ * it is not needed. It is a self-submitting node which requires no
+ * user interaction. While you would normally load the Protect module
+ * here and wait for a response, we instead mock the response with a
+ * dummy value and update the collector. Then call the
+ * submit function to proceed with the flow.
+ */
 @Component({
   selector: 'app-protect',
   templateUrl: './protect.component.html',

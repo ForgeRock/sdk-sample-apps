@@ -11,6 +11,9 @@
 import { Injectable } from '@angular/core';
 import { TokenManager, UserManager } from '@forgerock/javascript-sdk';
 
+/**
+ * Used to handle the OAuth flow
+ */
 @Injectable()
 export class OAuthService {
   /**

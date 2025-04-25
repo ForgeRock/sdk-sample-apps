@@ -10,7 +10,7 @@
 
 import { OnInit, inject } from '@angular/core';
 import { Component } from '@angular/core';
-import { Todo } from '../../features/todo/todo';
+import { Todo } from '../../features/todo/todo.types';
 import { TodoService } from '../../services/todo.service';
 import { HeaderComponent } from '../../layout/header/header.component';
 import { FormsModule } from '@angular/forms';
@@ -25,6 +25,7 @@ import { FooterComponent } from '../../layout/footer/footer.component';
   templateUrl: './todos.component.html',
   standalone: true,
   imports: [HeaderComponent, FormsModule, TodoComponent, FooterComponent],
+  providers: [TodoService],
 })
 export class TodosComponent implements OnInit {
   private readonly todoService = inject(TodoService);

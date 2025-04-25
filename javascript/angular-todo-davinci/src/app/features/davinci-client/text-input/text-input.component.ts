@@ -17,8 +17,8 @@ import { Updater } from '@forgerock/davinci-client/types';
   standalone: true,
 })
 export class TextInputComponent {
-  @Input() key: string;
-  @Input() label: string;
+  @Input() key: string = '';
+  @Input() label: string = '';
   @Input() update: Updater | null = null;
 
   onBlur(event: Event): void {

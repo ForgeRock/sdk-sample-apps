@@ -9,7 +9,7 @@
  */
 
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Todo } from './todo';
+import { Todo } from './todo.types';
 import { NgClass } from '@angular/common';
 import { TodoIconComponent } from '../../icons/todo-icon/todo-icon.component';
 import { ActionIconComponent } from '../../icons/action-icon/action-icon.component';

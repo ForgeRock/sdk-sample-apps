@@ -24,7 +24,6 @@ export default defineConfig({
       reuseExistingServer: !process.env.CI,
       env: {
         API_URL: 'http://localhost:9443',
-        DEBUGGER_OFF: 'true',
         DEVELOPMENT: 'false',
         PORT: '8443',
         WEB_OAUTH_CLIENT: "724ec718-c41c-4d51-98b0-84a583f450f9",
