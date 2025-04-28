@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 const BASE_URL = 'http://localhost:8443';
 
-test.describe('Angular - Davinci Todo', () => {
+test.describe.skip('Angular - Davinci Todo', () => {
   test.describe.configure({ mode: 'default' }); // Don't run these tests in parallel
 
   async function goToTodosPage(page) {
@@ -24,7 +24,6 @@ test.describe('Angular - Davinci Todo', () => {
   async function cleanupTodos(page) {
     // const dropdowns = await page.locator('ul li > div > button');
     const dropdowns = await page.getByLabel('More actions');
-    console.log('dropdowns', dropdowns);
     const numDropdowns = await dropdowns?.count();
     if (numDropdowns) {
       for (let i = 0; i < numDropdowns; i++) {

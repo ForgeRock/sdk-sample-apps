@@ -143,11 +143,14 @@ export class DavinciFormComponent implements OnInit {
       const code = node.client?.authorization?.code ?? '';
       const state = node.client?.authorization?.state ?? '';
       const user = await this.oauthService.handleOAuth({ code, state });
-      console.log('user', user);
-      user && this.finalizeAuthState(user as Record<string, string>);
+      if (user) {
+        this.finalizeAuthState(user as Record<string, string>);
 
-      // Redirect back to the home page
-      this.router.navigateByUrl('/home');
+        // Redirect back to the home page
+        this.router.navigateByUrl('/home');
+      } else {
+        this.userService.isAuthenticated = false;
+      }
     } catch (error) {
       console.error('Error handling success:', error);
       this.userService.isAuthenticated = false;

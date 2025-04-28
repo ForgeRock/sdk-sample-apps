@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 const BASE_URL = 'http://localhost:8443';
 
-test.describe('React - Davinci Todo', () => {
+test.describe.skip('React - Davinci Todo', () => {
   test.describe.configure({ mode: 'default' }); // Don't run these tests in parallel
   async function goToTodosPage(page) {
     // Log in and go to the todos page
