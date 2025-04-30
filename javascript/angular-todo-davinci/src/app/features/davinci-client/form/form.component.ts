@@ -7,7 +7,7 @@
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
  */
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, Signal, computed, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserService } from '../../../services/user.service';
@@ -25,7 +25,7 @@ import { UnknownComponent } from '../unknown/unknown.component';
 import { KeyIconComponent } from '../../../icons/key-icon/key-icon.component';
 import { NewUserIconComponent } from '../../../icons/new-user-icon/new-user-icon.component';
 
-import { SuccessNode } from '@forgerock/davinci-client/types';
+import { Collectors, SuccessNode } from '@forgerock/davinci-client/types';
 
 @Component({
   selector: 'app-davinci-form',
@@ -58,13 +58,44 @@ export class DavinciFormComponent implements OnInit {
 
   // Create local state using the DavinciService to manage the DaVinci flow
   node = this.davinciService.node;
-  collectors = this.davinciService.collectors;
   updater = this.davinciService.updater;
   startNewFlow = this.davinciService.startNewFlowCallback;
-  formName = this.davinciService.formName;
-  formAction = this.davinciService.formAction;
-  errorMessage = this.davinciService.errorMessage;
   isSubmittingForm = false;
+
+  collectors: Signal<Collectors[]> = computed(() => {
+    const currentNode = this.node();
+    const status = currentNode.status;
+    if (status === 'continue' || status === 'error') {
+      return currentNode.client.collectors ?? [];
+    } else return [];
+  });
+
+  formName: Signal<string> = computed(() => {
+    const currentNode = this.node();
+    if (currentNode?.status === 'continue') {
+      return currentNode.client.name ?? '';
+    } else {
+      return '';
+    }
+  });
+
+  formAction: Signal<string> = computed(() => {
+    const currentNode = this.node();
+    if (currentNode?.status === 'continue') {
+      return currentNode.client.action ?? '';
+    } else {
+      return '';
+    }
+  });
+  
+  errorMessage: Signal<string> = computed(() => {
+    const currentNode = this.node();
+    if (currentNode?.status === 'error') {
+      return currentNode.error.message ?? '';
+    } else {
+      return '';
+    }
+  });
 
   /** *********************************************************************
    * SDK INTEGRATION POINT

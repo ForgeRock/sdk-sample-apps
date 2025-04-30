@@ -10,10 +10,10 @@
 
 import { computed, Injectable, Signal, signal, WritableSignal } from '@angular/core';
 import createClient from './davinci.utils';
-import { DaVinciClient, DaVinciNode } from './davinci.types';
+import { DaVinciClient } from './davinci.types';
 import {
-  Collectors,
   FlowCollector,
+  NodeStates,
   PasswordCollector,
   TextCollector,
   Updater,
@@ -34,44 +34,15 @@ export class DavinciService {
    * computed values to prevent unnecessary re-renders of the form when the
    * node and collectors change.
    ************************************************************************* */
-  private client: WritableSignal<DaVinciClient | null> = signal(null);
-  readonly node: WritableSignal<DaVinciNode | null> = signal(null);
-  collectors: Signal<Collectors[]> = computed(() => {
-    const currentNode = this.node();
-    if (currentNode?.status === 'continue') {
-      return this.client().getCollectors() ?? [];
-    } else return [];
-  });
-  formName: Signal<string> = computed(() => {
-    const currentNode = this.node();
-    if (currentNode?.status === 'continue') {
-      return currentNode.client.name ?? '';
-    } else {
-      return '';
-    }
-  });
-  formAction: Signal<string> = computed(() => {
-    const currentNode = this.node();
-    if (currentNode?.status === 'continue') {
-      return currentNode.client.action ?? '';
-    } else {
-      return '';
-    }
-  });
-  errorMessage: Signal<string> = computed(() => {
-    const currentNode = this.node();
-    if (currentNode?.status === 'error') {
-      return currentNode.error.message ?? '';
-    } else {
-      return '';
-    }
-  });
+  private client: DaVinciClient | null = null;
+  readonly node: WritableSignal<NodeStates | null> = signal(null);
+
   updater: Signal<
     ((collector: TextCollector | ValidatedTextCollector | PasswordCollector) => Updater) | null
   > = computed(() => {
-    const currentNode = this.node();
-    if (this.client() && currentNode?.status === 'continue') {
-      return (collector) => this.updaterFunction(this.client(), collector);
+    const status = this.node().status;
+    if (this.client && (status === 'continue' || status === 'error')) {
+      return (collector) => this.client.update(collector);
     } else {
       return null;
     }
@@ -89,27 +60,16 @@ export class DavinciService {
      * Details: Start the DaVinci flow to get the first node for rendering the form.
      ********************************************************************* */
     try {
-      if (!this.client() || !this.node()) {
+      if (!this.client || !this.node()) {
         const davinciClient = await createClient();
         const initialNode = (await davinciClient?.start()) ?? null;
 
-        this.client.set(davinciClient);
+        this.client = davinciClient;
         this.node.set(initialNode);
       }
     } catch (error) {
       console.error('Error initializing DaVinci: ', error);
     }
-  }
-
-  /**
-   * @function updater - Gets the DaVinci client updater function for a collector
-   * @returns {function} - A function to call with the updated value for the collector's input
-   */
-  updaterFunction(
-    client: DaVinciClient,
-    collector: TextCollector | ValidatedTextCollector | PasswordCollector,
-  ): Updater {
-    return client.update(collector);
   }
 
   /**
@@ -127,7 +87,7 @@ export class DavinciService {
      * next node.
      ********************************************************************* */
     try {
-      const nextNode = await this.client()?.next();
+      const nextNode = await this.client?.next();
       this.node.set(nextNode);
     } catch (error) {
       console.error('Error getting next node', error);
@@ -147,15 +107,15 @@ export class DavinciService {
      * the first node from a new flow. We set the local node state to this
      * flow node to start a new flow.
      ********************************************************************* */
-    if (this.client()) {
+    if (this.client) {
       try {
-        const getFlowNode = this.client()?.flow({ action: collector.name });
+        const getFlowNode = this.client.flow({ action: collector.name });
         const flowNode = await getFlowNode();
         if (flowNode.error) {
           console.error('Error starting new flow: ', flowNode.error);
           this.node.set(null);
         } else {
-          this.node.set(flowNode as DaVinciNode);
+          this.node.set(flowNode as NodeStates);
         }
       } catch (error) {
         console.error('Error getting flow node: ', error);
