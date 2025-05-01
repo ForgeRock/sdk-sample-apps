@@ -1,7 +1,7 @@
 /*
  * ping-sample-web-angular-davinci
  *
- * create-client.utils.ts
+ * davinci.utils.ts
  *
  * Copyright (c) 2025 Ping Identity Corporation. All rights reserved.
  * This software may be modified and distributed under the terms

@@ -89,7 +89,7 @@ Render conditions for presenting appropriate views to user.
             />
           }
           @case ('FlowCollector') {
-            <app-flow-link [collector]="collector" [startNewFlow]="startNewFlow" />
+            <app-flow-link [collector]="collector" [startNewFlow]="startNewFlowCallback" />
           }
           @default {
             <app-unknown [collector]="collector" />
