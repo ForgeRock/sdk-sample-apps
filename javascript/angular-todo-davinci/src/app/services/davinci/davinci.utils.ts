@@ -11,7 +11,7 @@
 import { davinci } from '@forgerock/davinci-client';
 import createConfig from '../../../utilities/create-config';
 import { DaVinciConfig } from '@forgerock/davinci-client/types';
-import { DaVinciClient } from './davinci.types';
+import { DaVinciClient } from '../../services/davinci/davinci.types';
 
 /**
  * @function createClient - Utility function for creating a DaVinci client

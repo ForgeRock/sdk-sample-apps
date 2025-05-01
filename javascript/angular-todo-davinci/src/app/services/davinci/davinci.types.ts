@@ -12,3 +12,4 @@ import { davinci } from '@forgerock/davinci-client';
 
 type Awaited<T> = T extends Promise<infer U> ? U : T;
 export type DaVinciClient = Awaited<ReturnType<typeof davinci>>;
+export type DaVinciClientInfo = ReturnType<DaVinciClient['getClient']>;

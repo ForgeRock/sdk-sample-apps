@@ -33,24 +33,24 @@ Render conditions for presenting appropriate views to user.
       }
     </div>
   }
-  @if (!node || node.status === 'start') {
+  @if (!davinciService.node || davinciService.node.status === 'start') {
     <!-- 
     Since there is no node information we need to call DaVinci to retrieve the
       instructions for rendering the login form. 
       -->
     <app-loading message="Checking your session..."></app-loading>
-  } @else if (node.status === 'success') {
+  } @else if (davinciService.node.status === 'success') {
     <!-- 
     Since we have successfully authenticated, show a success message to
     user while we complete the process and redirect to home page.
     -->
     <app-alert type="success" message="Success! You're logged in."></app-alert>
-  } @else if (node.status === 'continue' && collectors.length) {
+  } @else if (davinciService.node.status === 'continue' && davinciService.collectors.length) {
     <!-- 
     The node to render has collectors, so we need to collect additional
     data from user.
     -->
-    @if (formName && !hasProtectCollector(collectors)) {
+    @if (formName && !hasProtectCollector(davinciService.collectors)) {
       <h1 class="text-center fs-2 mb-3">{{ formName }}</h1>
     }
 
@@ -58,11 +58,11 @@ Render conditions for presenting appropriate views to user.
     Iterate over the collectors and render the appropriate
     component for each one.
     -->
-    @for (collector of collectors; track collector) {
+    @for (collector of davinciService.collectors; track collector) {
       @if (collector.type === 'TextCollector' && collector.name === 'protectsdk') {
         <app-protect
           [label]="collector.output.label"
-          [update]="updater(collector)"
+          [update]="davinciService.updater(collector)"
           [submitProtect]="submitProtectCallback"
         />
       } @else {
@@ -71,14 +71,14 @@ Render conditions for presenting appropriate views to user.
             <app-text-input
               [key]="collector.output.key"
               [label]="collector.output.label"
-              [update]="updater(collector)"
+              [update]="davinciService.updater(collector)"
             />
           }
           @case ('PasswordCollector') {
             <app-password
               [key]="collector.output.key"
               [label]="collector.output.label"
-              [update]="updater(collector)"
+              [update]="davinciService.updater(collector)"
             />
           }
           @case ('SubmitCollector') {
@@ -89,7 +89,7 @@ Render conditions for presenting appropriate views to user.
             />
           }
           @case ('FlowCollector') {
-            <app-flow-link [collector]="collector" [startNewFlow]="startNewFlowCallback" />
+            <app-flow-link [collector]="collector" [startNewFlow]="davinciService.startNewFlowCallback" [setFormMeta]="setFormMeta"/>
           }
           @default {
             <app-unknown [collector]="collector" />
@@ -97,7 +97,7 @@ Render conditions for presenting appropriate views to user.
         }
       }
     }
-  } @else if (node.status === 'error') {
+  } @else if (davinciService.node.status === 'error') {
     <!-- 
     Something went wrong, show an error message to the user.
     -->

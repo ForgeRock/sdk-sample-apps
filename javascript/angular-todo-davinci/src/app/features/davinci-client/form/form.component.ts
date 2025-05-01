@@ -22,11 +22,10 @@ import { UnknownComponent } from '../unknown/unknown.component';
 import { KeyIconComponent } from '../../../icons/key-icon/key-icon.component';
 import { NewUserIconComponent } from '../../../icons/new-user-icon/new-user-icon.component';
 
-import { Collectors, FlowCollector, NodeStates, PasswordCollector, SuccessNode, TextCollector, Updater, ValidatedTextCollector } from '@forgerock/davinci-client/types';
-import { TokenManager, UserManager } from '@forgerock/javascript-sdk';
-import { DaVinciClient } from '../davinci.types';
-import createClient from '../davinci.utils';
+import { SuccessNode } from '@forgerock/davinci-client/types';
 import { UserService } from '../../../services/user.service';
+import { DavinciService } from '../../../services/davinci/davinci.service';
+import { OAuthService } from '../../../services/oauth.service';
 
 @Component({
   selector: 'app-davinci-form',
@@ -45,46 +44,39 @@ import { UserService } from '../../../services/user.service';
     KeyIconComponent,
     NewUserIconComponent,
   ],
+  providers: [DavinciService, OAuthService]
 })
 
 /**
  * A form for managing the user authentication and authorization flow
  */
 export class DavinciFormComponent implements OnInit {
+  readonly davinciService = inject(DavinciService);
+  private readonly oauthService = inject(OAuthService);
   private readonly userService = inject(UserService);
   private readonly router = inject(Router);
 
-  // Create local state using the DavinciService to manage the DaVinci flow
-  private client: DaVinciClient | null = null;
-  node: NodeStates | null = null;
-  collectors: Collectors[] = [];
+  // Create local state for form metadata
   formName = '';
   formAction = '';
-  // private clientInfo: ReturnType<DaVinciClient['getClient']> | null = null;
   errorMessage = '';
-  updater: (collector: TextCollector | ValidatedTextCollector | PasswordCollector) => Updater | null = null;
   isSubmittingForm = false;
 
-
   /**
-   * @function setFormData - Set the form data for the DaVinci flow
+   * @function setFormMeta - Set the form metadata for the DaVinci flow
    * @returns {void}
    */
-  private setFormData(node: NodeStates): void {
-    this.node = node;
-    this.collectors = this.client?.getCollectors() ?? [];
-
-    const clientInfo = this.client?.getClient() ?? null;
-    if (clientInfo.status === 'continue' || clientInfo.status === 'error') {
-      this.formName = clientInfo?.name ?? '';
-      this.formAction = clientInfo?.action ?? '';
+  setFormMeta = (): void => {
+    const clientInfo = this.davinciService.clientInfo;
+    if (clientInfo?.status === 'continue' || clientInfo?.status === 'error') {
+      this.formName = clientInfo.name ?? '';
+      this.formAction = clientInfo.action ?? '';
     }
 
-    if (node.status === 'error') {
-      this.errorMessage = node.error?.message ?? 'An unknown error occurred';
+    const currentNode = this.davinciService.node;
+    if (currentNode?.status === 'error') {
+      this.errorMessage = currentNode?.error?.message ?? 'An unknown error occurred';
     }
-
-    this.updater = this.client?.update ?? null;
 }
 
   /** *********************************************************************
@@ -94,44 +86,14 @@ export class DavinciFormComponent implements OnInit {
    * Details: Start the DaVinci flow to get the first node for rendering the form.
    ********************************************************************* */
   async ngOnInit(): Promise<void> {
-    try {
-          if (!this.client || !this.node) {
-            const davinciClient = await createClient();
-            const initialNode = (await davinciClient?.start()) ?? null;
-    
-            this.client = davinciClient;
-            this.setFormData(initialNode);
+    await this.davinciService.initDavinci();
+    this.setFormMeta();
 
-            // If the initial node is a success node, then skip to handling OAuth
-            console.log('intial node', initialNode);
-            if (initialNode?.status === 'success') {
-              await this.handleSuccess(initialNode);
-            }
-          }
-  } catch (error) {
-    console.error('Error initializing DaVinci: ', error);
-  }
-  }
-  
-  /**
-   * @function setNext - Get the next node in the DaVinci flow
-   * @returns {Promise<void>}
-   */
-  private async setNext() {
-    /** *********************************************************************
-     * SDK INTEGRATION POINT
-     * Summary: Get the next node in the DaVinci flow
-     * ----------------------------------------------------------------------
-     * Details: Get the next node in the flow from DaVinci. No need to pass
-     * the node with set values on collectors since the DaVinci client will
-     * manage the state of the current node. Updates local node state with the
-     * next node.
-     ********************************************************************* */
-    try {
-      const nextNode = await this.client?.next();
-      this.setFormData(nextNode);
-    } catch (error) {
-      console.error('Error getting next node', error);
+    // If the initial node is a success node, then skip to handling OAuth
+    const initialNode = this.davinciService.node;
+    console.log('intial node', initialNode);
+    if (initialNode?.status === 'success') {
+      await this.handleSuccess(initialNode);
     }
   }
 
@@ -151,38 +113,8 @@ export class DavinciFormComponent implements OnInit {
    * @returns {Promise<void>}
    */
   submitProtectCallback = async (): Promise<void> => {
-    await this.setNext();
-  };
-
-  /**
-   * @function startNewFlow - Starts a new DaVinci flow from a flow collector
-   * @returns {Promise<void>}
-   */
-  startNewFlowCallback = async (collector: FlowCollector) => {
-    /** *********************************************************************
-     * SDK INTEGRATION POINT
-     * Summary: Start a new DaVinci flow from a flow collector
-     * ----------------------------------------------------------------------
-     * Details: The DaVinci client provides a flow method for retrieving
-     * the first node from a new flow. We set the local node state to this
-     * flow node to start a new flow.
-     ********************************************************************* */
-    if (this.client) {
-      try {
-        const getFlowNode = this.client.flow({ action: collector.name });
-        const flowNode = await getFlowNode();
-        if (flowNode.error) {
-          console.error('Error starting new flow: ', flowNode.error);
-          this.setFormData(null)
-        } else {
-          this.setFormData(flowNode as NodeStates);
-        }
-      } catch (error) {
-        console.error('Error getting flow node: ', error);
-      }
-    } else {
-      console.error('Missing client to start new flow');
-    }
+    await this.davinciService.setNext();
+    this.setFormMeta();
   };
 
   /**
@@ -199,9 +131,12 @@ export class DavinciFormComponent implements OnInit {
        * Get the next node in the flow and continue with authorization if
        * it is a success node
        */
-      await this.setNext();
-      if (this.node?.status === 'success') {
-        await this.handleSuccess(this.node);
+      await this.davinciService.setNext();
+      this.setFormMeta();
+
+      const currentNode = this.davinciService.node;
+      if (currentNode?.status === 'success') {
+        await this.handleSuccess(currentNode);
       }
     } catch (error) {
       console.error(error);
@@ -210,45 +145,6 @@ export class DavinciFormComponent implements OnInit {
     }
   }
 
-  /**
-   * @function handleOAuth - The function to call when we get a successful login
-   * @returns {Promise<unknown>} - The user if authorization was successful
-   */
-  private async handleOAuth(params: { code: string; state: string }): Promise<unknown> {
-    /** *********************************************************************
-     * SDK INTEGRATION POINT
-     * Summary: Get OAuth/OIDC tokens with Authorization Code Flow w/PKCE.
-     * ----------------------------------------------------------------------
-     * Details: Since we have successfully authenticated the user, we can now
-     * get the OAuth2/OIDC tokens. We are passing the `forceRenew` option to
-     * ensure we get fresh tokens, regardless of existing tokens.
-     ************************************************************************* */
-    const { code, state } = params;
-    try {
-      await TokenManager.getTokens({
-        query: { code, state },
-        forceRenew: true,
-      });
-    } catch (err) {
-      console.error(`Error: get tokens; ${err}`);
-    }
-
-    /** *********************************************************************
-     * SDK INTEGRATION POINT
-     * Summary: Call the user info endpoint for some basic user data.
-     * ----------------------------------------------------------------------
-     * Details: This is an OAuth2 call that returns user information with a
-     * valid access token. This is optional and only used for displaying
-     * user info in the UI.
-     ********************************************************************* */
-    try {
-      const user = await UserManager.getCurrentUser();
-      return user;
-    } catch (err) {
-      console.error(`Error: get current user; ${err}`);
-      return null;
-    }
-  }
 
   /**
    * @function finalizeAuthState - Update global state in the UserService
@@ -275,7 +171,7 @@ export class DavinciFormComponent implements OnInit {
     try {
       const code = successNode.client?.authorization?.code ?? '';
       const state = successNode.client?.authorization?.state ?? '';
-      const user = await this.handleOAuth({ code, state });
+      const user = await this.oauthService.handleOAuth({ code, state });
       if (user) {
         this.finalizeAuthState(user as Record<string, string>);
 

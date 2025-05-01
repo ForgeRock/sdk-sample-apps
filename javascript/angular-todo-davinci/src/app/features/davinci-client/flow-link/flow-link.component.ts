@@ -18,9 +18,11 @@ import { FlowCollector } from '@forgerock/davinci-client/types';
 })
 export class FlowButtonComponent {
   @Input() collector: FlowCollector | null = null;
-  @Input() startNewFlow: (collector: FlowCollector) => Promise<void> | null = null;
+  @Input() startNewFlow: ((collector: FlowCollector) => Promise<void>) | null = null;
+  @Input() setFormMeta: (() => void) | null = null;
 
   async onFlowClick() {
     await this.startNewFlow(this.collector);
+    this.setFormMeta();
   }
 }
