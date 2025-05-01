@@ -20,9 +20,9 @@ Render conditions for presenting appropriate views to user.
  -->
 
 <form (submit)="submitHandler($event)">
-  @if (formAction()) {
+  @if (formAction) {
     <div class="cstm_form-icon text-center mb-3">
-      @switch (formAction()) {
+      @switch (formAction) {
         @case ('SIGNON') {
           <app-key-icon size="72px" />
         }
@@ -33,36 +33,36 @@ Render conditions for presenting appropriate views to user.
       }
     </div>
   }
-  @if (!node() || node().status === 'start') {
+  @if (!node || node.status === 'start') {
     <!-- 
     Since there is no node information we need to call DaVinci to retrieve the
       instructions for rendering the login form. 
       -->
     <app-loading message="Checking your session..."></app-loading>
-  } @else if (node().status === 'success') {
+  } @else if (node.status === 'success') {
     <!-- 
     Since we have successfully authenticated, show a success message to
     user while we complete the process and redirect to home page.
     -->
     <app-alert type="success" message="Success! You're logged in."></app-alert>
-  } @else if (node().status === 'continue' && collectors().length) {
+  } @else if (node.status === 'continue' && collectors.length) {
     <!-- 
     The node to render has collectors, so we need to collect additional
     data from user.
     -->
-    @if (formName() && !hasProtectCollector(collectors())) {
-      <h1 class="text-center fs-2 mb-3">{{ formName() }}</h1>
+    @if (formName && !hasProtectCollector(collectors)) {
+      <h1 class="text-center fs-2 mb-3">{{ formName }}</h1>
     }
 
     <!-- 
     Iterate over the collectors and render the appropriate
     component for each one.
     -->
-    @for (collector of collectors(); track collector) {
+    @for (collector of collectors; track collector) {
       @if (collector.type === 'TextCollector' && collector.name === 'protectsdk') {
         <app-protect
           [label]="collector.output.label"
-          [update]="updater()(collector)"
+          [update]="updater(collector)"
           [submitProtect]="submitProtectCallback"
         />
       } @else {
@@ -71,14 +71,14 @@ Render conditions for presenting appropriate views to user.
             <app-text-input
               [key]="collector.output.key"
               [label]="collector.output.label"
-              [update]="updater()(collector)"
+              [update]="updater(collector)"
             />
           }
           @case ('PasswordCollector') {
             <app-password
               [key]="collector.output.key"
               [label]="collector.output.label"
-              [update]="updater()(collector)"
+              [update]="updater(collector)"
             />
           }
           @case ('SubmitCollector') {
@@ -97,11 +97,11 @@ Render conditions for presenting appropriate views to user.
         }
       }
     }
-  } @else if (node().status === 'error') {
+  } @else if (node.status === 'error') {
     <!-- 
     Something went wrong, show an error message to the user.
     -->
-    <app-alert type="error" [message]="errorMessage()" />
+    <app-alert type="error" [message]="errorMessage" />
   } @else {
     <!-- 
     Just in case things blow up.
