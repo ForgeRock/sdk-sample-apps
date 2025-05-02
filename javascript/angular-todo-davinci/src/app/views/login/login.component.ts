@@ -11,7 +11,7 @@
 import { Component } from '@angular/core';
 import { BackHomeComponent } from '../../utilities/back-home/back-home.component';
 
-import { DavinciFormComponent } from '../../features/davinci-client/form/form.component';
+import { DavinciFormComponent } from '../../features/davinci/form/form.component';
 
 /**
  * Used to show a login page

@@ -8,7 +8,7 @@
  * of the MIT license. See the LICENSE file for details.
  */
 
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FlowCollector } from '@forgerock/davinci-client/types';
 
 @Component({
@@ -18,9 +18,11 @@ import { FlowCollector } from '@forgerock/davinci-client/types';
 })
 export class FlowButtonComponent {
   @Input() collector: FlowCollector | null = null;
-  @Input() startNewFlow: (collector: FlowCollector) => Promise<void> | null = null;
+  @Input() flow: () => void;
+  @Output() renderForm = new EventEmitter<void>();
 
   async onFlowClick() {
-    await this.startNewFlow(this.collector);
+    await this.flow();
+    this.renderForm.emit();
   }
 }

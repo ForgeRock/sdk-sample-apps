@@ -12,7 +12,7 @@ import { OnInit, inject } from '@angular/core';
 import { Component } from '@angular/core';
 import { Config, UserManager } from '@forgerock/javascript-sdk';
 import { AsyncConfigOptions } from '@forgerock/javascript-sdk/src/config/interfaces';
-import { UserService } from './services/user.service';
+import { SdkService } from './services/sdk.service';
 import { Router, RouterOutlet } from '@angular/router';
 import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -28,7 +28,7 @@ import { LoadingComponent } from './utilities/loading/loading.component';
   imports: [RouterOutlet, LoadingComponent],
 })
 export class AppComponent implements OnInit {
-  private readonly userService = inject(UserService);
+  private readonly sdkService = inject(SdkService);
   private readonly router = inject(Router);
 
   loading = false;
@@ -86,9 +86,9 @@ export class AppComponent implements OnInit {
     try {
       // The user is authenticated if we can get the user info
       const user = (await UserManager.getCurrentUser()) as Record<string, unknown>;
-      this.userService.isAuthenticated = true;
-      this.userService.username = `${user.given_name ?? ''} ${user.family_name ?? ''}`;
-      this.userService.email = `${user.email ?? ''}`;
+      this.sdkService.isAuthenticated = true;
+      this.sdkService.username = `${user.given_name ?? ''} ${user.family_name ?? ''}`;
+      this.sdkService.email = `${user.email ?? ''}`;
     } catch (err) {
       // User likely not authenticated
       console.log(err);

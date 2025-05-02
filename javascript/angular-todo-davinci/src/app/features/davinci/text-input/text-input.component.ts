@@ -9,7 +9,6 @@
  */
 
 import { Component, Input } from '@angular/core';
-import { Updater } from '@forgerock/davinci-client/types';
 
 @Component({
   selector: 'app-text-input',
@@ -19,7 +18,7 @@ import { Updater } from '@forgerock/davinci-client/types';
 export class TextInputComponent {
   @Input() key: string = '';
   @Input() label: string = '';
-  @Input() update: Updater | null = null;
+  @Input() update: (value: string) => void = () => {};
 
   onBlur(event: Event): void {
     this.update((event.target as HTMLInputElement).value);
