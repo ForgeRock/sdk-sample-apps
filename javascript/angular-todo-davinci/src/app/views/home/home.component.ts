@@ -9,7 +9,7 @@
  */
 
 import { Component, inject } from '@angular/core';
-import { UserService } from '../../services/user.service';
+import { SdkService } from '../../services/sdk.service';
 import { HeaderComponent } from '../../layout/header/header.component';
 
 import { VerifiedIconComponent } from '../../icons/verified-icon/verified-icon.component';
@@ -26,8 +26,8 @@ import { FooterComponent } from '../../layout/footer/footer.component';
   imports: [HeaderComponent, VerifiedIconComponent, RouterLink, FooterComponent],
 })
 export class HomeComponent {
-  private readonly userService = inject(UserService);
+  private readonly sdkService = inject(SdkService);
 
-  username = this.userService.username;
-  isAuthenticated = this.userService.isAuthenticated;
+  username = this.sdkService.username;
+  isAuthenticated = this.sdkService.isAuthenticated;
 }

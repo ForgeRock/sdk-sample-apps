@@ -11,7 +11,7 @@
 import { OnInit, inject } from '@angular/core';
 import { Component } from '@angular/core';
 import { FRUser } from '@forgerock/javascript-sdk';
-import { UserService } from '../../services/user.service';
+import { SdkService } from '../../services/sdk.service';
 import { LoadingComponent } from '../../utilities/loading/loading.component';
 
 /**
@@ -24,7 +24,7 @@ import { LoadingComponent } from '../../utilities/loading/loading.component';
   imports: [LoadingComponent],
 })
 export class LogoutComponent implements OnInit {
-  private readonly userService = inject(UserService);
+  private readonly sdkService = inject(SdkService);
 
   /**
    * As soon as this component loads we want to log the user out
@@ -45,9 +45,9 @@ export class LogoutComponent implements OnInit {
        * Details: Logout and clear existing, stored data
        ********************************************************************* */
       await FRUser.logout({ logoutRedirectUri: window.location.origin });
-      this.userService.username = '';
-      this.userService.email = '';
-      this.userService.isAuthenticated = false;
+      this.sdkService.username = '';
+      this.sdkService.email = '';
+      this.sdkService.isAuthenticated = false;
     } catch (err) {
       console.error(`Error: logout did not successfully complete; ${err}`);
     }
