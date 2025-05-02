@@ -10,7 +10,7 @@
 
 import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { UserService } from '../../services/user.service';
+import { SdkService } from '../../services/sdk.service';
 import { NgClass } from '@angular/common';
 import { PingIconComponent } from '../../icons/ping-icon/ping-icon.component';
 import { AngularIconComponent } from '../../icons/angular-icon/angular-icon.component';
@@ -37,10 +37,10 @@ import { AccountIconComponent } from '../../icons/account-icon/account-icon.comp
 })
 export class HeaderComponent {
   private readonly routerService = inject(Router);
-  private readonly userService = inject(UserService);
+  private readonly sdkService = inject(SdkService);
 
   router = this.routerService;
-  isAuthenticated = this.userService.isAuthenticated;
-  username = this.userService.username;
-  email = this.userService.email;
+  isAuthenticated = this.sdkService.isAuthenticated;
+  username = this.sdkService.username;
+  email = this.sdkService.email;
 }

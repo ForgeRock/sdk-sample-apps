@@ -8,8 +8,7 @@
  * of the MIT license. See the LICENSE file for details.
  */
 
-import { Component, Input, OnInit } from '@angular/core';
-import { Updater } from '@forgerock/davinci-client/types';
+import { Component,EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { LoadingComponent } from '../../../utilities/loading/loading.component';
 
 /**
@@ -28,11 +27,11 @@ import { LoadingComponent } from '../../../utilities/loading/loading.component';
 })
 export class ProtectComponent implements OnInit {
   @Input() label: string = '';
-  @Input() update: Updater | null = null;
-  @Input() submitProtect: (() => Promise<void>) | null = null;
+  @Input() update: (value: string) => void;
+  @Output() submitHandler = new EventEmitter<void>();
 
   async ngOnInit() {
     this.update('fakeprofile');
-    await this.submitProtect();
+    await this.submitHandler.emit();
   }
 }

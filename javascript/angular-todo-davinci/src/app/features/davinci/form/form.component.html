@@ -8,7 +8,7 @@ This software may be modified and distributed under the terms
 of the MIT license. See the LICENSE file for details.
 -->
 
-<!-- 
+<!--
 Render conditions for presenting appropriate views to user.
  First, we need to handle no "node", which means we are waiting for
  the initial response from PingOne for authentication.
@@ -16,7 +16,7 @@ Render conditions for presenting appropriate views to user.
  Once we have a node, we then need to ensure we don't already have a
  success or failure. If we have a node but don't have a success or
  failure, we will likely have collectors that we will need to present
- to the user in their render component form. 
+ to the user in their render component form.
  -->
 
 <form (submit)="submitHandler($event)">
@@ -34,27 +34,27 @@ Render conditions for presenting appropriate views to user.
     </div>
   }
   @if (!node || node.status === 'start') {
-    <!-- 
+    <!--
     Since there is no node information we need to call DaVinci to retrieve the
-      instructions for rendering the login form. 
+      instructions for rendering the login form.
       -->
     <app-loading message="Checking your session..."></app-loading>
   } @else if (node.status === 'success') {
-    <!-- 
+    <!--
     Since we have successfully authenticated, show a success message to
     user while we complete the process and redirect to home page.
     -->
     <app-alert type="success" message="Success! You're logged in."></app-alert>
   } @else if (node.status === 'continue' && collectors.length) {
-    <!-- 
+    <!--
     The node to render has collectors, so we need to collect additional
     data from user.
     -->
-    @if (formName && !hasProtectCollector(collectors)) {
+    @if (formName && shouldRenderTitle()) {
       <h1 class="text-center fs-2 mb-3">{{ formName }}</h1>
     }
 
-    <!-- 
+    <!--
     Iterate over the collectors and render the appropriate
     component for each one.
     -->
@@ -62,8 +62,8 @@ Render conditions for presenting appropriate views to user.
       @if (collector.type === 'TextCollector' && collector.name === 'protectsdk') {
         <app-protect
           [label]="collector.output.label"
-          [update]="updater(collector)"
-          [submitProtect]="submitProtectCallback"
+          [update]="client.update(collector)"
+          (submitHandler)="submitHandler()"
         />
       } @else {
         @switch (collector.type) {
@@ -71,14 +71,14 @@ Render conditions for presenting appropriate views to user.
             <app-text-input
               [key]="collector.output.key"
               [label]="collector.output.label"
-              [update]="updater(collector)"
+              [update]="client.update(collector)"
             />
           }
           @case ('PasswordCollector') {
             <app-password
               [key]="collector.output.key"
               [label]="collector.output.label"
-              [update]="updater(collector)"
+              [update]="client.update(collector)"
             />
           }
           @case ('SubmitCollector') {
@@ -89,7 +89,10 @@ Render conditions for presenting appropriate views to user.
             />
           }
           @case ('FlowCollector') {
-            <app-flow-link [collector]="collector" [startNewFlow]="startNewFlowCallback" />
+            <app-flow-link
+              [collector]="collector"
+              [flow]="client.flow({ action: collector.output.key })"
+              (renderForm)="renderForm()" />
           }
           @default {
             <app-unknown [collector]="collector" />
@@ -98,12 +101,12 @@ Render conditions for presenting appropriate views to user.
       }
     }
   } @else if (node.status === 'error') {
-    <!-- 
+    <!--
     Something went wrong, show an error message to the user.
     -->
     <app-alert type="error" [message]="errorMessage" />
   } @else {
-    <!-- 
+    <!--
     Just in case things blow up.
     -->
     <app-alert type="error" message="Unknown node status" />
