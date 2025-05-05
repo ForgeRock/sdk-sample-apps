@@ -17,7 +17,7 @@ import { Component, Input } from '@angular/core';
   imports: [],
 })
 export class SubmitButtonComponent {
-  @Input() key: string;
-  @Input() label: string;
-  @Input() submittingForm: boolean;
+  @Input() key: string = '';
+  @Input() label: string = '';
+  @Input() submittingForm: boolean = false;
 }

@@ -83,8 +83,7 @@ To modify the client portion of this project, you'll need to be familiar with th
 
 1. [Components](https://v18.angular.dev/guide/components)
 2. [Services and Dependency Injection](https://v18.angular.dev/guide/di)
-3. [Signals](https://v18.angular.dev/guide/signals)
-4. [Event Binding](https://v18.angular.dev/guide/templates/binding)
+3. [Event Binding](https://v18.angular.dev/guide/templates/binding)
 
 You'll also want a basic understanding the following:
 

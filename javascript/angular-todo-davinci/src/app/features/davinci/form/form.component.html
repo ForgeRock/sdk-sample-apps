@@ -62,7 +62,7 @@ Render conditions for presenting appropriate views to user.
       @if (collector.type === 'TextCollector' && collector.name === 'protectsdk') {
         <app-protect
           [label]="collector.output.label"
-          [update]="client.update(collector)"
+          [update]="client?.update(collector)"
           (submitHandler)="submitHandler()"
         />
       } @else {
@@ -71,14 +71,14 @@ Render conditions for presenting appropriate views to user.
             <app-text-input
               [key]="collector.output.key"
               [label]="collector.output.label"
-              [update]="client.update(collector)"
+              [update]="client?.update(collector)"
             />
           }
           @case ('PasswordCollector') {
             <app-password
               [key]="collector.output.key"
               [label]="collector.output.label"
-              [update]="client.update(collector)"
+              [update]="client?.update(collector)"
             />
           }
           @case ('SubmitCollector') {
@@ -91,8 +91,9 @@ Render conditions for presenting appropriate views to user.
           @case ('FlowCollector') {
             <app-flow-link
               [collector]="collector"
-              [flow]="client.flow({ action: collector.output.key })"
-              (renderForm)="renderForm()" />
+              [flow]="client?.flow({ action: collector.output.key })"
+              (renderForm)="renderForm()"
+            />
           }
           @default {
             <app-unknown [collector]="collector" />
@@ -100,7 +101,7 @@ Render conditions for presenting appropriate views to user.
         }
       }
     }
-  } @else if (node.status === 'error') {
+  } @else if (node.status === 'error' || node.status === 'failure') {
     <!--
     Something went wrong, show an error message to the user.
     -->

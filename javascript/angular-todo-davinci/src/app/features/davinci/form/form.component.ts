@@ -22,10 +22,7 @@ import { UnknownComponent } from '../unknown/unknown.component';
 import { KeyIconComponent } from '../../../icons/key-icon/key-icon.component';
 import { NewUserIconComponent } from '../../../icons/new-user-icon/new-user-icon.component';
 
-import {
-  Collectors,
-  NodeStates,
-} from '@forgerock/davinci-client/types';
+import { Collectors, NodeStates } from '@forgerock/davinci-client/types';
 import { DaVinciClient } from '../davinci.types';
 import createClient from '../davinci.utils';
 import { SdkService } from '../../../services/sdk.service';
@@ -56,9 +53,11 @@ export class DavinciFormComponent implements OnInit {
   private readonly sdkService = inject(SdkService);
   private readonly router = inject(Router);
 
-  // Create local state using the DavinciService to manage the DaVinci flow
-  client: DaVinciClient;
-  node: NodeStates = null;
+  /**
+   * Create local state to manage the DaVinci flow
+   */
+  client: DaVinciClient | null = null;
+  node: NodeStates | null = null;
   collectors: Collectors[] = [];
   formName = '';
   formAction = '';
@@ -66,39 +65,74 @@ export class DavinciFormComponent implements OnInit {
   isSubmittingForm = false;
 
   /**
-   * @function setFormData - Set the form data for the DaVinci flow
+   * @function renderForm - Set the form data for the DaVinci flow based on node status
    * @returns {void}
    */
   renderForm(): void {
-    const clientInfo = this.client.getClient(); // We don't have a type for ClientInfo yet
-    this.collectors = this.client.getCollectors();
+    /**
+     * Set the form collectors needed to compose the form
+     */
+    this.collectors = this.client?.getCollectors() ?? [];
 
-    if (clientInfo.status === 'continue' || clientInfo.status === 'error') {
-      this.formName = clientInfo.name ?? '';
-      this.formAction = clientInfo.action ?? '';
+    /**
+     * Set any form details that should be displayed. Use the getClient() method to
+     * conveniently get the client information from the node.
+     */
+    const clientInfo = this.client?.getClient(); // We don't have a type for ClientInfo yet
+    switch (clientInfo?.status) {
+      case 'continue':
+        this.formName = clientInfo.name ?? '';
+        this.formAction = clientInfo.action ?? '';
+        break;
+      case 'error':
+        this.errorMessage = this.node?.error?.message ?? 'An unknown error occurred';
+        break;
+      case 'failure':
+        this.errorMessage = 'An unknown failure occurred';
+        break;
+      default:
+        return;
     }
+  }
 
-    // TODO: Handle error node and continuation
-    // if (node.status === 'error') {
-    //   this.errorMessage = node.error?.message ?? 'An unknown error occurred';
-    // }
+  /**
+   * @function handleSuccess - Continue with authorization after successful login
+   * @param {string} code - The authorization code from a successfully completed DaVinci flow
+   * @param {string} state - The authorization state from a successfully completed DaVinci flow
+   * @returns {Promise<void>}
+   */
+  private async successHandler(code: string, state: string): Promise<void> {
+    /**
+     * Upon successful login, pass the authorization code and state to the SDK
+     * service to start the OIDC flow. Upon successfully retrieving a user profile,
+     * redirect the user to the home page.
+     */
+    try {
+      const user = await this.sdkService.startOidc({ code, state });
+      user && this.router.navigateByUrl('/home');
+    } catch (error) {
+      console.error('Error handling success:', error);
+      this.sdkService.isAuthenticated = false;
+    }
   }
 
   /** *********************************************************************
    * SDK INTEGRATION POINT
    * Summary: Initialize the Davinci client and flow
    * ----------------------------------------------------------------------
-   * Details: Start the DaVinci flow to get the first node for rendering the form.
+   * Details: Start the DaVinci flow to get the first node for rendering
+   * the form. If the user is already authenticated then skip to the OIDC
+   * step otherwise render a form
    ********************************************************************* */
   async ngOnInit(): Promise<void> {
     try {
       if (!this.client || !this.node) {
         this.client = await createClient();
-        this.node = await this.client.start();
+        this.node = (await this.client?.start()) ?? null;
 
-        if (this.node.status === 'success') {
-          const code = this.node.client.authorization?.code ?? '';
-          const state = this.node.client.authorization?.state ?? '';
+        if (this.node?.status === 'success') {
+          const code = this.node.client?.authorization?.code ?? '';
+          const state = this.node.client?.authorization?.state ?? '';
           await this.successHandler(code, state);
         } else {
           this.renderForm();
@@ -110,13 +144,11 @@ export class DavinciFormComponent implements OnInit {
   }
 
   /**
-   * @function shouldRenderTitle - Determines if there is a Protect SDK collector
+   * @function shouldRenderTitle - Determines if the form title should be displayed
    * @returns {boolean} - True if there is a Protect SDK collector otherwise false
    */
-  shouldRenderTitle() {
-    return !this.collectors?.find(
-      (collector) => collector.name === 'protectsdk',
-    );
+  shouldRenderTitle(): boolean {
+    return !this.collectors?.some((collector) => collector.name === 'protectsdk');
   }
 
   /**
@@ -129,45 +161,27 @@ export class DavinciFormComponent implements OnInit {
     this.isSubmittingForm = true;
 
     try {
-      /**
-       * Get the next node in the flow and continue with authorization if
-       * it is a success node
-       */
-      this.node = await this.client.next();
-      if (this.node.status === 'success') {
-        const code = this.node.client.authorization?.code ?? '';
-        const state = this.node.client.authorization?.state ?? '';
+      /** *********************************************************************
+       * SDK INTEGRATION POINT
+       * Summary: Submit the form and check the next node for next steps
+       * ----------------------------------------------------------------------
+       * Details: Get the next node in the flow from DaVinci. Notice there is
+       * no need to pass the node with set values on collectors since the DaVinci
+       * client will manage the state of the current node. Continue with the
+       * authorization flow if it is a success node otherwise render another form.
+       ********************************************************************* */
+      this.node = (await this.client?.next()) ?? null;
+      if (this.node?.status === 'success') {
+        const code = this.node.client?.authorization?.code ?? '';
+        const state = this.node.client?.authorization?.state ?? '';
         await this.successHandler(code, state);
-      } else if (this.node.status === 'continue') {
+      } else {
         this.renderForm();
       }
-      // TODO: Handle failure node
     } catch (error) {
-      console.error(error);
+      console.error('Error submitting form;', error);
     } finally {
       this.isSubmittingForm = false;
-    }
-  }
-
-  /**
-   * @function handleSuccess - Continue with authorization after successful login
-   * @param {SuccessNode} node - A success node from the DaVinci flow
-   * @returns {Promise<void>}
-   */
-  private async successHandler(code: string, state: string) {
-    /**
-     * Upon successful login, pass the authorization code and state to the OAuth
-     * service to get an authenticated user. Then, set the global user state in
-     * the UserService and finish by redirecting to the home page.
-     */
-    try {
-      await this.sdkService.startOidc({ code, state });
-
-      // Redirect back to the home page
-      this.router.navigateByUrl('/home');
-    } catch (error) {
-      console.error('Error handling success:', error);
-      this.sdkService.isAuthenticated = false;
     }
   }
 }
