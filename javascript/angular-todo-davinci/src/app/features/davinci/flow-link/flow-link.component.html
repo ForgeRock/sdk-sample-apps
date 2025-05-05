@@ -10,8 +10,8 @@ of the MIT license. See the LICENSE file for details.
 <a
   routerLink="#"
   class="d-flex flex-row justify-content-center cstm_flow-link mb-2"
-  [id]="collector.output.key"
+  [id]="collector?.output?.key"
   (click)="onFlowClick()"
 >
-  {{ collector.output.label }}
+  {{ collector?.output?.label }}
 </a>

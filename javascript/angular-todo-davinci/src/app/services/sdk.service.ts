@@ -1,7 +1,7 @@
 /*
  * ping-sample-web-angular-davinci
  *
- * user.service.ts
+ * sdk.service.ts
  *
  * Copyright (c) 2025 Ping Identity Corporation. All rights reserved.
  * This software may be modified and distributed under the terms
@@ -24,17 +24,31 @@ export class SdkService {
   isAuthenticated = false;
 
   /**
-   * State representing previously retrieved user information
+   * State representing retrieved user information
    */
   username: string = '';
   email: string = '';
 
-  async getUser(): Promise<Record<string, string> | null> {
+  /**
+   * @function getUser - Gets user information from the authorization server
+   * @returns {Promise<unknown>} - A promise that resolves to the user object if it exists
+   */
+  async getUser(): Promise<unknown> {
+    /** *********************************************************************
+     * SDK INTEGRATION POINT
+     * Summary: Call the user info endpoint for some basic user data and set
+     * the service state.
+     * ----------------------------------------------------------------------
+     * Details: This is an OAuth2 call that returns user information with a
+     * valid access token. This is optional and only used for displaying
+     * user info in the UI.
+     ********************************************************************* */
     try {
-      const user = await UserManager.getCurrentUser() as Record<string, string>;
+      const user = await UserManager.getCurrentUser();
       if (user) {
-        this.username = `${user.given_name ?? ''} ${user.family_name ?? ''}`;
-        this.email = user.email ?? '';
+        const userInfo = user as Record<string, string>;
+        this.username = `${userInfo.given_name ?? ''} ${userInfo.family_name ?? ''}`;
+        this.email = userInfo.email ?? '';
         this.isAuthenticated = true;
       } else {
         this.username = '';
@@ -58,37 +72,16 @@ export class SdkService {
      * ensure we get fresh tokens, regardless of existing tokens.
      ************************************************************************* */
     const { code, state } = params;
+
     try {
       await TokenManager.getTokens({
         query: { code, state },
         forceRenew: true,
       });
-    } catch (err) {
-      console.error(`Error: get tokens; ${err}`);
-    }
-
-    /** *********************************************************************
-     * SDK INTEGRATION POINT
-     * Summary: Call the user info endpoint for some basic user data.
-     * ----------------------------------------------------------------------
-     * Details: This is an OAuth2 call that returns user information with a
-     * valid access token. This is optional and only used for displaying
-     * user info in the UI.
-     ********************************************************************* */
-    try {
       const user = await this.getUser();
-      if (user) {
-        this.username = `${user.given_name ?? ''} ${user.family_name ?? ''}`;
-        this.email = user.email ?? '';
-        this.isAuthenticated = true;
-      } else {
-        this.username = '';
-        this.email = '';
-        this.isAuthenticated = false;
-      }
       return user;
     } catch (err) {
-      console.error(`Error: get current user; ${err}`);
+      console.error(`Error starting OIDC; ${err}`);
       return null;
     }
   }

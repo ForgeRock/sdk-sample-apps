@@ -10,6 +10,7 @@
 
 import { Component, Input } from '@angular/core';
 import { EyeIconComponent } from '../../../icons/eye-icon/eye-icon.component';
+import { Updater } from '@forgerock/davinci-client/types';
 
 @Component({
   selector: 'app-password',
@@ -18,9 +19,9 @@ import { EyeIconComponent } from '../../../icons/eye-icon/eye-icon.component';
   imports: [EyeIconComponent],
 })
 export class PasswordComponent {
-  @Input() key: string;
-  @Input() label: string;
-  @Input() update: (value: string) => void;
+  @Input() key: string = '';
+  @Input() label: string = '';
+  @Input() update: Updater | undefined = undefined;
 
   isVisible = false;
 
@@ -29,6 +30,6 @@ export class PasswordComponent {
   }
 
   onBlur(event: Event): void {
-    this.update((event.target as HTMLInputElement).value);
+    this.update && this.update((event.target as HTMLInputElement).value);
   }
 }
