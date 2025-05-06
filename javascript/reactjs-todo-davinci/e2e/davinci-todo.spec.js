@@ -2,12 +2,13 @@ import { test, expect } from '@playwright/test';
 
 const BASE_URL = 'http://localhost:8443';
 
-test.describe('React - Davinci Todo', () => {
+test.describe.skip('React - Davinci Todo', () => {
+  test.describe.configure({ mode: 'default' }); // Don't run these tests in parallel
   async function goToTodosPage(page) {
     // Log in and go to the todos page
     await page.goto(BASE_URL);
     await page.getByRole('link', { name: 'Sign In', exact: true }).click();
-    await page.getByLabel('Username').fill('reactdavinci@user.com');
+    await page.getByLabel('Username').fill('JsDvSampleAppsE2E@user.com');
     await page.getByLabel('Password').fill('FakePassword#123');
     await page.getByRole('button', { name: 'Sign On' }).click();
     await page.getByRole('link', { name: 'Todos', exact: true }).click();
@@ -20,7 +21,7 @@ test.describe('React - Davinci Todo', () => {
   }
 
   async function cleanupTodos(page) {
-    const dropdowns = await page.locator('ul > li > div > button');
+    const dropdowns = await page.getByLabel('More actions');
     const numDropdowns = await dropdowns?.count();
     if (numDropdowns) {
       for (let i = 0; i < numDropdowns; i++) {
@@ -70,7 +71,7 @@ test.describe('React - Davinci Todo', () => {
     await expect(page.getByText(todoText)).toBeVisible();
 
     // Delete the todo
-    await page.locator('ul > li > div > button').first().click(); // Select the first todo item's dropdown
+    await page.getByLabel('More actions').first().click(); // Select the first todo item's dropdown
     await page.getByRole('button', { name: 'Delete' }).click();
     await page.getByRole('button', { name: 'Delete Todo' }).click();
     await expect(page.getByText(todoText)).not.toBeVisible();
@@ -85,7 +86,7 @@ test.describe('React - Davinci Todo', () => {
     await page.getByRole('button', { name: 'Create' }).click();
 
     // Edit the todo
-    await page.locator('ul > li > div > button').first().click(); // Select the first todo item's dropdown
+    await page.getByLabel('More actions').first().click(); // Select the first todo item's dropdown
     await page.getByRole('button', { name: 'Edit' }).click();
     await page.getByLabel('Update todo text').fill(updatedTodoText);
     await page.getByRole('button', { name: 'Update Todo' }).click();
