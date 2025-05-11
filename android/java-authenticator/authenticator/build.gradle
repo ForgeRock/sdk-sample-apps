@@ -36,6 +36,7 @@ android {
 
     lintOptions {
         abortOnError false
+        disable 'UseTomlInstead'
     }
     buildFeatures {
         compose true
@@ -48,33 +49,33 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // ForgeRock Authenticator SDK
-    implementation ('org.forgerock:forgerock-authenticator:4.5.0')
+    implementation 'org.forgerock:forgerock-authenticator:4.8.0'
 
     // Loading images dynamically
     implementation 'com.squareup.picasso:picasso:2.5.2'
 
     // FCM Notifications
-    implementation "com.google.firebase:firebase-messaging:23.1.2"
+    implementation "com.google.firebase:firebase-messaging:24.1.1"
 
     // QRCode scanner - ML Kit dependencies and CameraX
-    implementation 'com.google.mlkit:barcode-scanning:16.1.2'
-    implementation 'androidx.camera:camera-core:1.0.0'
-    implementation 'androidx.camera:camera-camera2:1.0.0'
-    implementation 'androidx.camera:camera-lifecycle:1.0.0'
-    implementation 'androidx.camera:camera-view:1.0.0-alpha25'
+    implementation 'com.google.mlkit:barcode-scanning:17.3.0'
+    implementation 'androidx.camera:camera-core:1.4.2'
+    implementation 'androidx.camera:camera-camera2:1.4.2'
+    implementation 'androidx.camera:camera-lifecycle:1.4.2'
+    implementation 'androidx.camera:camera-view:1.4.2'
 
     // QRCode scanner - Alternative library
     implementation('com.journeyapps:zxing-android-embedded:3.3.0') { transitive = false }
     implementation 'com.google.zxing:core:3.3.3'
 
     // UI
-    implementation 'androidx.annotation:annotation:1.1.0'
-    implementation 'androidx.appcompat:appcompat:1.3.0'
+    implementation 'androidx.annotation:annotation:1.9.1'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'com.google.android.material:material:1.1.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation 'androidx.recyclerview:recyclerview:1.1.0'
-    implementation 'org.jetbrains:annotations:15.0'
+    implementation 'com.google.android.material:material:1.12.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
+    implementation 'androidx.recyclerview:recyclerview:1.4.0'
+    implementation 'org.jetbrains:annotations:23.0.0'
 
     // Biometric
     implementation 'androidx.biometric:biometric-ktx:1.2.0-alpha05'
