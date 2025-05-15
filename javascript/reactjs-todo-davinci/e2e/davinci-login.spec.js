@@ -7,7 +7,7 @@ test.describe('React - DaVinci Login', () => {
     await page.goto(BASE_URL);
     await page.getByRole('link', { name: 'Sign In', exact: true }).click();
     await page.getByLabel('Username').fill('reactdavinci@user.com');
-    await page.getByLabel('Password').fill('FakePassword#123');
+    await page.getByLabel('Password').fill('bae0fzc-mzg3krg5FQB');
     await page.getByRole('button', { name: 'Sign On' }).click();
     await expect(page.getByText('Welcome back, React Davinci!')).toBeVisible();
     await expect(page.getByText('Protect with Ping')).toBeVisible();
