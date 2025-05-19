@@ -33,6 +33,7 @@ import KeyIcon from '../../components/icons/key-icon';
 import NewUserIcon from '../../components/icons/new-user-icon';
 import FingerPrintIcon from '../../components/icons/finger-print-icon';
 import IdentityProvider from './identity-provider';
+import Protect from './protect';
 
 /**
  * @function Form - React component for managing the user authentication journey
@@ -186,7 +187,13 @@ export default function Form({ action, bottomMessage, followUp, topMessage, jour
     );
   } else if (
     renderStep.type === 'Step' &&
-    renderStep?.getCallbacksOfType(CallbackType.RedirectCallback).length > 0
+    (renderStep.getCallbacksOfType(CallbackType.PingOneProtectInitializeCallback).length ||
+      renderStep.getCallbacksOfType(CallbackType.PingOneProtectEvaluationCallback).length)
+  ) {
+    return <Protect step={renderStep} setSubmissionStep={setSubmissionStep} />;
+  } else if (
+    renderStep.type === 'Step' &&
+    renderStep.getCallbacksOfType(CallbackType.RedirectCallback).length
   ) {
     FRAuth.redirect(renderStep);
     return <Loading message="Redirecting ..." />;
