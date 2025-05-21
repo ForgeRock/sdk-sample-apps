@@ -8,28 +8,38 @@ import passwordComponent from './components/password.js';
 import submitButtonComponent from './components/submit-button.js';
 import protect from './components/protect.js';
 import flowLinkComponent from './components/flow-link.js';
+import idpCollectorButton from './components/social-login-button.js';
 
 console.log(import.meta.env);
 
 const config = {
   clientId: import.meta.env.VITE_WEB_OAUTH_CLIENT,
-  redirectUri: window.location.href,
-  scope: import.meta.env.VITE_SCOPE,
+  redirectUri: window.location.origin + '/',
+  scope: 'openid profile email name revoke',
   serverConfig: {
     wellknown: import.meta.env.VITE_WELLKNOWN_URL,
   },
 };
 
+const urlParams = new URLSearchParams(window.location.search);
+const continueToken = urlParams.get('continueToken');
+
 (async () => {
   const formEl = document.getElementById('form') as HTMLFormElement;
-
   const davinciClient = await davinci({ config });
+  let resumed;
+
+  if (continueToken) {
+    resumed = await davinciClient.resume({ continueToken });
+  }
   await Config.setAsync(config);
 
-  davinciClient.subscribe(() => {
-    const client = davinciClient.getClient();
-    console.log('Event emitted from observable:', client);
-  });
+  if (davinciClient) {
+    davinciClient.subscribe(() => {
+      const client = davinciClient.getClient();
+      console.log('Event emitted from observable:', client);
+    });
+  }
 
   function renderComplete() {
     const clientInfo = davinciClient.getClient();
@@ -66,16 +76,19 @@ const config = {
     `;
 
     const tokenBtn = document.getElementById('tokensButton') as HTMLButtonElement;
+
     tokenBtn.addEventListener('click', async () => {
       tokens = await TokenManager.getTokens({ query: { code, state } });
 
       console.log(tokens);
 
       const tokenPreEl = document.getElementById('accessToken') as HTMLPreElement;
+
       tokenPreEl.innerText = tokens?.accessToken || '';
     });
 
     const loginBtn = document.getElementById('logoutButton') as HTMLButtonElement;
+
     loginBtn.addEventListener('click', async () => {
       await FRUser.logout({ logoutRedirectUri: window.location.href });
 
@@ -109,28 +122,17 @@ const config = {
     const collectors = davinciClient.getCollectors();
     collectors.forEach((collector) => {
       if (collector.type === 'TextCollector' && collector.name === 'protectsdk') {
-        protect(
-          formEl,
-          collector,
-          davinciClient.update(collector),
-        );
+        protect(formEl, collector, davinciClient.update(collector));
       } else if (collector.type === 'TextCollector') {
-        usernameComponent(
-          formEl,
-          collector,
-          davinciClient.update(collector),
-        );
+        usernameComponent(formEl, collector, davinciClient.update(collector));
       } else if (collector.type === 'PasswordCollector') {
-        passwordComponent(
-          formEl,
-          collector,
-          davinciClient.update(collector),
-        );
+        passwordComponent(formEl, collector, davinciClient.update(collector));
       } else if (collector.type === 'SubmitCollector') {
-        submitButtonComponent(
-          formEl,
-          collector,
-        );
+        submitButtonComponent(formEl, collector);
+      } else if (collector.type === 'IdpCollector') {
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        collector;
+        idpCollectorButton(formEl, collector, davinciClient.externalIdp(collector));
       } else if (collector.type === 'FlowCollector') {
         flowLinkComponent(
           formEl,
@@ -164,5 +166,10 @@ const config = {
     mapRenderer(await davinciClient.next());
   });
 
-  mapRenderer(await davinciClient.start());
+  if (continueToken) {
+    mapRenderer(resumed);
+    resumed = null;
+  } else {
+    mapRenderer(await davinciClient.start());
+  }
 })();
