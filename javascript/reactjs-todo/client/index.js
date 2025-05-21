@@ -9,6 +9,7 @@
  */
 
 import { Config, TokenStorage } from '@forgerock/javascript-sdk';
+import { PIProtect } from '@forgerock/ping-protect';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
@@ -20,6 +21,8 @@ import {
   CENTRALIZED_LOGIN,
   SCOPE,
   WELLKNOWN_URL,
+  INIT_PROTECT,
+  PINGONE_ENV_ID,
 } from './constants';
 import { AppContext, useGlobalStateMgmt } from './global-state';
 
@@ -143,6 +146,20 @@ await Config.setAsync({
       prefersDarkTheme,
       username,
     });
+
+    /**
+     * If the INIT_PROTECT flag is set, initialize PingOne Protect as early as
+     * possible in the application for data collection. The PingOne environment ID
+     * is required while all other options in the configuration are optional.
+     */
+    if (INIT_PROTECT) {
+      if (!PINGONE_ENV_ID) {
+        console.error('Missing PingOne environment ID for Protect initialization');
+      } else {
+        PIProtect.start({ envId: PINGONE_ENV_ID });
+        console.log('PingOne Protect initialized at bootstrap');
+      }
+    }
 
     return (
       <AppContext.Provider value={stateMgmt}>

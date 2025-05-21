@@ -21,4 +21,5 @@ export const SESSION_URL = `${SERVER_URL}json/realms/root/sessions`;
 export const SERVER_TYPE = process.env.SERVER_TYPE;
 export const SCOPE = process.env.SCOPE;
 export const WELLKNOWN_URL = process.env.WELLKNOWN_URL;
+export const INIT_PROTECT = process.env.INIT_PROTECT === 'true';
 export const PINGONE_ENV_ID = process.env.PINGONE_ENV_ID;
