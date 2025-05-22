@@ -495,8 +495,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ForgeRock/forgerock-ios-sdk";
 			requirement = {
-				kind = exactVersion;
-				version = 4.4.1;
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.8.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
