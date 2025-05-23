@@ -39,6 +39,7 @@ export default defineConfig({
         REST_OAUTH_CLIENT: 'RestOAuthClient',
         REST_OAUTH_SECRET: process.env.REST_OAUTH_SECRET || '',
         CENTRALIZED_LOGIN: 'false',
+        INIT_PROTECT: 'false',
       },
       ignoreHTTPSErrors: true,
     },
