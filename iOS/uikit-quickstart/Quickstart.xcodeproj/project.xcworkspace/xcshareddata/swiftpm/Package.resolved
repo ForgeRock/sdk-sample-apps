@@ -24,8 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ForgeRock/forgerock-ios-sdk.git",
       "state" : {
-        "revision" : "94dd1b2d6e92164da0e512daaeaf418aef0e9b17",
-        "version" : "4.4.1"
+        "revision" : "30d77744d8fa1c49e2c79cdac7ffe671b2abaf23",
+        "version" : "4.8.0"
       }
     },
     {
@@ -56,6 +56,15 @@
       }
     },
     {
+      "identity" : "interop-ios-for-google-sdks",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/google/interop-ios-for-google-sdks.git",
+      "state" : {
+        "revision" : "040d087ac2267d2ddd4cca36c757d1c6a05fdbfe",
+        "version" : "101.0.0"
+      }
+    },
+    {
       "identity" : "joseswift",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/airsidemobile/JOSESwift.git",
@@ -71,6 +80,15 @@
       "state" : {
         "revision" : "59fde21ecebaaf1b20046e79f55f05f4beb7a74d",
         "version" : "5.2.7"
+      }
+    },
+    {
+      "identity" : "recaptcha-enterprise-mobile-sdk",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/GoogleCloudPlatform/recaptcha-enterprise-mobile-sdk.git",
+      "state" : {
+        "revision" : "5ec74256124faa7e7814c574509723f49e1fccfb",
+        "version" : "18.7.0"
       }
     }
   ],
