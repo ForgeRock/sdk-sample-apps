@@ -68,7 +68,15 @@ dependencies {
 
     // DaVinci SDK
     implementation(libs.davinci)
+    implementation(libs.foundation.android)
+
+    // Social Login
     implementation(libs.external.idp)
+
+    //To enable Native Google Sign-In, fall back to browser if Google SDK is not available.
+    implementation(libs.googleid)
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.facebook.login)
 
     implementation(libs.androidx.datastore.preferences)
 
@@ -87,4 +95,7 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
+
+    implementation(libs.coil.compose)
+    implementation(libs.coil.svg)
 }

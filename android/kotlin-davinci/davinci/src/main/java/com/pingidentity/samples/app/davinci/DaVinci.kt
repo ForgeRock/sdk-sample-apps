@@ -44,7 +44,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.pingidentity.davinci.module.details
+import com.pingidentity.davinci.module.continueNode
 import com.pingidentity.orchestrate.ContinueNode
 import com.pingidentity.orchestrate.ErrorNode
 import com.pingidentity.orchestrate.FailureNode
@@ -97,7 +97,7 @@ fun DaVinci(
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .fillMaxSize().verticalScroll(scroll)
-    ) {
+   ) {
         if (loading) {
             CircularProgressIndicator()
         }
@@ -125,9 +125,9 @@ fun DaVinci(
                 is ErrorNode -> {
                     Render(node)
                     // Render the previous node
-                    if (state.prev is ContinueNode) {
-                        Render(node = state.prev, onNodeUpdated, onStart) {
-                            onNext(state.prev)
+                    node.continueNode()?.let {
+                        Render(node = it, onNodeUpdated, onStart) {
+                            onNext(it)
                         }
                     }
                 }
