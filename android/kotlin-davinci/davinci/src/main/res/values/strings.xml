@@ -7,4 +7,9 @@
 
 <resources>
     <string name="app_name">DaVinci</string>
+
+    <!-- Facebook Login -->
+    <string name="facebook_app_id">{facebook client id}</string>
+    <string name="fb_login_protocol_scheme">fb{facebook client id}</string>
+    <string name="facebook_client_token">{client token}</string>
 </resources>

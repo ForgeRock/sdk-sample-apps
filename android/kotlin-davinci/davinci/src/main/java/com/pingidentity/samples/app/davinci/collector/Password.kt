@@ -18,8 +18,10 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,6 +45,16 @@ fun Password(
     field: PasswordCollector,
     onNodeUpdated: () -> Unit,
 ) {
+
+    var isValid by remember {
+        mutableStateOf(true)
+    }
+    var verify by remember { mutableStateOf("") }
+
+    LaunchedEffect(field) {
+        verify = ""
+    }
+
     Row(
         modifier =
         Modifier
@@ -57,10 +69,22 @@ fun Password(
             modifier = Modifier.wrapContentWidth(Alignment.CenterHorizontally),
             value = field.value,
             onValueChange = { value ->
+                // text = value
                 field.value = value
+                isValid = field.validate().isEmpty()
                 onNodeUpdated()
             },
-            label = { androidx.compose.material3.Text(field.label) },
+            isError = !isValid,
+            supportingText = if (!isValid) {
+                @Composable {
+                    ErrorMessage(field.validate())
+                }
+            } else null,
+            label = {
+                androidx.compose.material3.Text(
+                    text = if (field.required) "${field.label}*" else field.label
+                )
+            },
             trailingIcon = {
                 IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
                     if (passwordVisibility) {
@@ -84,5 +108,62 @@ fun Password(
 
         Spacer(modifier = Modifier.weight(1f, true))
     }
-}
 
+    if (field.type == "PASSWORD_VERIFY") {
+
+        Row(
+            modifier =
+            Modifier
+                .padding(4.dp)
+                .fillMaxWidth(),
+        ) {
+            var passwordVisibility by remember { mutableStateOf(false) }
+
+
+            Spacer(modifier = Modifier.weight(1f, true))
+
+            OutlinedTextField(
+                modifier = Modifier.wrapContentWidth(Alignment.CenterHorizontally),
+                value = verify,
+                onValueChange = { value ->
+                    verify = value
+                },
+                isError = verify != field.value,
+                supportingText = if (verify != field.value) {
+                    @Composable {
+                        androidx.compose.material3.Text(
+                            text = "Password does not match",
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                    }
+                } else null,
+                label = {
+                    androidx.compose.material3.Text(
+                        text = if (field.required) "${field.label}*" else field.label
+                    )
+                },
+                trailingIcon = {
+                    IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
+                        if (passwordVisibility) {
+                            Icon(Icons.Filled.Visibility, contentDescription = null)
+                        } else {
+                            Icon(Icons.Filled.VisibilityOff, contentDescription = null)
+                        }
+                    }
+                },
+                keyboardOptions =
+                KeyboardOptions(
+                    keyboardType = KeyboardType.Password,
+                ),
+                visualTransformation =
+                if (passwordVisibility) {
+                    VisualTransformation.None
+                } else {
+                    PasswordVisualTransformation()
+                },
+            )
+
+            Spacer(modifier = Modifier.weight(1f, true))
+        }
+    }
+}

@@ -3,8 +3,10 @@ activityCompose = "1.9.3"
 agp = "8.7.1"
 coreSplashscreen = "1.0.1"
 datastore = "1.0.0" # DataStorageTest failed when using 1.1.1 https://issuetracker.google.com/issues/337870543
-davinci = "1.1.0"
-externalIdp = "1.1.0"
+davinci = "1.2.0"
+davinci-android = "1.2.0"
+davinci-storage = "1.2.0"
+davinci-externalIdp = "1.2.0"
 kotlin = "2.0.0"
 compose = "1.7.4"
 compose-material3 = "1.3.0"
@@ -14,6 +16,11 @@ material = "1.12.0"
 materialIconsExtended = "1.7.4"
 navVersion = "2.8.3"
 composeBom = "2024.10.00"
+coilCompose = "2.4.0"
+coilSvg = "2.4.0"
+androidx-credentials = "1.5.0"
+googleid = "1.1.1"
+facebook-login = "18.0.3"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
@@ -27,10 +34,18 @@ compose-foundation = { module = "androidx.compose.foundation:foundation", versio
 compose-material3 = { module = "androidx.compose.material3:material3", version.ref = "compose-material3" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-davinci = { module = "com.pingidentity.sdks:davinci", version.ref = "davinci" }
-external-idp = { module = "com.pingidentity.sdks:external-idp", version.ref = "externalIdp" }
+davinci = { module = "com.pingidentity.sdks:android", version.ref = "davinci" }
+foundation-android = { module = "com.pingidentity.sdks:davinci", version.ref = "davinci-android" }
+foundation-storage = { module = "com.pingidentity.sdks:davinci", version.ref = "davinci-storage" }
+external-idp = { module = "com.pingidentity.sdks:external-idp", version.ref = "davinci-externalIdp" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
+coil-svg = { module = "io.coil-kt:coil-svg", version.ref = "coilSvg" }
+androidx-credentials = { group = "androidx.credentials", name = "credentials", version.ref = "androidx-credentials" }
+androidx-credentials-play-services-auth = { group = "androidx.credentials", name = "credentials-play-services-auth", version.ref = "androidx-credentials" }
+googleid = { group = "com.google.android.libraries.identity.googleid", name = "googleid", version.ref = "googleid" }
+facebook-login = { module = "com.facebook.android:facebook-login", version.ref = "facebook-login" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
