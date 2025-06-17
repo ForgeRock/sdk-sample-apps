@@ -18,7 +18,7 @@ export default function ObjectValueComponent({ collector, inputName, updater, su
       <div className="d-flex flex-column align-items-center mt-2 mb-2">
         <label
           htmlFor="device-select"
-          className={`cstm_subhead-text mb-4 fw-bold text-center ${state.theme.textMutedClass}`}
+          className={`form-label cstm_subhead-text mb-4 fw-bold text-center ${state.theme.textMutedClass}`}
         >
           {collector.output.label || 'select an option'}
         </label>
@@ -40,7 +40,7 @@ export default function ObjectValueComponent({ collector, inputName, updater, su
   } else if (collector.type === 'PhoneNumberCollector') {
     return (
       <>
-        <label htmlFor={'phone-number-input'} className={'mb-2 mt-2'}>
+        <label htmlFor={'form-label phone-number-input'} className={'mb-2 mt-2'}>
           {collector.output.label || 'Phone Number'}
         </label>
         <input
