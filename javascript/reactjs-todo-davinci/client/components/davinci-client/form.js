@@ -9,10 +9,14 @@
  */
 import React, { Fragment, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Readonly from './readonly.js';
 import Text from './text.js';
+import Error from './error.js';
 import Password from './password.js';
 import SubmitButton from './submit-button.js';
 import Protect from './protect.js';
+import ObjectValueComponent from './object-value.js';
+import SingleSelect from './single-select.js';
 import FlowLink from './flow-link.js';
 import Unknown from './unknown.js';
 import Alert from './alert.js';
@@ -45,7 +49,7 @@ export default function Form() {
    * Custom hooks for managing form state and authorization
    */
   const [user, setCode] = useOAuth();
-  const [{ formName, formAction, node, collectors }, { setNext, startNewFlow, updater }] =
+  const [{ formName, formAction, node, collectors }, { getError, setNext, startNewFlow, updater }] =
     useDavinci();
 
   /**
@@ -165,6 +169,28 @@ export default function Form() {
             key={collectorName}
           />
         );
+      case 'SingleSelectCollector':
+        return (
+          <SingleSelect collector={collector} updater={updater(collector)} key={collectorName} />
+        );
+      case 'ERROR_DISPLAY':
+        return <Error key={idx + 'err'} getError={getError} />;
+      case 'ReadOnlyCollector':
+        return <Readonly key={idx + collectorName} collector={collector} />;
+      case 'PhoneNumberCollector':
+      case 'DeviceRegistrationCollector':
+      case 'DeviceAuthenticationCollector':
+        return (
+          <ObjectValueComponent
+            inputName={collectorName}
+            collector={collector}
+            updater={updater(collector)}
+            key={collectorName}
+            submitForm={setNext}
+          />
+        );
+      case 'PROTECT':
+        return <Protect updater={updater(collector)} key={collectorName} />;
       case 'SubmitCollector':
         return <SubmitButton collector={collector} isLoading={isLoading} key={collectorName} />;
       case 'FlowCollector':
