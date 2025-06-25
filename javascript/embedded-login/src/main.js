@@ -1,4 +1,4 @@
-import { Config, FRAuth, FRUser, TokenManager, UserManager, getRealmUrlPath } from '@forgerock/javascript-sdk';
+import { Config, FRAuth, FRUser, TokenManager, UserManager } from '@forgerock/javascript-sdk';
 
 /*
  * @forgerock/javascript-sdk
@@ -19,16 +19,15 @@ const FATAL = 'Fatal';
 /**
  * CUSTOMERS:
  * Replace the argument passed into `setAsync` below with your own sample config object from
- * your ForgeRock Identity Platform deployment's OAuth configuration.
+ * your PingAIC/PingAM's OAuth configuration.
  */
 await Config.setAsync({
-  clientId: process.env.WEB_OAUTH_CLIENT, // e.g. 'ForgeRockSDKClient'
-  redirectUri: `${window.location.origin}/callback.html`, // e.g. 'https://sdkapp.example.com:8443/callback.html'
-  scope: process.env.SCOPE, // e.g. 'openid profile email address phone'
+  clientId: process.env.WEB_OAUTH_CLIENT, // e.g. 'PingSDKClient'
+  redirectUri: `${window.location.origin}/callback.html`, // e.g. 'https://localhost:8443/callback.html'
+  scope: process.env.SCOPE, // e.g. 'openid profile email'
   serverConfig: {
-    wellknown: wellknownUrl, // This can be found in your AM's OAuth2 configuration
+    wellknown: wellknownUrl, // This can be found in your PingAM's OAuth2 configuration
   },
-  realmPath: process.env.REALM_PATH, // e.g. 'alpha' or 'root'
 });
 
 // Define custom handlers to render and submit each expected step
