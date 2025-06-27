@@ -41,7 +41,7 @@ struct LoginView: View {
                 }
                 .padding()
                 
-                .navigationBarTitle("ForgeRock SDK", displayMode: .inline)
+                .navigationBarTitle("Ping SDK", displayMode: .inline)
                 .navigationDestination(isPresented: $loginViewModel.showNodeView) {
                     NodeView(nodeViewModel: NodeViewModel(node: loginViewModel.node))
                 }

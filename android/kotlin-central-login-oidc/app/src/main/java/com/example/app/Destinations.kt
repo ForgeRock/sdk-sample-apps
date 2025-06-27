@@ -15,6 +15,6 @@ object Destinations {
     const val ENV_ROUTE = "Environment Config"
     const val TOKEN_ROUTE = "Access Token"
     const val USER_PROFILE = "User"
-    const val CENTRALIZE_ROUTE = "Centralized Login"
+    const val CENTRALIZE_ROUTE = "Launch OIDC Redirect Login"
 }
 

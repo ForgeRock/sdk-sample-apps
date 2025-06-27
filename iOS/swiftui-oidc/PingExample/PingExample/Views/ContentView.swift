@@ -40,7 +40,7 @@ struct ContentView: View {
                             }
                         }
                     }) {
-                        Text("Launch OIDC")
+                        Text("Launch OIDC Redirect Login")
                     }
                     Button(action: {
                         Task {
