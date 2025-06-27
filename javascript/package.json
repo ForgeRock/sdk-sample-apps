@@ -30,7 +30,7 @@
     "start:reactjs-todo-dv": "npm-run-all --parallel todo-api reactjs-todo-dv",
     "lint": "npm run lint --workspaces --if-present",
     "prepare": "husky install",
-    "clean": "rimraf --glob ./javascript/**/node_modules; rimraf --glob ./javascript/**/dist; rimraf ./node_modules"
+    "clean": "rimraf --glob ./**/node_modules; rimraf --glob ./**/dist; rimraf ./node_modules"
   },
   "devDependencies": {
     "@playwright/test": "^1.41.2",

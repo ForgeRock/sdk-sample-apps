@@ -22,8 +22,7 @@ import { UnknownComponent } from '../unknown/unknown.component';
 import { KeyIconComponent } from '../../../icons/key-icon/key-icon.component';
 import { NewUserIconComponent } from '../../../icons/new-user-icon/new-user-icon.component';
 
-import { Collectors, NodeStates } from '@forgerock/davinci-client/types';
-import { DaVinciClient } from '../davinci.types';
+import { Collectors, DavinciClient, NodeStates } from '@forgerock/davinci-client/types';
 import createClient from '../davinci.utils';
 import { SdkService } from '../../../services/sdk.service';
 
@@ -56,7 +55,7 @@ export class DavinciFormComponent implements OnInit {
   /**
    * Create local state to manage the DaVinci flow
    */
-  client: DaVinciClient | null = null;
+  client: DavinciClient | null = null;
   node: NodeStates | null = null;
   collectors: Collectors[] = [];
   formName = '';

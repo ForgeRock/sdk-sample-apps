@@ -10,14 +10,13 @@
 
 import { davinci } from '@forgerock/davinci-client';
 import createConfig from '../../../utilities/create-config';
-import { DaVinciConfig } from '@forgerock/davinci-client/types';
-import { DaVinciClient } from './davinci.types';
+import { DaVinciConfig, DavinciClient } from '@forgerock/davinci-client/types';
 
 /**
  * @function createClient - Utility function for creating a DaVinci client
  * @returns {Object} - Either a DaVinci client if it has been initialized or null
  */
-export default async function createClient(): Promise<DaVinciClient | null> {
+export default async function createClient(): Promise<DavinciClient | null> {
   try {
     const config: DaVinciConfig = createConfig();
     const davinciClient = await davinci({ config });
