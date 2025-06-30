@@ -152,7 +152,7 @@ fun EnvRoute(configViewModel: ConfigViewModel, param: () -> Unit) {
                 },
                 modifier = Modifier.weight(1f)
             ) {
-                Text("Centralized Login")
+                Text("Launch OIDC Redirect Login")
             }
 
         }

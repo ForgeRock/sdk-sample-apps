@@ -23,12 +23,12 @@ import org.forgerock.android.auth.FROptionsBuilder
  */
 @Serializable
 data class PingConfig(
-    var discoveryEndpoint: String = "https://openam-sdks.forgeblocks.com/am/oauth2/realms/alpha/.well-known/openid-configuration",
-    var oauthClientId: String = "AndroidTest",
-    var oauthRedirectUri: String = "org.forgerock.demo:/oauth2redirect",
-    var oauthSignOutRedirectUri: String = "",
-    var cookieName: String = "5421aeddf91aa20",
-    var oauthScope: String = "openid profile email address")
+    var discoveryEndpoint: String = "", // Add the discovery endpoint of your server
+    var oauthClientId: String = "", // Add the client id of the OAuth2.0 client used by the app
+    var oauthRedirectUri: String = "org.forgerock.demo:/oauth2redirect", // Configure the redirect URI to the one selected in the app
+    var oauthSignOutRedirectUri: String = "", // Configure the sign out redirect URI to the one selected in the app, if needed.
+    var cookieName: String = "", // Configure the cookie name of your AIC/AM environment
+    var oauthScope: String = "") // Configure the OAuth2.0 scopes in a space separated string. ex: "openid email profile"
 
 /**
  * Convert PingConfig to FROptions.

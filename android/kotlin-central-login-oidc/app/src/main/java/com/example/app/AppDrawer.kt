@@ -63,7 +63,7 @@ fun AppDrawer(
             modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
         )
         NavigationDrawerItem(
-            label = { Text("Centralized Login") },
+            label = { Text("Launch OIDC Redirect Login") },
             selected = false,
             icon = { Icon(Icons.Filled.OpenInBrowser, null) },
             onClick = {
