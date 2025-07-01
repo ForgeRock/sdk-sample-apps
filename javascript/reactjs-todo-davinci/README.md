@@ -53,7 +53,7 @@ SCOPE="openid profile email phone name revoke"
 WELLKNOWN_URL=<<PingOne wellknown url>>/
 ```
 
-### Installing Dependencies and Run Build
+### Installing Dependencies
 
 **Run from root of `/javascript`**: since this sample app uses npm's workspaces, we recommend running the npm commands from the root of the `/javascript` folder.
 

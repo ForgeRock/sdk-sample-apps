@@ -9,7 +9,7 @@ test.describe('React - DaVinci Password Reset', () => {
     await page.getByRole('link', { name: 'Sign In', exact: true }).click();
     await page.getByRole('link', { name: 'Having trouble signing on?' }).click();
     await expect(page.getByRole('heading', { name: 'Forgot password form' })).toBeVisible();
-    await page.getByLabel('Username').fill('reactdavinci@user.com');
+    await page.getByLabel('Username').fill('JsDvSampleAppsE2E@user.com');
     await page.getByRole('button', { name: 'Submit' }).click();
 
     // Check for password reset verification form
