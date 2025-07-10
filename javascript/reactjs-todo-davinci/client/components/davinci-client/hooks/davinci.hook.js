@@ -124,6 +124,6 @@ export default function useDavinci() {
 
   return [
     { formName, formAction, node, collectors },
-    { setNext, startNewFlow, updater },
+    { setNext, startNewFlow, updater, getError: davinciClient && davinciClient.getError },
   ];
 }
