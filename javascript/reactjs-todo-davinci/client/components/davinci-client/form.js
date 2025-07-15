@@ -41,7 +41,7 @@ export default function Form() {
    * and index 1 having the "setter" methods to set new state values.
    */
 
-  const [{ theme }, methods] = useContext(AppContext);
+  const [{ theme, protectAPI }, methods] = useContext(AppContext);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -53,14 +53,41 @@ export default function Form() {
     useDavinci();
 
   /**
-   * @function hasProtectCollector - Determines if there is a Protect SDK collector
+   * @function hasProtectTextCollector - Determines if there is a Protect SDK Text collector
    * @param {Object} collectors - An array of collectors from DaVinci
-   * @returns {boolean} - True if there is a Protect SDK collector otherwise false
+   * @returns {boolean} - True if there is a Protect SDK Text collector otherwise false
    */
-  function hasProtectCollector(collectors) {
+  function hasProtectTextCollector(collectors) {
     return collectors?.some(
       (collector) => collector.type === 'TextCollector' && collector.name === 'protectsdk',
     );
+  }
+
+  /**
+   * @function hasProtectCollector - Determines if there is a ProtectCollector
+   * @param {Object} collectors - An array of collectors from DaVinci
+   * @returns {boolean} - True if there is a ProtectCollector otherwise false
+   */
+  function hasProtectCollector(collectors) {
+    return collectors?.some((collector) => collector.type === 'ProtectCollector');
+  }
+
+  /**
+   * @function updateProtectCollector - Updates the ProtectCollector with data collected
+   * @param {Object} protectCollector - A ProtectCollector from DaVinci
+   * @returns {Promise<void>}
+   */
+  async function updateProtectCollector(protectCollector) {
+    /**
+     * Use the `getData()` method to retrieve the device profiling and behavioral data
+     * collected since initialization. Then set the data on the ProtectCollector.
+     */
+    const data = await protectAPI.getData();
+    const protectUpdater = updater(protectCollector);
+    const error = protectUpdater(data);
+    if (error && 'error' in error) {
+      console.error(`Error updating ProtectCollector: ${error.error.message}`);
+    }
   }
 
   /**
@@ -68,7 +95,14 @@ export default function Form() {
    * @returns {Promise<void>}
    */
   async function submitProtect() {
-    await setNext();
+    if (hasProtectTextCollector(collectors)) {
+      await setNext();
+    } else if (hasProtectCollector(collectors)) {
+      const protectCollector = collectors.find(
+        (collector) => collector.type === 'ProtectCollector',
+      );
+      await updateProtectCollector(protectCollector);
+    }
   }
 
   /**
@@ -123,6 +157,9 @@ export default function Form() {
     setIsLoading(true);
 
     try {
+      // Submit Protect data if there is a Protect collector
+      await submitProtect(collectors);
+
       // Get the next node in the flow
       await setNext();
     } catch (error) {
@@ -147,7 +184,14 @@ export default function Form() {
     const collectorName = collector.name;
 
     if (collector.type === 'TextCollector' && collector.name === 'protectsdk') {
-      return <Protect updater={updater(collector)} submit={submitProtect} key={collectorName} />;
+      return (
+        <Protect
+          collector={collector}
+          updater={updater(collector)}
+          submit={submitProtect}
+          key={collectorName}
+        />
+      );
     }
 
     switch (collector.type) {
@@ -189,8 +233,11 @@ export default function Form() {
             submitForm={setNext}
           />
         );
-      case 'PROTECT':
-        return <Protect updater={updater(collector)} key={collectorName} />;
+      // TODO: Do we need this?
+      // case 'PROTECT':
+      //   return <Protect collector={collector} updater={updater(collector)} key={collectorName} />;
+      case 'ProtectCollector':
+        return <Protect collector={collector} key={collectorName} />;
       case 'SubmitCollector':
         return <SubmitButton collector={collector} isLoading={isLoading} key={collectorName} />;
       case 'FlowCollector':
@@ -248,7 +295,7 @@ export default function Form() {
       <Fragment>
         <div className="cstm_form-icon  align-self-center mb-3">{formIcon(formAction)}</div>
         <h1 className={`text-center fs-2 mb-3 ${theme.textClass}`}>
-          {hasProtectCollector(collectors) ? '' : formName}
+          {hasProtectTextCollector(collectors) || hasProtectCollector(collectors) ? '' : formName}
         </h1>
         {/*
          * Map over the collectors and render the appropriate

@@ -20,9 +20,16 @@ import { DEBUGGER } from './constants';
  * @param {Object} props.isAuthenticated - Boolean value of user's auth status
  * @param {Object} props.prefersDarkTheme - User theme setting
  * @param {Object} props.username - User's username
+ * @param {Object} props.protectAPI - A set of methods to interact with PingOne Protect
  * @returns {Array} - Global state values and state methods
  */
-export function useGlobalStateMgmt({ email, isAuthenticated, prefersDarkTheme, username }) {
+export function useGlobalStateMgmt({
+  email,
+  isAuthenticated,
+  prefersDarkTheme,
+  username,
+  protectAPI,
+}) {
   /**
    * Create state properties for "global" state.
    * Using internal names that differ from external to prevent shadowing.
@@ -32,6 +39,7 @@ export function useGlobalStateMgmt({ email, isAuthenticated, prefersDarkTheme, u
   const [authenticated, setAuthentication] = useState(isAuthenticated || false);
   const [mail, setEmail] = useState(email || '');
   const [name, setUser] = useState(username || '');
+  const [protectAPIMethods, setProtectAPI] = useState(protectAPI || null);
 
   let theme;
 
@@ -119,11 +127,13 @@ export function useGlobalStateMgmt({ email, isAuthenticated, prefersDarkTheme, u
       email: mail,
       theme,
       username: name,
+      protectAPI: protectAPIMethods,
     },
     {
       setAuthentication: setAuthenticationWrapper,
       setEmail: setEmailWrapper,
       setUser: setUserWrapper,
+      setProtectAPI,
     },
   ];
 }

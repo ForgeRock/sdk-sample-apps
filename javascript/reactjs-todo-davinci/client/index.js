@@ -9,11 +9,12 @@
  */
 
 import { Config, TokenStorage } from '@forgerock/javascript-sdk';
+import { protect } from '@pingidentity/protect';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import createConfig from './utilities/create-config';
 import Router from './router';
-import { DEBUGGER } from './constants';
+import { DEBUGGER, INIT_PROTECT, PINGONE_ENV_ID } from './constants';
 import { AppContext, useGlobalStateMgmt } from './global-state';
 
 /**
@@ -63,6 +64,27 @@ const config = createConfig();
   }
 
   /**
+   * If the INIT_PROTECT flag is set, initialize PingOne Protect as early as
+   * possible in the application for data collection. The PingOne environment ID
+   * is required while all other options in the configuration are optional.
+   */
+  let protectAPI;
+  if (INIT_PROTECT) {
+    if (!PINGONE_ENV_ID) {
+      console.error('Missing PingOne environment ID for Protect initialization');
+    } else {
+      try {
+        protectAPI = await protect({ envId: PINGONE_ENV_ID });
+        // Call `start()` to begin collecting data
+        await protectAPI.start();
+        console.log('PingOne Protect initialized at bootstrap. Collecting data...');
+      } catch (error) {
+        console.error(`Error initializing PingOne Protect: ${error}`);
+      }
+    }
+  }
+
+  /**
    * Pull custom values from outside of the app to (re)hydrate state.
    */
   const prefersDarkTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -93,6 +115,7 @@ const config = createConfig();
       isAuthenticated,
       prefersDarkTheme,
       username,
+      protectAPI,
     });
 
     return (
