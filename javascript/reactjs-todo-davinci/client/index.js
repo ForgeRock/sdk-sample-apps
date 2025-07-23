@@ -13,8 +13,9 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import createConfig from './utilities/create-config';
 import Router from './router';
-import { DEBUGGER } from './constants';
+import { DEBUGGER, INIT_PROTECT } from './constants';
 import { AppContext, useGlobalStateMgmt } from './global-state';
+import { initProtectApi } from './utilities/protect.api';
 
 /**
  * This import will produce a separate CSS file linked in the index.html
@@ -60,6 +61,25 @@ const config = createConfig();
     isAuthenticated = !!(await TokenStorage.get());
   } catch (err) {
     console.error(`Error: token retrieval for hydration; ${err}`);
+  }
+
+  /**
+   * If the INIT_PROTECT flag is set, initialize PingOne Protect as early as
+   * possible in the application for data collection. The PingOne environment ID
+   * is required while all other options in the configuration are optional.
+   */
+  try {
+    if (INIT_PROTECT) {
+      const protectApi = initProtectApi({ envId: process.env.PINGONE_ENV_ID });
+      const error = await protectApi.start();
+      if (!error) {
+        console.log('Protect initialized at bootstrap for data collection');
+      } else {
+        console.error(`Error initializing Protect: ${error.error}`);
+      }
+    }
+  } catch (err) {
+    console.error(`Error initializing Protect: ${err}`);
   }
 
   /**

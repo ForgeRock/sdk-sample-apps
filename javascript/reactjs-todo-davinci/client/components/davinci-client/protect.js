@@ -9,27 +9,46 @@
  */
 import React, { useEffect, useState } from 'react';
 import Loading from '../utilities/loading.js';
+import { initProtectApi } from '../../utilities/protect.api.js';
+import { INIT_PROTECT, PINGONE_ENV_ID } from '../../constants.js';
 
-export default function Protect({ updater, submit }) {
+export default function Protect({ collector }) {
   const [loading, setLoading] = useState(true);
-  /**
-   * The protect collector is sent with the first node of the flow, but
-   * it is not needed. It is a self-submitting node which requires no
-   * user interaction. While you would normally load the Protect module
-   * here and wait for a response, we instead mock the response with a
-   * dummy value and update the collector. Then call the
-   * submit function to proceed with the flow.
-   */
+
   useEffect(() => {
-    async function handleProtect() {
-      updater('fakeprofile');
-      setLoading(false);
-      if (submit !== undefined) {
-        await submit();
+    async function initProtect() {
+      try {
+        /**
+         * If the INIT_PROTECT flag is false, rely on the configuration from the PingOne
+         * Protect Collector's output to initialize the Protect API. Then call the API's
+         * start method to begin collecting data.
+         */
+        if (!INIT_PROTECT) {
+          const config = collector.output.config;
+          const protectApi = initProtectApi({
+            envId: PINGONE_ENV_ID,
+            behavioralDataCollection: config.behavioralDataCollection,
+            // universalDeviceIdentification: config.universalDeviceIdentification, // This feature is not yet supported
+          });
+
+          const error = await protectApi.start();
+          if (!error) {
+            console.log('PingOne Protect initialized by collector for data collection');
+          } else {
+            console.error(`Error initializing Protect: ${error.error}`);
+          }
+        }
+      } catch (err) {
+        console.error(`Failed to initialize PingOne Protect`, err);
+      } finally {
+        setLoading(false);
       }
     }
-    handleProtect();
-  }, [updater, submit]);
 
-  return loading ? <Loading key="loading-protect" /> : null;
+    initProtect();
+  }, [collector]);
+
+  return loading ? (
+    <Loading key="loading-protect" message="Initializing PingOne Protect..." />
+  ) : null;
 }

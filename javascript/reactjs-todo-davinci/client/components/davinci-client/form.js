@@ -24,6 +24,7 @@ import Alert from './alert.js';
 import KeyIcon from '../icons/key-icon';
 import NewUserIcon from '../icons/new-user-icon';
 import Loading from '../utilities/loading.js';
+import { updateProtectCollector } from '../utilities/protect.utils.js';
 import { AppContext } from '../../global-state.js';
 import useDavinci from './hooks/davinci.hook.js';
 import useOAuth from './hooks/oauth.hook.js';
@@ -54,25 +55,6 @@ export default function Form() {
     { formName, formAction, node, collectors },
     { getError, setNext, startNewFlow, updater, externalIdp },
   ] = useDavinci();
-
-  /**
-   * @function hasProtectCollector - Determines if there is a Protect SDK collector
-   * @param {Object} collectors - An array of collectors from DaVinci
-   * @returns {boolean} - True if there is a Protect SDK collector otherwise false
-   */
-  function hasProtectCollector(collectors) {
-    return collectors?.some(
-      (collector) => collector.type === 'TextCollector' && collector.name === 'protectsdk',
-    );
-  }
-
-  /**
-   * @function submitProtect - Handles Protect collector submission
-   * @returns {Promise<void>}
-   */
-  async function submitProtect() {
-    await setNext();
-  }
 
   /**
    * Upon successful login, set the authorization code and state used in the custom
@@ -126,7 +108,16 @@ export default function Form() {
     setIsLoading(true);
 
     try {
-      // Get the next node in the flow
+      // Update the Protect collector with the data collected
+      const protectCollector = collectors.find(
+        (collector) => collector.type === 'ProtectCollector',
+      );
+
+      if (protectCollector) {
+        await updateProtectCollector(updater(protectCollector));
+      }
+
+      // Submit all collectors and set the next node in the flow
       await setNext();
     } catch (error) {
       console.error(error);
@@ -148,10 +139,6 @@ export default function Form() {
      * when iterating through an unknown list of Davinci collectors
      ********************************************************************* */
     const collectorName = collector.name;
-
-    if (collector.type === 'TextCollector' && collector.name === 'protectsdk') {
-      return <Protect updater={updater(collector)} submit={submitProtect} key={collectorName} />;
-    }
 
     switch (collector.type) {
       case 'TextCollector':
@@ -201,8 +188,8 @@ export default function Form() {
             key={collectorName}
           />
         );
-      case 'PROTECT':
-        return <Protect updater={updater(collector)} key={collectorName} />;
+      case 'ProtectCollector':
+        return <Protect collector={collector} key={collectorName} />;
       case 'SubmitCollector':
         return <SubmitButton collector={collector} isLoading={isLoading} key={collectorName} />;
       case 'FlowCollector':
@@ -259,9 +246,7 @@ export default function Form() {
     return (
       <Fragment>
         <div className="cstm_form-icon  align-self-center mb-3">{formIcon(formAction)}</div>
-        <h1 className={`text-center fs-2 mb-3 ${theme.textClass}`}>
-          {hasProtectCollector(collectors) ? '' : formName}
-        </h1>
+        <h1 className={`text-center fs-2 mb-3 ${theme.textClass}`}>{formName}</h1>
         {/*
          * Map over the collectors and render the appropriate
          * component for each one.
