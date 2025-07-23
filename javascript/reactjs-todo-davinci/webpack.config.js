@@ -15,6 +15,8 @@ module.exports = () => {
   const WEB_OAUTH_CLIENT = process.env.WEB_OAUTH_CLIENT || localEnv.WEB_OAUTH_CLIENT;
   const SCOPE = process.env.SCOPE || localEnv.SCOPE;
   const WELLKNOWN_URL = process.env.WELLKNOWN_URL || localEnv.WELLKNOWN_URL;
+  const INIT_PROTECT = process.env.INIT_PROTECT || localEnv.INIT_PROTECT;
+  const PINGONE_ENV_ID = process.env.PINGONE_ENV_ID || localEnv.PINGONE_ENV_ID;
 
   return {
     // Point to the top level source file
@@ -106,6 +108,8 @@ module.exports = () => {
         'process.env.WEB_OAUTH_CLIENT': JSON.stringify(WEB_OAUTH_CLIENT),
         'process.env.SCOPE': JSON.stringify(SCOPE),
         'process.env.WELLKNOWN_URL': JSON.stringify(WELLKNOWN_URL),
+        'process.env.INIT_PROTECT': JSON.stringify(INIT_PROTECT),
+        'process.env.PINGONE_ENV_ID': JSON.stringify(PINGONE_ENV_ID),
       }),
     ],
   };
