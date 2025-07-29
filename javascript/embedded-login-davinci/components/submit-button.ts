@@ -1,13 +1,8 @@
-import {
-  InternalErrorResponse,
-  ActionCollector,
-  SubmitCollector,
-} from '@forgerock/davinci-client/types';
+import { SubmitCollector } from '@forgerock/davinci-client/types';
 
 export default function submitButtonComponent(
   formEl: HTMLFormElement,
   collector: SubmitCollector,
-  updater: () => Promise<void | InternalErrorResponse>,
 ) {
   const button = document.createElement('button');
 

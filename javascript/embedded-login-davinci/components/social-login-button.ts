@@ -6,7 +6,6 @@ export default function idpCollectorButton(
   updater: () => Promise<void | InternalErrorResponse>,
 ) {
   const button = document.createElement('button');
-  console.log('collector', collector);
   button.value = collector.output.label;
   button.innerHTML = collector.output.label;
   button.onclick = async () => {
