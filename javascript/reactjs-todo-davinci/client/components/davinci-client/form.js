@@ -13,6 +13,7 @@ import Readonly from './readonly.js';
 import Text from './text.js';
 import Error from './error.js';
 import Password from './password.js';
+import SocialLoginButton from './social-login-button.js';
 import SubmitButton from './submit-button.js';
 import Protect from './protect.js';
 import ObjectValueComponent from './object-value.js';
@@ -49,8 +50,10 @@ export default function Form() {
    * Custom hooks for managing form state and authorization
    */
   const [user, setCode] = useOAuth();
-  const [{ formName, formAction, node, collectors }, { getError, setNext, startNewFlow, updater }] =
-    useDavinci();
+  const [
+    { formName, formAction, node, collectors },
+    { getError, setNext, startNewFlow, updater, externalIdp },
+  ] = useDavinci();
 
   /**
    * @function hasProtectCollector - Determines if there is a Protect SDK collector
@@ -187,6 +190,15 @@ export default function Form() {
             updater={updater(collector)}
             key={collectorName}
             submitForm={setNext}
+          />
+        );
+      case 'IdpCollector':
+        return (
+          <SocialLoginButton
+            collector={collector}
+            updater={externalIdp}
+            isLoading={isLoading}
+            key={collectorName}
           />
         );
       case 'PROTECT':

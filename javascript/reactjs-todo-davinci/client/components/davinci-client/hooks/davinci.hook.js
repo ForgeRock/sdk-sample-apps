@@ -11,6 +11,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import createClient from './create-client.utils.js';
 
+const urlParams = new URLSearchParams(window.location.search);
+const continueToken = urlParams.get('continueToken');
+
 /**
  * @function useDavinci - Custom React hook that manages the DaVinci flow state
  * @returns {Object} - An array with state at index 0 and setter methods at index 1
@@ -53,9 +56,18 @@ export default function useDavinci() {
     async function initDavinci() {
       try {
         const client = await createClient();
-        const initialNode = await client?.start();
         setDavinciClient(client);
-        setNode(initialNode);
+
+        if (continueToken) {
+          /**
+           * If we were redirected here from an IDP with a continueToken, then resume the flow
+           */
+          const resumeNode = await client?.resume({ continueToken });
+          setNode(resumeNode);
+        } else {
+          const initialNode = await client?.start();
+          setNode(initialNode);
+        }
       } catch (error) {
         console.error(`Error initializing DaVinci; ${error}`);
       }
@@ -124,6 +136,12 @@ export default function useDavinci() {
 
   return [
     { formName, formAction, node, collectors },
-    { setNext, startNewFlow, updater, getError: davinciClient && davinciClient.getError },
+    {
+      setNext,
+      startNewFlow,
+      updater,
+      externalIdp: davinciClient && davinciClient.externalIdp(),
+      getError: davinciClient && davinciClient.getError,
+    },
   ];
 }
