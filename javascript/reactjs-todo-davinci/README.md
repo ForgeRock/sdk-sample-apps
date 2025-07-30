@@ -4,6 +4,18 @@
 
 This sample code is provided "as is" and is not a supported product of Ping Identity. It's purpose is solely to demonstrate how the Ping JavaScript SDK  and DaVinci client can be implemented within a React application. Also, this is not a demonstration of React itself or instructional for _how_ to build a React app. There are many aspects to routing, state management, tooling and other aspects to building a React app that are outside of the scope of this project. For information about creating a React app, [visit React's official documentation](https://reactjs.org/docs/create-a-new-react-app.html).
 
+## Supported DaVinci Collectors
+- TextCollector
+- PasswordCollector
+- SingleSelectCollector
+- ReadOnlyCollector
+- PhoneNumberCollector
+- DeviceRegistrationCollector
+- DeviceAuthenticationCollector
+- IdpCollector
+- SubmitCollector
+- FlowCollector
+
 ## Requirements
 
 1. A PingOne tenant with SSO and DaVinci services enabled

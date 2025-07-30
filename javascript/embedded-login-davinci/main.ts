@@ -129,10 +129,8 @@ const continueToken = urlParams.get('continueToken');
       } else if (collector.type === 'PasswordCollector') {
         passwordComponent(formEl, collector, davinciClient.update(collector));
       } else if (collector.type === 'SubmitCollector') {
-        submitButtonComponent(formEl, collector, davinciClient.externalIdp());
+        submitButtonComponent(formEl, collector);
       } else if (collector.type === 'IdpCollector') {
-        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-        collector;
         idpCollectorButton(formEl, collector, davinciClient.externalIdp());
       } else if (collector.type === 'FlowCollector') {
         flowLinkComponent(
