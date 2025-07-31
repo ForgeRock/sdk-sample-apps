@@ -1,6 +1,6 @@
 <p align="center">
-  <a href="https://github.com/ForgeRock/sdk-sample-apps">
-    <img src="https://cdn.forgerock.com/logo/interim/Logo-PingIdentity-ForgeRock-Hor-FullColor.svg" alt="Logo">
+  <a href="https://github.com/ForgeRock/ping-android-sdk">
+    <img src="https://www.pingidentity.com/content/dam/picr/nav/Ping-Logo-2.svg" alt="Logo">
   </a>
   <hr/>
 </p>
@@ -16,14 +16,14 @@ Ping provides these Flutter samples to help demonstrate SDK functionality/implem
 - Xcode: Latest version recommended
 - Android Studio: Latest version recommended
 - VS Code: Latest Version recommended
-- VS Code Flutter Plug in: Latest Version recommended
+- VS Code Flutter Plugin: Latest Version recommended
 - PingAM, or AIC
 
 ## Getting Started
 
 To try out the Ping SDKs Flutter sample, perform these steps:
-1. Configure PingAM/AIC. Ensure that you registered an OAuth 2.0 application for native mobile apps in PingAM/AIC. More details in this [documentation](https://backstage.forgerock.com/docs/sdks/latest/sdks/serverconfiguration/onpremise/index.html)
-2. Configue the `todo-api` `.env` file and run using `npm start --workspace todo-api` on a Terminal window.
+1. Configure PingAM/AIC. Ensure that you registered an OAuth 2.0 application for native mobile apps in PingAM/AIC. More details in this [documentation](https://docs.pingidentity.com/pingoneaic/latest/am-oauth2/oauth2-register-client.html)
+2. Configure the `todo-api` `.env` file and run using `npm start --workspace todo-api` on a Terminal window.
 3. Clone this repo:
 
     ```
