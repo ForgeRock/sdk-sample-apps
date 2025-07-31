@@ -64,22 +64,18 @@ const config = createConfig();
   }
 
   /**
-   * If the INIT_PROTECT flag is set, initialize PingOne Protect as early as
+   * If the INIT_PROTECT flag is set to 'bootstrap', initialize PingOne Protect as early as
    * possible in the application for data collection. The PingOne environment ID
    * is required while all other options in the configuration are optional.
    */
-  try {
-    if (INIT_PROTECT) {
-      const protectApi = initProtectApi({ envId: process.env.PINGONE_ENV_ID });
-      const error = await protectApi.start();
-      if (!error) {
-        console.log('Protect initialized at bootstrap for data collection');
-      } else {
-        console.error(`Error initializing Protect: ${error.error}`);
-      }
+  if (INIT_PROTECT === 'bootstrap') {
+    const protectApi = initProtectApi({ envId: process.env.PINGONE_ENV_ID });
+    const result = await protectApi.start();
+    if (result?.error) {
+      console.error(`Error initializing Protect: ${result.error}`);
+    } else {
+      console.log('Protect initialized at bootstrap for data collection');
     }
-  } catch (err) {
-    console.error(`Error initializing Protect: ${err}`);
   }
 
   /**

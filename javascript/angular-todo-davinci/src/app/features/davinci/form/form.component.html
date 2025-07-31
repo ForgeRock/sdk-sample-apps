@@ -50,54 +50,45 @@ Render conditions for presenting appropriate views to user.
     The node to render has collectors, so we need to collect additional
     data from user.
     -->
-    @if (formName && shouldRenderTitle()) {
-      <h1 class="text-center fs-2 mb-3">{{ formName }}</h1>
-    }
+
+    <h1 class="text-center fs-2 mb-3">{{ formName }}</h1>
 
     <!--
     Iterate over the collectors and render the appropriate
     component for each one.
     -->
     @for (collector of collectors; track collector) {
-      @if (collector.type === 'TextCollector' && collector.name === 'protectsdk') {
-        <app-protect
-          [label]="collector.output.label"
-          [update]="client?.update(collector)"
-          (submitHandler)="submitHandler()"
-        />
-      } @else {
-        @switch (collector.type) {
-          @case ('TextCollector') {
-            <app-text-input
-              [key]="collector.output.key"
-              [label]="collector.output.label"
-              [update]="client?.update(collector)"
-            />
-          }
-          @case ('PasswordCollector') {
-            <app-password
-              [key]="collector.output.key"
-              [label]="collector.output.label"
-              [update]="client?.update(collector)"
-            />
-          }
-          @case ('SubmitCollector') {
-            <app-submit-button
-              [key]="collector.output.key"
-              [label]="collector.output.label"
-              [submittingForm]="isSubmittingForm"
-            />
-          }
-          @case ('FlowCollector') {
-            <app-flow-link
-              [collector]="collector"
-              [flow]="client?.flow({ action: collector.output.key })"
-              (renderForm)="renderForm()"
-            />
-          }
-          @default {
-            <app-unknown [collector]="collector" />
-          }
+      @switch (collector.type) {
+        @case ('TextCollector') {
+          <app-text-input
+            [key]="collector.output.key"
+            [label]="collector.output.label"
+            [update]="client?.update(collector)"
+          />
+        }
+        @case ('PasswordCollector') {
+          <app-password
+            [key]="collector.output.key"
+            [label]="collector.output.label"
+            [update]="client?.update(collector)"
+          />
+        }
+        @case ('SubmitCollector') {
+          <app-submit-button
+            [key]="collector.output.key"
+            [label]="collector.output.label"
+            [submittingForm]="isSubmittingForm"
+          />
+        }
+        @case ('FlowCollector') {
+          <app-flow-link
+            [collector]="collector"
+            [flow]="client?.flow({ action: collector.output.key })"
+            (renderForm)="renderForm()"
+          />
+        }
+        @default {
+          <app-unknown [collector]="collector" />
         }
       }
     }

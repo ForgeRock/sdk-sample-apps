@@ -11,7 +11,6 @@ import { Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { ProtectComponent } from '../protect/protect.component';
 import { TextInputComponent } from '../text-input/text-input.component';
 import { PasswordComponent } from '../password/password.component';
 import { SubmitButtonComponent } from '../submit-button/submit-button.component';
@@ -32,7 +31,6 @@ import { SdkService } from '../../../services/sdk.service';
   standalone: true,
   imports: [
     FormsModule,
-    ProtectComponent,
     TextInputComponent,
     PasswordComponent,
     SubmitButtonComponent,
@@ -140,14 +138,6 @@ export class DavinciFormComponent implements OnInit {
     } catch (error) {
       console.error('Error initializing DaVinci: ', error);
     }
-  }
-
-  /**
-   * @function shouldRenderTitle - Determines if the form title should be displayed
-   * @returns {boolean} - True if there is a Protect SDK collector otherwise false
-   */
-  shouldRenderTitle(): boolean {
-    return !this.collectors?.some((collector) => collector.name === 'protectsdk');
   }
 
   /**

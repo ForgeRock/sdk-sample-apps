@@ -6,7 +6,6 @@ import { davinci } from '@forgerock/davinci-client';
 import usernameComponent from './components/text.js';
 import passwordComponent from './components/password.js';
 import submitButtonComponent from './components/submit-button.js';
-import protect from './components/protect.js';
 import flowLinkComponent from './components/flow-link.js';
 import idpCollectorButton from './components/social-login-button.js';
 import { InternalErrorResponse, NodeStates } from '@forgerock/davinci-client/types';
@@ -122,9 +121,7 @@ const continueToken = urlParams.get('continueToken');
 
     const collectors = davinciClient.getCollectors();
     collectors.forEach((collector) => {
-      if (collector.type === 'TextCollector' && collector.name === 'protectsdk') {
-        protect(formEl, collector, davinciClient.update(collector));
-      } else if (collector.type === 'TextCollector') {
+      if (collector.type === 'TextCollector') {
         usernameComponent(formEl, collector, davinciClient.update(collector));
       } else if (collector.type === 'PasswordCollector') {
         passwordComponent(formEl, collector, davinciClient.update(collector));
@@ -141,10 +138,6 @@ const continueToken = urlParams.get('continueToken');
         );
       }
     });
-
-    if (davinciClient.getCollectors().find((collector) => collector.name === 'protectsdk')) {
-      mapRenderer(await davinciClient.next());
-    }
   }
 
   function mapRenderer(node) {

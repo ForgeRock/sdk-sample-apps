@@ -15,6 +15,7 @@ This sample code is provided "as is" and is not a supported product of Ping Iden
 - IdpCollector
 - SubmitCollector
 - FlowCollector
+- ProtectCollector
 
 ## Requirements
 

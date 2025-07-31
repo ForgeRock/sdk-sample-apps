@@ -19,23 +19,23 @@ export default function Protect({ collector }) {
     async function initProtect() {
       try {
         /**
-         * If the INIT_PROTECT flag is false, rely on the configuration from the PingOne
-         * Protect Collector's output to initialize the Protect API. Then call the API's
+         * If the INIT_PROTECT flag is set to 'flow', rely on the configuration from the PingOne
+         * ProtectCollector's output to initialize the Protect API. Then call the API's
          * start method to begin collecting data.
          */
-        if (!INIT_PROTECT) {
+        if (INIT_PROTECT === 'flow') {
           const config = collector.output.config;
           const protectApi = initProtectApi({
             envId: PINGONE_ENV_ID,
             behavioralDataCollection: config.behavioralDataCollection,
-            // universalDeviceIdentification: config.universalDeviceIdentification, // This feature is not yet supported
+            universalDeviceIdentification: config.universalDeviceIdentification,
           });
 
-          const error = await protectApi.start();
-          if (!error) {
-            console.log('PingOne Protect initialized by collector for data collection');
+          const result = await protectApi.start();
+          if (result?.error) {
+            console.error(`Error initializing Protect: ${result.error}`);
           } else {
-            console.error(`Error initializing Protect: ${error.error}`);
+            console.log('PingOne Protect initialized by collector for data collection');
           }
         }
       } catch (err) {
