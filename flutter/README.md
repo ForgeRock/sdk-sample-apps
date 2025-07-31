@@ -21,4 +21,4 @@ To try out the Ping iOS and Android SDKs in a Flutter application please look at
 
 - Latest Xcode
 - Latest Android Studio
-- Latest VSCode with the Flutter plug in istalled
+- Latest VSCode with the Flutter plug in installed
