@@ -25,12 +25,12 @@ export default function Protect({ step, setSubmissionStep }) {
   useEffect(() => {
     async function handleProtect() {
       if (
-        !INIT_PROTECT &&
+        INIT_PROTECT === 'journey' &&
         step.getCallbacksOfType(CallbackType.PingOneProtectInitializeCallback).length
       ) {
         const callback = step.getCallbackOfType(CallbackType.PingOneProtectInitializeCallback);
         /**
-         * If the INIT_PROTECT flag is false, rely on the PingOneProtectInitializeCallback
+         * If the INIT_PROTECT flag is set to 'journey', rely on the PingOneProtectInitializeCallback
          * to initialize PingOne Protect. The configuration can be retrieved from the node
          * in the journey using the `getConfig()` method on the callback.
          */
