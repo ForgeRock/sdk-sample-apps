@@ -13,6 +13,7 @@ import KBA from './kba';
 import Password from './password';
 import TermsAndConditions from './boolean';
 import TextInputField from './text';
+import DeviceProfile from './deviceProfile';
 import Unknown from './unknown';
 
 /**
@@ -47,6 +48,8 @@ export function mapCallbacksToComponents(cb, idx, state, setState) {
       return <TermsAndConditions callback={cb} key={name} />;
     case 'KbaCreateCallback':
       return <KBA callback={cb} key={name} />;
+    case 'DeviceProfileCallback':
+      return <DeviceProfile callback={cb} key={name} />;
     default:
       // If current callback is not supported, render a warning message
       return <Unknown callback={cb} key={`unknown-${idx}`} />;
