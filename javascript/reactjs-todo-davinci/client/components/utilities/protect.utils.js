@@ -25,8 +25,8 @@ export async function updateProtectCollector(protectCollectorUpdater) {
     return;
   }
 
-  const error = protectCollectorUpdater(data);
-  if (error && 'error' in error) {
-    console.error(`Error updating ProtectCollector: ${error.error.message}`);
+  const result = protectCollectorUpdater(data);
+  if (result && 'error' in result) {
+    console.error(`Error updating ProtectCollector: ${result.error.message}`);
   }
 }

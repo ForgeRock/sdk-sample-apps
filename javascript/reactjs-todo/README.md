@@ -46,6 +46,9 @@ Note: The sample app currently supports the following callbacks only:
 - BooleanAttributeInputCallback
 - KbaCreateCallback
 - TermsAndConditionsCallback
+- TextOutputCallback
+- ConfirmationCallback
+- SelectIdPCallback
 
 ### Configure Your `.env` File
 
