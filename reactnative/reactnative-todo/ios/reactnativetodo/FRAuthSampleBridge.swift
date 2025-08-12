@@ -418,13 +418,11 @@ public class FRAuthSampleBridge: NSObject {
     // Execute the device profile collection
     callback.execute { collectedData in
       guard 
-        let data = try? JSONSerialization.data(withJSONObject: collectedData, options: []),
-        let profileData = String(data: data, encoding: .utf8),
-        !profileData.isEmpty
+        !collectedData.isEmpty
       else {
-        let errorMsg = "Collectors returned no device profile data"
+        let errorMsg = "Device profile callback handler: Collectors returned no device profile data"
         FRLog.e(errorMsg)
-        reject("FRDeviceProfileCallbackEmpty", errorMsg, nil)
+        reject("Error", errorMsg, nil)
         return
       }
       FRLog.i("Device profile data collected")
