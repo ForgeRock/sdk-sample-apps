@@ -9,9 +9,8 @@ package com.pingidentity.samples.app.token
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.pingidentity.davinci.user
 import com.pingidentity.oidc.OidcError
-import com.pingidentity.samples.app.davinci.daVinci
+import com.pingidentity.samples.app.User
 import com.pingidentity.utils.Result.Failure
 import com.pingidentity.utils.Result.Success
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,7 +29,7 @@ class TokenViewModel : ViewModel() {
      */
     fun accessToken() {
         viewModelScope.launch {
-            daVinci.user()?.let {
+            User.user()?.let {
                 when (val result = it.token()) {
                     is Failure -> {
                         state.update {

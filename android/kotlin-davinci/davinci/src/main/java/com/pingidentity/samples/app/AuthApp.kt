@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Logout
-import androidx.compose.material.icons.filled.Bolt
-import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.material.icons.filled.RocketLaunch
 import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material3.DrawerValue
@@ -119,5 +117,5 @@ fun AuthApp() {
  * @return The title of the current screen.
  */
 fun getTitle(backStackEntry: NavBackStackEntry?): String {
-    return backStackEntry?.destination?.route ?: Destinations.DAVINCI
+    return backStackEntry?.destination?.route ?: Destinations.ENV_ROUTE
 }

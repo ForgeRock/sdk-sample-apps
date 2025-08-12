@@ -9,9 +9,8 @@ package com.pingidentity.samples.app.userprofile
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.pingidentity.davinci.user
 import com.pingidentity.oidc.OidcError
-import com.pingidentity.samples.app.davinci.daVinci
+import com.pingidentity.samples.app.User
 import com.pingidentity.utils.Result.Failure
 import com.pingidentity.utils.Result.Success
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,7 +29,7 @@ class UserProfileViewModel : ViewModel() {
      */
     fun userinfo() {
         viewModelScope.launch {
-            daVinci.user()?.let { user ->
+            User.user()?.let { user ->
                 when (val result = user.userinfo(false)) {
                     is Failure ->
                         state.update { s ->

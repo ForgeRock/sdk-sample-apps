@@ -17,6 +17,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.GeneratingTokens
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.RocketLaunch
 import androidx.compose.material3.Icon
@@ -30,7 +32,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.pingidentity.samples.app.Destinations.CENTRALIZE_ROUTE
 import com.pingidentity.samples.app.Destinations.DAVINCI
+import com.pingidentity.samples.app.Destinations.ENV_ROUTE
 import com.pingidentity.samples.app.Destinations.TOKEN_ROUTE
 import com.pingidentity.samples.app.Destinations.USER_INFO
 
@@ -57,11 +61,31 @@ fun AppDrawer(
             modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
         )
         NavigationDrawerItem(
+            label = { Text("Environment") },
+            selected = false,
+            icon = { Icon(Icons.Filled.Home, null) },
+            onClick = {
+                navigateTo(ENV_ROUTE)
+                closeDrawer()
+            },
+            modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
+        )
+        NavigationDrawerItem(
             label = { Text("Launch DaVinci") },
             selected = false,
             icon = { Icon(Icons.Filled.RocketLaunch, null) },
             onClick = {
                 navigateTo(DAVINCI)
+                closeDrawer()
+            },
+            modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
+        )
+        NavigationDrawerItem(
+            label = { Text("Centralize Login") },
+            selected = false,
+            icon = { Icon(Icons.Filled.OpenInBrowser, null) },
+            onClick = {
+                navigateTo(CENTRALIZE_ROUTE)
                 closeDrawer()
             },
             modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
