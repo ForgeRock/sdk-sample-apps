@@ -11,14 +11,11 @@ export default function DeviceProfile({ callback }) {
   const callbackType = callback.getType();
   const [timer, setTimer] = useState(5);
   useEffect(() => {
-    if (timer === 0) {
-      return;
-    }
     const interval = setInterval(() => {
-      setTimer((prev) => prev - 1);
+      setTimer(prev => (prev <= 1 ? 0 : prev - 1));
     }, 1000);
     return () => clearInterval(interval);
-  }, [timer]);
+  }, []);
 
   return (
     <FormControl>
