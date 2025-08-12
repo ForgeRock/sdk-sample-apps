@@ -23,7 +23,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        manifestPlaceholders["appRedirectUriScheme"] = "myapp"
+        manifestPlaceholders["appRedirectUriScheme"] = "myapp" // TODO update this with redirect Uri schema.
 
     }
 
@@ -69,6 +69,8 @@ dependencies {
     // DaVinci SDK
     implementation(libs.davinci)
     implementation(libs.foundation.android)
+    implementation(libs.foundation.oidc)
+    implementation(libs.foundation.oidc.browser)
 
     // Social Login
     implementation(libs.external.idp)

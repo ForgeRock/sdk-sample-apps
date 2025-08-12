@@ -9,32 +9,13 @@ package com.pingidentity.samples.app.davinci
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.pingidentity.davinci.DaVinci
-import com.pingidentity.davinci.module.Oidc
-import com.pingidentity.logger.Logger
-import com.pingidentity.logger.STANDARD
 import com.pingidentity.orchestrate.ContinueNode
+import com.pingidentity.samples.app.Mode
+import com.pingidentity.samples.app.User
+import com.pingidentity.samples.app.env.daVinci
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-
-/**
- * The DaVinci instance.
- */
-val daVinci = DaVinci {
-    logger = Logger.STANDARD
-
-    //TODO: Provide here the Server configuration. Add the PingOne server Discovery Endpoint and
-    // the OAuth2.0 client details
-
-    // Oidc as module
-    module(Oidc) {
-        clientId = "<Client ID>"
-        discoveryEndpoint = "<Discovery Endpoint>"
-        scopes = mutableSetOf("<scope1>", "<scope2>", "...")
-        redirectUri = "<Redirect URI>"
-    }
-}
 
 /**
  * The view model for the DaVinci app. Holds the state of the app.
@@ -81,6 +62,7 @@ class DaVinciViewModel : ViewModel() {
             true
         }
         viewModelScope.launch {
+            User.current(Mode.DAVINCI)
             val next = daVinci.start()
 
             state.update {
