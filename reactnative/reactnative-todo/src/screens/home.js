@@ -30,20 +30,20 @@ export default function Home() {
             />
           ) : null
         }
-        <Heading size="lg">Protect with ForgeRock;</Heading>
+        <Heading size="lg">Protect with Ping Identity;</Heading>
         <Heading size="lg">Develop with React Native</Heading>
         <Text fontSize="xl" fontWeight="bold" mt={6}>
-          Learn how to develop ForgeRock protected, hybrid apps with the React
+          Learn how to develop Ping protected, hybrid apps with the React
           Native library and our Native SDKs.
         </Text>
         <Heading size="md" fontWeight="regular" mt={6}>
           About this project
         </Heading>
         <Text fontSize="md" mt={3}>
-          The purpose of this sample app is to demonstrate how the ForgeRock
+          The purpose of this sample app is to demonstrate how the Ping
           SDKs can be leveraged within a fully-functional React Native
           application. Included in this sample app is a sample bridging layer
-          for connecting the native ForgeRock modules (Android and iOS) with the
+          for connecting the native Ping modules (Android and iOS) with the
           React Native layer along with a "light" use of the JavaScript SDK for
           better ergonomics.
         </Text>

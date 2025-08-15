@@ -72,6 +72,9 @@ public struct FRCallback: Encodable {
   var inputNames: [String]?
   var policies: RawPolicies?
   var failedPolicies: [RawFailedPolicies]?
+  var metadataRequired: Bool?
+  var locationRequired: Bool?
+  var message: String?
 
   /**
    * Raw journey/tree JSON response from ForgeRock server
@@ -110,6 +113,13 @@ public struct FRCallback: Encodable {
           print(error)
         }
       }
+      // Serialize the server response into a dictionary for react native layer
+      if let thisCallback = callback as? DeviceProfileCallback {
+        self.metadataRequired = thisCallback.metadataRequired
+        self.locationRequired = thisCallback.locationRequired
+        self.message = thisCallback.message
+      }
+
       if let failedPolicies = thisCallback.failedPolicies {
         self.failedPolicies = []
         for failedPolicy in failedPolicies {

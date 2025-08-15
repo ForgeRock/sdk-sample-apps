@@ -187,6 +187,17 @@ public class FRAuthSampleBridge: NSObject {
         }
 
         /**
+         * DeviceProfileCallback inherits from HiddenValueCallback, which itself inherits from SingleValueCallback.
+         * To prevent the input value from being overwritten by SingleValueCallback logic,
+         * we must handle DeviceProfileCallback first.
+         */
+
+        else if let thisCallback = nodeCallback as? DeviceProfileCallback {
+          handleDeviceProfileCallback(thisCallback, node: node, resolve: resolve, rejecter: reject)
+          return //prevent duplicate promise resolution
+        }
+
+        /**
          * This detects the "common" callback with a single input value.
          */
         else if let thisCallback = nodeCallback as? SingleValueCallback {
@@ -393,6 +404,35 @@ public class FRAuthSampleBridge: NSObject {
       }
     }
   }
+
+  /**
+   * Method for handling Device Profile Callback.
+   * This callback is used to collect device information, such as location and metadata.
+   */
+   private func handleDeviceProfileCallback(
+    _ callback: DeviceProfileCallback,
+    node: Node,
+    resolve: @escaping RCTPromiseResolveBlock,
+    rejecter reject: @escaping RCTPromiseRejectBlock) {
+    
+    // Execute the device profile collection
+    callback.execute { collectedData in
+      guard 
+        !collectedData.isEmpty
+      else {
+        let errorMsg = "Device profile callback handler: Collectors returned no device profile data"
+        FRLog.e(errorMsg)
+        reject("Error", errorMsg, nil)
+        return
+      }
+      FRLog.i("Device profile data collected")
+
+      // Continue to the next node after collecting device profile data
+      self.next(node: node, resolve: resolve, rejecter: reject)
+    }
+  }
+
+
 
   /**
    * Private method for preparing a node returned from the iOS SDK for the React Native layer.
