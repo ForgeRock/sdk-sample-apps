@@ -16,8 +16,8 @@ const params = url.searchParams;
 const authCode = params.get('code');
 const state = params.get('state');
 
-const displayError = (errorMessage) => {
-  document.querySelector('#Error span').innerHTML = errorMessage;
+const displayError = (error) => {
+  document.querySelector('#Error span').innerHTML = JSON.stringify(error, null, 2);
   document.querySelector('#Error').classList.add('active');
 };
 

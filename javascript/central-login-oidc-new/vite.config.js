@@ -1,31 +1,36 @@
 import * as path from 'path';
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 
-export default defineConfig({
-  root: __dirname,
-  build: {
-    outDir: './dist',
-    reportCompressedSize: true,
-    target: 'esnext',
-    minify: false,
-    rollupOptions: {
-      input: {
-        main: path.resolve(__dirname, 'index.html'),
-      },
-      output: {
-        entryFileNames: 'main.js',
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd());
+  const PORT = env.VITE_PORT || '8443';
+
+  return {
+    root: __dirname,
+    build: {
+      outDir: './dist',
+      reportCompressedSize: true,
+      target: 'esnext',
+      minify: false,
+      rollupOptions: {
+        input: {
+          main: path.resolve(__dirname, 'index.html'),
+        },
+        output: {
+          entryFileNames: 'main.js',
+        },
       },
     },
-  },
-  preview: {
-    port: 8443,
-  },
-  server: {
-    port: 8443,
-    headers: {
-      'Service-Worker-Allowed': '/',
-      'Service-Worker': 'script',
+    preview: {
+      port: PORT,
     },
-    strictPort: true,
-  },
+    server: {
+      port: PORT,
+      headers: {
+        'Service-Worker-Allowed': '/',
+        'Service-Worker': 'script',
+      },
+      strictPort: true,
+    },
+  };
 });
