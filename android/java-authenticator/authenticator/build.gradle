@@ -14,7 +14,7 @@ android {
 
     defaultConfig {
         applicationId "org.forgerock.authenticator.sample"
-        minSdkVersion 23
+        minSdkVersion 28
         targetSdkVersion 35
         versionCode 1
         versionName "1.0"
@@ -49,7 +49,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // ForgeRock Authenticator SDK
-    implementation 'org.forgerock:forgerock-authenticator:4.8.0'
+    implementation 'org.forgerock:forgerock-authenticator:4.8.2'
 
     // Loading images dynamically
     implementation 'com.squareup.picasso:picasso:2.5.2'
