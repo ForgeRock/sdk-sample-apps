@@ -11,6 +11,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import createClient from './create-client.utils.js';
 
+const urlParams = new URLSearchParams(window.location.search);
+const acrValue = urlParams.get('acrValue');
+
 /**
  * @function useDavinci - Custom React hook that manages the DaVinci flow state
  * @returns {Object} - An array with state at index 0 and setter methods at index 1
@@ -53,7 +56,14 @@ export default function useDavinci() {
     async function initDavinci() {
       try {
         const client = await createClient();
-        const initialNode = await client?.start();
+        const initialNode = await client?.start(
+          /**
+           * Optional: If your OAuth client has more than one policy, you can select
+           * a policy to execute by passing in the policy ID as an ACR value to the
+           * query option of the DaVinci client start method
+           */
+          acrValue ? { query: { acr_values: acrValue } } : undefined,
+        );
         setDavinciClient(client);
         setNode(initialNode);
       } catch (error) {
