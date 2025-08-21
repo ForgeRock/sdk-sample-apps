@@ -12,6 +12,9 @@ import Loading from '../utilities/loading.js';
 import { initProtectApi } from '../../utilities/protect.api.js';
 import { INIT_PROTECT, PINGONE_ENV_ID } from '../../constants.js';
 
+const urlParams = new URLSearchParams(window.location.search);
+const protectInitMode = INIT_PROTECT || urlParams.get('initProtect');
+
 export default function Protect({ collector }) {
   const [loading, setLoading] = useState(true);
 
@@ -23,7 +26,7 @@ export default function Protect({ collector }) {
          * ProtectCollector's output to initialize the Protect API. Then call the API's
          * start method to begin collecting data.
          */
-        if (INIT_PROTECT === 'flow') {
+        if (protectInitMode === 'flow') {
           const config = collector.output.config;
           const protectApi = initProtectApi({
             envId: PINGONE_ENV_ID,

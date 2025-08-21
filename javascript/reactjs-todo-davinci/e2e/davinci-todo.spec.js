@@ -1,4 +1,12 @@
+/*
+ *
+ * Copyright (c) 2025 Ping Identity Corporation. All rights reserved.
+ * This software may be modified and distributed under the terms
+ * of the MIT license. See the LICENSE file for details.
+ *
+ */
 import { test, expect } from '@playwright/test';
+import { username, password } from './utils/demo-user';
 
 const BASE_URL = 'http://localhost:8443';
 
@@ -9,8 +17,8 @@ test.describe('React - Davinci Todo', () => {
     // Log in and go to the todos page
     await page.goto(BASE_URL);
     await page.getByRole('link', { name: 'Sign In', exact: true }).click();
-    await page.getByLabel('Username').fill('JsDvSampleAppsE2E@user.com');
-    await page.getByLabel('Password').fill('FakePassword#123');
+    await page.getByLabel('Username').fill(username);
+    await page.getByLabel('Password').fill(password);
     await page.getByRole('button', { name: 'Sign On' }).click();
     await page.getByRole('link', { name: 'Todos', exact: true }).click();
     await page.waitForURL(BASE_URL + '/todos');
