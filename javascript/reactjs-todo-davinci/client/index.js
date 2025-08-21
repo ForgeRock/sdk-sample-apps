@@ -23,6 +23,11 @@ import { initProtectApi } from './utilities/protect.api';
  */
 import './styles/index.scss';
 
+if (DEBUGGER) debugger;
+
+const urlParams = new URLSearchParams(window.location.search);
+const protectInitMode = INIT_PROTECT || urlParams.get('initProtect');
+
 /** ***************************************************************************
  * SDK INTEGRATION POINT
  * Summary: Configure the SDK
@@ -36,8 +41,6 @@ import './styles/index.scss';
  *   PingOne
  * - serverConfig: this includes the wellknown URL of your PingOne environment
  *************************************************************************** */
-if (DEBUGGER) debugger;
-
 const config = createConfig();
 
 /**
@@ -68,7 +71,7 @@ const config = createConfig();
    * possible in the application for data collection. The PingOne environment ID
    * is required while all other options in the configuration are optional.
    */
-  if (INIT_PROTECT === 'bootstrap') {
+  if (protectInitMode === 'bootstrap') {
     const protectApi = initProtectApi({ envId: process.env.PINGONE_ENV_ID });
     const result = await protectApi.start();
     if (result?.error) {
