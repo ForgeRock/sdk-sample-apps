@@ -23,5 +23,5 @@ Then, create your configuration `.env` file based on the included `.env.example`
 Then, from the `/javascript` folder run the sample app as follows:
 ```
 npm install 
-npm run start:central-login-oidc
+npm run start:central-login-oidc-client
 ``` 
