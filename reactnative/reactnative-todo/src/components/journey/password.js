@@ -94,7 +94,12 @@ function handlePasswordFailures(arr = []) {
   return arr.reduce((prev, curr) => {
     let failureObj;
     try {
-      failureObj = JSON.parse(curr);
+      if (typeof curr === 'string') {
+        failureObj = JSON.parse(curr);
+      } else {
+        // If curr is already an object, use it directly
+        failureObj = curr;
+      }
     } catch (err) {
       console.log('Parsing failure for password');
     }

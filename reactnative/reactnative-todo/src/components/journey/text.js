@@ -6,7 +6,7 @@
  */
 
 import { FormControl } from 'native-base';
-import React , {useState} from 'react';
+import React , {useCallback, memo} from 'react';
 import {TextInput} from 'react-native';
 
 /*
@@ -22,7 +22,7 @@ import { handleFailedPolicies } from './utilities';
  * @param {Object} props.callback - The callback object from AM
  * @returns {Object} - React component object
  */
-export default function Text({ callback, state, setState }) {
+const Text = memo(({ callback, state, setState }) => {
   /********************************************************************
    * JAVASCRIPT SDK INTEGRATION POINT
    * Summary: Utilize Callback methods
@@ -38,21 +38,26 @@ export default function Text({ callback, state, setState }) {
   );
   const isRequired = callback.isRequired ? callback.isRequired() : false;
   const label = callback.getPrompt();
-  const setText = (text) => {
+  const inputName = callback?.payload?.input?.[0]?.name;
+
+  const setText = useCallback((text) => {
     callback.setInputValue(text);
-    setState(text);
-  };
+    setState(prevState => ({ ...prevState, [inputName]: text }));
+    console.log('Setting input value', text);
+  }, [callback, inputName, setState]);
   return (
     <FormControl isRequired={isRequired} isInvalid={error}>
       <FormControl.Label mb={0}>{label}</FormControl.Label>
       <TextInput
           autoCapitalize="none"
           onChangeText= {value => setText(value)}
-          value={state}
+          value={state[inputName || '']}
         />
       <FormControl.ErrorMessage>
         {error.length ? error : ''}
       </FormControl.ErrorMessage>
     </FormControl>
   );
-}
+});
+
+export default Text;
