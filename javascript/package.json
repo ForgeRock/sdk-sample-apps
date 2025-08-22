@@ -8,6 +8,7 @@
   "workspaces": [
     "./angular-todo/",
     "./central-login-oidc/",
+    "./central-login-oidc-client/",
     "./embedded-login/",
     "./embedded-login-davinci/",
     "./reactjs-todo/",
@@ -22,6 +23,7 @@
     "reactjs-todo": "npm start --workspace reactjs-todo",
     "reactjs-todo-dv": "npm start --workspace reactjs-todo-davinci",
     "start:central-login-oidc": "npm start --workspace central-login-oidc",
+    "start:central-login-oidc-client": "npm start --workspace central-login-oidc-client",
     "start:embedded-login": "npm start --workspace embedded-login",
     "start:embedded-login-davinci": "npm run dev --workspace embedded-login-davinci",
     "start:angular-todo": "npm-run-all --parallel todo-api angular-todo",
