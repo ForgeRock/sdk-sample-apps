@@ -95,13 +95,26 @@ const displayError = (error) => {
   };
 
   document.querySelector('#loginBtn')?.addEventListener('click', async () => {
+    // If the user is already logged in, display user info
+    const tokens = await oidcClient.token.get();
+
+    if (tokens.accessToken) {
+      const user = await oidcClient.user.info();
+      if ('error' in user) {
+        displayError(user.error);
+        return;
+      }
+      showUser(user);
+      return;
+    }
+
+    // Otherwise redirect to the authorization server for centralized login
     const authorizeUrl = await oidcClient.authorize.url();
     if (typeof authorizeUrl !== 'string' && 'error' in authorizeUrl) {
       displayError(authorizeUrl.error);
       return;
     }
 
-    // Redirect to the authorization server for centralized login
     window.location.assign(authorizeUrl);
   });
 

@@ -50,6 +50,33 @@ test.describe('Login Tests', () => {
     await expect(page.locator('#User pre')).toContainText('demouser@user.com');
   });
 
+  test('login with valid token skips redirect', async ({ page }) => {
+    const { navigate, clickButton } = asyncEvents(page);
+    await navigate('http://localhost:8443/');
+    expect(page.url()).toBe('http://localhost:8443/');
+
+    await clickButton('Login', 'https://apps.pingone.ca/');
+
+    await page.getByLabel('Username').fill(pingOneUsername);
+    await page.getByRole('textbox', { name: 'Password' }).fill(pingOnePassword);
+    await page.getByRole('button', { name: 'Sign On' }).click();
+
+    await page.waitForURL('http://localhost:8443/**');
+    expect(page.url()).toContain('code');
+    expect(page.url()).toContain('state');
+
+    // Refresh the page and clear tokens
+    await navigate('http://localhost:8443/');
+    await page.evaluate(() => window.localStorage.clear());
+    await page.on('request', (request) => {
+      expect(request.url()).not.toContain('https://apps.pingone.ca/');
+    });
+
+    await page.getByRole('button', { name: 'Login' }).click();
+    await expect(page.locator('#User pre')).toContainText('demouser');
+    await expect(page.locator('#User pre')).toContainText('demouser@user.com');
+  });
+
   test('login with invalid state fails with error', async ({ page }) => {
     const { navigate } = asyncEvents(page);
     await navigate('http://localhost:8443/?code=12345&state=abcxyz');

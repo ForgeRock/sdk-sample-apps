@@ -1,5 +1,9 @@
 # OIDC Login
 
+\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\
+**IMPORTANT NOTE**: This sample app is deprecated. Please refer to the central-login-oidc-client sample app [here](https://github.com/ForgeRock/sdk-sample-apps/tree/main/javascript/central-login-oidc-client) for the latest information.\
+\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*
+
 The SDK provides an option for using the Authorization Code Flow
 (with PKCE) with a centralized application using OIDC Login. 
 
