@@ -1,5 +1,5 @@
 {
-  "originHash" : "956d622730eea977a9714ff7bca8e26297309c8b894a7bbf03c3f9f9b8d6d312",
+  "originHash" : "92fc3ec9500767cb61d13a91cfe6c784c81896777e4b14643d5c26d8c23cb97a",
   "pins" : [
     {
       "identity" : "app-check",
@@ -17,6 +17,15 @@
       "state" : {
         "revision" : "2781038865a80e2c425a1da12cc1327bcd56501f",
         "version" : "1.7.6"
+      }
+    },
+    {
+      "identity" : "cocoalumberjack",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/CocoaLumberjack/CocoaLumberjack.git",
+      "state" : {
+        "revision" : "a9ed4b6f9bdedce7d77046f43adfb8ce1fd54114",
+        "version" : "3.9.0"
       }
     },
     {
@@ -69,8 +78,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ForgeRock/ping-ios-sdk",
       "state" : {
-        "revision" : "5aab0b63b6fd15b19f77715bb07030aebc5f18e2",
-        "version" : "1.1.0"
+        "revision" : "f3f2836898c54efda9f5de4e3d1a418edfa7e8cb",
+        "version" : "1.2.0"
       }
     },
     {
@@ -80,6 +89,24 @@
       "state" : {
         "revision" : "540318ecedd63d883069ae7f1ed811a2df00b6ac",
         "version" : "2.4.0"
+      }
+    },
+    {
+      "identity" : "svgkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SVGKit/SVGKit",
+      "state" : {
+        "revision" : "58152b9f7c85eab239160b36ffdfd364aa43d666",
+        "version" : "3.0.0"
+      }
+    },
+    {
+      "identity" : "swift-log",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-log",
+      "state" : {
+        "revision" : "ce592ae52f982c847a4efc0dd881cc9eb32d29f2",
+        "version" : "1.6.4"
       }
     }
   ],

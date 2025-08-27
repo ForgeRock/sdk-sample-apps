@@ -12,7 +12,7 @@
 import SwiftUI
 import PingDavinci
 import PingBrowser
-import PingExternal_idp
+import PingExternalIdP
 
 /// A SwiftUI view that creates buttons for social identity provider authentication.
 ///

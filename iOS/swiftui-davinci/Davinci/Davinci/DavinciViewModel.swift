@@ -13,7 +13,7 @@ import Foundation
 import PingDavinci
 import PingOidc
 import PingOrchestrate
-import PingExternal_idp
+import PingExternalIdP
 
 /// Configures and initializes the DaVinci instance with the PingOne server and OAuth 2.0 client details.
 /// - This configuration includes:
