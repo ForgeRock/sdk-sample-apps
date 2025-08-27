@@ -9,7 +9,7 @@
 
 _This repository contains React Native sample apps provided by **Ping Identity** to demonstrate SDK functionality and implementation. These samples are for demonstration purposes only, are provided **"as is"**, and are not official Ping products nor supported by Ping._
 
-The sample app uses a **bridging architecture** to integrate **Ping SDKs** with React Native. you can also modify the code to use  **bridgeless** architecture as well. The apps rely on the  [`../javascript/todo-api/`](../javascript/todo-api/) project for backend storage, specifically for a simple **To-Do** list example.
+The sample app uses a **bridging architecture** to integrate **Ping SDKs** with React Native. You can modify the code to use  **bridgeless** architecture as well. The apps rely on the  [`../javascript/todo-api/`](../javascript/todo-api/) project for backend storage, specifically for a simple **To-Do** list example.
 
 ---
 
@@ -30,7 +30,8 @@ The sample app uses a **bridging architecture** to integrate **Ping SDKs** with 
 > **Note**: Before starting, complete the [React Native Environment Setup](https://reactnative.dev/docs/environment-setup) through the **"Creating a new application"** step.
 
 1. **Configure PingAM/AIC**:
-    - Register an **OAuth 2.0 application** for native mobile apps in **PingAM/AIC**. Refer to the official [Server Configuration Guide](https://docs.pingidentity.com/sdks/latest/sdks/configure-your-server.html) for more details.
+    - Register an **OAuth 2.0 application** for native mobile apps in **PingAM/AIC**. Refer to the official [Server Configuration Guide](https://docs.pingidentity.com/sdks/latest/sdks/tutorials/react-native/00_before-you-begin.html) for more details.
+    - A **Confidential Client** must be registered for the todo API backend obtain tokens. For detail instructions, refer to the official [Server configuration Guide](https://docs.pingidentity.com/sdks/latest/sdks/tutorials/reactjs/00_before-you-begin.html). 
 
 2. **Clone the Repository**:
     ```bash
@@ -40,8 +41,8 @@ The sample app uses a **bridging architecture** to integrate **Ping SDKs** with 
 3. **Open the React Native Project** in Visual Studio Code.
 
 4. **Set Up the Backend**:
-    - Configure the [`../javascript/todo-api/`](../javascript/todo-api/) `.env` file.
-    - This todo Api will introspect the token sent from the reactnative application
+    - Configure the [`../javascript/todo-api/`](../javascript/todo-api/) `.env` file. For more details on how to setup [Configure the API server app](https://docs.pingidentity.com/sdks/latest/sdks/tutorials/reactjs/02_configure-the-projects.html).
+    - This todo API will introspect the token sent from the reactnative application
     - Run the backend using:
       ```bash
       cd sdk-sample-apps/javascript
