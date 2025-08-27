@@ -22,7 +22,7 @@ import Unknown from './unknown';
  * @param {number} idx - Index number within map
  * @returns {Object} - React component
  */
-export function mapCallbacksToComponents(cb, idx, state, setState) {
+export function mapCallbacksToComponents(cb, idx, onValueChange) {
   const name = cb?.payload?.input?.[0].name;
   //console.log('Rendering callback', cb);
 
@@ -40,7 +40,7 @@ export function mapCallbacksToComponents(cb, idx, state, setState) {
     case 'ValidatedCreateUsernameCallback':
     case 'StringAttributeInputCallback':
         // Single input handling
-        return <TextInputField callback={cb} key={name} state={state} setState={setState} />;
+        return <TextInputField callback={cb} key={name} onValueChange={onValueChange} />;
     case 'PasswordCallback':
     case 'ValidatedCreatePasswordCallback':
       return <Password callback={cb} key={name} />;

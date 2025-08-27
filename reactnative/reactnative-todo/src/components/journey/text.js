@@ -6,7 +6,7 @@
  */
 
 import { FormControl } from 'native-base';
-import React , {useCallback, memo} from 'react';
+import React , { useCallback, memo, useState, useEffect } from 'react';
 import {TextInput} from 'react-native';
 
 /*
@@ -22,7 +22,7 @@ import { handleFailedPolicies } from './utilities';
  * @param {Object} props.callback - The callback object from AM
  * @returns {Object} - React component object
  */
-const Text = memo(({ callback, state, setState }) => {
+const Text = memo(({ callback, onValueChange }) => {
   /********************************************************************
    * JAVASCRIPT SDK INTEGRATION POINT
    * Summary: Utilize Callback methods
@@ -36,22 +36,28 @@ const Text = memo(({ callback, state, setState }) => {
   const error = handleFailedPolicies(
     callback.getFailedPolicies ? callback.getFailedPolicies() : [],
   );
+  const [localValue, setLocalValue] = useState('');
   const isRequired = callback.isRequired ? callback.isRequired() : false;
   const label = callback.getPrompt();
   const inputName = callback?.payload?.input?.[0]?.name;
 
-  const setText = useCallback((text) => {
-    callback.setInputValue(text);
-    setState(prevState => ({ ...prevState, [inputName]: text }));
-    console.log('Setting input value', text);
-  }, [callback, inputName, setState]);
+  const handleTextChange = useCallback((text) => {
+    setLocalValue(text);
+    onValueChange?.(inputName, text);
+  }, [inputName, onValueChange]);
+
+  // Some input names are the same, so clear local value when callback changes
+  useEffect(() => {
+    setLocalValue('');
+  }, [callback]);
+
   return (
     <FormControl isRequired={isRequired} isInvalid={error}>
       <FormControl.Label mb={0}>{label}</FormControl.Label>
       <TextInput
           autoCapitalize="none"
-          onChangeText= {value => setText(value)}
-          value={state[inputName || '']}
+          onChangeText= {handleTextChange}
+          value={localValue}
         />
       <FormControl.ErrorMessage>
         {error.length ? error : ''}

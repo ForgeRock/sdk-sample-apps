@@ -13,7 +13,7 @@ import {
   Spinner,
   Text,
 } from 'native-base';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState, useRef } from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import Alert from '../utilities/alert';
@@ -25,7 +25,19 @@ import { mapCallbacksToComponents } from './utilities';
 
 export default function Form({ action, bottomMessage, children }) {
   const [_, methods] = useContext(AppContext);
-  const [inputValue, setInputValue] = useState('');
+  const [formValue, setFormValues] = useState({});
+  const formValuesRef = useRef({});
+
+  const handleInputChange = useCallback((name, value) => {
+    // Update the ref immediately
+    formValuesRef.current = {
+      ...formValuesRef.current,
+      [name]: value,
+    };
+    // Debounce the state update to prevent re-renders
+    setFormValues(formValuesRef.current);
+  }, []);
+
   /**
    * Call custom hook to handle the state and error management as well
    * as request orchestration for the iterative process between a client
@@ -61,6 +73,31 @@ export default function Form({ action, bottomMessage, children }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
+    const handleSubmit = useCallback(() => {
+      // Indicate form processing
+      setProcessingForm(true);
+
+      // Get all callbacks from the current step
+      const callbacks = renderStep.callbacks || [];
+      const currentFormValues = formValuesRef.current;
+
+      // Update each callback with its corresponding form value
+      callbacks.forEach(callback => {
+        const inputName = callback?.payload?.input?.[0]?.name;
+        const value = currentFormValues[inputName];
+        if (value !== undefined) {
+          callback.setInputValue(value);
+        }
+      });
+
+      // Set currently rendered step as step to be submitted
+      setSubmissionStep(renderStep);
+
+      // Reset form values and ref
+      formValuesRef.current = {};
+      setFormValues({});
+  }, [renderStep, setProcessingForm, setSubmissionStep]);
+
   /**
    * Render conditions for presenting appropriate views to user.
    * First, we need to handle no "step" to render, which means we are
@@ -88,6 +125,7 @@ export default function Form({ action, bottomMessage, children }) {
      * The step to render has callbacks, so we need to collect additional
      * data from user. Map callbacks to form inputs.
      */
+
     return (
       <ScrollView>
         <Box safeArea flex={1} p={2} w="90%" mx="auto">
@@ -103,17 +141,11 @@ export default function Form({ action, bottomMessage, children }) {
                * Map over the callbacks in renderStep and render the appropriate
                * component for each one using the mapper.js utility.
                */
-              renderStep.callbacks.map((cb, idx) => mapCallbacksToComponents(cb, idx, inputValue, setInputValue))
+              renderStep.callbacks.map((cb, idx) => mapCallbacksToComponents(cb, idx, handleInputChange))
 
             }
             <Button
-              onPress={() => {
-                // Indicate form processing
-                setInputValue('');
-                setProcessingForm(true);
-                // set currently rendered step as step to be submitted
-                setSubmissionStep(renderStep);
-              }}
+              onPress={handleSubmit}
               size="lg"
             >
               {
