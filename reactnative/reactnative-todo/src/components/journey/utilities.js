@@ -22,8 +22,9 @@ import Unknown from './unknown';
  * @param {number} idx - Index number within map
  * @returns {Object} - React component
  */
-export function mapCallbacksToComponents(cb, idx, state, setState) {
+export function mapCallbacksToComponents(cb, idx, onValueChange) {
   const name = cb?.payload?.input?.[0].name;
+  //console.log('Rendering callback', cb);
 
   /** *********************************************************************
    * JAVASCRIPT SDK INTEGRATION POINT
@@ -38,7 +39,8 @@ export function mapCallbacksToComponents(cb, idx, state, setState) {
     case 'NameCallback':
     case 'ValidatedCreateUsernameCallback':
     case 'StringAttributeInputCallback':
-      return <TextInputField callback={cb} key={name} state={state} setState={setState} />;
+        // Single input handling
+        return <TextInputField callback={cb} key={name} onValueChange={onValueChange} />;
     case 'PasswordCallback':
     case 'ValidatedCreatePasswordCallback':
       return <Password callback={cb} key={name} />;
@@ -71,7 +73,12 @@ function handleFailedPolicies(failedPolicies = []) {
     const validationFailure = failedPolicies.reduce((prev, curr) => {
       let failureObj;
       try {
-        failureObj = JSON.parse(curr);
+        if (typeof curr === 'string') {
+          failureObj = JSON.parse(curr);
+        } else {
+          // If curr is already an object, use it directly
+          failureObj = curr;
+        }
       } catch (err) {
         console.log(`Parsing failure for ${err.message}`);
       }
