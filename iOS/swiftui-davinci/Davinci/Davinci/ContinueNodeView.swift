@@ -11,7 +11,7 @@
 import SwiftUI
 import PingOrchestrate
 import PingDavinci
-import PingExternal_idp
+import PingExternalIdP
 
 /// A view for displaying and handling user interaction with a continue node in the authentication flow.
 /// - This view renders different collectors based on their type and handles user input and validation.
@@ -92,6 +92,12 @@ struct ContinueNodeView: View {
                             RadioButtonView(field: singleSelectCollector, onNodeUpdated: onNodeUpdated)
                         }
                     }
+                case let deviceRegistrationCollector as DeviceRegistrationCollector:
+                    DeviceRegistrationView(field: deviceRegistrationCollector, onNext: onNext)
+                case let deviceAuthenticationCollector as DeviceAuthenticationCollector:
+                    DeviceAuthenticationView(field: deviceAuthenticationCollector, onNext: onNext)
+                case let phoneNumberCollector as PhoneNumberCollector:
+                    PhoneNumberView(field: phoneNumberCollector, onNodeUpdated: onNodeUpdated)
                 case is IdpCollector:
                     if let idpCollector = collector as? IdpCollector {
                         /// View model to handle identity provider interactions
@@ -104,8 +110,8 @@ struct ContinueNodeView: View {
                 }
             }
             
-            /// Fallback button shown when no other navigation elements are present
-            if !continueNode.collectors.contains(where: { $0 is FlowCollector || $0 is SubmitCollector }) {
+            // Fallback Next Button
+            if !continueNode.collectors.contains(where: { $0 is FlowCollector || $0 is SubmitCollector || $0 is DeviceRegistrationCollector || $0 is DeviceAuthenticationCollector }) {
                 Button(action: { onNext(false) }) {
                     Text("Next")
                         .frame(maxWidth: .infinity)
