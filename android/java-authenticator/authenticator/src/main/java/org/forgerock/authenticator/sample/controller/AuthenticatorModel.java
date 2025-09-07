@@ -176,6 +176,15 @@ public class AuthenticatorModel {
     }
 
     /**
+     * Get the list of Mechanisms associated with an issuer and accountName.
+     * Those are part of the unique identifiers for Account and Mechanism objects.
+     */
+    public List<Mechanism> getMechanisms(String issuer, String accountName) {
+        Account account = fraClient.getAccount(issuer + "-" + accountName);
+        return account.getMechanisms();
+    }
+
+    /**
      * Remove the passed Mechanism from the storage
      */
     public boolean removeMechanism(Mechanism mechanism) {

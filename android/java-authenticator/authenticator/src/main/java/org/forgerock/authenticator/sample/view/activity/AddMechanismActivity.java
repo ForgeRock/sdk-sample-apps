@@ -9,7 +9,6 @@ package org.forgerock.authenticator.sample.view.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,19 +17,20 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import org.forgerock.android.auth.FRAListener;
-import org.forgerock.android.auth.Logger;
 import org.forgerock.android.auth.Mechanism;
 import org.forgerock.android.auth.exception.DuplicateMechanismException;
 import org.forgerock.authenticator.sample.controller.AuthenticatorModel;
 import org.forgerock.authenticator.sample.R;
 import org.forgerock.authenticator.sample.camera.CameraScanActivity;
 import org.forgerock.authenticator.sample.controller.GooglePlayServicesUtil;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
 
 /**
  * Activity used for Add new mechanism by scanning QR codes. Provides feedback to the user when a QR code is scanned,
@@ -86,6 +86,36 @@ public class AddMechanismActivity extends AppCompatActivity {
         intentIntegrator.initiateScan();
     }
 
+    /**
+     * Removes the duplicated or partially registered mechanism based on the scanned result.
+     * This is used only when the user scans a QR code that represents an existing mechanism.
+     *
+     * @param scanResult The scanned QR code result, which should be a URI format.
+     */
+    private void removeMechanism(final String scanResult) {
+        try {
+            // parse the URI to get the path
+            URI uri = new URI(scanResult);
+            String path = uri.getPath().substring(1);
+
+            // split the path and remove forward slash to get issuer and account name
+            String[] pathParts = path.split(":");
+            String issuer = pathParts[0];
+            String accountName = pathParts.length > 1 ? pathParts[1] : "";
+
+            // remove the OATH mechanism if it exists
+            List<Mechanism> mechanisms = AuthenticatorModel.getInstance().getMechanisms(issuer, accountName);
+            if (mechanisms != null && !mechanisms.isEmpty()) {
+                Mechanism mechanism = mechanisms.get(0);
+                AuthenticatorModel.getInstance().removeMechanism(mechanism);
+            } else {
+                Log.w(TAG, "No mechanism found for issuer: " + issuer + ", account name: " + accountName);
+            }
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -125,6 +155,12 @@ public class AddMechanismActivity extends AppCompatActivity {
         final Activity thisActivity = this;
 
         AuthenticatorModel.getInstance().createMechanismFromUri(scanResult, new FRAListener<Mechanism>() {
+            /**
+             * Called when the Mechanism is successfully created from the scanned QR code.
+             * Displays a success message and finishes the activity.
+             *
+             * @param mechanism The Mechanism that was created.
+             */
             @Override
             public void onSuccess(final Mechanism mechanism) {
                 AddMechanismActivity.this.runOnUiThread(new Runnable() {
@@ -139,6 +175,12 @@ public class AddMechanismActivity extends AppCompatActivity {
                 AuthenticatorModel.getInstance().notifyDataChanged();
             }
 
+            /**
+             * Called when there is an error creating the Mechanism from the scanned QR code.
+             * Handles both duplication and other exceptions.
+             *
+             * @param exception The exception that occurred during the creation of the Mechanism.
+             */
             @Override
             public void onException(final Exception exception) {
                 AddMechanismActivity.this.runOnUiThread(new Runnable() {
@@ -146,43 +188,100 @@ public class AddMechanismActivity extends AppCompatActivity {
                     public void run() {
                         // Check if it's a duplication exception issue
                         if(exception instanceof DuplicateMechanismException)  {
-                            final Mechanism duplicate = ((DuplicateMechanismException) exception).getCausingMechanism();
-                            AlertDialog.Builder builder = new AlertDialog.Builder(thisActivity);
-                            builder.setTitle(R.string.duplicate_title_noreplace)
-                                    .setMessage(R.string.duplicate_message_noreplace)
-                                    .setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            finish();
-                                            return;
-                                        }
-                                    })
-                                    .setCancelable(false)
-                                    .show();
+
+                            // if the mechanism is a duplicate and a combined mechanism is being created
+                            // remove the duplicate mechanism and scan again
+                            if (scanResult.contains("mfauth://")) {
+                                // remove the duplicate mechanism from the model
+                                Mechanism duplicateMechanism = ((DuplicateMechanismException) exception).getCausingMechanism();
+                                AuthenticatorModel.getInstance().removeMechanism(duplicateMechanism);
+
+                                // call the createMechanismFromUri again to create the new mechanism
+                                createMechanismFromScan(scanResult);
+                            } else {
+                                // inform the user that the mechanism is a duplicate and ask if they want to replace it
+                                AlertDialog.Builder builder = new AlertDialog.Builder(thisActivity);
+                                builder.setTitle(R.string.duplicate_title_noreplace)
+                                        .setMessage(R.string.duplicate_message_noreplace)
+                                        .setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                finish();
+                                            }
+                                        })
+                                        .setCancelable(false)
+                                        .show();
+                            }
                         }
                         // Check for any other issue
                         else {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(thisActivity);
-                            String message = getString(R.string.add_error_qrcode);
-                            message += getString(R.string.add_error_qrcode_detail, exception.getLocalizedMessage());
-                            builder.setMessage(message)
-                                    .setPositiveButton(R.string.try_again, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            launchCameraScanActivity();
-                                        }
-                                    })
-                                    .setNegativeButton(R.string.cancel,  new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            finish();
-                                        }
-                                    })
-                                    .setCancelable(false)
-                                    .show();
+                            // if the mechanism is a duplicate and a combined mechanism is being registered
+                            // inform the user and ask if they want to try again
+                            if (scanResult.contains("mfauth://")) {
+                                // remove the duplicate, and ask the user to try again
+                                removeMechanism(scanResult);
+                                AlertDialog.Builder builder = new AlertDialog.Builder(thisActivity);
+                                String message = "Failed to add combined mechanism. Please try adding the combined mechanism again.";
+                                builder.setMessage(message)
+                                        .setPositiveButton(R.string.try_again, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                launchCameraScanActivity();
+                                            }
+                                        })
+                                        .setNegativeButton(R.string.cancel,  new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                finish();
+                                            }
+                                        })
+                                        .setCancelable(false)
+                                        .show();
+
+                                  //TODO: Another option is to let the user to decide if they want to keep the OATH mechanism
+//                                // inform the user and ask if the wants to keep the existing OATH mechanism
+//                                AlertDialog.Builder builder = new AlertDialog.Builder(thisActivity);
+//                                String message = "Failed to add the Push method of the combined mechanism. Do you want to keep the OATH?";
+//                                builder.setMessage(message)
+//                                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//                                            @Override
+//                                            public void onClick(DialogInterface dialog, int id) {
+//                                                finish();
+//                                            }
+//                                        })
+//                                        .setNegativeButton("No",  new DialogInterface.OnClickListener() {
+//                                            @Override
+//                                            public void onClick(DialogInterface dialog, int id) {
+//                                                removeMechanism(scanResult);
+//                                            }
+//                                        })
+//                                        .setCancelable(false)
+//                                        .show();
+                            } else {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(thisActivity);
+                                String message = getString(R.string.add_error_qrcode);
+                                message += getString(R.string.add_error_qrcode_detail, exception.getLocalizedMessage());
+                                builder.setMessage(message)
+                                        .setPositiveButton(R.string.try_again, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                launchCameraScanActivity();
+                                            }
+                                        })
+                                        .setNegativeButton(R.string.cancel,  new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                finish();
+                                            }
+                                        })
+                                        .setCancelable(false)
+                                        .show();
+                            }
                         }
+                        AuthenticatorModel.getInstance().notifyDataChanged();
                     }
                 });
             }
+
         });
 
     }
