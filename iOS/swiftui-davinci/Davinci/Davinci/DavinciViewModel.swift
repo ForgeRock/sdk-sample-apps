@@ -22,13 +22,13 @@ import PingExternalIdP
 ///   - Redirect URI
 ///   - Discovery Endpoint
 ///   - Other optional fields
-public let davinci = DaVinci.createDaVinci { config in
-    //TODO: Provide here the Server configuration. Add the PingOne server Discovery Endpoint and the OAuth2.0 client details
-    config.module(OidcModule.config) { oidcValue in
-        oidcValue.clientId = <#"Client ID"#>
-        oidcValue.scopes = [<#"scope1"#>, <#"scope2"#>, <#"scope3"#>]
-        oidcValue.redirectUri = <#"Redirect URI"#>
-        oidcValue.discoveryEndpoint = <#"Discovery Endpoint"#>
+public let daVinci = DaVinci.createDaVinci { config in
+    config.module(PingDavinci.OidcModule.config) { oidcValue in
+        oidcValue.clientId = "<#CLIENT_ID#>"
+        oidcValue.scopes = Set(["openid", "email", "address", "phone", "profile"])
+        oidcValue.redirectUri = "<#REDIRECT_URI#>"
+        oidcValue.acrValues = "<#ACR_VALUES#>"
+        oidcValue.discoveryEndpoint = "<#DISCOVERY_ENDPOINT#>"
     }
 }
 
@@ -60,7 +60,7 @@ class DavinciViewModel: ObservableObject {
         }
         
         // Starts the DaVinci orchestration process and retrieves the first node.
-        let next = await davinci.start()
+    let next = await daVinci.start()
         
         await MainActor.run {
             self.state = DavinciState(previous: next , node: next)

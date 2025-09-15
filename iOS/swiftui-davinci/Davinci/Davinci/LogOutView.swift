@@ -23,8 +23,9 @@ struct LogOutView: View {
         NextButton(title: "Proceed to logout") {
             Task {
                 await logoutViewModel.logout()
-                path.removeLast()
-                path.append("DaVinci")
+                if path.count > 0 {
+                    path.removeLast()
+                }
             }
         }
         .navigationTitle("Logout")

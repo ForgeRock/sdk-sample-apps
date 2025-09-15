@@ -42,6 +42,11 @@ struct ContentView: View {
                 NavigationLink(value: "DaVinci") {
                     Text("Launch DaVinci")
                 }
+                /// Navigation option to launch OIDC login.
+                /// - Takes the user to the OIDC Web authentication flow.
+                NavigationLink(value: "OIDC") {
+                    Text("Launch OIDC Login")
+                }
                 /// Navigation option to access the token-related view.
                 /// - Shows the user's current access token.
                 NavigationLink(value: "Token") {
@@ -62,6 +67,8 @@ struct ContentView: View {
                 switch item {
                 case "DaVinci":
                     DavinciView(path: $path)
+                case "OIDC":
+                    OidcLoginView(path: $path)
                 case "Token":
                     AccessTokenView()
                 case "User":
