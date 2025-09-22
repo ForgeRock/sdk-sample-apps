@@ -92,7 +92,7 @@ You will likely have to accept the security certificate exceptions for both your
 
 This project has a debugging statements that can be activated which causes the app to pause execution at each SDK integration point. It will have a comment above the `debugger` statement explaining the purpose of the integration.
 
-If you'd like to use this feature as a learning tool, [open the live app](https://fr-react-todos.crbrl.io/) and then open the developer tools of your browser. Rerun the app with the developer tools open, and it will automatically pause at these points of integration.
+If you'd like to use this feature as a learning tool, run the application locally and then open the developer tools of your browser. Rerun the app with the developer tools open, and it will automatically pause at these points of integration.
 
 For local development, if you want to turn these debuggers off, you can set the environment variable of `DEBUGGER_OFF` to true.
 
