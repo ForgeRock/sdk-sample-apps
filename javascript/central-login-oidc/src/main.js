@@ -10,22 +10,13 @@ import * as forgerock from '@forgerock/javascript-sdk';
  * of the MIT license. See the LICENSE file for details.
  */
 
-console.log({
-  clientId: process.env.WEB_OAUTH_CLIENT, // e.g. 'ForgeRockSDKClient' or PingOne Services Client GUID
-  redirectUri: `https://localhost:8443`, // Redirect back to your app, e.g. 'https://localhost:8443' or the domain your app is served.
-  scope: process.env.SCOPE, // e.g. 'openid profile email address phone revoke' When using PingOne services `revoke` scope is required
-  serverConfig: {
-    wellknown: process.env.WELL_KNOWN,
-    timeout: parseInt(process.env.TIMEOUT), // Any value between 3000 to 5000 is good, this impacts the redirect time to login. Change that according to your needs.
-  },
-});
 await forgerock.Config.setAsync({
   clientId: process.env.WEB_OAUTH_CLIENT, // e.g. 'ForgeRockSDKClient' or PingOne Services Client GUID
   redirectUri: `${window.location.origin}`, // Redirect back to your app, e.g. 'https://localhost:8443' or the domain your app is served.
   scope: process.env.SCOPE, // e.g. 'openid profile email address phone revoke' When using PingOne services `revoke` scope is required
   serverConfig: {
     wellknown: process.env.WELL_KNOWN,
-    timeout: parseInt(process.env.TIMEOUT), // Any value between 3000 to 5000 is good, this impacts the redirect time to login. Change that according to your needs.
+    timeout: process.env.TIMEOUT, // Any value between 3000 to 5000 is good, this impacts the redirect time to login. Change that according to your needs.
   },
 });
 
