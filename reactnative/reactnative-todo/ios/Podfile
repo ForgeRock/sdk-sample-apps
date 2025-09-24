@@ -17,6 +17,7 @@ end
 target 'reactnativetodo' do
   config = use_native_modules!
   pod 'FRAuth', '4.6.0'
+  pod 'FRProximity', '4.6.0'
 
   use_react_native!(
     :path => config[:reactNativePath],
