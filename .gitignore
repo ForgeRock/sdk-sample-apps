@@ -56,3 +56,6 @@ code
 terminalOutput
 outputs/*
 /.idea/
+**/logs
+
+.direnv/*

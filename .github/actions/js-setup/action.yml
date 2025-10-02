@@ -1,0 +1,42 @@
+name: 'JavaScript Setup'
+description: 'Sets up the JS environment with Nix, Cachix, and cached dependencies'
+inputs:
+  cache-playwright:
+    description: 'Whether to cache playwright browsers'
+    required: false
+    default: 'false'
+outputs:
+  npm-cache-hit:
+    description: "Whether the npm cache was hit"
+    value: ${{ steps.npm-cache.outputs.cache-hit }}
+  playwright-cache-hit:
+    description: "Whether the Playwright cache was hit"
+    value: ${{ steps.playwright-cache.outputs.cache-hit }}
+runs:
+  using: "composite"
+  steps:
+    - name: Install Nix
+      uses: DeterminateSystems/nix-installer-action@v4
+    - name: Use Cachix
+      uses: cachix/cachix-action@v12
+      with:
+        name: ping-sdk-samples
+    - name: Cache node_modules
+      uses: actions/cache@v4
+      id: npm-cache
+      with:
+        path: ./javascript/node_modules
+        key: ${{ runner.os }}-npm-${{ hashFiles('javascript/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-npm-
+    - name: Cache Playwright browsers
+      if: inputs.cache-playwright == 'true'
+      uses: actions/cache@v4
+      id: playwright-cache
+      with:
+        path: |
+          ~/.cache/ms-playwright
+          ~/Library/Caches/ms-playwright
+        key: ${{ runner.os }}-playwright-${{ hashFiles('javascript/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-playwright-

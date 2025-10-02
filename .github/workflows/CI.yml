@@ -5,57 +5,71 @@ on:
     paths:
       - 'javascript/**/*'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  pr:
+  lint:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
-        shardIndex: [1, 2, 3, 4] # Split tests into 4 shards
-        node: [18.19.0, 20.11.1]
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
     defaults:
       run:
         working-directory: ./javascript
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node }}
-      - uses: actions/cache@v4
-        id: cache
-        with:
-          path: |
-            node_modules
-          key: ${{ runner.os }}-npm-${{matrix.node}}-${{ hashFiles('package-lock.json') }}
+      - uses: ./.github/actions/js-setup
+        id: setup
 
-      - run: npm ci
-        working-directory: ./javascript
-        if: steps.cache.outputs.cache-hit != 'true'
-
-      - name: Lint
-        run: npm run lint
-
-      - run: npx playwright install
-
-      - name: E2E Tests - Shard ${{ matrix.shardIndex }} of 4
+      - name: Install dependencies and Lint
         run: |
-          cd reactjs-todo && npm run e2e -- --shard=${{ matrix.shardIndex }}/4
-          cd ../reactjs-todo-davinci && npm run e2e -- --shard=${{ matrix.shardIndex }}/4
-          cd ../angular-todo && npm run e2e -- --shard=${{ matrix.shardIndex }}/4
-          cd ../angular-todo-davinci && npm run e2e -- --shard=${{ matrix.shardIndex }}/4
+          nix develop --command bash -c "
+            set -e
+            if [ \"${{ steps.setup.outputs.npm-cache-hit }}\" != 'true' ]; then
+              npm ci
+            fi
+            npm run lint
+          "
+
+  e2e:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        shardIndex: [1, 2, 3, 4]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: ./javascript
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/js-setup
+        id: setup
+        with:
+          cache-playwright: 'true'
+
+      - name: Install Deps and Run E2E Tests
         env:
           REST_OAUTH_SECRET: ${{ secrets.REST_OAUTH_SECRET }}
+        run: |
+          nix develop --command bash -c "
+            set -e
+            if [ \"${{ steps.setup.outputs.npm-cache-hit }}\" != 'true' ]; then
+              npm ci
+            fi
+            if [ \"${{ steps.setup.outputs.playwright-cache-hit }}\" != 'true' ]; then
+              npx playwright install --with-deps
+            fi
+            npm run e2e -ws --if-present -- --shard=${{ matrix.shardIndex }}/4
+          "
 
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: Playwright Results - ${{ runner.os }} - ${{ matrix.node }} - Shard ${{ matrix.shardIndex }} - ${{ github.run_attempt }}
+          name: Playwright Results - ${{ runner.os }} - Shard ${{ matrix.shardIndex }} - ${{ github.run_attempt }}
           path: |
-            ./javascript/reactjs-todo/test-results
-            ./javascript/reactjs-todo/playwright-report
-            ./javascript/angular-todo/test-results
-            ./javascript/angular-todo/playwright-report
-            ./javascript/reactjs-todo-davinci/test-results
-            ./javascript/reactjs-todo-davinci/playwright-report
-            ./javascript/angular-todo-davinci/test-results
-            ./javascript/angular-todo-davinci/playwright-report
+            javascript/**/test-results/
+            javascript/**/playwright-report/
