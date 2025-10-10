@@ -30,7 +30,8 @@ public class FRAuthSampleBridge: NSObject {
    */
   @objc func start(
     _ resolve: @escaping RCTPromiseResolveBlock,
-    rejecter reject: @escaping RCTPromiseRejectBlock) {
+    rejecter reject: @escaping RCTPromiseRejectBlock
+  ) {
     /**
      * Set log level according to your needs
      * Options are ...
@@ -40,59 +41,69 @@ public class FRAuthSampleBridge: NSObject {
      * - network
      * - warning
      * - error
-     * - all
+     * - all 
      */
     FRLog.setLogLevel([.all])
-    do {
-      /** *************************************************************************
-       * SDK INTEGRATION POINT
-       * Summary: Initialize the SDK
-       * --------------------------------------------------------------------------
-       * Details: This initializes the iOS SDK. It can take a moment to resolve,
-       * so we add a slight delay to ensure no other SDK methods are called before
-       * the SDK is ready.
-       ************************************************************************* */
-      let config = Configuration()
-      let options = FROptions(url: config.amURL, realm: config.realm, cookieName: config.cookieName, authServiceName: config.mainAuthenticationJourney, oauthClientId: config.oauthClientId, oauthRedirectUri: config.oauthRedirectURI, oauthScope: config.oauthScopes)
-      try FRAuth.start(options: options)
-            
-      DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-        /**
-         * Check for FRAuth.shared. If it exists, the SDK is good to go. If not,
-         */
-        if (FRAuth.shared != nil) {
-          resolve("SDK initialized")
-        } else {
-          reject("Error", "SDK not initialized; please check the log for details", nil)
+    DispatchQueue.main.async {
+      do {
+        /** *************************************************************************
+         * SDK INTEGRATION POINT
+         * Summary: Initialize the SDK
+         * --------------------------------------------------------------------------
+         * Details: This initializes the iOS SDK. It can take a moment to resolve,
+         * so we add a slight delay to ensure no other SDK methods are called before
+         * the SDK is ready.
+         ************************************************************************* */
+        let config = Configuration()
+        let options = FROptions(
+          url: config.amURL,
+          realm: config.realm,
+          cookieName: config.cookieName,
+          authServiceName: config.mainAuthenticationJourney,
+          oauthClientId: config.oauthClientId,
+          oauthRedirectUri: config.oauthRedirectURI,
+          oauthScope: config.oauthScopes
+        )
+        try FRAuth.start(options: options)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+          /**
+           * Check for FRAuth.shared. If it exists, the SDK is good to go. If not,
+           */
+          if FRAuth.shared != nil {
+            resolve("SDK initialized")
+          } else {
+            reject("Error", "SDK not initialized; please check the log for details", nil)
+          }
         }
       }
-    }
-    catch {
-      FRLog.e(error.localizedDescription)
-      reject("Error", "SDK failed during the initialization process", error)
+      catch {
+        FRLog.e(error.localizedDescription)
+        reject("Error", "SDK failed during the initialization process", error)
+      }
     }
   }
-
+  
   /**
    * Method for the initial call to the journey/tree defined in `forgerock_auth_service_name` within the FRAuthConfig.
    */
   @objc func login(
     _ resolve: @escaping RCTPromiseResolveBlock,
     rejecter reject: @escaping RCTPromiseRejectBlock) {
-
-    /** *************************************************************************
-     * SDK INTEGRATION POINT
-     * Summary: Make initial request to the journey/tree for login
-     * --------------------------------------------------------------------------
-     * Details: This calls the tree assigned to login within the FRAuthConfig.
-     * It returns a `node`, which is also known as a "step". This `node` is a
-     * collection of "callbacks", which represent a request for atomic
-     * information.
-     ************************************************************************* */
-    FRUser.login { (user, node, error) in
-      self.handleNode(user, node, error, resolve: resolve, rejecter: reject)
+      
+      /** *************************************************************************
+       * SDK INTEGRATION POINT
+       * Summary: Make initial request to the journey/tree for login
+       * --------------------------------------------------------------------------
+       * Details: This calls the tree assigned to login within the FRAuthConfig.
+       * It returns a `node`, which is also known as a "step". This `node` is a
+       * collection of "callbacks", which represent a request for atomic
+       * information.
+       ************************************************************************* */
+      FRUser.login { (user, node, error) in
+        self.handleNode(user, node, error, resolve: resolve, rejecter: reject)
+      }
     }
-  }
 
   /**
    * Method for the initial call to the journey/tree defined in `forgerock_registration_service_name`
@@ -408,6 +419,14 @@ public class FRAuthSampleBridge: NSObject {
   /**
    * Method for handling Device Profile Callback.
    * This callback is used to collect device information, such as location and metadata.
+   *
+   * ⚠️ Important:
+   * For this to function as expected make sure you have added the required
+   * privacy usage description keys in your Info.plist:
+   *
+   * - NSBluetoothAlwaysUsageDescription
+   * - NSFaceIDUsageDescription
+   * - NSLocationWhenInUseUsageDescription
    */
    private func handleDeviceProfileCallback(
     _ callback: DeviceProfileCallback,
