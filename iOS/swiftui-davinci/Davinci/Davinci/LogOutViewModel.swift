@@ -18,15 +18,30 @@ class LogOutViewModel: ObservableObject {
     /// - Updated with a completion message when logout is successful.
     @Published var logout: String = ""
     
-    /// Performs the user logout process using the DaVinci SDK.
-    /// - Executes the `logout()` method from the DaVinci user object asynchronously.
+    /// Performs the user logout process using either the DaVinci SDK or OIDC Web SDK.
+    /// - Executes the appropriate `logout()` method based on which user is authenticated.
     /// - Updates the `logout` property with a completion message upon success.
     func logout() async {
-        /// Call the DaVinci SDK's logout method
-        await davinci.user()?.logout()
+        var logoutMessage = ""
+        
+        /// Check for DaVinci user first
+        if let daVinciUser = await daVinci.daVinciUser() {
+            await daVinciUser.logout()
+            logoutMessage = "DaVinci user logout completed"
+        }
+        /// Check for OIDC user
+        if let oidcUser = await oidcLogin.oidcLoginUser() {
+            await oidcUser.logout()
+            logoutMessage = "OIDC user logout completed"
+        }
+        /// If no authenticated user found
+        else {
+            logoutMessage = "No authenticated user found"
+        }
+        
         /// Update the UI on the main thread
         await MainActor.run {
-            logout =  "Logout completed"
+            logout = logoutMessage
         }
     }
 }

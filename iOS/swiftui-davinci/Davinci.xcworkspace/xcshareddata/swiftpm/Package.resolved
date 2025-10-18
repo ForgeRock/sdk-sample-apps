@@ -42,8 +42,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/GoogleSignIn-iOS.git",
       "state" : {
-        "revision" : "4dbde2358566466e21f05d69f9e770b0b81b6eb8",
-        "version" : "8.1.0-vwg-eap-1.0.0"
+        "revision" : "3859395ef0d8585208df69aaed8f116c693658ef",
+        "version" : "8.1.0-vwg-eap-1.1.0"
       }
     },
     {
@@ -51,8 +51,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/GoogleUtilities.git",
       "state" : {
-        "revision" : "53156c7ec267db846e6b64c9f4c4e31ba4cf75eb",
-        "version" : "8.0.2"
+        "revision" : "60da361632d0de02786f709bdc0c4df340f7613e",
+        "version" : "8.1.0"
       }
     },
     {
@@ -78,8 +78,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ForgeRock/ping-ios-sdk",
       "state" : {
-        "revision" : "f3f2836898c54efda9f5de4e3d1a418edfa7e8cb",
-        "version" : "1.2.0"
+        "branch" : "SDKS-4353_OIDC_Bug_fixes",
+        "revision" : "f5d58b8be5812f8beec32bac00e96307e02055c1"
+      }
+    },
+    {
+      "identity" : "pingone-signals-sdk-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/pingidentity/pingone-signals-sdk-ios.git",
+      "state" : {
+        "revision" : "bf37bd85fa909428d764630c71cf0d4f3d2d7e05",
+        "version" : "5.3.0"
       }
     },
     {

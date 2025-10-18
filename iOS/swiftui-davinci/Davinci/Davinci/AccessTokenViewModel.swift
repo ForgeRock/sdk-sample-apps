@@ -11,6 +11,8 @@
 
 import Foundation
 import PingLogger
+import PingOrchestrate
+import PingOidc
 
 /// A view model responsible for managing the access token state.
 /// - This class handles fetching the access token using the DaVinci SDK and logs the results.
@@ -29,19 +31,29 @@ class AccessTokenViewModel: ObservableObject {
         }
     }
     
-    /// Fetches the access token using the DaVinci SDK.
-    /// - The method checks for a successful token retrieval and updates the `accessToken` property.
+    /// Fetches the access token using either the DaVinci SDK or OIDC Web SDK.
+    /// - The method checks both daVinci and oidcLogin for an authenticated user and retrieves their token.
     /// - Logs the success or failure result using `PingLogger`.
     func accessToken() async {
-        /// Request the token from the DaVinci SDK
-        let token = await davinci.user()?.token()
+        var tokenResult: Result<Token, OidcError>?
+        
+        /// Check DaVinci user first
+        if let daVinciUser = await daVinci.daVinciUser() {
+            tokenResult = await daVinciUser.token()
+            LogManager.standard.i("Fetching token from DaVinci user")
+        }
+        /// If no DaVinci user, check OIDC user  
+        else if let oidcUser = await oidcLogin.user() {
+            tokenResult = await oidcUser.token()
+            LogManager.standard.i("Fetching token from OIDC user")
+        }
         
         /// Process the token result
-        switch token {
-        case .success(let accessToken):
+        switch tokenResult {
+        case .success(let token):
             /// Update the UI on the main thread with the received token
             await MainActor.run {
-                self.accessToken = String(describing: accessToken)
+                self.accessToken = String(describing: token.accessToken)
             }
             /// Log the successful token retrieval
             LogManager.standard.i("AccessToken: \(self.accessToken)")
@@ -53,8 +65,11 @@ class AccessTokenViewModel: ObservableObject {
             /// Log the error that occurred
             LogManager.standard.e("", error: error)
         case .none:
-            /// No response received, no further action required
-            break
+            /// No authenticated user found in either DaVinci or OIDC
+            await MainActor.run {
+                self.accessToken = "No authenticated user found"
+            }
+            LogManager.standard.i("No authenticated user found in either DaVinci or OIDC")
         }
     }
 }

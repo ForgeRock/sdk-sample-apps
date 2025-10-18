@@ -55,6 +55,8 @@
 		A5EED25C2CF7B5480064B168 /* UserInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5EED25B2CF7B5480064B168 /* UserInfoView.swift */; };
 		A5EED25E2CF7B8F80064B168 /* UserInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5EED25D2CF7B8F80064B168 /* UserInfoViewModel.swift */; };
 		A5EED2602CF7B9380064B168 /* LogOutViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5EED25F2CF7B9380064B168 /* LogOutViewModel.swift */; };
+		B1OIDC012024ABCD0001 /* OidcLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1OIDC022024ABCD0002 /* OidcLoginView.swift */; };
+		B1OIDC032024ABCD0003 /* OidcLoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1OIDC042024ABCD0004 /* OidcLoginViewModel.swift */; };
 		EC83DE312E5F2BD600D2B5B4 /* DeviceRegistrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC83DE2F2E5F2BD600D2B5B4 /* DeviceRegistrationView.swift */; };
 		EC83DE322E5F2BD600D2B5B4 /* DeviceAuthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC83DE2E2E5F2BD600D2B5B4 /* DeviceAuthenticationView.swift */; };
 		EC83DE332E5F2BD600D2B5B4 /* PhoneNumberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC83DE302E5F2BD600D2B5B4 /* PhoneNumberView.swift */; };
@@ -66,6 +68,7 @@
 		EC83DE5A2E5F2D1D00D2B5B4 /* SVGKit in Frameworks */ = {isa = PBXBuildFile; productRef = EC83DE592E5F2D1D00D2B5B4 /* SVGKit */; };
 		EC83DE5C2E5F2D1D00D2B5B4 /* SVGKitSwift in Frameworks */ = {isa = PBXBuildFile; productRef = EC83DE5B2E5F2D1D00D2B5B4 /* SVGKitSwift */; };
 		EC83DE5E2E5F2EFE00D2B5B4 /* AsyncSVGImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC83DE5D2E5F2EFE00D2B5B4 /* AsyncSVGImage.swift */; };
+		ECCC647B2E783FCB00CD9650 /* PingJourney in Frameworks */ = {isa = PBXBuildFile; productRef = ECCC647A2E783FCB00CD9650 /* PingJourney */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -110,6 +113,8 @@
 		A5EED25B2CF7B5480064B168 /* UserInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoView.swift; sourceTree = "<group>"; };
 		A5EED25D2CF7B8F80064B168 /* UserInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoViewModel.swift; sourceTree = "<group>"; };
 		A5EED25F2CF7B9380064B168 /* LogOutViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogOutViewModel.swift; sourceTree = "<group>"; };
+		B1OIDC022024ABCD0002 /* OidcLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OidcLoginView.swift; sourceTree = "<group>"; };
+		B1OIDC042024ABCD0004 /* OidcLoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OidcLoginViewModel.swift; sourceTree = "<group>"; };
 		EC83DE2E2E5F2BD600D2B5B4 /* DeviceAuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceAuthenticationView.swift; sourceTree = "<group>"; };
 		EC83DE2F2E5F2BD600D2B5B4 /* DeviceRegistrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceRegistrationView.swift; sourceTree = "<group>"; };
 		EC83DE302E5F2BD600D2B5B4 /* PhoneNumberView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneNumberView.swift; sourceTree = "<group>"; };
@@ -133,6 +138,7 @@
 				A52877782D9C71C400B4885D /* PingBrowser in Frameworks */,
 				A51C18EC2CF5247200A78241 /* PingOidc in Frameworks */,
 				EC83DE5C2E5F2D1D00D2B5B4 /* SVGKitSwift in Frameworks */,
+				ECCC647B2E783FCB00CD9650 /* PingJourney in Frameworks */,
 				A51313D32D9C6C640086F846 /* PingLogger in Frameworks */,
 				A52877822D9C71C400B4885D /* PingOrchestrate in Frameworks */,
 				EC83DE372E5F2CA200D2B5B4 /* PingExternalIdPApple in Frameworks */,
@@ -193,6 +199,8 @@
 				A5EED25F2CF7B9380064B168 /* LogOutViewModel.swift */,
 				A5EED25B2CF7B5480064B168 /* UserInfoView.swift */,
 				A5EED25D2CF7B8F80064B168 /* UserInfoViewModel.swift */,
+				B1OIDC022024ABCD0002 /* OidcLoginView.swift */,
+				B1OIDC042024ABCD0004 /* OidcLoginViewModel.swift */,
 				3A5441342BCDF10B00385131 /* Assets.xcassets */,
 				3A5441362BCDF10B00385131 /* Preview Content */,
 			);
@@ -339,6 +347,8 @@
 				A5A5F8612D5CE16A0053BF24 /* TextView.swift in Sources */,
 				3A3709962BEB038200AA7B51 /* AccessTokenView.swift in Sources */,
 				A5A5F8652D5CE4A60053BF24 /* ErrorView.swift in Sources */,
+				B1OIDC012024ABCD0001 /* OidcLoginView.swift in Sources */,
+				B1OIDC032024ABCD0003 /* OidcLoginViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -584,8 +594,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ForgeRock/ping-ios-sdk";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.2.0;
+				branch = "SDKS-4353_OIDC_Bug_fixes";
+				kind = branch;
 			};
 		};
 		EC83DE582E5F2D1D00D2B5B4 /* XCRemoteSwiftPackageReference "SVGKit" */ = {
@@ -743,6 +753,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = EC83DE582E5F2D1D00D2B5B4 /* XCRemoteSwiftPackageReference "SVGKit" */;
 			productName = SVGKitSwift;
+		};
+		ECCC647A2E783FCB00CD9650 /* PingJourney */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A57584782D9DD9EC00AFD754 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;
+			productName = PingJourney;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
