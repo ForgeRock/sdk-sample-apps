@@ -1,0 +1,191 @@
+services:
+  # ============================================================
+  # Backend API (shared by todo apps)
+  # ============================================================
+  todo-api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    container_name: todo-api
+    environment:
+      # Load .env file if it exists, otherwise use these defaults
+      - PORT=${PORT:-9443}
+      - NODE_ENV=${NODE_ENV:-production}
+      # PingOne/AM configuration (override via .env file at project root)
+      - AM_URL=${AM_URL:-}
+      - REALM_PATH=${REALM_PATH:-}
+      - WEB_OAUTH_CLIENT=${WEB_OAUTH_CLIENT:-}
+      - DEBUGGER_OFF=${DEBUGGER_OFF:-false}
+    ports:
+      - "9443:9443"
+    volumes:
+      # Persist PouchDB databases
+      - todo-api-data:/app/todo-api/todos
+      - todo-api-users:/app/todo-api/users
+    networks:
+      - ping-sdk-network
+    profiles:
+      - reactjs-todo
+      - angular-todo
+      - reactjs-davinci
+      - angular-davinci
+      - api-only
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9443/healthcheck"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # ============================================================
+  # React Todo App (with PingOne AIC/AM)
+  # ============================================================
+  reactjs-todo:
+    build:
+      context: .
+      dockerfile: Dockerfile.react
+      args:
+        APP_NAME: reactjs-todo
+    container_name: reactjs-todo
+    ports:
+      - "8443:8443"
+      - "8080:8080"
+    depends_on:
+      todo-api:
+        condition: service_healthy
+    networks:
+      - ping-sdk-network
+    profiles:
+      - reactjs-todo
+
+  # ============================================================
+  # Angular Todo App (with PingOne AIC/AM)
+  # ============================================================
+  angular-todo:
+    build:
+      context: .
+      dockerfile: Dockerfile.angular
+      args:
+        APP_NAME: angular-todo
+    container_name: angular-todo
+    ports:
+      - "8443:8443"
+      - "8080:8080"
+    depends_on:
+      todo-api:
+        condition: service_healthy
+    networks:
+      - ping-sdk-network
+    profiles:
+      - angular-todo
+
+  # ============================================================
+  # React Todo DaVinci App
+  # ============================================================
+  reactjs-todo-davinci:
+    build:
+      context: .
+      dockerfile: Dockerfile.react
+      args:
+        APP_NAME: reactjs-todo-davinci
+    container_name: reactjs-todo-davinci
+    ports:
+      - "8443:8443"
+      - "8080:8080"
+    depends_on:
+      todo-api:
+        condition: service_healthy
+    networks:
+      - ping-sdk-network
+    profiles:
+      - reactjs-davinci
+
+  # ============================================================
+  # Angular Todo DaVinci App
+  # ============================================================
+  angular-todo-davinci:
+    build:
+      context: .
+      dockerfile: Dockerfile.angular
+      args:
+        APP_NAME: angular-todo-davinci
+    container_name: angular-todo-davinci
+    ports:
+      - "8443:8443"
+      - "8080:8080"
+    depends_on:
+      todo-api:
+        condition: service_healthy
+    networks:
+      - ping-sdk-network
+    profiles:
+      - angular-davinci
+
+  # ============================================================
+  # Embedded Login (with PingOne AIC/AM)
+  # ============================================================
+  embedded-login:
+    build:
+      context: .
+      dockerfile: Dockerfile.react
+      args:
+        APP_NAME: embedded-login
+    container_name: embedded-login
+    ports:
+      - "8443:8443"
+      - "8080:8080"
+    networks:
+      - ping-sdk-network
+    profiles:
+      - embedded-login
+
+  # ============================================================
+  # Central Login OIDC (with PingOne AIC/AM)
+  # ============================================================
+  central-login-oidc:
+    build:
+      context: .
+      dockerfile: Dockerfile.react
+      args:
+        APP_NAME: central-login-oidc
+    container_name: central-login-oidc
+    ports:
+      - "8443:8443"
+      - "8080:8080"
+    networks:
+      - ping-sdk-network
+    profiles:
+      - central-login
+
+  # ============================================================
+  # Embedded Login DaVinci (Vite-based)
+  # ============================================================
+  embedded-login-davinci:
+    build:
+      context: .
+      dockerfile: Dockerfile.vite
+      args:
+        APP_NAME: embedded-login-davinci
+    container_name: embedded-login-davinci
+    ports:
+      - "5829:5829"
+    networks:
+      - ping-sdk-network
+    profiles:
+      - embedded-davinci
+
+# ============================================================
+# Networks
+# ============================================================
+networks:
+  ping-sdk-network:
+    driver: bridge
+
+# ============================================================
+# Volumes (for persistent data)
+# ============================================================
+volumes:
+  todo-api-data:
+    driver: local
+  todo-api-users:
+    driver: local
