@@ -1,4 +1,4 @@
-# React JS Todo Sample App
+# React JS Journey Sample App
 
 ## Disclaimers
 
@@ -7,9 +7,9 @@ This sample code is provided "as is" and is not a supported product of Ping. It'
 ## Requirements
 
 1. An instance of Ping's Access Manager (AM), either within a Ping's Advanced Identity Cloud tenant, your own private installation or locally installed on your computer
-2. Node >= 14.2.0 (recommended: install via [official package installer](https://nodejs.org/en/))
+2. Node >= 18.12.0 (recommended: install via [official package installer](https://nodejs.org/en/))
 3. Knowledge of using the Terminal/Command Line
-4. Ability to generate security certs (recommended: mkcert ([installation instructions here](https://github.com/FiloSottile/mkcert#installation))
+4. Ability to generate security certs (recommended: mkcert ([installation instructions here](https://github.com/FiloSottile/mkcert#installation)))
 5. This project "cloned" to your computer
 
 ## Setup
@@ -20,9 +20,9 @@ Once you have the 5 requirements above met, we can build the project.
 
 #### Configure CORS
 
-1. Allowed origins: `https://react.example.com:8443`
+1. Allowed origins: `https://localhost:8443`
 2. Allowed methods: `GET` `POST`
-3. Allowed headers: `Content-Type` `X-Requested-With` `Accept-API-Version` `Authorization`
+3. Allowed headers: `Content-Type` `X-Requested-With` `X-Requested-Platform` `Accept-API-Version` `Authorization`
 4. Allow credentials: enable
 
 #### Create Your OAuth Clients
@@ -35,7 +35,7 @@ Once you have the 5 requirements above met, we can build the project.
 1. Login
 2. Register
 
-Note: The sample app currently supports the following callbacks only:
+**Note**: The sample app currently supports the following callbacks only:
 
 - NameCallback
 - PasswordCallback
@@ -46,68 +46,57 @@ Note: The sample app currently supports the following callbacks only:
 - BooleanAttributeInputCallback
 - KbaCreateCallback
 - TermsAndConditionsCallback
+- TextOutputCallback
+- ConfirmationCallback
+- SelectIdPCallback
+- RedirectCallback
+- PingOneProtectInitializeCallback
+- PingOneProtectEvaluationCallback
+
+WebAuthn type steps for registration and authentication are also supported
+
 
 ### Configure Your `.env` File
 
-Change the name of `.env.example` to `.env` and replace the bracketed values (e.g. `<<<helper-text>>>`) with your values.
+Change the name of `.env.example` to `.env` and fill the environment variables with your values.
 
 Example with annotations:
 
 ```text
-SERVER_URL=<<<URL to your AM/ PingOne instance>>>
-APP_URL=https://react.example.com:8443 # in develop we do not use this variable for dynamic deployment reasons
-API_URL=https://api.example.com:9443
+WELLKNOWN_URL=<<<Wellknown URL to your AM instance>>>
+APP_URL=https://localhost:8443 # in develop we do not use this variable for dynamic deployment reasons
+API_URL=http://localhost:9443
 DEBUGGER_OFF=false
 JOURNEY_LOGIN=Login
 JOURNEY_REGISTER=Registration
 REALM_PATH=<<<Realm path of AM>>>
 WEB_OAUTH_CLIENT=<<<Your Web OAuth client name/ID>>>
+SCOPE='openid profile email'
 ```
 
 ### Installing Dependencies and Run Build
 
-**Run from root of repo**: since this sample app uses npm's workspaces, we recommend running the npm commands from the root of the repo.
+**Run from `/javascript` root**: Since this sample app uses npm's workspaces, we recommend running the npm commands from the root of the `/javascript` folder.
 
 ```sh
 # Install all dependencies (no need to pass the -w option)
 npm install
-
-# run sample app project
-# only if you want to see the app build, the serve command will do this for you
-npm run build -w reactjs-todo # if in workspace root
-
-npm run build # if in the reactjs-todo folder
-```
-
-### Update Your `/etc/hosts` File
-
-Now you'll need to update your `hosts` (`/etc/hosts` if on a Mac) to allow for domain aliases:
-
-```sh
-sudo vim /etc/hosts
-```
-
-```text
-# hosts file aliases
-127.0.0.1 react.example.com api.example.com
 ```
 
 ### Run the Servers
 
-Now, run the below commands to start the processes needed for building the application and running the servers for both client and API server:
+Now, run the below command to start the processes needed for building the application and running the servers for both client and API server:
 
 ```sh
-# In one terminal window, run the following watch command
-npm run start:reactjs-todo # only if in root
-
-npm start # if in reactjs-todo folder
+# In one terminal window, run the following command from the root of the /javascript folder
+npm run start:react-journey
 ```
 
-Now, you should be able to visit `https://react.example.com:8443`, which is your web app or client (the Relying Party in OAuth terms). This client will make requests to your AM instance, (the Authorization Server in OAuth terms), which will be running on whatever domain you set, and `https://api.example.com:9443` as the REST API for your todos (the Resource Server).
+Now, you should be able to visit `https://localhost:8443`, which is your web app or client (the Relying Party in OAuth terms). This client will make requests to your AM instance, (the Authorization Server in OAuth terms), which will be running on whatever domain you set, and `http://localhost:9443` as the REST API for your todos (the Resource Server).
 
 ### Accept Cert Exceptions
 
-You will likely have to accept the security certificate exceptions for both your React app and the Node.js server. To accept the cert form the Node.js server, you can visit `https://api.example.com:9443/healthcheck` in your browser. Once you receive "OK", your Node.js server is running on the correct domain and port, and the cert is accepted.
+You will likely have to accept the security certificate exceptions for both your React app and the Node.js server. To accept the cert form the Node.js server, you can visit `http://localhost:9443/healthcheck` in your browser. Once you receive "OK", your Node.js server is running on the correct domain and port, and the cert is accepted.
 
 ## Learn About Integration Touchpoints
 
