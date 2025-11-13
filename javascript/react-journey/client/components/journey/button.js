@@ -1,0 +1,35 @@
+/*
+ * ping-sample-web-react-journey
+ *
+ * button.js
+ *
+ * Copyright (c) 2026 Ping Identity Ping Identity Corporation. All rights reserved.
+ * This software may be modified and distributed under the terms
+ * of the MIT license. See the LICENSE file for details.
+ */
+
+import React from 'react';
+
+export default function Button({ buttonText, submittingForm }) {
+  return (
+    <button
+      type="submit"
+      className="btn btn-primary w-100"
+      disabled={submittingForm ? 'disabled' : null}
+    >
+      {
+        /**
+         * Render a small spinner during submission calls
+         */
+        submittingForm ? (
+          <span
+            className="spinner-border spinner-border-sm"
+            role="status"
+            aria-hidden="true"
+          ></span>
+        ) : null
+      }
+      <span> {buttonText}</span>
+    </button>
+  );
+}
