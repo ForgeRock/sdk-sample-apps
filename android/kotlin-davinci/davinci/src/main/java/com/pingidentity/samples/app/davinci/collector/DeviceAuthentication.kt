@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 - 2025 Ping Identity. All rights reserved.
+ * Copyright (c) 2024 - 2025 Ping Identity Corporation. All rights reserved.
  *
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
@@ -24,13 +24,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.ImageLoader
 import coil.compose.rememberAsyncImagePainter
 import coil.decode.SvgDecoder
-import com.pingidentity.android.ContextProvider
 import com.pingidentity.davinci.collector.DeviceAuthenticationCollector
 
 @Composable
@@ -39,7 +39,7 @@ fun DeviceAuthentication(
     onNext: () -> Unit,
 ) {
 
-    var selectedId by remember { mutableStateOf<String?>(null) }
+    var selectedId by remember(field) { mutableStateOf<String?>(null) }
 
     OutlinedCard (
         modifier = Modifier
@@ -78,7 +78,7 @@ fun DeviceAuthentication(
                     // Icon from URL
                     Icon(
                         painter = rememberAsyncImagePainter(model = device.iconSrc,
-                            imageLoader = ImageLoader.Builder(ContextProvider.context)
+                            imageLoader = ImageLoader.Builder(LocalContext.current)
                                 .components { add(SvgDecoder.Factory()) }
                                 .build()
                         ),

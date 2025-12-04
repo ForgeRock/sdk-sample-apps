@@ -18,18 +18,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.pingidentity.davinci.collector.SubmitCollector
 
-/**
- * The submit button.
- *
- * @param field The submit collector.
- * @param onNext The callback to be called when the next node is triggered.
- */
 @Composable
 fun SubmitButton(
     field: SubmitCollector,
     onNext: () -> Unit,
 ) {
-    field.value = ""
     Row(
         modifier =
         Modifier

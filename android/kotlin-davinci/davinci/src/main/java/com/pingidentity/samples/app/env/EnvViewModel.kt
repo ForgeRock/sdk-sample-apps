@@ -6,21 +6,22 @@ package com.pingidentity.samples.app.env
  * of the MIT license. See the LICENSE file for details.
  */
 
+import android.app.Application
+import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.core.net.toUri
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.lifecycle.ViewModel
-import com.pingidentity.android.ContextProvider.context
+import androidx.lifecycle.AndroidViewModel
 import com.pingidentity.davinci.DaVinci
 import com.pingidentity.davinci.module.Oidc
 import com.pingidentity.davinci.plugin.DaVinci
+import com.pingidentity.davinci.user
 import com.pingidentity.logger.Logger
 import com.pingidentity.logger.STANDARD
 import com.pingidentity.oidc.OidcClientConfig
-import com.pingidentity.oidc.OidcWeb
-import com.pingidentity.samples.app.User
 import com.pingidentity.samples.app.settingDataStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -28,7 +29,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlin.text.split
 
-// TODO Replace the placeholder values in both test and prod configurations.
 val testConfig by lazy {
     DaVinci {
         logger = Logger.STANDARD
@@ -59,13 +59,14 @@ val prodConfig by lazy {
 
 
 var daVinci: DaVinci = testConfig
+lateinit var redirectUri: Uri //For Social Login redirect parameter using Auth Tab
 
-lateinit var oidcWeb: OidcWeb
 
-class EnvViewModel : ViewModel() {
+class EnvViewModel(application: Application) : AndroidViewModel(application) {
 
     private val servers = listOf(testConfig, prodConfig)
     val oidcConfigs = listOf(testConfig.oidcConfig(), prodConfig.oidcConfig())
+    private val context = getApplication<Application>().applicationContext
 
     var current by mutableStateOf(prodConfig.oidcConfig())
         private set
@@ -85,20 +86,13 @@ class EnvViewModel : ViewModel() {
 
         daVinci = server
 
-        oidcWeb = OidcWeb {
-            logger = Logger.STANDARD
+        val oidcConfig = server.oidcConfig()
+        redirectUri = oidcConfig.redirectUri.toUri()
 
-            module(com.pingidentity.oidc.module.Oidc) {
-                clientId = config.clientId
-                discoveryEndpoint = config.discoveryEndpoint
-                scopes = config.scopes
-                redirectUri = config.redirectUri
-            }
-        }
 
         if (current.clientId != config.clientId) {
             CoroutineScope(Dispatchers.Default).launch {
-                User.user()?.logout()
+                daVinci.user()?.logout()
             }
         }
 

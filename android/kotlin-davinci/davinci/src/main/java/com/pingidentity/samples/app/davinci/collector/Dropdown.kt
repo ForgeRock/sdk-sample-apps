@@ -29,10 +29,10 @@ import com.pingidentity.davinci.collector.SingleSelectCollector
 @Composable
 fun Dropdown(field: SingleSelectCollector, onNodeUpdated: () -> Unit) {
     val options = listOf("") + field.options.map { it.value }
-    var expanded by remember { mutableStateOf(false) }
-    var selectedOption by remember { mutableStateOf(field.value) }
+    var expanded by remember(field) { mutableStateOf(false) }
+    var selectedOption by remember(field) { mutableStateOf(field.value) }
 
-    var isValid by remember {
+    var isValid by remember(field) {
         mutableStateOf(true)
     }
 

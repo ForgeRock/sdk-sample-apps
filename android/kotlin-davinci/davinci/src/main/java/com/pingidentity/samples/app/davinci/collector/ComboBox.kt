@@ -36,10 +36,10 @@ import com.pingidentity.davinci.collector.MultiSelectCollector
 @Composable
 fun ComboBox(field: MultiSelectCollector, onNodeUpdated: () -> Unit) {
     val options = field.options.map { it.value }
-    var expanded by remember { mutableStateOf(false) }
-    val selectedOptions = remember { mutableStateListOf<String>() }
+    var expanded by remember(field) { mutableStateOf(false) }
+    val selectedOptions = remember(field) { mutableStateListOf<String>() }
 
-    var isValid by remember {
+    var isValid by remember(field) {
         mutableStateOf(true)
     }
 

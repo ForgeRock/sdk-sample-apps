@@ -18,7 +18,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.GeneratingTokens
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.RocketLaunch
 import androidx.compose.material3.Icon
@@ -32,18 +31,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.pingidentity.samples.app.Destinations.CENTRALIZE_ROUTE
 import com.pingidentity.samples.app.Destinations.DAVINCI
 import com.pingidentity.samples.app.Destinations.ENV_ROUTE
 import com.pingidentity.samples.app.Destinations.TOKEN_ROUTE
 import com.pingidentity.samples.app.Destinations.USER_INFO
 
-/**
- * The app drawer.
- *
- * @param logoutViewModel The logout view model.
- * @param navigateTo The navigation function.
- */
 @Composable
 fun AppDrawer(
     logoutViewModel: LogoutViewModel,
@@ -70,22 +62,13 @@ fun AppDrawer(
             },
             modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
         )
+
         NavigationDrawerItem(
             label = { Text("Launch DaVinci") },
             selected = false,
             icon = { Icon(Icons.Filled.RocketLaunch, null) },
             onClick = {
                 navigateTo(DAVINCI)
-                closeDrawer()
-            },
-            modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
-        )
-        NavigationDrawerItem(
-            label = { Text("Centralize Login") },
-            selected = false,
-            icon = { Icon(Icons.Filled.OpenInBrowser, null) },
-            onClick = {
-                navigateTo(CENTRALIZE_ROUTE)
                 closeDrawer()
             },
             modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
@@ -117,7 +100,7 @@ fun AppDrawer(
             icon = { Icon(Icons.AutoMirrored.Filled.Logout, null) },
             onClick = {
                 logoutViewModel.logout {
-                    navigateTo(DAVINCI)
+                    navigateTo(ENV_ROUTE)
                 }
                 closeDrawer()
             },
@@ -126,11 +109,6 @@ fun AppDrawer(
     }
 }
 
-/**
- * The logo.
- *
- * @param modifier The modifier to be applied to the logo.
- */
 @Composable
 private fun Logo(modifier: Modifier) {
     Row(
@@ -141,7 +119,7 @@ private fun Logo(modifier: Modifier) {
             .then(modifier),
     ) {
         Icon(
-            painterResource(R.drawable.ping_logo),
+            painterResource(R.drawable.logo_davinci_white),
             contentDescription = null,
             modifier =
             Modifier

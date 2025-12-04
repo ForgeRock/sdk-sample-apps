@@ -1,14 +1,10 @@
 [versions]
 activityCompose = "1.9.3"
-agp = "8.7.1"
+agp = "8.12.2"
 coreSplashscreen = "1.0.1"
-datastore = "1.0.0" # DataStorageTest failed when using 1.1.1 https://issuetracker.google.com/issues/337870543
-davinci = "1.3.0-beta1"
-davinci-android = "1.3.0-beta1"
-davinci-storage = "1.3.0-beta1"
-davinci-externalIdp = "1.3.0-beta1"
-davinci-oidc = "1.3.0-beta1"
-kotlin = "2.0.0"
+datastore = "1.1.7"
+ping = "1.3.0"
+kotlin = "2.2.0"
 compose = "1.7.4"
 compose-material3 = "1.3.0"
 coreKtx = "1.13.1"
@@ -22,6 +18,7 @@ coilSvg = "2.4.0"
 androidx-credentials = "1.5.0"
 googleid = "1.1.1"
 facebook-login = "18.0.3"
+serialization = "1.9.0"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
@@ -35,17 +32,14 @@ compose-foundation = { module = "androidx.compose.foundation:foundation", versio
 compose-material3 = { module = "androidx.compose.material3:material3", version.ref = "compose-material3" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-davinci = { module = "com.pingidentity.sdks:android", version.ref = "davinci" }
-foundation-android = { module = "com.pingidentity.sdks:davinci", version.ref = "davinci-android" }
-foundation-oidc = { module = "com.pingidentity.sdks:oidc", version.ref = "davinci-oidc" }
-foundation-oidc-browser = { module = "com.pingidentity.sdks:browser", version.ref = "davinci-oidc" }
-foundation-storage = { module = "com.pingidentity.sdks:davinci", version.ref = "davinci-storage" }
-external-idp = { module = "com.pingidentity.sdks:external-idp", version.ref = "davinci-externalIdp" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
+davinci = { module = "com.pingidentity.sdks:davinci", version.ref = "ping" }
+external-idp = { module = "com.pingidentity.sdks:external-idp", version.ref = "ping" }
+protect = { module = "com.pingidentity.sdks:protect", version.ref = "ping" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 coil-svg = { module = "io.coil-kt:coil-svg", version.ref = "coilSvg" }
-androidx-credentials = { group = "androidx.credentials", name = "credentials", version.ref = "androidx-credentials" }
 androidx-credentials-play-services-auth = { group = "androidx.credentials", name = "credentials-play-services-auth", version.ref = "androidx-credentials" }
 googleid = { group = "com.google.android.libraries.identity.googleid", name = "googleid", version.ref = "googleid" }
 facebook-login = { module = "com.facebook.android:facebook-login", version.ref = "facebook-login" }

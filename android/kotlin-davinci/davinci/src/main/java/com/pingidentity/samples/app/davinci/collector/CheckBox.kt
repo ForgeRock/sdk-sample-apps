@@ -27,7 +27,7 @@ import com.pingidentity.davinci.collector.MultiSelectCollector
 
 @Composable
 fun CheckBox(field: MultiSelectCollector, onNodeUpdated: () -> Unit) {
-    val selectedOptions= remember { mutableStateMapOf<String, Boolean>() }
+    val selectedOptions= remember(field) { mutableStateMapOf<String, Boolean>() }
 
     LaunchedEffect(field) {
         field.options.forEach { item ->
@@ -35,7 +35,7 @@ fun CheckBox(field: MultiSelectCollector, onNodeUpdated: () -> Unit) {
         }
     }
 
-    var isValid by remember {
+    var isValid by remember(field) {
         mutableStateOf(true)
     }
 

@@ -19,12 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.pingidentity.davinci.collector.FlowCollector
 
-/**
- * The flow button.
- *
- * @param field The flow collector.
- * @param onNext The callback to be called when the next node is triggered.
- */
 @Composable
 fun FlowButton(
     field: FlowCollector,
@@ -36,7 +30,6 @@ fun FlowButton(
             .padding(4.dp)
             .fillMaxWidth(),
     ) {
-        field.value = ""
         if (field.type == "FLOW_LINK") {
             TextButton(
                 modifier =

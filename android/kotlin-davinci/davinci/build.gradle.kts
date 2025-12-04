@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 /*
  * Copyright (c) 2024 - 2025 Ping Identity Corporation. All rights reserved.
  *
@@ -13,12 +15,12 @@ plugins {
 
 android {
     namespace = "com.pingidentity.samples.app"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.pingidentity.samples.app"
-        minSdk = 28
-        targetSdk = 35
+        minSdk = 29
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
@@ -40,8 +42,10 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlinOptions {
-        jvmTarget = "17"
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_17)
+        }
     }
 
     signingConfigs {
@@ -68,12 +72,12 @@ dependencies {
 
     // DaVinci SDK
     implementation(libs.davinci)
-    implementation(libs.foundation.android)
-    implementation(libs.foundation.oidc)
-    implementation(libs.foundation.oidc.browser)
 
     // Social Login
     implementation(libs.external.idp)
+
+    // Protect
+    implementation(libs.protect)
 
     //To enable Native Google Sign-In, fall back to browser if Google SDK is not available.
     implementation(libs.googleid)
@@ -81,6 +85,7 @@ dependencies {
     implementation(libs.facebook.login)
 
     implementation(libs.androidx.datastore.preferences)
+    implementation(libs.kotlinx.serialization.json)
 
     implementation(libs.compose.ui)
     implementation(libs.compose.material3)

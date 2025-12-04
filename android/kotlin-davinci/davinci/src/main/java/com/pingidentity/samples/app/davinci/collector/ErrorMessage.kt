@@ -45,6 +45,5 @@ fun getErrorMessage(error: ValidationError): String {
         is UniqueCharacter -> "The input must contain at least ${error.min} unique characters."
         is MaxRepeat -> "The input contains too many repeated characters. Maximum allowed repeats: ${error.max}."
         is MinCharacters -> "The input must include at least ${error.min} character(s) from this set: '${error.character}'."
-        else -> "Invalid input. Please check the provided value."
     }
 }

@@ -23,21 +23,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.pingidentity.davinci.collector.TextCollector
 
-/**
- * The text field.
- *
- * @param field The text collector.
- * @param onNodeUpdated The callback to be called when the current node is updated.
- */
 @Composable
 fun Text(
     field: TextCollector,
     onNodeUpdated: () -> Unit,
 ) {
 
-    var isValid by remember {
+    var isValid by remember(field) {
         mutableStateOf(true)
     }
+    var text by remember(field) { mutableStateOf(field.value) }
 
     Row(
         modifier =
@@ -46,15 +41,13 @@ fun Text(
             .fillMaxWidth(),
     ) {
 
-        // var text by rememberSaveable { mutableStateOf("") }
-
         Spacer(modifier = Modifier.weight(1f, true))
 
         OutlinedTextField(
             modifier = Modifier.wrapContentWidth(Alignment.CenterHorizontally),
-            value = field.value,
+            value = text ,
             onValueChange = { value ->
-                // text = value
+                text = value
                 field.value = value
                 isValid = field.validate().isEmpty()
                 onNodeUpdated()

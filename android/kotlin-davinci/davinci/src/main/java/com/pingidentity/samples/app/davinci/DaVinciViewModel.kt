@@ -10,16 +10,11 @@ package com.pingidentity.samples.app.davinci
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pingidentity.orchestrate.ContinueNode
-import com.pingidentity.samples.app.Mode
-import com.pingidentity.samples.app.User
 import com.pingidentity.samples.app.env.daVinci
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-/**
- * The view model for the DaVinci app. Holds the state of the app.
- */
 class DaVinciViewModel : ViewModel() {
     var state = MutableStateFlow(DaVinciState())
         private set
@@ -27,18 +22,10 @@ class DaVinciViewModel : ViewModel() {
     var loading = MutableStateFlow(false)
         private set
 
-    /**
-     * Initialize the DaVinci flow.
-     */
     init {
         start()
     }
 
-    /**
-     * Call the next node in the DaVinci flow.
-     *
-     * @param current The current node.
-     */
     fun next(current: ContinueNode) {
         loading.update {
             true
@@ -46,7 +33,7 @@ class DaVinciViewModel : ViewModel() {
         viewModelScope.launch {
             val next = current.next()
             state.update {
-                it.copy(node = next)
+                it.copy(node = next, counter = it.counter + 1)
             }
             loading.update {
                 false
@@ -54,19 +41,16 @@ class DaVinciViewModel : ViewModel() {
         }
     }
 
-    /**
-     * Start the DaVinci flow.
-     */
     fun start() {
         loading.update {
             true
         }
         viewModelScope.launch {
-            User.current(Mode.DAVINCI)
+
             val next = daVinci.start()
 
             state.update {
-                it.copy(node = next)
+                it.copy(node = next, counter = it.counter + 1)
             }
             loading.update {
                 false
@@ -74,12 +58,9 @@ class DaVinciViewModel : ViewModel() {
         }
     }
 
-    /**
-     * Refresh the state of the DaVinci flow.
-     */
     fun refresh() {
         state.update {
-            it.copy(node = it.node)
+            it.copy(node = it.node, counter = it.counter + 1)
         }
     }
 }

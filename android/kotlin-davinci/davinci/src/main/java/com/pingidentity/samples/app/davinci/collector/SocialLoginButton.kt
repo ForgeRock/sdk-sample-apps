@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.pingidentity.browser.BrowserLauncher
 import com.pingidentity.idp.davinci.IdpCollector
 import com.pingidentity.samples.app.R
+import com.pingidentity.samples.app.env.redirectUri
 import kotlinx.coroutines.launch
 
 @Composable
@@ -38,9 +39,9 @@ fun SocialLoginButton(
 
     Row(
         modifier =
-        Modifier
-            .padding(4.dp)
-            .fillMaxWidth(),
+            Modifier
+                .padding(4.dp)
+                .fillMaxWidth(),
     ) {
         var id = -1
         when (idpCollector.idpType) {
@@ -53,16 +54,16 @@ fun SocialLoginButton(
         if (id == -1) {
             Button(
                 modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .wrapContentWidth(Alignment.CenterHorizontally),
+                    Modifier
+                        .fillMaxWidth()
+                        .wrapContentWidth(Alignment.CenterHorizontally),
                 onClick = {
                     coroutineScope.launch {
                         BrowserLauncher.customTabsCustomizer = {
                             setShowTitle(false)
                             setUrlBarHidingEnabled(true)
                         }
-                        val result = idpCollector.authorize()
+                        val result = idpCollector.authorize(redirectUri)
                         result.onSuccess {
                             onNext()
                         }
@@ -80,7 +81,8 @@ fun SocialLoginButton(
                 androidx.compose.material3.Text(idpCollector.label)
             }
         } else {
-            Image(painter = painterResource(id = id),
+            Image(
+                painter = painterResource(id = id),
                 contentDescription = null,
                 modifier = Modifier
                     .width(200.dp)
@@ -91,7 +93,7 @@ fun SocialLoginButton(
                                 setShowTitle(false)
                                 setUrlBarHidingEnabled(true)
                             }
-                            val result = idpCollector.authorize()
+                            val result = idpCollector.authorize(redirectUri)
                             result.onSuccess { onNext() }
                             result.onFailure {
                                 Log.e(

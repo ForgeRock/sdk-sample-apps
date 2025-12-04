@@ -15,9 +15,6 @@ import kotlinx.coroutines.launch
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
-/**
- * The main view model.
- */
 class MainViewModel : ViewModel() {
 
     var isLoading = MutableStateFlow(true)
@@ -27,6 +24,7 @@ class MainViewModel : ViewModel() {
         viewModelScope.launch {
             delay(2.toDuration(DurationUnit.SECONDS))
             isLoading.value = false
+
         }
     }
 }
