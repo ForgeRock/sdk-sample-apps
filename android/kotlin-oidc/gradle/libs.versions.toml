@@ -1,0 +1,45 @@
+[versions]
+activityCompose = "1.9.3"
+agp = "8.12.2"
+coreSplashscreen = "1.0.1"
+datastore = "1.1.7"
+ping = "1.3.0"
+kotlin = "2.2.0"
+compose = "1.7.4"
+compose-material3 = "1.3.0"
+coreKtx = "1.13.1"
+appcompat = "1.7.0"
+material = "1.12.0"
+materialIconsExtended = "1.7.4"
+navVersion = "2.8.3"
+composeBom = "2024.10.00"
+coilCompose = "2.4.0"
+coilSvg = "2.4.0"
+serialization = "1.9.0"
+
+[libraries]
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
+androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
+androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
+androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navVersion" }
+androidx-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
+compose-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "compose" }
+compose-material3 = { module = "androidx.compose.material3:material3", version.ref = "compose-material3" }
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
+pingidentity-oidc = { module = "com.pingidentity.sdks:oidc", version.ref = "ping" }
+pingidentity-browser = { module = "com.pingidentity.sdks:browser", version.ref = "ping" }
+pingidentity-orchestrate = { module = "com.pingidentity.sdks:orchestrate", version.ref = "ping" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
+coil-svg = { module = "io.coil-kt:coil-svg", version.ref = "coilSvg" }
+
+[plugins]
+androidApplication = { id = "com.android.application", version.ref = "agp" }
+kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+

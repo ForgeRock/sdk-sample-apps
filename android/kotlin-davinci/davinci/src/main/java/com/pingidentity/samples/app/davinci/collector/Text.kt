@@ -23,6 +23,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.pingidentity.davinci.collector.TextCollector
 
+/**
+ * The text field.
+ *
+ * @param field The text collector.
+ * @param onNodeUpdated The callback to be called when the current node is updated.
+ */
 @Composable
 fun Text(
     field: TextCollector,

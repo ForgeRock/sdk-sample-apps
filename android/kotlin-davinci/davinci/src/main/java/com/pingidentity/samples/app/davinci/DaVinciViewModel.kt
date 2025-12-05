@@ -15,6 +15,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+/**
+ * The view model for the DaVinci app. Holds the state of the app.
+ */
 class DaVinciViewModel : ViewModel() {
     var state = MutableStateFlow(DaVinciState())
         private set
@@ -22,10 +25,18 @@ class DaVinciViewModel : ViewModel() {
     var loading = MutableStateFlow(false)
         private set
 
+    /**
+     * Initialize the DaVinci flow.
+     */
     init {
         start()
     }
 
+    /**
+     * Call the next node in the DaVinci flow.
+     *
+     * @param current The current node.
+     */
     fun next(current: ContinueNode) {
         loading.update {
             true
@@ -41,6 +52,9 @@ class DaVinciViewModel : ViewModel() {
         }
     }
 
+    /**
+     * Start the DaVinci flow.
+     */
     fun start() {
         loading.update {
             true
@@ -58,6 +72,9 @@ class DaVinciViewModel : ViewModel() {
         }
     }
 
+    /**
+     * Refresh the state of the DaVinci flow.
+     */
     fun refresh() {
         state.update {
             it.copy(node = it.node, counter = it.counter + 1)

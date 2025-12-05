@@ -29,6 +29,11 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
+/**
+ * The user profile screen.
+ *
+ * @param userProfileViewModel The user profile view model.
+ */
 @Composable
 fun UserProfile(userProfileViewModel: UserProfileViewModel) {
     val state by userProfileViewModel.state.collectAsState()

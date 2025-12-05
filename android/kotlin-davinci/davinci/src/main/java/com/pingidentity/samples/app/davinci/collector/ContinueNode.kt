@@ -40,6 +40,13 @@ import com.pingidentity.idp.davinci.IdpCollector
 import com.pingidentity.orchestrate.ContinueNode
 import com.pingidentity.protect.davinci.ProtectCollector
 
+/**
+ * The continue node.
+ *
+ * @param continueNode The continue node to render.
+ * @param onNodeUpdated The callback to be called when the current node is updated.
+ * @param onNext The callback to be called when the next node is triggered.
+ */
 @Composable
 fun ContinueNode(
     continueNode: ContinueNode,

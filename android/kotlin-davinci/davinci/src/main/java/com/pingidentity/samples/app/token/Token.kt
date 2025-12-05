@@ -40,6 +40,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.pingidentity.samples.app.json
 import kotlinx.serialization.encodeToString
 
+/**
+ * The token screen.
+ *
+ * @param tokenViewModel The token view model.
+ */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Token(tokenViewModel: TokenViewModel = viewModel<TokenViewModel>()) {

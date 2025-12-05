@@ -17,10 +17,16 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+/**
+ *  The token view model. Provides methods to get and reset the access token.
+ */
 class TokenViewModel : ViewModel() {
     var state = MutableStateFlow(TokenState())
         private set
 
+    /**
+     * Gets the access token.
+     */
     fun accessToken() {
         viewModelScope.launch {
             daVinci.user()?.let {
@@ -45,6 +51,9 @@ class TokenViewModel : ViewModel() {
         }
     }
 
+    /**
+     * Revoke the access token.
+     */
     fun revoke() {
         viewModelScope.launch {
             daVinci.user()?.revoke()

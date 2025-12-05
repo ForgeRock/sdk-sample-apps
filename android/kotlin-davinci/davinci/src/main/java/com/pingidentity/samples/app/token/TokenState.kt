@@ -10,6 +10,12 @@ package com.pingidentity.samples.app.token
 import com.pingidentity.oidc.Token
 import com.pingidentity.oidc.OidcError
 
+/**
+ * The token state.
+ *
+ * @property token The token.
+ * @property error The error.
+ */
 data class TokenState(
     var token: Token? = null,
     var error: OidcError? = null,

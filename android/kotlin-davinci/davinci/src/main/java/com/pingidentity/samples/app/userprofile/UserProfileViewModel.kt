@@ -16,10 +16,16 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+/**
+ * The user profile view model. Provides method to retrieve the user profile.
+ */
 class UserProfileViewModel : ViewModel() {
     var state = MutableStateFlow(UserProfileState())
         private set
 
+    /**
+     * Get the user profile.
+     */
     fun userinfo() {
         viewModelScope.launch {
             daVinci.user()?.let { user ->

@@ -36,6 +36,12 @@ import com.pingidentity.samples.app.Destinations.ENV_ROUTE
 import com.pingidentity.samples.app.Destinations.TOKEN_ROUTE
 import com.pingidentity.samples.app.Destinations.USER_INFO
 
+/**
+ * The app drawer.
+ *
+ * @param logoutViewModel The logout view model.
+ * @param navigateTo The navigation function.
+ */
 @Composable
 fun AppDrawer(
     logoutViewModel: LogoutViewModel,
@@ -109,6 +115,11 @@ fun AppDrawer(
     }
 }
 
+/**
+ * The logo.
+ *
+ * @param modifier The modifier to be applied to the logo.
+ */
 @Composable
 private fun Logo(modifier: Modifier) {
     Row(
