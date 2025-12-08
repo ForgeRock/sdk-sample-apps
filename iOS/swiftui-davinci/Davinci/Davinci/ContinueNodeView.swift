@@ -12,6 +12,7 @@ import SwiftUI
 import PingOrchestrate
 import PingDavinci
 import PingExternalIdP
+import PingProtect
 
 /// A view for displaying and handling user interaction with a continue node in the authentication flow.
 /// - This view renders different collectors based on their type and handles user input and validation.
@@ -104,6 +105,11 @@ struct ContinueNodeView: View {
                         let viewModel = SocialButtonViewModel(idpCollector: idpCollector)
                         /// View for social login buttons (Google, Facebook, etc.)
                         SocialButtonView(socialButtonViewModel: viewModel, onNext: onNext, onStart: onStart)
+                    }
+                case is ProtectCollector:
+                    if let protectCollector = collector as? ProtectCollector {
+                        /// View for PingProtect fraud detection and risk assessment
+                        PingProtectView(field: protectCollector, onNodeUpdated: onNodeUpdated)
                     }
                 default:
                     EmptyView()

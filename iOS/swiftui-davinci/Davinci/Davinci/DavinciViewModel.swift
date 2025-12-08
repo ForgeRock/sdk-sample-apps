@@ -14,6 +14,7 @@ import PingDavinci
 import PingOidc
 import PingOrchestrate
 import PingExternalIdP
+import PingProtect
 
 /// Configures and initializes the DaVinci instance with the PingOne server and OAuth 2.0 client details.
 /// - This configuration includes:
@@ -24,12 +25,38 @@ import PingExternalIdP
 ///   - Other optional fields
 public let davinci = DaVinci.createDaVinci { config in
     //TODO: Provide here the Server configuration. Add the PingOne server Discovery Endpoint and the OAuth2.0 client details
-    config.module(OidcModule.config) { oidcValue in
+    config.module(PingDavinci.OidcModule.config) { oidcValue in
         oidcValue.clientId = <#"Client ID"#>
         oidcValue.scopes = [<#"scope1"#>, <#"scope2"#>, <#"scope3"#>]
         oidcValue.redirectUri = <#"Redirect URI"#>
         oidcValue.discoveryEndpoint = <#"Discovery Endpoint"#>
+        oidcValue.acrValues = <#"acrValue1"#>
     }
+    
+    // Configure PingProtect module for fraud detection and risk assessment
+    /*
+     The DaVinci Client for Android and iOS provide the ProtectLifecycle module for simplifying the management of data collection.
+
+     As a DaVinci Client module, it is aware of the current state of authentication, and can automatically pause and resume behavioral data collection when required.
+
+     Configure the ProtectLifecycle module in your DaVinci Client configuration, as with other modules (Optional).
+     
+     config.module(ProtectLifecycleModule.config) { protectValue in
+             protectValue.isBehavioralDataCollection = true
+             protectValue.isLazyMetadata = true
+             protectValue.envId = "[END_ID]"
+             protectValue.deviceAttributesToIgnore = ["deviceId"]
+             protectValue.isConsoleLogEnabled = true
+
+             protectValue.pauseBehavioralDataOnSuccess = true
+             protectValue.resumeBehavioralDataOnStart = true
+         }
+     
+     You can choose not to initialize data collection on app startup and instead initialize it on-demand, when your DaVinci flow reaches the relevant node.
+     
+     The DaVinci for Android and iOS will automatically initialize data collection when calling the collect() method in response to receiving a ProtectCollector from PingOne. Learn more in Return captured data to a DaVinci flow.
+     */
+    
 }
 
 /// A view model that manages the flow and state of the DaVinci orchestration process.
@@ -66,6 +93,23 @@ class DavinciViewModel: ObservableObject {
             self.state = DavinciState(previous: next , node: next)
             isLoading = false
         }
+        
+        // Direct initialization using the Protect interface (Optional)
+        /*
+         await Protect.config { protectConfig in
+             protectConfig.isBehavioralDataCollection = true
+             protectConfig.isLazyMetadata = true
+             protectConfig.envId = "3072206d-c6ce-ch15-m0nd-f87e972c7cc3"
+             protectConfig.deviceAttributesToIgnore = ["deviceId", "serialNumber"]
+             protectConfig.isConsoleLogEnabled = true
+         }
+         
+         // Initialize the Collection.
+         
+         try await Protect.initialize()
+
+         print("Protect data collection initialized.")
+         */
     }
     
     /// Advances to the next node in the orchestration process.
