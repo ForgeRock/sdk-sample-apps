@@ -45,16 +45,6 @@
 			path = OidcExample;
 			sourceTree = "<group>";
 		};
-		ECC5A57A2EE841E10034504A /* OidcExampleTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = OidcExampleTests;
-			sourceTree = "<group>";
-		};
-		ECC5A5842EE841E10034504A /* OidcExampleUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = OidcExampleUITests;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,8 +83,6 @@
 			isa = PBXGroup;
 			children = (
 				ECC5A56C2EE841DF0034504A /* OidcExample */,
-				ECC5A57A2EE841E10034504A /* OidcExampleTests */,
-				ECC5A5842EE841E10034504A /* OidcExampleUITests */,
 				ECC5A56B2EE841DF0034504A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -154,9 +142,6 @@
 			dependencies = (
 				ECC5A5792EE841E10034504A /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				ECC5A57A2EE841E10034504A /* OidcExampleTests */,
-			);
 			name = OidcExampleTests;
 			packageProductDependencies = (
 			);
@@ -176,9 +161,6 @@
 			);
 			dependencies = (
 				ECC5A5832EE841E10034504A /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				ECC5A5842EE841E10034504A /* OidcExampleUITests */,
 			);
 			name = OidcExampleUITests;
 			packageProductDependencies = (

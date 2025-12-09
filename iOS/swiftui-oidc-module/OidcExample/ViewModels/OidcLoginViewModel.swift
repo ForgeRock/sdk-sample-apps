@@ -79,7 +79,7 @@ class OidcLoginViewModel: ObservableObject {
                     self.state = .failure(oidcError)
                 } else {
                     // Wrap generic errors in OidcError if needed
-                    self.state = .failure(.unknown)
+                    self.state = .failure(.unknown())
                 }
                 isLoading = false
             }

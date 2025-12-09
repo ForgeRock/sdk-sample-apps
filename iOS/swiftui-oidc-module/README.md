@@ -1,4 +1,5 @@
-# SwiftUI OIDC Module Sample Application
+# SwiftUI OIDC Module Sample Application 
+![Ping Identity](https://www.pingidentity.com/content/dam/picr/nav/Ping-Logo-2.svg)
 
 A comprehensive iOS sample application demonstrating browser-based OIDC (OpenID Connect) authentication using the Ping iOS SDK's OIDC Module and `OidcWeb.createOidcWeb` API.
 
