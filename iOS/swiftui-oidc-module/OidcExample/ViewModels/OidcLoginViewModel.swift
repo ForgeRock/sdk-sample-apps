@@ -9,11 +9,11 @@
 //
 
 import Foundation
-import Combine
 import PingOrchestrate
 import PingOidc
 import PingLogger
 import PingBrowser
+import Combine
 
 /// Configures and initializes the OIDC Web instance with OAuth 2.0 client details.
 /// - This configuration includes:
@@ -29,25 +29,13 @@ public let oidcLogin = OidcWeb.createOidcWeb { config in
     config.logger = LogManager.standard
 
     config.module(PingOidc.OidcModule.config) { oidcValue in
-        oidcValue.clientId = "iosClient"
-        oidcValue.scopes = Set(["openid", "email", "address"])
-        oidcValue.redirectUri = "frauth://com.forgerock.ios.frexample"
-        oidcValue.discoveryEndpoint = "https://openam-bafaloukas.forgeblocks.com/am/oauth2/alpha/.well-known/openid-configuration"
+        oidcValue.clientId = <#"Client ID"#>
+        oidcValue.scopes = Set([<#"openid"#>, <#"profile"#>, <#"email"#>])
+        oidcValue.redirectUri = <#"Redirect URI"#>
+        oidcValue.discoveryEndpoint = <#"Discovery Endpoint"#>
         // Optional: Add ACR values if required by your authentication flow
         // oidcValue.acrValues = <#"ACR_VALUE"#>
     }
-    
-    /*/
-     clientId: "iosClient",
-     scopes: ["openid", "email", "address"], // Alter the scopes based on your clients configuration
-     redirectUri: "frauth://com.forgerock.ios.frexample",
-     signOutUri: "",
-     discoveryEndpoint: "https://openam-bafaloukas.forgeblocks.com/am/oauth2/alpha/.well-known/openid-configuration",
-     environment: "AIC",
-     cookieName: "386c0d288cac4b9",
-     serverUrl: "https://openam-bafaloukas.forgeblocks.com/am",
-     realm: "alpha"
-*/
 }
 
 /// A view model that manages the OIDC authentication flow and state.
@@ -91,7 +79,7 @@ class OidcLoginViewModel: ObservableObject {
                     self.state = .failure(oidcError)
                 } else {
                     // Wrap generic errors in OidcError if needed
-                    self.state = .failure(.unknown(cause: error, message: error.localizedDescription))
+                    self.state = .failure(.unknown)
                 }
                 isLoading = false
             }
