@@ -66,6 +66,8 @@
 		EC83DE5A2E5F2D1D00D2B5B4 /* SVGKit in Frameworks */ = {isa = PBXBuildFile; productRef = EC83DE592E5F2D1D00D2B5B4 /* SVGKit */; };
 		EC83DE5C2E5F2D1D00D2B5B4 /* SVGKitSwift in Frameworks */ = {isa = PBXBuildFile; productRef = EC83DE5B2E5F2D1D00D2B5B4 /* SVGKitSwift */; };
 		EC83DE5E2E5F2EFE00D2B5B4 /* AsyncSVGImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC83DE5D2E5F2EFE00D2B5B4 /* AsyncSVGImage.swift */; };
+		ECC5A51F2EE714420034504A /* PingProtect in Frameworks */ = {isa = PBXBuildFile; productRef = ECC5A51E2EE714420034504A /* PingProtect */; };
+		ECC5A5452EE71AC60034504A /* PingProtectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECC5A5202EE714D30034504A /* PingProtectView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -115,6 +117,7 @@
 		EC83DE302E5F2BD600D2B5B4 /* PhoneNumberView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneNumberView.swift; sourceTree = "<group>"; };
 		EC83DE3C2E5F2CEB00D2B5B4 /* DeviceCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceCardView.swift; sourceTree = "<group>"; };
 		EC83DE5D2E5F2EFE00D2B5B4 /* AsyncSVGImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncSVGImage.swift; sourceTree = "<group>"; };
+		ECC5A5202EE714D30034504A /* PingProtectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PingProtectView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -148,6 +151,7 @@
 				EC83DE5A2E5F2D1D00D2B5B4 /* SVGKit in Frameworks */,
 				A51313CF2D9C6C640086F846 /* PingDavinci in Frameworks */,
 				A51313D72D9C6C640086F846 /* PingOrchestrate in Frameworks */,
+				ECC5A51F2EE714420034504A /* PingProtect in Frameworks */,
 				EC83DE3B2E5F2CA900D2B5B4 /* PingExternalIdPGoogle in Frameworks */,
 				A528777A2D9C71C400B4885D /* PingDavinci in Frameworks */,
 				A575847C2D9DD9EC00AFD754 /* PingDavinci in Frameworks */,
@@ -227,6 +231,7 @@
 				A5A5F8522D5CE16A0053BF24 /* FlowButtonView.swift */,
 				A5A5F8532D5CE16A0053BF24 /* LabelView.swift */,
 				A5A5F8542D5CE16A0053BF24 /* PasswordView.swift */,
+				ECC5A5202EE714D30034504A /* PingProtectView.swift */,
 				EC83DE302E5F2BD600D2B5B4 /* PhoneNumberView.swift */,
 				A5A5F8552D5CE16A0053BF24 /* RadioButtonView.swift */,
 				A51E622A2D9C4F9D005164D9 /* SocialButtonView.swift */,
@@ -328,6 +333,7 @@
 				A51E622B2D9C4F9F005164D9 /* SocialButtonView.swift in Sources */,
 				A5A5F8592D5CE16A0053BF24 /* ErrorMessageView.swift in Sources */,
 				A5A5F85A2D5CE16A0053BF24 /* PasswordView.swift in Sources */,
+				ECC5A5452EE71AC60034504A /* PingProtectView.swift in Sources */,
 				A5A5F85B2D5CE16A0053BF24 /* ComboBoxView.swift in Sources */,
 				A5A5F85C2D5CE16A0053BF24 /* DropdownView.swift in Sources */,
 				A5A5F85D2D5CE16A0053BF24 /* LabelView.swift in Sources */,
@@ -585,7 +591,7 @@
 			repositoryURL = "https://github.com/ForgeRock/ping-ios-sdk";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.2.0;
+				minimumVersion = 1.3.1;
 			};
 		};
 		EC83DE582E5F2D1D00D2B5B4 /* XCRemoteSwiftPackageReference "SVGKit" */ = {
@@ -743,6 +749,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = EC83DE582E5F2D1D00D2B5B4 /* XCRemoteSwiftPackageReference "SVGKit" */;
 			productName = SVGKitSwift;
+		};
+		ECC5A51E2EE714420034504A /* PingProtect */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A57584782D9DD9EC00AFD754 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;
+			productName = PingProtect;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
