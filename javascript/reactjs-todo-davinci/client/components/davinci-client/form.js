@@ -109,6 +109,11 @@ export default function Form() {
 
     try {
       // Update the Protect collector with the data collected
+      /**
+       * Todo: Move updating the Protect collector into the Protect component.
+       * For now, this ensures it is updated before submitting the form while
+       * collecting as much data as possible.
+       */
       const protectCollector = collectors.find(
         (collector) => collector.type === 'ProtectCollector',
       );

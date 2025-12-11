@@ -21,7 +21,7 @@ test.describe('React - DaVinci Register New User', () => {
     await page.getByLabel('First Name').fill('Test');
     await page.getByLabel('Last Name').fill(`Test-${randomUUID}`);
     await page.getByLabel('Email').fill(`test-${randomUUID}@user.com`);
-    await page.getByLabel('Password').fill('FakePassword#123');
+    await page.getByLabel('Password').fill('Demo_12345!');
     await page.getByRole('button', { name: 'Save' }).click();
 
     // Check for verification form

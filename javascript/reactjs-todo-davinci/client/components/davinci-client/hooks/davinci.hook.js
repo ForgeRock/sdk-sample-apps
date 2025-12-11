@@ -58,13 +58,13 @@ export default function useDavinci() {
       try {
         const client = await createClient();
         setDavinciClient(client);
-        
+
         if (continueToken) {
           /**
            * If we were redirected here from an IDP with a continueToken, then resume the flow
-          */
-         const resumeNode = await client?.resume({ continueToken });
-         setNode(resumeNode);
+           */
+          const resumeNode = await client?.resume({ continueToken });
+          setNode(resumeNode);
         } else {
           const initialNode = await client?.start(
             /**

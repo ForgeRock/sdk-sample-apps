@@ -39,9 +39,9 @@
     "webpack-dev-server": "^5.1.0"
   },
   "dependencies": {
-    "@forgerock/davinci-client": "beta",
+    "@forgerock/davinci-client": "latest",
     "@forgerock/javascript-sdk": "latest",
-    "@forgerock/protect": "beta",
+    "@forgerock/protect": "latest",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",

@@ -10,7 +10,7 @@ test.describe.skip('Angular - Davinci Todo', () => {
     await page.goto(BASE_URL);
     await page.getByRole('link', { name: 'Sign In', exact: true }).click();
     await page.getByLabel('Username').fill('JsDvSampleAppsE2E@user.com');
-    await page.getByLabel('Password').fill('FakePassword#123');
+    await page.getByLabel('Password').fill('Demo_12345!');
     await page.getByRole('button', { name: 'Sign On' }).click();
     await page.getByRole('link', { name: 'Todos', exact: true }).click();
     await page.waitForURL(BASE_URL + '/todos');
