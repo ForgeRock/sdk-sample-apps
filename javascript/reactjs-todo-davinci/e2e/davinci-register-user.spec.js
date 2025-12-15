@@ -1,3 +1,10 @@
+/*
+ *
+ * Copyright (c) 2025 Ping Identity Corporation. All rights reserved.
+ * This software may be modified and distributed under the terms
+ * of the MIT license. See the LICENSE file for details.
+ *
+ */
 import { test, expect } from '@playwright/test';
 import { v4 as uuid } from 'uuid';
 
@@ -14,7 +21,7 @@ test.describe('React - DaVinci Register New User', () => {
     await page.getByLabel('First Name').fill('Test');
     await page.getByLabel('Last Name').fill(`Test-${randomUUID}`);
     await page.getByLabel('Email').fill(`test-${randomUUID}@user.com`);
-    await page.getByLabel('Password').fill('FakePassword#123');
+    await page.getByLabel('Password').fill('Demo_12345!');
     await page.getByRole('button', { name: 'Save' }).click();
 
     // Check for verification form

@@ -148,11 +148,11 @@ await Config.setAsync({
     });
 
     /**
-     * If the INIT_PROTECT flag is set, initialize PingOne Protect as early as
+     * If the INIT_PROTECT flag is set to 'bootstrap', initialize PingOne Protect as early as
      * possible in the application for data collection. The PingOne environment ID
      * is required while all other options in the configuration are optional.
      */
-    if (INIT_PROTECT) {
+    if (INIT_PROTECT === 'bootstrap') {
       if (!PINGONE_ENV_ID) {
         console.error('Missing PingOne environment ID for Protect initialization');
       } else {

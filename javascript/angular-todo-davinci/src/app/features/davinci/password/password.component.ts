@@ -10,7 +10,7 @@
 
 import { Component, Input } from '@angular/core';
 import { EyeIconComponent } from '../../../icons/eye-icon/eye-icon.component';
-import { Updater } from '@forgerock/davinci-client/types';
+import { PasswordCollector, Updater } from '@forgerock/davinci-client/types';
 
 @Component({
   selector: 'app-password',
@@ -21,7 +21,7 @@ import { Updater } from '@forgerock/davinci-client/types';
 export class PasswordComponent {
   @Input() key: string = '';
   @Input() label: string = '';
-  @Input() update: Updater | undefined = undefined;
+  @Input() update: Updater<PasswordCollector> | undefined = undefined;
 
   isVisible = false;
 

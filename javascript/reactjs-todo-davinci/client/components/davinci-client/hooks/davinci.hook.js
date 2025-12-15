@@ -13,6 +13,7 @@ import createClient from './create-client.utils.js';
 
 const urlParams = new URLSearchParams(window.location.search);
 const continueToken = urlParams.get('continueToken');
+const acrValue = urlParams.get('acrValue');
 
 /**
  * @function useDavinci - Custom React hook that manages the DaVinci flow state
@@ -65,7 +66,14 @@ export default function useDavinci() {
           const resumeNode = await client?.resume({ continueToken });
           setNode(resumeNode);
         } else {
-          const initialNode = await client?.start();
+          const initialNode = await client?.start(
+            /**
+             * Optional: If your OAuth client has more than one policy, you can select
+             * a policy to execute by passing in the policy ID as an ACR value to the
+             * query option of the DaVinci client start method
+             */
+            acrValue ? { query: { acr_values: acrValue } } : undefined,
+          );
           setNode(initialNode);
         }
       } catch (error) {

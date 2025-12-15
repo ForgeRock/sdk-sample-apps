@@ -9,27 +9,49 @@
  */
 import React, { useEffect, useState } from 'react';
 import Loading from '../utilities/loading.js';
+import { initProtectApi } from '../../utilities/protect.api.js';
+import { INIT_PROTECT, PINGONE_ENV_ID } from '../../constants.js';
 
-export default function Protect({ updater, submit }) {
+const urlParams = new URLSearchParams(window.location.search);
+const protectInitMode = INIT_PROTECT || urlParams.get('initProtect');
+
+export default function Protect({ collector }) {
   const [loading, setLoading] = useState(true);
-  /**
-   * The protect collector is sent with the first node of the flow, but
-   * it is not needed. It is a self-submitting node which requires no
-   * user interaction. While you would normally load the Protect module
-   * here and wait for a response, we instead mock the response with a
-   * dummy value and update the collector. Then call the
-   * submit function to proceed with the flow.
-   */
+
   useEffect(() => {
-    async function handleProtect() {
-      updater('fakeprofile');
-      setLoading(false);
-      if (submit !== undefined) {
-        await submit();
+    async function initProtect() {
+      try {
+        /**
+         * If the INIT_PROTECT flag is set to 'flow', rely on the configuration from the PingOne
+         * ProtectCollector's output to initialize the Protect API. Then call the API's
+         * start method to begin collecting data.
+         */
+        if (protectInitMode === 'flow') {
+          const config = collector.output.config;
+          const protectApi = initProtectApi({
+            envId: PINGONE_ENV_ID,
+            behavioralDataCollection: config.behavioralDataCollection,
+            universalDeviceIdentification: config.universalDeviceIdentification,
+          });
+
+          const result = await protectApi.start();
+          if (result?.error) {
+            console.error(`Error initializing Protect: ${result.error}`);
+          } else {
+            console.log('PingOne Protect initialized by collector for data collection');
+          }
+        }
+      } catch (err) {
+        console.error(`Failed to initialize PingOne Protect`, err);
+      } finally {
+        setLoading(false);
       }
     }
-    handleProtect();
-  }, [updater, submit]);
 
-  return loading ? <Loading key="loading-protect" /> : null;
+    initProtect();
+  }, [collector]);
+
+  return loading ? (
+    <Loading key="loading-protect" message="Initializing PingOne Protect..." />
+  ) : null;
 }

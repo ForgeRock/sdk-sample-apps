@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { displayName, password, username } from './utils/demo-user';
 
 test('Angular - Login with WebAuthn', async ({ browser, page }) => {
   let authenticator;
@@ -19,11 +20,11 @@ test('Angular - Login with WebAuthn', async ({ browser, page }) => {
     await page.goto('https://localhost:8443/home?journey=TEST_WebAuthn-Registration');
     await page.getByRole('link', { name: 'Sign In', exact: true }).click();
 
-    await page.getByLabel('User Name').fill('user01');
-    await page.getByLabel('Password').fill('Password1!');
-    await page.getByPlaceholder('Password').press('Enter');
+    await page.getByLabel('User Name').fill(username);
+    await page.getByLabel('Password').fill(password);
+    await page.getByLabel('Password').press('Enter');
 
-    await expect(page.getByText('Welcome back, user01 user01!')).toBeVisible();
+    await expect(page.getByText(`Welcome back, ${displayName}!`)).toBeVisible();
 
     await cdpSession.send('WebAuthn.removeVirtualAuthenticator', {
       authenticatorId: authenticator.authenticatorId,

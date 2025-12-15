@@ -39,7 +39,8 @@ export default defineConfig({
         REST_OAUTH_CLIENT: 'RestOAuthClient',
         REST_OAUTH_SECRET: process.env.REST_OAUTH_SECRET || '',
         CENTRALIZED_LOGIN: 'false',
-        INIT_PROTECT: 'false',
+        INIT_PROTECT: 'journey',
+        PINGONE_ENV_ID: '02fb4743-189a-4bc7-9d6c-a919edfe6447'
       },
       ignoreHTTPSErrors: true,
     },
