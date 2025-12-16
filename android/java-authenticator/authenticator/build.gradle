@@ -7,15 +7,24 @@
 
 apply plugin: 'com.android.application'
 
+// Force compatible versions of Google Play Services
+configurations.all {
+    resolutionStrategy {
+        force 'com.google.android.gms:play-services-tasks:18.2.0'
+        force 'com.google.android.gms:play-services-base:18.5.0'
+        force 'com.google.android.gms:play-services-basement:18.4.0'
+    }
+}
+
 android {
 
     namespace 'org.forgerock.authenticator.sample'
-    compileSdk 35
+    compileSdk 36
 
     defaultConfig {
         applicationId "org.forgerock.authenticator.sample"
         minSdkVersion 28
-        targetSdkVersion 35
+        targetSdkVersion 36
         versionCode 1
         versionName "1.0"
 
@@ -49,13 +58,22 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // ForgeRock Authenticator SDK
-    implementation 'org.forgerock:forgerock-authenticator:4.8.2'
+    implementation('org.forgerock:forgerock-authenticator:4.8.3')
+
+    // Firebase BOM to ensure compatible versions (using newer BOM)
+    implementation platform('com.google.firebase:firebase-bom:34.0.0')
+
+    // Explicitly add compatible Google Play Services versions
+    implementation 'com.google.android.gms:play-services-tasks:18.2.0'
+    implementation 'com.google.android.gms:play-services-base:18.5.0'
+    implementation 'com.google.android.gms:play-services-basement:18.4.0'
 
     // Loading images dynamically
     implementation 'com.squareup.picasso:picasso:2.5.2'
 
+
     // FCM Notifications
-    implementation "com.google.firebase:firebase-messaging:24.1.1"
+    implementation "com.google.firebase:firebase-messaging"
 
     // QRCode scanner - ML Kit dependencies and CameraX
     implementation 'com.google.mlkit:barcode-scanning:17.3.0'

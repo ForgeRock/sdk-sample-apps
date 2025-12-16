@@ -3,6 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="org.forgerock.authenticator.sample">
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
@@ -18,6 +22,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         >
+
+        <!-- 16KB page size support for Android 15+ -->
+        <property
+            android:name="android.app.16kb_page_support"
+            android:value="true" />
+
         <activity
             android:name=".view.activity.LauncherActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
