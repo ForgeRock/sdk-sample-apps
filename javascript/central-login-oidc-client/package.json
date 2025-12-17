@@ -10,10 +10,10 @@
     "e2e": "playwright test",
     "e2e:ui": "playwright test --ui"
   },
-  "devDependencies": {
-    "vite": "^7.1.2"
-  },
   "dependencies": {
-    "@forgerock/oidc-client": "^0.0.0-beta-20250820123621"
+    "@forgerock/oidc-client": "latest"
+  },
+  "devDependencies": {
+    "vite": "^5.4.9"
   }
 }

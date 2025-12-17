@@ -10,4 +10,4 @@
 export const pingAmUsername = 'sdkuser';
 export const pingAmPassword = 'password';
 export const pingOneUsername = 'demouser';
-export const pingOnePassword = 'U.QPDWEN47ZMyJhCDmhGLK*nr';
+export const pingOnePassword = 'yvk4uwq2edr@gxb7UWD';

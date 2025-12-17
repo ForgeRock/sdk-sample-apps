@@ -15,7 +15,7 @@ export default defineConfig({
   webServer: [
     // PingOne client
     {
-      command: 'npm run dev',
+      command: 'npm run start',
       url: 'http://localhost:8443',
       timeout: 120 * 1000,
       reuseExistingServer: !process.env.CI,
@@ -33,7 +33,7 @@ export default defineConfig({
 
     // PingAM client
     {
-      command: 'npm run dev',
+      command: 'npm run start',
       url: 'http://localhost:8444',
       timeout: 120 * 1000,
       reuseExistingServer: !process.env.CI,
