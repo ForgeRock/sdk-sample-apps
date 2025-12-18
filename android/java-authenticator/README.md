@@ -27,5 +27,5 @@ To try out the Ping Android SDK sample, perform these steps:
 
 - Latest version of Android Studio
 - Ping Advanced Identity Cloud or Ping AM 7.1 and above
-- Android API level 23+
+- Android API level 28+
 - Google Firebase project (google-services.json)
