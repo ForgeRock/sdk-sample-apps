@@ -29,7 +29,6 @@ fun SubmitButton(
     field: SubmitCollector,
     onNext: () -> Unit,
 ) {
-    field.value = ""
     Row(
         modifier =
         Modifier

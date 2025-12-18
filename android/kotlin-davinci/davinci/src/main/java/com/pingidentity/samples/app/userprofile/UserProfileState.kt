@@ -18,5 +18,5 @@ import kotlinx.serialization.json.JsonObject
  */
 data class UserProfileState(
     var user: JsonObject? = null,
-    var error: Throwable? = null,
+    var error: OidcError? = null,
 )

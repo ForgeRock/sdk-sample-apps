@@ -1,20 +1,34 @@
 /*
- * Copyright (c) 2024 - 2025 Ping Identity Corporation. All rights reserved.
+ * Copyright (c) 2025 Ping Identity Corporation. All rights reserved.
  *
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
  */
 
-package com.pingidentity.samples.app.centralize
+package com.pingidentity.samples.oidc.app.centralize
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.pingidentity.samples.app.Mode
-import com.pingidentity.samples.app.User
-import com.pingidentity.samples.app.env.oidcWeb
+import com.pingidentity.logger.Logger
+import com.pingidentity.logger.STANDARD
+import com.pingidentity.oidc.OidcWeb
+import com.pingidentity.oidc.module.Oidc
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+
+//TODO Update configuration
+val web by lazy {
+    OidcWeb {
+        logger = Logger.STANDARD
+        module(Oidc) {
+            clientId = "<Client ID>"
+            discoveryEndpoint = "<Discovery Endpoint>"
+            scopes = mutableSetOf("<scope1>", "<scope2>", "...")
+            redirectUri = "<Redirect URI>"
+        }
+    }
+}
 
 class CentralizeLoginViewModel : ViewModel() {
     var state = MutableStateFlow(CentralizeState())
@@ -22,8 +36,7 @@ class CentralizeLoginViewModel : ViewModel() {
 
     fun login() {
         viewModelScope.launch {
-            User.current(Mode.CENTRALIZE)
-            oidcWeb.authorize {
+            web.authorize {
             }.onSuccess { user ->
                 state.update {
                     it.copy(user = user, error = null)

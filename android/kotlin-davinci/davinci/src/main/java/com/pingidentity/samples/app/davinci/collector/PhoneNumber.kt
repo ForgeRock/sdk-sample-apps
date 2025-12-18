@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 Ping Identity. All rights reserved.
+ * Copyright (c) 2025 Ping Identity Corporation. All rights reserved.
  *
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
@@ -36,13 +36,17 @@ import com.pingidentity.davinci.collector.PhoneNumberCollector
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PhoneNumber(field: PhoneNumberCollector, onNodeUpdated: () -> Unit) {
-    var expanded by remember { mutableStateOf(false) }
-    var selectedCountryCode by remember {
-        mutableStateOf(countryCodes.firstOrNull { it.countryCode == field.defaultCountryCode }
-            ?: countryCodes.first())
+    var expanded by remember(field) { mutableStateOf(false) }
+    var selectedCountryCode by remember(field) {
+        val codeToUse = field.countryCode.ifEmpty { field.defaultCountryCode }
+        mutableStateOf(
+            countryCodes.firstOrNull { it.countryCode == codeToUse }
+                ?: countryCodes.first()
+        )
     }
+    var phone by remember(field) { mutableStateOf(field.phoneNumber) }
 
-    var isValid by remember {
+    var isValid by remember(field) {
         mutableStateOf(true)
     }
 
@@ -106,11 +110,11 @@ fun PhoneNumber(field: PhoneNumberCollector, onNodeUpdated: () -> Unit) {
             }
             // Phone Number Input
             OutlinedTextField(
-                value = field.phoneNumber,
-                onValueChange = {
-                    val phoneNumber = it.take(10).filter { it.isDigit() }
+                value = phone,
+                onValueChange = { value ->
+                    val phoneNumber = value.take(10).filter { it.isDigit() }
+                    phone = phoneNumber
                     field.phoneNumber = phoneNumber
-                    onNodeUpdated()
                 },
                 label = { androidx.compose.material3.Text(field.label) },
                 singleLine = true,
@@ -148,4 +152,3 @@ val countryCodes = listOf(
     Country("HK", "Hong Kong", "852"),
     // Add more countries as needed
 )
-

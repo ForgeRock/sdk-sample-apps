@@ -24,7 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.pingidentity.samples.app.ErrorAlert
+import com.pingidentity.samples.app.json
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -63,7 +63,7 @@ fun UserProfile(userProfileViewModel: UserProfileViewModel) {
                 modifier = Modifier.padding(4.dp),
                 text =
                     state.user?.let {
-                        prettyJson.encodeToString(it)
+                        json.encodeToString(it)
                     } ?: state.error?.toString() ?: "",
             )
         }
@@ -75,17 +75,4 @@ fun UserProfile(userProfileViewModel: UserProfileViewModel) {
             Text(text = "Show UserInfo")
         }
     }
-    state.error?.apply {
-        ErrorAlert(throwable = this)
-    }
 }
-
-/**
- * The JSON serializer.
- */
-@OptIn(ExperimentalSerializationApi::class)
-val prettyJson =
-    Json { // this returns the JsonBuilder
-        prettyPrint = true
-        prettyPrintIndent = " "
-    }

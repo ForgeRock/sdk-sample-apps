@@ -12,11 +12,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.pingidentity.samples.app.centralize.Centralize
-import com.pingidentity.samples.app.centralize.CentralizeLoginViewModel
 import com.pingidentity.samples.app.davinci.DaVinci
 import com.pingidentity.samples.app.env.Env
-import com.pingidentity.samples.app.env.EnvViewModel
 import com.pingidentity.samples.app.token.Token
 import com.pingidentity.samples.app.userprofile.UserProfile
 import com.pingidentity.samples.app.userprofile.UserProfileViewModel
@@ -37,8 +34,7 @@ fun AppNavHost(
         startDestination = startDestination,
     ) {
         composable(Destinations.ENV_ROUTE) {
-            val envViewModel = viewModel<EnvViewModel>()
-            Env(envViewModel)
+            Env()
         }
         composable(Destinations.DAVINCI) {
             DaVinci {
@@ -51,12 +47,6 @@ fun AppNavHost(
         composable(Destinations.USER_INFO) {
             val userProfileViewModel = viewModel<UserProfileViewModel>()
             UserProfile(userProfileViewModel)
-        }
-        composable(Destinations.CENTRALIZE_ROUTE) {
-            val centralizeLoginViewModel = viewModel<CentralizeLoginViewModel>()
-            Centralize(centralizeLoginViewModel) {
-                navController.navigate(Destinations.USER_INFO)
-            }
         }
     }
 }

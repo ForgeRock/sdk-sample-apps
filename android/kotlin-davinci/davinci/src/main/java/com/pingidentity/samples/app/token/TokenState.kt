@@ -18,5 +18,5 @@ import com.pingidentity.oidc.OidcError
  */
 data class TokenState(
     var token: Token? = null,
-    var error: Throwable? = null,
+    var error: OidcError? = null,
 )

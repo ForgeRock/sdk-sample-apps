@@ -9,10 +9,9 @@ package com.pingidentity.samples.app.userprofile
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.pingidentity.oidc.OidcError
-import com.pingidentity.samples.app.User
-import com.pingidentity.utils.Result.Failure
-import com.pingidentity.utils.Result.Success
+import com.pingidentity.davinci.user
+import com.pingidentity.samples.app.env.daVinci
+import com.pingidentity.utils.Result
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -29,21 +28,14 @@ class UserProfileViewModel : ViewModel() {
      */
     fun userinfo() {
         viewModelScope.launch {
-            User.user()?.let { user ->
+            daVinci.user()?.let { user ->
                 when (val result = user.userinfo(false)) {
-                    is Failure ->
+                    is Result.Failure ->
                         state.update { s ->
-                            val exception = when(val oidcError = result.value as? OidcError) {
-                                is OidcError.ApiError -> Throwable(oidcError.message)
-                                is OidcError.AuthorizeError -> oidcError.cause
-                                is OidcError.NetworkError -> oidcError.cause
-                                is OidcError.Unknown -> oidcError.cause
-                                else -> IllegalStateException("Unexpected OidcError type: ${result.value}")
-                            }
-                            s.copy(user = null, error = exception)
+                            s.copy(user = null, error = result.value)
                         }
 
-                    is Success ->
+                    is Result.Success ->
                         state.update { s ->
                             s.copy(user = result.value, error = null)
                         }

@@ -36,7 +36,6 @@ fun FlowButton(
             .padding(4.dp)
             .fillMaxWidth(),
     ) {
-        field.value = ""
         if (field.type == "FLOW_LINK") {
             TextButton(
                 modifier =

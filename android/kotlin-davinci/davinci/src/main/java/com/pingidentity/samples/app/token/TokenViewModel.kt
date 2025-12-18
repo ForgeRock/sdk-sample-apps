@@ -9,8 +9,8 @@ package com.pingidentity.samples.app.token
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.pingidentity.oidc.OidcError
-import com.pingidentity.samples.app.User
+import com.pingidentity.davinci.user
+import com.pingidentity.samples.app.env.daVinci
 import com.pingidentity.utils.Result.Failure
 import com.pingidentity.utils.Result.Success
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,18 +29,11 @@ class TokenViewModel : ViewModel() {
      */
     fun accessToken() {
         viewModelScope.launch {
-            User.user()?.let {
+            daVinci.user()?.let {
                 when (val result = it.token()) {
                     is Failure -> {
                         state.update {
-                            val exception = when(val oidcError = result.value as? OidcError) {
-                                is OidcError.ApiError -> Throwable(oidcError.message)
-                                is OidcError.AuthorizeError -> oidcError.cause
-                                is OidcError.NetworkError -> oidcError.cause
-                                is OidcError.Unknown -> oidcError.cause
-                                else -> IllegalStateException("Unexpected OidcError type: ${result.value}")
-                            }
-                            it.copy(token = null, error = exception)
+                            it.copy(token = null, error = result.value)
                         }
                     }
 
@@ -59,8 +52,41 @@ class TokenViewModel : ViewModel() {
     }
 
     /**
-     * Resets the access token.
+     * Revoke the access token.
      */
+    fun revoke() {
+        viewModelScope.launch {
+            daVinci.user()?.revoke()
+            state.update {
+                it.copy(token = null, error = null)
+            }
+        }
+    }
+
+    fun refresh() {
+        viewModelScope.launch {
+            daVinci.user()?.let {
+                when (val result = it.refresh()) {
+                    is Failure -> {
+                        state.update { state ->
+                            state.copy(token = null, error = result.value)
+                        }
+                    }
+
+                    is Success -> {
+                        state.update { state ->
+                            state.copy(token = result.value, error = null)
+                        }
+                    }
+                }
+            } ?: run {
+                state.update {
+                    it.copy(token = null, error = null)
+                }
+            }
+        }
+    }
+
     fun reset() {
         state.update {
             it.copy(null, null)

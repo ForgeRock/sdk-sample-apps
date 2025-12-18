@@ -46,10 +46,12 @@ fun Password(
     onNodeUpdated: () -> Unit,
 ) {
 
-    var isValid by remember {
+    var isValid by remember(field) {
         mutableStateOf(true)
     }
-    var verify by remember { mutableStateOf("") }
+    var verify by remember(field) { mutableStateOf("") }
+    var password by remember(field) { mutableStateOf(field.value) }
+
 
     LaunchedEffect(field) {
         verify = ""
@@ -67,12 +69,11 @@ fun Password(
 
         OutlinedTextField(
             modifier = Modifier.wrapContentWidth(Alignment.CenterHorizontally),
-            value = field.value,
+            value = password,
             onValueChange = { value ->
-                // text = value
+                password = value
                 field.value = value
                 isValid = field.validate().isEmpty()
-                onNodeUpdated()
             },
             isError = !isValid,
             supportingText = if (!isValid) {
@@ -117,7 +118,7 @@ fun Password(
                 .padding(4.dp)
                 .fillMaxWidth(),
         ) {
-            var passwordVisibility by remember { mutableStateOf(false) }
+            var passwordVisibility by remember(field) { mutableStateOf(false) }
 
 
             Spacer(modifier = Modifier.weight(1f, true))

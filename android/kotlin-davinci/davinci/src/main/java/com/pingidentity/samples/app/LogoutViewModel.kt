@@ -9,13 +9,14 @@ package com.pingidentity.samples.app
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.pingidentity.davinci.user
+import com.pingidentity.samples.app.env.daVinci
 import kotlinx.coroutines.launch
 
 /**
  * The logout view model.
  */
 class LogoutViewModel : ViewModel() {
-
     /**
      * Logout the user.
      *
@@ -23,8 +24,9 @@ class LogoutViewModel : ViewModel() {
      */
     fun logout(onCompleted: () -> Unit) {
         viewModelScope.launch {
-            User.user()?.logout()
+            //If you are using DaVinci, you can use the DaVinci user object to logout
+            daVinci.user()?.logout()
+            onCompleted()
         }
-        onCompleted()
     }
 }

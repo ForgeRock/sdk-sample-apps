@@ -10,8 +10,6 @@ package com.pingidentity.samples.app.davinci
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pingidentity.orchestrate.ContinueNode
-import com.pingidentity.samples.app.Mode
-import com.pingidentity.samples.app.User
 import com.pingidentity.samples.app.env.daVinci
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -46,7 +44,7 @@ class DaVinciViewModel : ViewModel() {
         viewModelScope.launch {
             val next = current.next()
             state.update {
-                it.copy(node = next)
+                it.copy(node = next, counter = it.counter + 1)
             }
             loading.update {
                 false
@@ -62,11 +60,11 @@ class DaVinciViewModel : ViewModel() {
             true
         }
         viewModelScope.launch {
-            User.current(Mode.DAVINCI)
+
             val next = daVinci.start()
 
             state.update {
-                it.copy(node = next)
+                it.copy(node = next, counter = it.counter + 1)
             }
             loading.update {
                 false
@@ -79,7 +77,7 @@ class DaVinciViewModel : ViewModel() {
      */
     fun refresh() {
         state.update {
-            it.copy(node = it.node)
+            it.copy(node = it.node, counter = it.counter + 1)
         }
     }
 }

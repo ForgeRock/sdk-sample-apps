@@ -14,6 +14,5 @@ object Destinations {
     const val ENV_ROUTE = "Environment"
     const val TOKEN_ROUTE = "Access Token"
     const val USER_INFO = "User Info"
-    const val DAVINCI = "DaVinci"
-    const val CENTRALIZE_ROUTE = "Centralize Login"
+    const val DAVINCI = "DAVINCI"
 }
