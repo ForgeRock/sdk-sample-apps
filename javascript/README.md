@@ -42,11 +42,7 @@ To try out the Ping JavaScript SDK please look at one of our samples:
 
 ### Integrate with flows - PingOne DaVinci:
 
-- [**Embedded Login DaVinci - `embedded-login-davinci`**](./embedded-login-davinci/)
-
-  - This sample app uses the PingOne Sign on With Sessions OOTB in DaVinci environments and found in the marketplace.       Demonstrates use cases such as user authentication, registration, and account recovery.
-
-- [**React Todo DaVinci - `reactjs-todo-davinci`**](./embedded-login-davinci/)
+- [**React Todo DaVinci - `reactjs-todo-davinci`**](./reactjs-todo-davinci/)
 
   - Todo application that involves authentication and authorization of a user to post Todos with DaVinci in ReactJS.
   Demonstrates handling DaVinci flows and collectors.

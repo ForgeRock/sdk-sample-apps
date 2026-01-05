@@ -9,7 +9,6 @@
  */
 
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import apiRequest from '../../utilities/request';
 
@@ -17,12 +16,10 @@ import apiRequest from '../../utilities/request';
  * @function useTodoFetch - A custom React hook for fetching todos from API
  * @param {Function} dispatch - The function to pass in an action with data to result in new state
  * @param {Function} setFetched - A function for setting the state of hasFetched
- * @param {string} todosLength - The todo collection
+ * @param {Function} setApiError - A function for setting API error messages
  * @returns {undefined} - this doesn't directly return anything, but calls dispatch to set data
  */
-export default function useTodoFetch(dispatch, setFetched) {
-  const navigate = useNavigate();
-
+export default function useTodoFetch(dispatch, setFetched, setApiError) {
   /**
    * Since we are making an API call, which is a side-effect,
    * we will wrap this in a useEffect, which will re-render the
@@ -33,9 +30,12 @@ export default function useTodoFetch(dispatch, setFetched) {
       // Request the todos from our resource API
       const fetchedTodos = await apiRequest('todos', 'GET');
 
-      // TODO: improve error handling
       if (fetchedTodos.error) {
-        return navigate('/login');
+        setApiError(
+          'The Todo API server is not running. Please start it with npm run start:todo-api from the javascript directory.',
+        );
+        setFetched(true);
+        return;
       }
       setFetched(true);
       dispatch({ type: 'init-todos', payload: { todos: fetchedTodos } });
