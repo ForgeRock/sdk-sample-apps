@@ -1,7 +1,7 @@
 
 //
 //  PinCollectorView.swift
-//  PingExample
+//  JourneyModuleSample
 //
 //  Created by GP on 30/10/2025.
 //
