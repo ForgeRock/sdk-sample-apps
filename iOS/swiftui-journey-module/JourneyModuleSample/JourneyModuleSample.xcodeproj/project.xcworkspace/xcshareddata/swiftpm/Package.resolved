@@ -87,8 +87,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ForgeRock/ping-ios-sdk",
       "state" : {
-        "revision" : "08d889ffa090c4b38da677820dee2e20c7c2b4bd",
-        "version" : "2.0.0-alpha"
+        "branch" : "SDKS-4616_Re_adding_Protect_IDP_callbacks",
+        "revision" : "20b778afaf2b5e4a3b1b1ddb73850892cd8045a9"
       }
     },
     {

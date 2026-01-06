@@ -19,7 +19,7 @@ import PingFido
 import PingReCaptchaEnterprise
 import PingBinding
 import PingCommons
-internal import PingJourneyPlugin
+import PingJourneyPlugin
 
 struct JourneyView: View {
     /// The view model that manages the Journey flow logic.
@@ -142,10 +142,9 @@ struct JourneyNodeView: View {
         !continueNode.callbacks.contains { callback in
             callback is ConfirmationCallback ||
             callback is SuspendedTextOutputCallback ||
-            // TODO: Uncomment for 2.0.0 release
-//            callback is PingOneProtectInitializeCallback ||
-//            callback is PingOneProtectEvaluationCallback ||
-//            callback is IdpCallback ||
+            callback is PingOneProtectInitializeCallback ||
+            callback is PingOneProtectEvaluationCallback ||
+            callback is IdpCallback ||
             callback is FidoRegistrationCallback ||
             callback is FidoAuthenticationCallback ||
             callback is DeviceBindingCallback ||
@@ -206,19 +205,18 @@ struct JourneyNodeView: View {
                 case let validatedPasswordCallback as ValidatedPasswordCallback:
                     ValidatedPasswordCallbackView(callback: validatedPasswordCallback, onNodeUpdated: onNodeUpdated)
                     
-                    // TODO: Uncomment for 2.0.0 release. 
-//                case let protectInitCallback as PingOneProtectInitializeCallback:
-//                    PingOneProtectInitializeCallbackView(callback: protectInitCallback, onNext: onNext)
-//                    
-//                case let protectEvalCallback as PingOneProtectEvaluationCallback:
-//                    PingOneProtectEvaluationCallbackView(callback: protectEvalCallback, onNext: onNext)
-//                    
-//                case let selectIdpCallback as SelectIdpCallback:
-//                    SelectIdpCallbackView(callback: selectIdpCallback, onNext: onNext)
-//                    
-//                case let idpCallback as IdpCallback:
-//                    let idpCallbackViewModel = IdpCallbackViewModel(callback: idpCallback)
-//                    IdpCallbackView(viewModel: idpCallbackViewModel, onNext: onNext)
+                case let protectInitCallback as PingOneProtectInitializeCallback:
+                    PingOneProtectInitializeCallbackView(callback: protectInitCallback, onNext: onNext)
+                    
+                case let protectEvalCallback as PingOneProtectEvaluationCallback:
+                    PingOneProtectEvaluationCallbackView(callback: protectEvalCallback, onNext: onNext)
+                    
+                case let selectIdpCallback as SelectIdpCallback:
+                    SelectIdpCallbackView(callback: selectIdpCallback, onNext: onNext)
+                    
+                case let idpCallback as IdpCallback:
+                    let idpCallbackViewModel = IdpCallbackViewModel(callback: idpCallback)
+                    IdpCallbackView(viewModel: idpCallbackViewModel, onNext: onNext)
 
                 case let deviceProfileCallback as DeviceProfileCallback:
                     DeviceProfileCallbackView(callback: deviceProfileCallback, onNext: onNext)
@@ -248,12 +246,11 @@ struct JourneyNodeView: View {
             
             if showNext {
                 Button(action: {
-                    // TODO: Uncomment for 2.0.0 release
-//                    if let selectIDPCallback = continueNode.callbacks.first(where: {
-//                        $0 is SelectIdpCallback
-//                    }) as? SelectIdpCallback {
-//                        selectIDPCallback.value = "localAuthentication"
-//                    }
+                    if let selectIDPCallback = continueNode.callbacks.first(where: {
+                        $0 is SelectIdpCallback
+                    }) as? SelectIdpCallback {
+                        selectIDPCallback.value = "localAuthentication"
+                    }
                     onNext()
                 }) {
                     Text("Next")

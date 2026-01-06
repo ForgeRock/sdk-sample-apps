@@ -422,8 +422,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ForgeRock/ping-ios-sdk";
 			requirement = {
-				kind = exactVersion;
-				version = "2.0.0-alpha";
+				branch = "SDKS-4616_Re_adding_Protect_IDP_callbacks";
+				kind = branch;
 			};
 		};
 		EC80253D2F0BE2AD0046C961 /* XCRemoteSwiftPackageReference "SVGKit" */ = {

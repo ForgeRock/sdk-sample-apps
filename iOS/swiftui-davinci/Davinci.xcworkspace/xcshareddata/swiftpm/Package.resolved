@@ -74,12 +74,21 @@
       }
     },
     {
+      "identity" : "interop-ios-for-google-sdks",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/google/interop-ios-for-google-sdks.git",
+      "state" : {
+        "revision" : "040d087ac2267d2ddd4cca36c757d1c6a05fdbfe",
+        "version" : "101.0.0"
+      }
+    },
+    {
       "identity" : "ping-ios-sdk",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ForgeRock/ping-ios-sdk",
       "state" : {
-        "revision" : "5afd472a8a0479ecc80f2583af7a685701be2b28",
-        "version" : "1.3.1"
+        "revision" : "08d889ffa090c4b38da677820dee2e20c7c2b4bd",
+        "version" : "2.0.0-alpha"
       }
     },
     {
@@ -98,6 +107,15 @@
       "state" : {
         "revision" : "540318ecedd63d883069ae7f1ed811a2df00b6ac",
         "version" : "2.4.0"
+      }
+    },
+    {
+      "identity" : "recaptcha-enterprise-mobile-sdk",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/GoogleCloudPlatform/recaptcha-enterprise-mobile-sdk.git",
+      "state" : {
+        "revision" : "fb634e89a36fd91725ad654d5576d800c061b37d",
+        "version" : "18.8.2"
       }
     },
     {

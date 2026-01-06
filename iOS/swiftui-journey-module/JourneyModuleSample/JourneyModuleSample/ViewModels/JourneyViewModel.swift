@@ -22,16 +22,25 @@ import Combine
 ///   - Redirect URI
 ///   - Discovery Endpoint
 ///   - Other optional fields
+///
+/// TODO: Replace the placeholder values below with your actual configuration:
+/// - serverUrl: Your PingAM/AIC server URL (e.g., "https://your-server.example.com/am")
+/// - realm: Your authentication realm (e.g., "alpha")
+/// - cookie: Your session cookie name
+/// - clientId: Your OAuth 2.0 client ID
+/// - scopes: Your OAuth 2.0 scopes
+/// - redirectUri: Your app's redirect URI
+/// - discoveryEndpoint: Your OIDC discovery endpoint URL
 
 public let journey = Journey.createJourney { config in
-    config.serverUrl = "https://openam-bafaloukas.forgeblocks.com/am"
-    config.realm = "alpha"
-    config.cookie = "386c0d288cac4b9"
+    config.serverUrl = <#"https://your-server.example.com/am"#>
+    config.realm = <#"your-realm"#>
+    config.cookie = <#"your-cookie-name"#>
     config.module(PingJourney.OidcModule.config) { oidcValue in
-        oidcValue.clientId = "iosClient"
-        oidcValue.scopes = ["openid", "profile", "email"]
-        oidcValue.redirectUri = "myapp://callback"
-        oidcValue.discoveryEndpoint = "https://openam-bafaloukas.forgeblocks.com/am/oauth2/alpha/.well-known/openid-configuration"
+        oidcValue.clientId = <#"your-client-id"#>
+        oidcValue.scopes = <#"[SCOPES]"#>
+        oidcValue.redirectUri = <#"yourapp://callback"#>
+        oidcValue.discoveryEndpoint = <#"https://your-server.example.com/am/oauth2/your-realm/.well-known/openid-configuration"#>
     }
 }
 
