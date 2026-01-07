@@ -218,7 +218,7 @@ private actor ClientInitializationActor {
     private var oathInitialized = false
     private var pushInitialized = false
     
-    func initializeOath(factory: () async throws -> OathClient) async throws -> OathClient? {
+    func initializeOath(factory: @Sendable () async throws -> OathClient) async throws -> OathClient? {
         guard !oathInitialized && !isOathInitializing else { return nil }
         
         isOathInitializing = true
@@ -229,7 +229,7 @@ private actor ClientInitializationActor {
         return client
     }
     
-    func initializePush(factory: () async throws -> PushClient) async throws -> PushClient? {
+    func initializePush(factory: @Sendable () async throws -> PushClient) async throws -> PushClient? {
         guard !pushInitialized && !isPushInitializing else { return nil }
         
         isPushInitializing = true

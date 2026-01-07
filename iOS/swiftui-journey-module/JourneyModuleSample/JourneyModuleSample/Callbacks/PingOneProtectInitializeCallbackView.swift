@@ -42,7 +42,7 @@ struct PingOneProtectInitializeCallbackView: View {
 class PingOneProtectInitializeViewModel: ObservableObject {
     @Published var isLoading: Bool = true
 
-    private var task: Task<Void, Never>?
+    nonisolated(unsafe) private var task: Task<Void, Never>?
     private let callback: PingOneProtectInitializeCallback
     private let onNext: () -> Void
     private var hasStartedInitialization = false
@@ -84,7 +84,7 @@ class PingOneProtectInitializeViewModel: ObservableObject {
         }
     }
 
-    func cancelInitialization() {
+    nonisolated func cancelInitialization() {
         task?.cancel()
         task = nil
     }

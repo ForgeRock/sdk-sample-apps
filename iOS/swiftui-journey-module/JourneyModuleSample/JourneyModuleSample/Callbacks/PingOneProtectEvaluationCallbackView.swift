@@ -42,7 +42,7 @@ struct PingOneProtectEvaluationCallbackView: View {
 class PingOneProtectEvaluationViewModel: ObservableObject {
     @Published var isLoading: Bool = true
 
-    private var task: Task<Void, Never>?
+    nonisolated(unsafe) private var task: Task<Void, Never>?
     private let callback: PingOneProtectEvaluationCallback
     private let onNext: () -> Void
     private var hasStartedEvaluation = false
@@ -84,7 +84,7 @@ class PingOneProtectEvaluationViewModel: ObservableObject {
         }
     }
 
-    func cancelEvaluation() {
+    nonisolated func cancelEvaluation() {
         task?.cancel()
         task = nil
     }

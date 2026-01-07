@@ -43,7 +43,7 @@ struct PollingWaitCallbackView: View {
 class PollingWaitViewModel: ObservableObject {
     @Published var progress: Double = 0.0
 
-    private var task: Task<Void, Never>?
+    nonisolated(unsafe) private var task: Task<Void, Never>?
     private let callback: PollingWaitCallback
     private let onTimeout: () -> Void
 
@@ -82,7 +82,7 @@ class PollingWaitViewModel: ObservableObject {
         }
     }
 
-    func cancelPolling() {
+    nonisolated func cancelPolling() {
         task?.cancel()
         task = nil
     }
