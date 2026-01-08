@@ -33,14 +33,14 @@ import Combine
 /// - discoveryEndpoint: Your OIDC discovery endpoint URL
 
 public let journey = Journey.createJourney { config in
-    config.serverUrl = <#"https://your-server.example.com/am"#>
-    config.realm = <#"your-realm"#>
-    config.cookie = <#"your-cookie-name"#>
+    config.serverUrl = "https://openam-keyless.forgeblocks.com/am"
+    config.realm = "alpha"
+    config.cookie = "89bf6dea4a81042"
     config.module(PingJourney.OidcModule.config) { oidcValue in
-        oidcValue.clientId = <#"your-client-id"#>
-        oidcValue.scopes = <#"[SCOPES]"#>
-        oidcValue.redirectUri = <#"yourapp://callback"#>
-        oidcValue.discoveryEndpoint = <#"https://your-server.example.com/am/oauth2/your-realm/.well-known/openid-configuration"#>
+        oidcValue.clientId = "iosClient"
+        oidcValue.scopes = ["openid", "profile", "email"]
+        oidcValue.redirectUri = "myapp://callback"
+        oidcValue.discoveryEndpoint = "https://openam-keyless.forgeblocks.com/am/oauth2/alpha/.well-known/openid-configuration"
     }
 }
 

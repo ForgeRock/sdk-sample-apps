@@ -236,8 +236,8 @@ struct JourneyNodeView: View {
                 case let deviceSigningVerifierCallback as DeviceSigningVerifierCallback:
                     DeviceSigningVerifierCallbackView(callback: deviceSigningVerifierCallback, onNext: onNext)
                     
-                case _ as HiddenValueCallback:
-                    EmptyView()
+                case let hiddenValueCallback as HiddenValueCallback:
+                    KeylessView(callback: hiddenValueCallback, onNodeUpdated: onNext)
                     
                 default:
                     Text("Unsupported callback type")
