@@ -9,21 +9,23 @@ import PingJourney
 import SwiftUI
 
 struct KeylessView: View {
-    let viewModel = KeylessViewModel()
+//    let viewModel = KeylessViewModel()
     let callback: HiddenValueCallback
-    let onNodeUpdated: () -> Void
+    let onNext: () -> Void
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(callback.valueId)
-                .font(.headline)
-                .foregroundColor(.primary)
-                .multilineTextAlignment(.leading)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            .onSubmit {
-                onNodeUpdated() // commit to node state only when done
-            }
-            .padding()
+        VStack {
+            Text("Device Signing")
+                .font(.title)
+            Text("Please wait while we sign the challenge.")
+                .font(.body)
+                .padding()
+            ProgressView()
         }
+        .onAppear(perform: handleKeyless)
+    }
+    
+    func handleKeyless() {
+        
     }
 }
