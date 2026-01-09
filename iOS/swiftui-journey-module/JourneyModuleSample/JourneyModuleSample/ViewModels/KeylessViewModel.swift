@@ -10,16 +10,7 @@
 
 import PingJourney
 
-struct KeylessPayload: Codable {
-    let keylessAPIKey: String
-    let keylessHost: String
-    let op_id: String
-}
 
-struct KeylessResponse: Codable {
-    let jwt: String
-    let clientState: String
-}
 
 
 class KeylessViewModel {

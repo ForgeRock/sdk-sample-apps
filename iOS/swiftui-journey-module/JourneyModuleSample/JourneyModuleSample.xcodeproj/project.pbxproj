@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		07633AE12F0FFEE100433610 /* KeylessSDK in Frameworks */ = {isa = PBXBuildFile; productRef = 07633AE02F0FFEE100433610 /* KeylessSDK */; };
 		EC8024302F0BDD1C0046C961 /* PingBinding in Frameworks */ = {isa = PBXBuildFile; productRef = EC80242F2F0BDD1C0046C961 /* PingBinding */; };
 		EC8024322F0BDD1C0046C961 /* PingBrowser in Frameworks */ = {isa = PBXBuildFile; productRef = EC8024312F0BDD1C0046C961 /* PingBrowser */; };
 		EC8024342F0BDD1C0046C961 /* PingCommons in Frameworks */ = {isa = PBXBuildFile; productRef = EC8024332F0BDD1C0046C961 /* PingCommons */; };
@@ -30,10 +31,14 @@
 		EC8025022F0BE15D0046C961 /* PingReCaptchaEnterprise in Frameworks */ = {isa = PBXBuildFile; productRef = EC8025012F0BE15D0046C961 /* PingReCaptchaEnterprise */; };
 		EC80253F2F0BE2AD0046C961 /* SVGKit in Frameworks */ = {isa = PBXBuildFile; productRef = EC80253E2F0BE2AD0046C961 /* SVGKit */; };
 		EC8025412F0BE2AD0046C961 /* SVGKitSwift in Frameworks */ = {isa = PBXBuildFile; productRef = EC8025402F0BE2AD0046C961 /* SVGKitSwift */; };
+		EC92D2DA2F1121CE0083CCF3 /* KeylessInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC92D2D92F1121CE0083CCF3 /* KeylessInfoViewModel.swift */; };
+		EC92D2DC2F1121D70083CCF3 /* KeylessInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC92D2DB2F1121D70083CCF3 /* KeylessInfoView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		EC8024202F0BDC900046C961 /* JourneyModuleSample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JourneyModuleSample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		EC92D2D92F1121CE0083CCF3 /* KeylessInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeylessInfoViewModel.swift; sourceTree = "<group>"; };
+		EC92D2DB2F1121D70083CCF3 /* KeylessInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeylessInfoView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -74,6 +79,7 @@
 				EC8024322F0BDD1C0046C961 /* PingBrowser in Frameworks */,
 				EC8024522F0BDD1C0046C961 /* PingOrchestrate in Frameworks */,
 				EC8024462F0BDD1C0046C961 /* PingJourney in Frameworks */,
+				07633AE12F0FFEE100433610 /* KeylessSDK in Frameworks */,
 				EC8024402F0BDD1C0046C961 /* PingExternalIdPFacebook in Frameworks */,
 				EC80244A2F0BDD1C0046C961 /* PingLogger in Frameworks */,
 				EC8024342F0BDD1C0046C961 /* PingCommons in Frameworks */,
@@ -97,6 +103,8 @@
 				EC8024222F0BDC900046C961 /* JourneyModuleSample */,
 				EC8025002F0BE15D0046C961 /* Frameworks */,
 				EC8024212F0BDC900046C961 /* Products */,
+				EC92D2D92F1121CE0083CCF3 /* KeylessInfoViewModel.swift */,
+				EC92D2DB2F1121D70083CCF3 /* KeylessInfoView.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -158,6 +166,7 @@
 				EC8025012F0BE15D0046C961 /* PingReCaptchaEnterprise */,
 				EC80253E2F0BE2AD0046C961 /* SVGKit */,
 				EC8025402F0BE2AD0046C961 /* SVGKitSwift */,
+				07633AE02F0FFEE100433610 /* KeylessSDK */,
 			);
 			productName = JourneyModuleSample;
 			productReference = EC8024202F0BDC900046C961 /* JourneyModuleSample.app */;
@@ -190,6 +199,7 @@
 			packageReferences = (
 				EC80242E2F0BDD1C0046C961 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */,
 				EC80253D2F0BE2AD0046C961 /* XCRemoteSwiftPackageReference "SVGKit" */,
+				07633ADF2F0FFEE100433610 /* XCRemoteSwiftPackageReference "mobile-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = EC8024212F0BDC900046C961 /* Products */;
@@ -216,6 +226,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EC92D2DC2F1121D70083CCF3 /* KeylessInfoView.swift in Sources */,
+				EC92D2DA2F1121CE0083CCF3 /* KeylessInfoViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -283,7 +295,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 6.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -340,7 +352,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_VERSION = 6.0;
+				SWIFT_VERSION = 5.0;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -357,6 +369,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = JourneyModuleSample/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Keyless wants to use your camera to scan your biometrics";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -368,14 +381,14 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.pingidentity.JourneyModuleSample;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pingidentity.JourneyModuleSampleKeylessPing;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 6.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -392,6 +405,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = JourneyModuleSample/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Keyless wants to use your camera to scan your biometrics";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -403,14 +417,14 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.pingidentity.JourneyModuleSample;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pingidentity.JourneyModuleSampleKeylessPing;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 6.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -439,6 +453,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		07633ADF2F0FFEE100433610 /* XCRemoteSwiftPackageReference "mobile-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "keyless.mobile-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.4.1;
+			};
+		};
 		EC80242E2F0BDD1C0046C961 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ForgeRock/ping-ios-sdk";
@@ -458,6 +480,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		07633AE02F0FFEE100433610 /* KeylessSDK */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 07633ADF2F0FFEE100433610 /* XCRemoteSwiftPackageReference "mobile-sdk" */;
+			productName = KeylessSDK;
+		};
 		EC80242F2F0BDD1C0046C961 /* PingBinding */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = EC80242E2F0BDD1C0046C961 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;

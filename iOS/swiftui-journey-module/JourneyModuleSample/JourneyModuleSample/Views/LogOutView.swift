@@ -19,12 +19,18 @@ struct LogOutView: View {
     @StateObject private var logoutViewModel =  LogOutViewModel()
     
     var body: some View {
-        Spacer()
-        NextButton(title: "Proceed to logout") {
-            Task {
-                await logoutViewModel.logout()
-                if path.count > 0 {
-                    path.removeLast()
+        VStack(spacing: 20) {
+            Toggle("De-enroll keyless device during logout", isOn: $logoutViewModel.shouldDeEnrollKeyless)
+                .padding(.horizontal)
+            
+            Spacer()
+            
+            NextButton(title: "Proceed to logout") {
+                Task {
+                    await logoutViewModel.logout()
+                    if path.count > 0 {
+                        path.removeLast()
+                    }
                 }
             }
         }

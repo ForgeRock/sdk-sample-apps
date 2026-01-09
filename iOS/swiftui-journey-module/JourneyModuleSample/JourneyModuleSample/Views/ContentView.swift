@@ -41,7 +41,7 @@ enum MenuSection: CaseIterable, Identifiable {
         case .userManagement:
             return [.token, .user, .deviceManagement, .logout]
         case .developerTools:
-            return [.deviceInfo, .logger, .storage, .bindingKeys]
+            return [.deviceInfo, .keylessInfo, .logger, .storage, .bindingKeys]
         }
     }
 }
@@ -54,6 +54,7 @@ enum MenuItem: String, CaseIterable, Identifiable {
     case logout = "Logout"
     case deviceManagement = "Device Management"
     case deviceInfo = "DeviceInfo"
+    case keylessInfo = "KeylessInfo"
     case logger = "Logger"
     case storage = "Storage"
     case bindingKeys = "Binding Keys"
@@ -68,6 +69,7 @@ enum MenuItem: String, CaseIterable, Identifiable {
         case .logout: return "rectangle.portrait.and.arrow.right"
         case .deviceManagement: return "iphone.and.arrow.forward"
         case .deviceInfo: return "iphone"
+        case .keylessInfo: return "key.radiowaves.forward"
         case .logger: return "doc.text.magnifyingglass"
         case .storage: return "externaldrive.fill"
         case .bindingKeys: return "key.icloud.fill"
@@ -82,6 +84,7 @@ enum MenuItem: String, CaseIterable, Identifiable {
         case .logout: return "Logout"
         case .deviceManagement: return "Device Management"
         case .deviceInfo: return "Device Info"
+        case .keylessInfo: return "Keyless Info"
         case .logger: return "Logger"
         case .storage: return "Storage"
         case .bindingKeys: return "Binding Keys"
@@ -96,6 +99,7 @@ enum MenuItem: String, CaseIterable, Identifiable {
         case .logout: return "End session"
         case .deviceManagement: return "Manage registered devices"
         case .deviceInfo: return "Collect device data"
+        case .keylessInfo: return "View Keyless SDK data"
         case .logger: return "Test logging"
         case .storage: return "Test storage"
         case .bindingKeys: return "Manage stored binding keys"
@@ -154,6 +158,8 @@ struct ContentView: View {
                     BindingKeysView()
                 case .deviceInfo:
                     DeviceInfoView(menuItem: item)
+                case .keylessInfo:
+                    KeylessInfoView(menuItem: item)
                 }
             }
             .task {
