@@ -13,6 +13,22 @@ import SwiftUI
 import PingExternalIdP
 import Combine
 
+/**
+ * A SwiftUI view for handling external identity provider (IdP) authentication during authentication flows.
+ *
+ * This view manages the OAuth/OIDC flow with external identity providers such as Google, Facebook,
+ * Apple, or other social login providers. When the user taps "Continue", the app opens the provider's
+ * authorization page in a browser, where the user signs in. Upon completion, the app receives the
+ * authorization result and proceeds.
+ *
+ * **User Action Required:** YES - User must:
+ * 1. Tap the "Continue" button to initiate external IdP flow
+ * 2. Sign in through the external provider's interface (in browser)
+ * 3. Authorize the application to access their profile
+ *
+ * The UI displays the provider name, a continue button, and status indicators showing authenticating,
+ * success, or failure states with appropriate icons and messages.
+ */
 struct IdpCallbackView: View {
     @StateObject var viewModel: IdpCallbackViewModel
     

@@ -12,6 +12,19 @@ import SwiftUI
 import PingJourney
 import Combine
 
+/**
+ * A SwiftUI view for capturing password input with server-side validation during authentication flows.
+ *
+ * This view provides a secure password input field with visibility toggle and real-time validation
+ * against server-defined password policies. The field displays error messages when the password
+ * fails to meet requirements (e.g., minimum length, complexity, character types). Commonly used
+ * during registration or password change flows.
+ *
+ * **User Action Required:** YES - User must enter a password that meets validation requirements.
+ *
+ * The UI displays a SecureFieldView with password visibility toggle, validation feedback, and
+ * error messages when policies fail. The field appearance changes to indicate error states.
+ */
 struct ValidatedPasswordCallbackView: View {
     let callback: ValidatedPasswordCallback
     let onNodeUpdated: () -> Void

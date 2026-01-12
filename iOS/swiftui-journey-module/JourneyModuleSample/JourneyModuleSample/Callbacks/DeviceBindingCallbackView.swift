@@ -11,6 +11,20 @@
 import SwiftUI
 import PingBinding
 
+/**
+ * A SwiftUI view for handling device binding operations during authentication flows.
+ *
+ * This view automatically initiates the device binding process when displayed, which securely
+ * associates the current device with the user's account. The binding may involve biometric
+ * authentication or PIN collection depending on configuration. Once binding completes,
+ * the view automatically proceeds to the next step.
+ *
+ * **User Action Required:** CONDITIONAL - May require biometric authentication or PIN entry
+ * depending on the device authenticator configuration. Default configuration binds automatically.
+ *
+ * The UI displays a loading indicator with status message during the binding process. The component
+ * supports custom PIN collectors and biometric authenticators through configuration options.
+ */
 struct DeviceBindingCallbackView: View {
     var callback: DeviceBindingCallback
     let onNext: () -> Void

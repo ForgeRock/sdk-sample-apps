@@ -11,6 +11,22 @@
 import SwiftUI
 import PingFido
 
+/**
+ * A SwiftUI view for handling FIDO2/WebAuthn credential registration during authentication flows.
+ *
+ * This view enables users to register a new FIDO2 credential (passkey) on their device for
+ * passwordless authentication. Users can optionally provide a device name for identification.
+ * When the user taps the registration button, the system prompts for biometric verification
+ * (Face ID/Touch ID) or device passcode to create and secure the new credential.
+ *
+ * **User Action Required:** YES - User must:
+ * 1. Optionally enter a device name
+ * 2. Tap the "Register with FIDO" button
+ * 3. Complete biometric authentication (Face ID/Touch ID) or enter device passcode
+ *
+ * The UI displays a text field for optional device naming and a button to initiate registration.
+ * The system handles the biometric prompt and credential creation automatically.
+ */
 struct FidoRegistrationCallbackView: View {
     var callback: FidoRegistrationCallback
     let onNext: () -> Void

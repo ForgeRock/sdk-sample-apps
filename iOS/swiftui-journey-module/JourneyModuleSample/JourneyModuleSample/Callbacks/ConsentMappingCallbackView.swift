@@ -11,6 +11,20 @@
 import SwiftUI
 import PingJourney
 
+/**
+ * A SwiftUI view for obtaining user consent for attribute mapping during authentication flows.
+ *
+ * This view displays detailed information about data mapping consent, including the mapping name,
+ * display name, icon, access level, required fields, and a descriptive message. Users must review
+ * this information and toggle their consent. This is commonly used when integrating with external
+ * systems that require explicit permission to share user attributes.
+ *
+ * **User Action Required:** YES - User must toggle the consent switch to accept or decline the mapping.
+ *
+ * The UI displays all consent details including name, display name, icon reference, access level,
+ * required status, mapped fields, message, and a toggle switch for consent. The toggle reflects
+ * the current consent state.
+ */
 struct ConsentMappingCallbackView: View {
     let callback: ConsentMappingCallback
     let onNodeUpdated: () -> Void

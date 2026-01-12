@@ -12,6 +12,20 @@ import SwiftUI
 import PingJourney
 import Combine
 
+/**
+ * A SwiftUI view for displaying a polling wait state during authentication flows.
+ *
+ * This view shows a progress indicator while waiting for a server-side operation to complete,
+ * such as waiting for out-of-band authentication, email verification, or external approval.
+ * The view displays a message and animated progress indicator for the specified wait duration.
+ * Once the timeout expires, it automatically triggers the next polling attempt.
+ *
+ * **User Action Required:** NO - The wait and polling process is fully automatic.
+ *
+ * The UI displays the server-provided message and a circular progress indicator that smoothly
+ * animates from 0% to 100% over the wait duration. Common use cases include push notification
+ * approval waits or QR code scanning timeouts.
+ */
 struct PollingWaitCallbackView: View {
     @StateObject private var viewModel: PollingWaitViewModel
 

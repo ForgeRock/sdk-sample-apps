@@ -11,6 +11,20 @@
 import SwiftUI
 import PingJourney
 
+/**
+ * A SwiftUI view for displaying informational, warning, or error messages during authentication flows.
+ *
+ * This view presents read-only text messages with contextual icons based on message type
+ * (information, warning, error, or default). It is used to provide feedback or instructions
+ * to the user without requiring any input. The message is displayed with an appropriate
+ * icon and color scheme to indicate severity or importance.
+ *
+ * **User Action Required:** NO - This is a display-only component for informational purposes.
+ *
+ * The UI displays an icon (info, warning, or error) alongside the message text. Colors are
+ * automatically applied based on message type: blue for information, orange for warnings,
+ * red for errors, and gray for default messages.
+ */
 struct TextOutputCallbackView: View {
     let callback: TextOutputCallback
 

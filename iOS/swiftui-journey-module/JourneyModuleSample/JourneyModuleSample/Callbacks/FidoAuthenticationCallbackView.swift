@@ -12,6 +12,21 @@ import SwiftUI
 import PingFido
 import Combine
 
+/**
+ * A SwiftUI view for handling FIDO2/WebAuthn authentication during authentication flows.
+ *
+ * This view initiates passwordless authentication using FIDO2 credentials (passkeys) stored on
+ * the device. When the user taps the authentication button, the system prompts for biometric
+ * verification (Face ID/Touch ID) or device passcode to authorize the FIDO2 credential usage.
+ * This provides strong, phishing-resistant authentication.
+ *
+ * **User Action Required:** YES - User must:
+ * 1. Tap the "Authenticate with FIDO" button
+ * 2. Complete biometric authentication (Face ID/Touch ID) or enter device passcode
+ *
+ * The UI displays a button that triggers the FIDO2 authentication ceremony. The system handles
+ * the biometric prompt and credential selection automatically.
+ */
 struct FidoAuthenticationCallbackView: View {
     var callback: FidoAuthenticationCallback
     let onNext: () -> Void

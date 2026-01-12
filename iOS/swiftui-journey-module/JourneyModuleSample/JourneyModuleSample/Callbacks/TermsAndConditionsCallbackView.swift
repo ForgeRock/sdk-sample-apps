@@ -12,6 +12,19 @@ import SwiftUI
 import PingJourney
 import Combine
 
+/**
+ * A SwiftUI view for presenting and accepting terms and conditions during authentication flows.
+ *
+ * This view displays the terms and conditions text along with version and creation date information.
+ * Users must review the terms and toggle their acceptance before proceeding. This is commonly used
+ * during registration or when terms are updated and require re-acceptance. The toggle reflects
+ * the current acceptance state.
+ *
+ * **User Action Required:** YES - User must toggle the switch to accept the terms and conditions.
+ *
+ * The UI displays the version, creation date, full terms text, and an acceptance toggle switch.
+ * All information is presented in a clear hierarchy with appropriate styling.
+ */
 struct TermsAndConditionsCallbackView: View {
     let callback: TermsAndConditionsCallback
     let onNodeUpdated: () -> Void

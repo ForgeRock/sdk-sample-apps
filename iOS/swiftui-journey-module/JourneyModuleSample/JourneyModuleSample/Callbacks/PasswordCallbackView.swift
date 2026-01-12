@@ -11,6 +11,19 @@
 import SwiftUI
 import PingJourney
 
+/**
+ * A SwiftUI view for capturing password input during authentication flows.
+ *
+ * This view provides a secure password input field with visibility toggle functionality.
+ * The password is masked by default but can be revealed using the visibility toggle.
+ * The input is submitted when the user presses return or completes editing.
+ *
+ * **User Action Required:** YES - User must enter their password in the secure field.
+ *
+ * The UI displays a SecureFieldView component with password visibility toggle.
+ * The field updates the callback's internal state on each keystroke and commits
+ * to the journey node when submitted.
+ */
 struct PasswordCallbackView: View {
 
     var callback: PasswordCallback

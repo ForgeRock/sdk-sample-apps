@@ -11,6 +11,19 @@
 import SwiftUI
 import PingJourney
 
+/**
+ * A SwiftUI view for capturing username input with server-side validation during authentication flows.
+ *
+ * This view provides a text field for username input with real-time validation against server-defined
+ * policies. The field validates username format, availability, and other requirements, displaying
+ * error messages when validation fails. The border color changes to red when errors are present.
+ * Commonly used during user registration.
+ *
+ * **User Action Required:** YES - User must enter a valid username that meets all requirements.
+ *
+ * The UI displays a text field with auto-correction disabled, validation feedback, and error
+ * messages below the field when validation policies fail (e.g., username taken, invalid format).
+ */
 struct ValidatedUsernameCallbackView: View {
     let callback: ValidatedUsernameCallback
     let onNodeUpdated: () -> Void

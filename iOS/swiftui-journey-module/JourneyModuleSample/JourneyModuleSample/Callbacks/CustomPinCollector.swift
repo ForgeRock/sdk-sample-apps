@@ -14,6 +14,33 @@ import SwiftUI
 import PingBinding
 import Combine
 
+/**
+ * A custom implementation of the PinCollector protocol for device binding and signing operations.
+ *
+ * This class provides a SwiftUI-based PIN collection interface that can be used as an alternative
+ * to the default PIN collector in device binding and device signing scenarios. When PIN input is
+ * required, this collector presents a modal PinCollectorView over the current view controller,
+ * allowing the user to enter their 4-digit PIN.
+ *
+ * **Implementation Details:**
+ * - Conforms to the PinCollector protocol from PingBinding SDK
+ * - Presents PinCollectorView modally as a form sheet
+ * - Finds the topmost view controller to present the PIN entry UI
+ * - Handles both PIN submission and cancellation scenarios
+ * - Executes completion handler with the collected PIN (or nil if cancelled)
+ *
+ * **Usage:**
+ * This custom collector can be configured in DeviceBindingCallback or DeviceSigningVerifierCallback:
+ *
+ * ```swift
+ * let result = await callback.bind { config in
+ *     config.pinCollector = CustomPinCollector()
+ * }
+ * ```
+ *
+ * **Thread Safety:**
+ * The collectPin method ensures UI operations are performed on the main thread using DispatchQueue.main.async.
+ */
 class CustomPinCollector: PinCollector {
     
     func collectPin(prompt: Prompt, completion: @escaping @Sendable (String?) -> Void) {

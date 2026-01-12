@@ -11,6 +11,22 @@
 import SwiftUI
 import PingJourney
 
+/**
+ * A SwiftUI view for creating Knowledge-Based Authentication (KBA) security questions during registration.
+ *
+ * This view allows users to select or create a security question and provide an answer. Users can
+ * choose from predefined questions or create their own custom question if allowed. The question-answer
+ * pair is used for account recovery or additional authentication verification. The answer is submitted
+ * when the user presses return.
+ *
+ * **User Action Required:** YES - User must:
+ * 1. Select a security question from the dropdown (or choose "Provide your own")
+ * 2. Enter a custom question if that option is selected
+ * 3. Provide an answer to the selected question
+ *
+ * The UI displays a picker for question selection, an optional text field for custom questions,
+ * and a text field for the answer. All fields are styled with rounded borders.
+ */
 struct KbaCreateCallbackView: View {
     let callback: KbaCreateCallback
     let onNodeUpdated: () -> Void

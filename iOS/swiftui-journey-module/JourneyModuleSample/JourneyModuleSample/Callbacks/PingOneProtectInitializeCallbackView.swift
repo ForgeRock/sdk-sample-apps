@@ -12,6 +12,19 @@ import SwiftUI
 import PingProtect
 import Combine
 
+/**
+ * A SwiftUI view for initializing PingOne Protect device profiling during authentication flows.
+ *
+ * This view automatically initiates the PingOne Protect SDK initialization when displayed, which
+ * prepares the device profiling and risk assessment capabilities. A loading indicator is shown
+ * for a minimum duration to provide user feedback. Once initialization completes, the view
+ * automatically proceeds to the next step.
+ *
+ * **User Action Required:** NO - The initialization process is fully automatic.
+ *
+ * The UI displays a centered loading spinner with the message "Initializing device profile collection..."
+ * The view ensures a minimum display time for better UX even if initialization completes quickly.
+ */
 struct PingOneProtectInitializeCallbackView: View {
     @StateObject private var viewModel: PingOneProtectInitializeViewModel
 

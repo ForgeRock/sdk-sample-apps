@@ -12,6 +12,19 @@ import SwiftUI
 import PingExternalIdP
 import Combine
 
+/**
+ * A SwiftUI view for selecting an external identity provider during authentication flows.
+ *
+ * This view presents a list of available external identity providers (e.g., Google, Facebook, Apple)
+ * for the user to choose from. When a provider is selected, the callback records the choice and
+ * immediately proceeds to the IdP authentication flow. This is commonly used when multiple social
+ * login options are available.
+ *
+ * **User Action Required:** YES - User must select one identity provider from the available options.
+ *
+ * The UI displays a scrollable list of provider buttons, each styled prominently and labeled with
+ * the provider name. The provider names are automatically capitalized for consistency.
+ */
 struct SelectIdpCallbackView: View {
     let callback: SelectIdpCallback
     let onNext: () -> Void

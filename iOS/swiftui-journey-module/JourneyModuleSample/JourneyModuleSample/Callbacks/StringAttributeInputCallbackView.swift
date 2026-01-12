@@ -11,6 +11,20 @@
 import SwiftUI
 import PingJourney
 
+/**
+ * A SwiftUI view for capturing text-based attribute values with validation during authentication flows.
+ *
+ * This view provides a text field for freeform text input with server-side validation. The field
+ * validates against defined policies and displays error messages when validation fails. The border
+ * color changes to red when errors are present. Common use cases include email addresses, phone
+ * numbers, postal codes, or other validated string attributes.
+ *
+ * **User Action Required:** YES - User must enter a valid text value.
+ *
+ * The UI displays a text field with auto-correction disabled, validation feedback, and error
+ * messages below the field when validation policies fail. Errors are displayed with descriptive
+ * messages from the server.
+ */
 struct StringAttributeInputCallbackView: View {
     let callback: StringAttributeInputCallback
     let onNodeUpdated: () -> Void

@@ -11,6 +11,20 @@
 import SwiftUI
 import PingJourney
 
+/**
+ * A SwiftUI view for capturing numeric attribute values with validation during authentication flows.
+ *
+ * This view provides a text field configured for decimal number input with real-time validation.
+ * Input is filtered to allow only numeric characters and decimal points. The field validates
+ * against server-defined policies and displays error messages when validation fails. The border
+ * color changes to red when errors are present.
+ *
+ * **User Action Required:** YES - User must enter a valid numeric value.
+ *
+ * The UI displays a text field with decimal pad keyboard, validation feedback, and error messages
+ * below the field when validation policies fail. Common use cases include age, quantity, or
+ * other numeric profile attributes.
+ */
 struct NumberAttributeInputCallbackView: View {
     let callback: NumberAttributeInputCallback
     let onNodeUpdated: () -> Void

@@ -12,6 +12,20 @@ import SwiftUI
 import PingBinding
 import Combine
 
+/**
+ * A SwiftUI view for handling device signing verification during authentication flows.
+ *
+ * This view automatically initiates a cryptographic signing operation to verify device authenticity
+ * and user authorization. The signing process may involve biometric authentication or PIN collection
+ * depending on configuration. This is typically used for high-security transactions or step-up
+ * authentication scenarios.
+ *
+ * **User Action Required:** CONDITIONAL - May require biometric authentication or PIN entry
+ * depending on the device authenticator configuration. Default configuration signs automatically.
+ *
+ * The UI displays a loading indicator with status message during the signing process. The component
+ * supports custom PIN collectors, biometric authenticators, and user key selection through configuration.
+ */
 struct DeviceSigningVerifierCallbackView: View {
     var callback: DeviceSigningVerifierCallback
     let onNext: () -> Void

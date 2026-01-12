@@ -11,6 +11,19 @@
 import SwiftUI
 import PingJourney
 
+/**
+ * A SwiftUI view for presenting multiple choice selections during authentication flows.
+ *
+ * This view displays a picker menu with predefined choices from which the user must select.
+ * The selected choice index is tracked and updated in the callback as the user makes their
+ * selection. Common use cases include selecting authentication methods, security questions,
+ * or other configuration options.
+ *
+ * **User Action Required:** YES - User must select one option from the available choices.
+ *
+ * The UI displays a menu-style picker with a rounded border. The picker is pre-populated
+ * with the current selection and updates the callback immediately when changed.
+ */
 struct ChoiceCallbackView: View {
     let callback: ChoiceCallback
     let onNodeUpdated: () -> Void
