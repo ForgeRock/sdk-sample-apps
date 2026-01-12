@@ -21,9 +21,7 @@ import PingPush
 
 @main
 struct JourneyModuleSampleApp: App {
-    // Connect AppDelegate for push notifications
-    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-
+    
     // Create an instance of the manager.
     // @StateObject ensures it's kept alive for the app's lifecycle.
     @StateObject private var sceneManager = ScenePhaseManager()
