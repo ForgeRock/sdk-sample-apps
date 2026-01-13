@@ -9,6 +9,7 @@
  */
 
 import React, { useContext, Fragment, useReducer, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import { AppContext } from '../global-state';
 import CreateTodo from '../components/todos/create';
@@ -64,7 +65,8 @@ export default function Todos() {
    */
   const Todos = apiError ? (
     <div className="alert alert-warning m-3" role="alert">
-      <strong>Unable to load todos:</strong> {apiError}
+      <strong>Unable to load todos:</strong> {apiError}.{' '}
+      <Link to="/login">Please sign in to continue.</Link>
     </div>
   ) : hasFetched ? (
     <ul className={`list-group list-group-flush mb-1 ${state.theme.listGroupClass}`}>
