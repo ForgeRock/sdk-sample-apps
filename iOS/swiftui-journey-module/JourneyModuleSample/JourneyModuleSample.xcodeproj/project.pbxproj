@@ -1,0 +1,579 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		EC8024302F0BDD1C0046C961 /* PingBinding in Frameworks */ = {isa = PBXBuildFile; productRef = EC80242F2F0BDD1C0046C961 /* PingBinding */; };
+		EC8024322F0BDD1C0046C961 /* PingBrowser in Frameworks */ = {isa = PBXBuildFile; productRef = EC8024312F0BDD1C0046C961 /* PingBrowser */; };
+		EC8024342F0BDD1C0046C961 /* PingCommons in Frameworks */ = {isa = PBXBuildFile; productRef = EC8024332F0BDD1C0046C961 /* PingCommons */; };
+		EC8024362F0BDD1C0046C961 /* PingDeviceClient in Frameworks */ = {isa = PBXBuildFile; productRef = EC8024352F0BDD1C0046C961 /* PingDeviceClient */; };
+		EC8024382F0BDD1C0046C961 /* PingDeviceId in Frameworks */ = {isa = PBXBuildFile; productRef = EC8024372F0BDD1C0046C961 /* PingDeviceId */; };
+		EC80243A2F0BDD1C0046C961 /* PingDeviceProfile in Frameworks */ = {isa = PBXBuildFile; productRef = EC8024392F0BDD1C0046C961 /* PingDeviceProfile */; };
+		EC80243C2F0BDD1C0046C961 /* PingExternalIdP in Frameworks */ = {isa = PBXBuildFile; productRef = EC80243B2F0BDD1C0046C961 /* PingExternalIdP */; };
+		EC80243E2F0BDD1C0046C961 /* PingExternalIdPApple in Frameworks */ = {isa = PBXBuildFile; productRef = EC80243D2F0BDD1C0046C961 /* PingExternalIdPApple */; };
+		EC8024402F0BDD1C0046C961 /* PingExternalIdPFacebook in Frameworks */ = {isa = PBXBuildFile; productRef = EC80243F2F0BDD1C0046C961 /* PingExternalIdPFacebook */; };
+		EC8024422F0BDD1C0046C961 /* PingExternalIdPGoogle in Frameworks */ = {isa = PBXBuildFile; productRef = EC8024412F0BDD1C0046C961 /* PingExternalIdPGoogle */; };
+		EC8024442F0BDD1C0046C961 /* PingFido in Frameworks */ = {isa = PBXBuildFile; productRef = EC8024432F0BDD1C0046C961 /* PingFido */; };
+		EC8024462F0BDD1C0046C961 /* PingJourney in Frameworks */ = {isa = PBXBuildFile; productRef = EC8024452F0BDD1C0046C961 /* PingJourney */; };
+		EC8024482F0BDD1C0046C961 /* PingJourneyPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = EC8024472F0BDD1C0046C961 /* PingJourneyPlugin */; };
+		EC80244A2F0BDD1C0046C961 /* PingLogger in Frameworks */ = {isa = PBXBuildFile; productRef = EC8024492F0BDD1C0046C961 /* PingLogger */; };
+		EC80244C2F0BDD1C0046C961 /* PingNetwork in Frameworks */ = {isa = PBXBuildFile; productRef = EC80244B2F0BDD1C0046C961 /* PingNetwork */; };
+		EC80244E2F0BDD1C0046C961 /* PingOath in Frameworks */ = {isa = PBXBuildFile; productRef = EC80244D2F0BDD1C0046C961 /* PingOath */; };
+		EC8024502F0BDD1C0046C961 /* PingOidc in Frameworks */ = {isa = PBXBuildFile; productRef = EC80244F2F0BDD1C0046C961 /* PingOidc */; };
+		EC8024522F0BDD1C0046C961 /* PingOrchestrate in Frameworks */ = {isa = PBXBuildFile; productRef = EC8024512F0BDD1C0046C961 /* PingOrchestrate */; };
+		EC8024542F0BDD1C0046C961 /* PingProtect in Frameworks */ = {isa = PBXBuildFile; productRef = EC8024532F0BDD1C0046C961 /* PingProtect */; };
+		EC8024562F0BDD1C0046C961 /* PingPush in Frameworks */ = {isa = PBXBuildFile; productRef = EC8024552F0BDD1C0046C961 /* PingPush */; };
+		EC8025022F0BE15D0046C961 /* PingReCaptchaEnterprise in Frameworks */ = {isa = PBXBuildFile; productRef = EC8025012F0BE15D0046C961 /* PingReCaptchaEnterprise */; };
+		EC80253F2F0BE2AD0046C961 /* SVGKit in Frameworks */ = {isa = PBXBuildFile; productRef = EC80253E2F0BE2AD0046C961 /* SVGKit */; };
+		EC8025412F0BE2AD0046C961 /* SVGKitSwift in Frameworks */ = {isa = PBXBuildFile; productRef = EC8025402F0BE2AD0046C961 /* SVGKitSwift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		EC8024202F0BDC900046C961 /* JourneyModuleSample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JourneyModuleSample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		EC8025CE2F0D6EBE0046C961 /* Exceptions for "JourneyModuleSample" folder in "JourneyModuleSample" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = EC80241F2F0BDC900046C961 /* JourneyModuleSample */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		EC8024222F0BDC900046C961 /* JourneyModuleSample */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				EC8025CE2F0D6EBE0046C961 /* Exceptions for "JourneyModuleSample" folder in "JourneyModuleSample" target */,
+			);
+			path = JourneyModuleSample;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		EC80241D2F0BDC900046C961 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EC8024422F0BDD1C0046C961 /* PingExternalIdPGoogle in Frameworks */,
+				EC8024482F0BDD1C0046C961 /* PingJourneyPlugin in Frameworks */,
+				EC80244E2F0BDD1C0046C961 /* PingOath in Frameworks */,
+				EC8024442F0BDD1C0046C961 /* PingFido in Frameworks */,
+				EC8024502F0BDD1C0046C961 /* PingOidc in Frameworks */,
+				EC8024302F0BDD1C0046C961 /* PingBinding in Frameworks */,
+				EC8024362F0BDD1C0046C961 /* PingDeviceClient in Frameworks */,
+				EC80244C2F0BDD1C0046C961 /* PingNetwork in Frameworks */,
+				EC8025022F0BE15D0046C961 /* PingReCaptchaEnterprise in Frameworks */,
+				EC8024322F0BDD1C0046C961 /* PingBrowser in Frameworks */,
+				EC8024522F0BDD1C0046C961 /* PingOrchestrate in Frameworks */,
+				EC8024462F0BDD1C0046C961 /* PingJourney in Frameworks */,
+				EC8024402F0BDD1C0046C961 /* PingExternalIdPFacebook in Frameworks */,
+				EC80244A2F0BDD1C0046C961 /* PingLogger in Frameworks */,
+				EC8024342F0BDD1C0046C961 /* PingCommons in Frameworks */,
+				EC8025412F0BE2AD0046C961 /* SVGKitSwift in Frameworks */,
+				EC80243E2F0BDD1C0046C961 /* PingExternalIdPApple in Frameworks */,
+				EC8024542F0BDD1C0046C961 /* PingProtect in Frameworks */,
+				EC80243A2F0BDD1C0046C961 /* PingDeviceProfile in Frameworks */,
+				EC8024382F0BDD1C0046C961 /* PingDeviceId in Frameworks */,
+				EC8024562F0BDD1C0046C961 /* PingPush in Frameworks */,
+				EC80253F2F0BE2AD0046C961 /* SVGKit in Frameworks */,
+				EC80243C2F0BDD1C0046C961 /* PingExternalIdP in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		EC8024172F0BDC900046C961 = {
+			isa = PBXGroup;
+			children = (
+				EC8024222F0BDC900046C961 /* JourneyModuleSample */,
+				EC8025002F0BE15D0046C961 /* Frameworks */,
+				EC8024212F0BDC900046C961 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		EC8024212F0BDC900046C961 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				EC8024202F0BDC900046C961 /* JourneyModuleSample.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		EC8025002F0BE15D0046C961 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		EC80241F2F0BDC900046C961 /* JourneyModuleSample */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EC80242B2F0BDC930046C961 /* Build configuration list for PBXNativeTarget "JourneyModuleSample" */;
+			buildPhases = (
+				EC80241C2F0BDC900046C961 /* Sources */,
+				EC80241D2F0BDC900046C961 /* Frameworks */,
+				EC80241E2F0BDC900046C961 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				EC8024222F0BDC900046C961 /* JourneyModuleSample */,
+			);
+			name = JourneyModuleSample;
+			packageProductDependencies = (
+				EC80242F2F0BDD1C0046C961 /* PingBinding */,
+				EC8024312F0BDD1C0046C961 /* PingBrowser */,
+				EC8024332F0BDD1C0046C961 /* PingCommons */,
+				EC8024352F0BDD1C0046C961 /* PingDeviceClient */,
+				EC8024372F0BDD1C0046C961 /* PingDeviceId */,
+				EC8024392F0BDD1C0046C961 /* PingDeviceProfile */,
+				EC80243B2F0BDD1C0046C961 /* PingExternalIdP */,
+				EC80243D2F0BDD1C0046C961 /* PingExternalIdPApple */,
+				EC80243F2F0BDD1C0046C961 /* PingExternalIdPFacebook */,
+				EC8024412F0BDD1C0046C961 /* PingExternalIdPGoogle */,
+				EC8024432F0BDD1C0046C961 /* PingFido */,
+				EC8024452F0BDD1C0046C961 /* PingJourney */,
+				EC8024472F0BDD1C0046C961 /* PingJourneyPlugin */,
+				EC8024492F0BDD1C0046C961 /* PingLogger */,
+				EC80244B2F0BDD1C0046C961 /* PingNetwork */,
+				EC80244D2F0BDD1C0046C961 /* PingOath */,
+				EC80244F2F0BDD1C0046C961 /* PingOidc */,
+				EC8024512F0BDD1C0046C961 /* PingOrchestrate */,
+				EC8024532F0BDD1C0046C961 /* PingProtect */,
+				EC8024552F0BDD1C0046C961 /* PingPush */,
+				EC8025012F0BE15D0046C961 /* PingReCaptchaEnterprise */,
+				EC80253E2F0BE2AD0046C961 /* SVGKit */,
+				EC8025402F0BE2AD0046C961 /* SVGKitSwift */,
+			);
+			productName = JourneyModuleSample;
+			productReference = EC8024202F0BDC900046C961 /* JourneyModuleSample.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		EC8024182F0BDC900046C961 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2610;
+				LastUpgradeCheck = 2610;
+				TargetAttributes = {
+					EC80241F2F0BDC900046C961 = {
+						CreatedOnToolsVersion = 26.1.1;
+					};
+				};
+			};
+			buildConfigurationList = EC80241B2F0BDC900046C961 /* Build configuration list for PBXProject "JourneyModuleSample" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = EC8024172F0BDC900046C961;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				EC80242E2F0BDD1C0046C961 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */,
+				EC80253D2F0BE2AD0046C961 /* XCRemoteSwiftPackageReference "SVGKit" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = EC8024212F0BDC900046C961 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				EC80241F2F0BDC900046C961 /* JourneyModuleSample */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		EC80241E2F0BDC900046C961 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		EC80241C2F0BDC900046C961 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		EC8024292F0BDC930046C961 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 9QSE66762D;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		EC80242A2F0BDC930046C961 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 9QSE66762D;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_VERSION = 6.0;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		EC80242C2F0BDC930046C961 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = JourneyModuleSample/JourneyModuleSample.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9QSE66762D;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = JourneyModuleSample/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pingidentity.JourneyModuleSample;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		EC80242D2F0BDC930046C961 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = JourneyModuleSample/JourneyModuleSample.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9QSE66762D;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = JourneyModuleSample/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pingidentity.JourneyModuleSample;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		EC80241B2F0BDC900046C961 /* Build configuration list for PBXProject "JourneyModuleSample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EC8024292F0BDC930046C961 /* Debug */,
+				EC80242A2F0BDC930046C961 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EC80242B2F0BDC930046C961 /* Build configuration list for PBXNativeTarget "JourneyModuleSample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EC80242C2F0BDC930046C961 /* Debug */,
+				EC80242D2F0BDC930046C961 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		EC80242E2F0BDD1C0046C961 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ForgeRock/ping-ios-sdk";
+			requirement = {
+				kind = exactVersion;
+				version = "2.0.0-alpha-9b37c20";
+			};
+		};
+		EC80253D2F0BE2AD0046C961 /* XCRemoteSwiftPackageReference "SVGKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SVGKit/SVGKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		EC80242F2F0BDD1C0046C961 /* PingBinding */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EC80242E2F0BDD1C0046C961 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;
+			productName = PingBinding;
+		};
+		EC8024312F0BDD1C0046C961 /* PingBrowser */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EC80242E2F0BDD1C0046C961 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;
+			productName = PingBrowser;
+		};
+		EC8024332F0BDD1C0046C961 /* PingCommons */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EC80242E2F0BDD1C0046C961 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;
+			productName = PingCommons;
+		};
+		EC8024352F0BDD1C0046C961 /* PingDeviceClient */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EC80242E2F0BDD1C0046C961 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;
+			productName = PingDeviceClient;
+		};
+		EC8024372F0BDD1C0046C961 /* PingDeviceId */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EC80242E2F0BDD1C0046C961 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;
+			productName = PingDeviceId;
+		};
+		EC8024392F0BDD1C0046C961 /* PingDeviceProfile */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EC80242E2F0BDD1C0046C961 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;
+			productName = PingDeviceProfile;
+		};
+		EC80243B2F0BDD1C0046C961 /* PingExternalIdP */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EC80242E2F0BDD1C0046C961 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;
+			productName = PingExternalIdP;
+		};
+		EC80243D2F0BDD1C0046C961 /* PingExternalIdPApple */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EC80242E2F0BDD1C0046C961 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;
+			productName = PingExternalIdPApple;
+		};
+		EC80243F2F0BDD1C0046C961 /* PingExternalIdPFacebook */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EC80242E2F0BDD1C0046C961 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;
+			productName = PingExternalIdPFacebook;
+		};
+		EC8024412F0BDD1C0046C961 /* PingExternalIdPGoogle */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EC80242E2F0BDD1C0046C961 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;
+			productName = PingExternalIdPGoogle;
+		};
+		EC8024432F0BDD1C0046C961 /* PingFido */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EC80242E2F0BDD1C0046C961 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;
+			productName = PingFido;
+		};
+		EC8024452F0BDD1C0046C961 /* PingJourney */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EC80242E2F0BDD1C0046C961 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;
+			productName = PingJourney;
+		};
+		EC8024472F0BDD1C0046C961 /* PingJourneyPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EC80242E2F0BDD1C0046C961 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;
+			productName = PingJourneyPlugin;
+		};
+		EC8024492F0BDD1C0046C961 /* PingLogger */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EC80242E2F0BDD1C0046C961 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;
+			productName = PingLogger;
+		};
+		EC80244B2F0BDD1C0046C961 /* PingNetwork */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EC80242E2F0BDD1C0046C961 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;
+			productName = PingNetwork;
+		};
+		EC80244D2F0BDD1C0046C961 /* PingOath */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EC80242E2F0BDD1C0046C961 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;
+			productName = PingOath;
+		};
+		EC80244F2F0BDD1C0046C961 /* PingOidc */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EC80242E2F0BDD1C0046C961 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;
+			productName = PingOidc;
+		};
+		EC8024512F0BDD1C0046C961 /* PingOrchestrate */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EC80242E2F0BDD1C0046C961 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;
+			productName = PingOrchestrate;
+		};
+		EC8024532F0BDD1C0046C961 /* PingProtect */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EC80242E2F0BDD1C0046C961 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;
+			productName = PingProtect;
+		};
+		EC8024552F0BDD1C0046C961 /* PingPush */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EC80242E2F0BDD1C0046C961 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;
+			productName = PingPush;
+		};
+		EC8025012F0BE15D0046C961 /* PingReCaptchaEnterprise */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EC80242E2F0BDD1C0046C961 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;
+			productName = PingReCaptchaEnterprise;
+		};
+		EC80253E2F0BE2AD0046C961 /* SVGKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EC80253D2F0BE2AD0046C961 /* XCRemoteSwiftPackageReference "SVGKit" */;
+			productName = SVGKit;
+		};
+		EC8025402F0BE2AD0046C961 /* SVGKitSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EC80253D2F0BE2AD0046C961 /* XCRemoteSwiftPackageReference "SVGKit" */;
+			productName = SVGKitSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = EC8024182F0BDC900046C961 /* Project object */;
+}
