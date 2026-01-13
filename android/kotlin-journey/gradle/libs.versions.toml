@@ -1,0 +1,62 @@
+[versions]
+activityCompose = "1.9.3"
+agp = "8.12.2"
+coreSplashscreen = "1.0.1"
+datastore = "1.1.7"
+ping = "2.0.0-beta1"
+kotlin = "2.2.0"
+compose = "1.7.4"
+compose-material3 = "1.3.0"
+coreKtx = "1.13.1"
+appcompat = "1.7.0"
+material = "1.12.0"
+materialIconsExtended = "1.7.4"
+navVersion = "2.8.3"
+composeBom = "2024.10.00"
+coilCompose = "2.4.0"
+coilSvg = "2.4.0"
+androidx-credentials = "1.5.0"
+googleid = "1.1.1"
+facebook-login = "18.0.3"
+serialization = "1.9.0"
+play-services-fido = "21.2.0"
+play-services-auth = "1.5.0"
+
+[libraries]
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
+androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
+androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
+androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navVersion" }
+androidx-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
+compose-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "compose" }
+compose-material3 = { module = "androidx.compose.material3:material3", version.ref = "compose-material3" }
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
+journey = { module = "com.pingidentity.sdks:journey", version.ref = "ping" }
+external-idp = { module = "com.pingidentity.sdks:external-idp", version.ref = "ping" }
+protect = { module = "com.pingidentity.sdks:protect", version.ref = "ping" }
+fido = { module = "com.pingidentity.sdks:fido", version.ref = "ping" }
+binding = { module = "com.pingidentity.sdks:binding", version.ref = "ping" }
+binding-ui = { module = "com.pingidentity.sdks:binding-ui", version.ref = "ping" }
+binding-migration = { module = "com.pingidentity.sdks:binding-migration", version.ref = "ping" }
+device-profile = { module = "com.pingidentity.sdks:device-profile", version.ref = "ping" }
+device-client = { module = "com.pingidentity.sdks:device-client", version.ref = "ping" }
+recaptcha-enterprise = { module = "com.pingidentity.sdks:recaptcha-enterprise", version.ref = "ping" }
+play-services-fido = { module = "com.google.android.gms:play-services-fido", version.ref = "play-services-fido" }
+play-services-auth = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "play-services-auth" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
+coil-svg = { module = "io.coil-kt:coil-svg", version.ref = "coilSvg" }
+androidx-credentials-play-services-auth = { group = "androidx.credentials", name = "credentials-play-services-auth", version.ref = "androidx-credentials" }
+googleid = { group = "com.google.android.libraries.identity.googleid", name = "googleid", version.ref = "googleid" }
+facebook-login = { module = "com.facebook.android:facebook-login", version.ref = "facebook-login" }
+
+[plugins]
+androidApplication = { id = "com.android.application", version.ref = "agp" }
+kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+
