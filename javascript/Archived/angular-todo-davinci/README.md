@@ -1,5 +1,7 @@
 # Angular Todo Sample App with DaVinci
 
+> **ARCHIVED**: This sample app is archived and no longer actively maintained. For DaVinci integration examples, please refer to the [reactjs-todo-davinci](../../reactjs-todo-davinci/) sample app.
+
 ## Disclaimers
 
 This sample code is provided "as is" and is not a supported product of Ping Identity. It's purpose is solely to demonstrate how the Ping JavaScript SDK and Davinci client can be implemented within an Angular application. Also, this is not a demonstration of Angular itself or instructional for _how_ to build an Angular app. There are many aspects to routing, state management, tooling and other aspects to building an Angular app that are outside of the scope of this project. For information about creating an Angular app, [visit Angular's official documentation](https://v18.angular.dev/overview).

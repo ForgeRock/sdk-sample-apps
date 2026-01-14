@@ -9,6 +9,7 @@
  */
 
 import React, { useContext, Fragment, useReducer, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import { AppContext } from '../global-state';
 import CreateTodo from '../components/todos/create';
@@ -32,11 +33,12 @@ export default function Todos() {
    */
   const [state] = useContext(AppContext);
   const [hasFetched, setFetched] = useState(false);
+  const [apiError, setApiError] = useState(null);
   const [todos, dispatch] = useReducer(reducer, []);
   const [selectedDeleteTodo, setSelectedDeleteTodo] = useState(null);
   const [selectedEditTodo, setSelectedEditTodo] = useState(null);
 
-  useTodoFetch(dispatch, setFetched);
+  useTodoFetch(dispatch, setFetched, setApiError);
 
   function addTodo(newTodo) {
     dispatch({ type: 'add-todo', payload: { todo: newTodo } });
@@ -58,10 +60,15 @@ export default function Todos() {
   }
 
   /**
-   * Dynamic React component for rendering either the loading component
-   * or the Todos collection component.
+   * Dynamic React component for rendering either the loading component,
+   * an error message, or the Todos collection component.
    */
-  const Todos = hasFetched ? (
+  const Todos = apiError ? (
+    <div className="alert alert-warning m-3" role="alert">
+      <strong>Unable to load todos:</strong> {apiError}.{' '}
+      <Link to="/login">Please sign in to continue.</Link>
+    </div>
+  ) : hasFetched ? (
     <ul className={`list-group list-group-flush mb-1 ${state.theme.listGroupClass}`}>
       {/**
        * We we've fetched the todos, iterate over them for display.
