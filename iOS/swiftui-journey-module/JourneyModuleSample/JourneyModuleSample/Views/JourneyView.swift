@@ -158,86 +158,93 @@ struct JourneyNodeView: View {
             ForEach(Array(continueNode.callbacks.enumerated()), id: \.offset) { index, callback in
                 switch callback {
                 case let booleanCallback as BooleanAttributeInputCallback:
-                    BooleanAttributeInputCallbackView(callback: booleanCallback, onNodeUpdated: onNodeUpdated)
+                    BooleanAttributeInputCallbackView(callback: booleanCallback, onNodeUpdated: onNodeUpdated).id(booleanCallback.id)
                     
                 case let choiceCallback as ChoiceCallback:
-                    ChoiceCallbackView(callback: choiceCallback, onNodeUpdated: onNodeUpdated)
+                    ChoiceCallbackView(callback: choiceCallback, onNodeUpdated: onNodeUpdated).id(choiceCallback.id)
                     
                 case let confirmationCallback as ConfirmationCallback:
-                    ConfirmationCallbackView(callback: confirmationCallback, onSelected: onNext)
+                    ConfirmationCallbackView(callback: confirmationCallback, onSelected: onNext).id(confirmationCallback.id)
                     
                 case let consentCallback as ConsentMappingCallback:
-                    ConsentMappingCallbackView(callback: consentCallback, onNodeUpdated: onNodeUpdated)
+                    ConsentMappingCallbackView(callback: consentCallback, onNodeUpdated: onNodeUpdated).id(consentCallback.id)
                     
                 case let kbaCallback as KbaCreateCallback:
-                    KbaCreateCallbackView(callback: kbaCallback, onNodeUpdated: onNodeUpdated)
+                    KbaCreateCallbackView(callback: kbaCallback, onNodeUpdated: onNodeUpdated).id(kbaCallback.id)
                     
                 case let numberCallback as NumberAttributeInputCallback:
-                    NumberAttributeInputCallbackView(callback: numberCallback, onNodeUpdated: onNodeUpdated)
+                    NumberAttributeInputCallbackView(callback: numberCallback, onNodeUpdated: onNodeUpdated).id(numberCallback.id)
                     
                 case let passwordCallback as PasswordCallback:
-                    PasswordCallbackView(callback: passwordCallback, onNodeUpdated: onNodeUpdated)
+                    PasswordCallbackView(callback: passwordCallback, onNodeUpdated: onNodeUpdated).id(passwordCallback.id)
                     
                 case let pollingCallback as PollingWaitCallback:
-                    PollingWaitCallbackView(callback: pollingCallback, onTimeout: onNext)
+                    PollingWaitCallbackView(callback: pollingCallback, onTimeout: onNext).id(pollingCallback.id)
                     
                 case let stringCallback as StringAttributeInputCallback:
-                    StringAttributeInputCallbackView(callback: stringCallback, onNodeUpdated: onNodeUpdated)
+                    StringAttributeInputCallbackView(callback: stringCallback, onNodeUpdated: onNodeUpdated).id(stringCallback.id)
                     
                 case let termsCallback as TermsAndConditionsCallback:
-                    TermsAndConditionsCallbackView(callback: termsCallback, onNodeUpdated: onNodeUpdated)
+                    TermsAndConditionsCallbackView(callback: termsCallback, onNodeUpdated: onNodeUpdated).id(termsCallback.id)
                     
                 case let textInputCallback as TextInputCallback:
-                    TextInputCallbackView(callback: textInputCallback, onNodeUpdated: onNodeUpdated)
+                    TextInputCallbackView(callback: textInputCallback, onNodeUpdated: onNodeUpdated).id(textInputCallback.id)
                     
                 case let textOutputCallback as TextOutputCallback:
-                    TextOutputCallbackView(callback: textOutputCallback)
+                    TextOutputCallbackView(callback: textOutputCallback).id(textOutputCallback.id)
                     
                 case let suspendedTextCallback as SuspendedTextOutputCallback:
-                    TextOutputCallbackView(callback: suspendedTextCallback)
+                    TextOutputCallbackView(callback: suspendedTextCallback).id(suspendedTextCallback.id)
                     
                 case let nameCallback as NameCallback:
-                    NameCallbackView(callback: nameCallback, onNodeUpdated: onNodeUpdated)
+                    NameCallbackView(callback: nameCallback, onNodeUpdated: onNodeUpdated).id(nameCallback.id)
                     
                 case let validatedUsernameCallback as ValidatedUsernameCallback:
-                    ValidatedUsernameCallbackView(callback: validatedUsernameCallback, onNodeUpdated: onNodeUpdated)
+                    ValidatedUsernameCallbackView(callback: validatedUsernameCallback, onNodeUpdated: onNodeUpdated).id(validatedUsernameCallback.id)
                     
                 case let validatedPasswordCallback as ValidatedPasswordCallback:
-                    ValidatedPasswordCallbackView(callback: validatedPasswordCallback, onNodeUpdated: onNodeUpdated)
+                    ValidatedPasswordCallbackView(callback: validatedPasswordCallback, onNodeUpdated: onNodeUpdated).id(validatedPasswordCallback.id)
                     
                 case let protectInitCallback as PingOneProtectInitializeCallback:
-                    PingOneProtectInitializeCallbackView(callback: protectInitCallback, onNext: onNext)
+                    PingOneProtectInitializeCallbackView(callback: protectInitCallback, onNext: onNext).id(protectInitCallback.id)
                     
                 case let protectEvalCallback as PingOneProtectEvaluationCallback:
-                    PingOneProtectEvaluationCallbackView(callback: protectEvalCallback, onNext: onNext)
+                    PingOneProtectEvaluationCallbackView(callback: protectEvalCallback, onNext: onNext).id(protectEvalCallback.id)
                     
                 case let selectIdpCallback as SelectIdpCallback:
-                    SelectIdpCallbackView(callback: selectIdpCallback, onNext: onNext)
+                    SelectIdpCallbackView(callback: selectIdpCallback, onNext: onNext).id(selectIdpCallback.id)
                     
                 case let idpCallback as IdpCallback:
                     let idpCallbackViewModel = IdpCallbackViewModel(callback: idpCallback)
-                    IdpCallbackView(viewModel: idpCallbackViewModel, onNext: onNext)
+                    IdpCallbackView(viewModel: idpCallbackViewModel, onNext: onNext).id(idpCallback.id)
 
                 case let deviceProfileCallback as DeviceProfileCallback:
-                    DeviceProfileCallbackView(callback: deviceProfileCallback, onNext: onNext)
+                    DeviceProfileCallbackView(callback: deviceProfileCallback, onNext: onNext).id(deviceProfileCallback.id)
 
                 case let fidoRegistrationCallback as FidoRegistrationCallback:
-                    FidoRegistrationCallbackView(callback: fidoRegistrationCallback, onNext: onNext)
+                    FidoRegistrationCallbackView(callback: fidoRegistrationCallback, onNext: onNext).id(fidoRegistrationCallback.id)
                     
                 case let fidoAuthenticationCallback as FidoAuthenticationCallback:
-                    FidoAuthenticationCallbackView(callback: fidoAuthenticationCallback, onNext: onNext)
+                    FidoAuthenticationCallbackView(callback: fidoAuthenticationCallback, onNext: onNext).id(fidoAuthenticationCallback.id)
                     
                 case let reCaptchaEnterpriseCallback as ReCaptchaEnterpriseCallback:
                     ReCaptchaEnterpriseCallbackView(callback: reCaptchaEnterpriseCallback, onNext: onNext).id(reCaptchaEnterpriseCallback.id)
                     
                 case let deviceBindingCallback as DeviceBindingCallback:
-                    DeviceBindingCallbackView(callback: deviceBindingCallback, onNext: onNext)
+                    DeviceBindingCallbackView(callback: deviceBindingCallback, onNext: onNext).id(deviceBindingCallback.id)
 
                 case let deviceSigningVerifierCallback as DeviceSigningVerifierCallback:
-                    DeviceSigningVerifierCallbackView(callback: deviceSigningVerifierCallback, onNext: onNext)
+                    DeviceSigningVerifierCallbackView(callback: deviceSigningVerifierCallback, onNext: onNext).id(deviceSigningVerifierCallback.id)
                     
                 case let hiddenValueCallback as HiddenValueCallback:
-                    KeylessView(callback: hiddenValueCallback, onNext: onNext)
+                    if let metadataCallback = continueNode.callbacks.first(where: { $0 is MetadataCallback }) as? MetadataCallback {
+                        // Handle the case when MetadataCallback is present
+                        // You can now access metadataCallback.value and other properties
+                        KeylessView(callback: hiddenValueCallback, metadataCallback: metadataCallback, onNext: onNext)
+                    } else {
+                        // Handle the case when MetadataCallback is not present
+                        KeylessView(callback: hiddenValueCallback, metadataCallback: nil, onNext: onNext)
+                    }
                     
                 default:
                     Text("Unsupported callback type")

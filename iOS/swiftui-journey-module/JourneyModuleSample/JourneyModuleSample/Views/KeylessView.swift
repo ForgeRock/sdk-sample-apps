@@ -12,6 +12,7 @@ import KeylessSDK
 struct KeylessView: View {
     //    let viewModel = KeylessViewModel()
     let callback: HiddenValueCallback
+    let metadataCallback: MetadataCallback?
     let onNext: () -> Void
     
     var body: some View {
