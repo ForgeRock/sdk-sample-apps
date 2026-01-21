@@ -10,7 +10,7 @@
 
 import React, { useContext, useEffect, useState } from 'react';
 
-import { AppContext } from '../../global-state';
+import { ThemeContext } from '../../context/theme.context';
 import ActionIcon from '../icons/action-icon';
 import TodoIcon from '../icons/todo-icon';
 
@@ -24,7 +24,7 @@ import TodoIcon from '../icons/todo-icon';
  * @returns {Object} - React component object
  */
 export default function Todo({ completeTodo, setSelectedDeleteTodo, setSelectedEditTodo, item }) {
-  const [state] = useContext(AppContext);
+  const theme = useContext(ThemeContext);
 
   /**
    * The destructing of the hook's array results in index 0 having the state value,
@@ -41,7 +41,7 @@ export default function Todo({ completeTodo, setSelectedDeleteTodo, setSelectedE
 
   return (
     <li
-      className={`cstm_todo-item list-group-item list-group-item-action d-flex p-0 ${state.theme.textClass}`}
+      className={`cstm_todo-item list-group-item list-group-item-action d-flex p-0 ${theme.textClass}`}
     >
       <div className="flex-grow-1">
         <input
@@ -71,7 +71,7 @@ export default function Todo({ completeTodo, setSelectedDeleteTodo, setSelectedE
           <ActionIcon />
         </button>
         <ul
-          className={`dropdown-menu dropdown-menu-end shadow-sm ${state.theme.dropdownClass}`}
+          className={`dropdown-menu dropdown-menu-end shadow-sm ${theme.dropdownClass}`}
           aria-labelledby={`todo_action_${todo._id}`}
         >
           <li>

@@ -10,9 +10,9 @@
 
 import React, { Fragment, useContext } from 'react';
 import { Link } from 'react-router-dom';
-
-import { AppContext } from '../global-state';
 import VerifiedIcon from '../components/icons/verified-icon';
+import { OidcContext } from '../context/oidc.context';
+import { ThemeContext } from '../context/theme.context';
 
 /**
  * @function Home - React view for Home
@@ -25,11 +25,12 @@ export default function Home() {
    * The destructing of the hook's array results in index 0 having the state value,
    * and index 1 having the "setter" method to set new state values.
    */
-  const [state] = useContext(AppContext);
+  const [state] = useContext(OidcContext);
+  const theme = useContext(ThemeContext);
 
   const createAccountText = !state.isAuthenticated ? (
     <Fragment>
-      <h2 className={`fs-4 fw-normal pt-3 pb-1 ${state.theme.textClass}`}>Getting started</h2>
+      <h2 className={`fs-4 fw-normal pt-3 pb-1 ${theme.textClass}`}>Getting started</h2>
       <p>
         To use this app, <Link to="/register">create an account now</Link>! Already have an account?{' '}
         <Link to="/login">Sign in</Link> to get things done!
@@ -51,27 +52,27 @@ export default function Home() {
   ) : null;
 
   return (
-    <div className={`cstm_container container-fluid ${state.theme.textClass}`}>
+    <div className={`cstm_container container-fluid ${theme.textClass}`}>
       {LoginAlert}
-      <h1 className={`cstm_head-text text-center ${state.theme.textClass}`}>
+      <h1 className={`cstm_head-text text-center ${theme.textClass}`}>
         Protect with Ping; Develop with React.js
       </h1>
 
-      <p className={`cstm_subhead-text fs-3 mb-4 fw-bold ${state.theme.textMutedClass}`}>
+      <p className={`cstm_subhead-text fs-3 mb-4 fw-bold ${theme.textMutedClass}`}>
         Learn how to develop Ping protected web apps with the{' '}
-        <a className={`${state.theme.textMutedClass}`} href="https://reactjs.org/">
+        <a className={`${theme.textMutedClass}`} href="https://reactjs.org/">
           React.js
         </a>{' '}
         library and our{' '}
         <a
-          className={`${state.theme.textMutedClass}`}
+          className={`${theme.textMutedClass}`}
           href="https://github.com/ForgeRock/ping-javascript-sdk/"
         >
           JavaScript SDK
         </a>
         .
       </p>
-      <h2 className={`fs-4 fw-normal pt-3 pb-1 ${state.theme.textClass}`}>About this project</h2>
+      <h2 className={`fs-4 fw-normal pt-3 pb-1 ${theme.textClass}`}>About this project</h2>
       <p>
         The purpose of this sample web app is to demonstrate how the Ping JavaScript SDK is
         implemented within a fully-functional application using a popular framework. The source code

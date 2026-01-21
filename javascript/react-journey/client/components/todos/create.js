@@ -11,7 +11,7 @@
 import React, { useContext, useRef, useState } from 'react';
 
 import apiRequest from '../../utilities/request';
-import { AppContext } from '../../global-state';
+import { ThemeContext } from '../../context/theme.context';
 
 /**
  * @function CreateTodo - React component for displaying the input and button pair for todo creation
@@ -20,7 +20,7 @@ import { AppContext } from '../../global-state';
  * @returns {Object} - React component object
  */
 export default function CreateTodo({ addTodo }) {
-  const [state] = useContext(AppContext);
+  const theme = useContext(ThemeContext);
 
   const [creatingTodo, setCreatingTodo] = useState(false);
   const textInput = useRef(null);
@@ -40,7 +40,7 @@ export default function CreateTodo({ addTodo }) {
 
   return (
     <form
-      className={`p-3 d-flex ${state.theme.textClass}`}
+      className={`p-3 d-flex ${theme.textClass}`}
       action="http://localhost:9443/todos"
       method="POST"
       onSubmit={createTodo}
@@ -49,7 +49,7 @@ export default function CreateTodo({ addTodo }) {
         <input
           id="newTodo"
           type="text"
-          className={`cstm_form-control form-control bg-transparent ${state.theme.textClass} ${state.theme.borderClass}`}
+          className={`cstm_form-control form-control bg-transparent ${theme.textClass} ${theme.borderClass}`}
           placeholder="What needs doing?"
           required="required"
           ref={textInput}

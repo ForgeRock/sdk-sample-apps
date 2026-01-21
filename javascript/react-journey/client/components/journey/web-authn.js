@@ -10,14 +10,14 @@
 
 import { WebAuthn, WebAuthnStepType } from '@forgerock/journey-client/webauthn';
 import React, { useEffect, useState, useContext } from 'react';
-import { AppContext } from '../../global-state';
+import { ThemeContext } from '../../context/theme.context';
 /**
  * @function WebAuthn - Footer React component
  * @returns {Object} - React component object
  */
 
 export default function WebAuthnComponent({ step, setSubmissionStep }) {
-  const [contextState] = useContext(AppContext);
+  const theme = useContext(ThemeContext);
   const webAuthnStep = WebAuthn.getWebAuthnStepType(step);
   const [state, setState] = useState({
     message: '',
@@ -52,10 +52,10 @@ export default function WebAuthnComponent({ step, setSubmissionStep }) {
       <span className="d-flex justify-content-center my-2">
         <span className="cstm_loading-spinner spinner-border text-primary" role="status"></span>
       </span>
-      <span className={`d-flex justify-content-center fw-bolder ${contextState.theme.textClass}`}>
+      <span className={`d-flex justify-content-center fw-bolder ${theme.textClass}`}>
         {state.header}
       </span>
-      <span className={`d-flex justify-content-center p-3 fs-5 ${contextState.theme.textClass}`}>
+      <span className={`d-flex justify-content-center p-3 fs-5 ${theme.textClass}`}>
         {state.message}
       </span>
     </p>
