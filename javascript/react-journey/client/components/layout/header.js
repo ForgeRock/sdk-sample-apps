@@ -12,11 +12,12 @@ import React, { useContext } from 'react';
 import { Link, useLocation, useSearchParams } from 'react-router-dom';
 
 import AccountIcon from '../icons/account-icon';
-import { AppContext } from '../../global-state';
 import ForgeRockIcon from '../icons/forgerock-icon';
 import HomeIcon from '../icons/home-icon';
 import ReactIcon from '../icons/react-icon';
 import TodosIcon from '../icons/todos-icon';
+import { OidcContext } from '../../context/oidc.context';
+import { ThemeContext } from '../../context/theme.context';
 
 /**
  * @function Header - Header React view
@@ -29,7 +30,8 @@ export default function Header() {
    * The destructing of the hook's array results in index 0 having the state value,
    * and index 1 having the "setter" method to set new state values.
    */
-  const [state] = useContext(AppContext);
+  const [state] = useContext(OidcContext);
+  const theme = useContext(ThemeContext);
   const location = useLocation();
   const [params] = useSearchParams();
 
@@ -97,14 +99,14 @@ export default function Header() {
             <AccountIcon classes="cstm_profile-icon" size="48px" />
           </button>
           <ul
-            className={`dropdown-menu dropdown-menu-end shadow-sm pb-0 ${state.theme.dropdownClass}`}
+            className={`dropdown-menu dropdown-menu-end shadow-sm pb-0 ${theme.dropdownClass}`}
             aria-labelledby="account_dropdown"
           >
             <li>
-              <div className={`dropdown-header border-bottom ${state.theme.borderClass}`}>
+              <div className={`dropdown-header border-bottom ${theme.borderClass}`}>
                 <p
                   className={`fw-bold fs-6 mb-0 ${
-                    state.theme.textClass ? state.theme.textClass : 'text-dark'
+                    theme.textClass ? theme.textClass : 'text-dark'
                   }`}
                 >
                   {state.username}
@@ -127,7 +129,7 @@ export default function Header() {
       <div className="d-flex py-3">
         <Link
           className={`cstm_login-link py-2 px-3 mx-1 ${
-            state.theme.mode === 'dark' ? 'cstm_login-link_dark' : ''
+            theme.mode === 'dark' ? 'cstm_login-link_dark' : ''
           }`}
           to={urlQueryParams}
         >
@@ -142,7 +144,7 @@ export default function Header() {
 
   return (
     <nav
-      className={`navbar navbar-expand ${state.theme.navbarClass} ${state.theme.borderHighContrastClass} py-0 border-bottom`}
+      className={`navbar navbar-expand ${theme.navbarClass} ${theme.borderHighContrastClass} py-0 border-bottom`}
     >
       <div className="cstm_container container-fluid d-flex align-items-stretch">
         <Link
@@ -151,7 +153,7 @@ export default function Header() {
             state.isAuthenticated ? 'cstm_navbar-brand_auth' : ''
           } navbar-brand ${
             state.isAuthenticated ? 'd-none d-sm-none d-md-block' : ''
-          } py-3 pe-4 me-4 ${state.theme.borderHighContrastClass}`}
+          } py-3 pe-4 me-4 ${theme.borderHighContrastClass}`}
         >
           <ForgeRockIcon size="31px" /> + <ReactIcon size="38px" />
         </Link>

@@ -8,11 +8,11 @@
  * of the MIT license. See the LICENSE file for details.
  */
 
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import createJourneyClient from './journey-client.utils.js';
 import { DEBUGGER } from '../../../constants.js';
 import { htmlDecode } from '../../../utilities/decode.js';
-import { useOidcClient } from '../../../oidc-client.js';
+import { OidcContext } from '../../../context/oidc.context.js';
 import { callbackType } from '@forgerock/journey-client';
 
 /**
@@ -49,7 +49,7 @@ export default function useJourney({ action, formMetadata, resumeUrl }) {
   // User state
   const [user, setUser] = useState(null);
 
-  const oidcClient = useOidcClient();
+  const [{oidcClient}] = useContext(OidcContext);
 
   useEffect(() => {
     async function initJourney() {

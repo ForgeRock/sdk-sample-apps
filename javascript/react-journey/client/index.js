@@ -13,10 +13,11 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import Router from './router';
 import { CONFIG, DEBUGGER, INIT_PROTECT, PINGONE_ENV_ID } from './constants';
-import { AppContext, useGlobalStateMgmt } from './global-state';
 import { oidc } from '@forgerock/oidc-client';
-import { OidcProvider } from './oidc-client';
 import Loading from './components/utilities/loading';
+import { initTheme, ThemeContext } from './context/theme.context';
+import { useInitOidcState, OidcContext } from './context/oidc.context';
+import { ProtectContext } from './context/protect.context';
 
 /**
  * This import will produce a separate CSS file linked in the index.html
@@ -57,10 +58,6 @@ import './styles/index.scss';
   const username = window.sessionStorage.getItem('sdk_username');
   const rootEl = document.getElementById('root');
 
-  if (prefersDarkTheme) {
-    document.body.classList.add('cstm_bg-dark', 'bg-dark');
-  }
-
   /**
    * @function Init - Initializes React and global state
    * @returns {Object} - React component object
@@ -79,13 +76,14 @@ import './styles/index.scss';
      * If global state becomes a more complex function of the app,
      * something like Redux might be a better option.
      */
-    const stateMgmt = useGlobalStateMgmt({
+    const oidcState = useInitOidcState({
       email,
       isAuthenticated,
-      prefersDarkTheme,
       username,
       oidcClient,
     });
+
+    const theme = initTheme(prefersDarkTheme);
 
     /**
      * If the INIT_PROTECT flag is set, initialize PingOne Protect as early as
@@ -102,15 +100,14 @@ import './styles/index.scss';
     }
 
     return (
-      /**
-       * Pass the OIDC client to the OidcProvider to store it in React Context
-       * for use throughout the app.
-       */
-      <OidcProvider client={oidcClient}>
-        <AppContext.Provider value={stateMgmt}>
-          <Router />
-        </AppContext.Provider>
-      </OidcProvider>
+      <ThemeContext.Provider value={theme}>
+        <OidcContext.Provider value={oidcState}>
+          {/* TODO: pass protect API here */}
+          <ProtectContext.Provider value={null}>
+            <Router />
+          </ProtectContext.Provider>
+        </OidcContext.Provider>
+      </ThemeContext.Provider>
     );
   }
 

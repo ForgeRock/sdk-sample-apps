@@ -12,20 +12,20 @@ import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import BackHome from '../components/utilities/back-home';
 import Loading from '../components/utilities/loading';
 import Card from '../components/layout/card';
-import { AppContext } from '../global-state';
 import Form from '../components/journey/form';
 import { CENTRALIZED_LOGIN, DEBUGGER } from '../constants';
-import { useOidcClient } from '../oidc-client';
+import { OidcContext } from '../context/oidc.context';
+import { ThemeContext } from '../context/theme.context';
 
 /**
  * @function Login - React view for Login
  * @returns {Object} - React component object
  */
 export default function Login() {
-  const oidcClient = useOidcClient();
-
+  const theme = useContext(ThemeContext);
+  
   // Used for setting global authentication state
-  const [contextState, methods] = useContext(AppContext);
+  const [{oidcClient}, methods] = useContext(OidcContext);
 
   // Used for redirection after success
   const navigate = useNavigate();
@@ -120,7 +120,7 @@ export default function Login() {
             <Form
               action={{ type: 'login' }}
               bottomMessage={
-                <p className={`text-center text-secondary p-3 ${contextState.theme.textClass}`}>
+                <p className={`text-center text-secondary p-3 ${theme.textClass}`}>
                   Don’t have an account? <Link to="/register">Sign up here!</Link>
                 </p>
               }

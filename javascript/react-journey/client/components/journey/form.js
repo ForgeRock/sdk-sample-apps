@@ -20,7 +20,6 @@ import Loading from '../utilities/loading';
 import Password from './password';
 import treeReducer from './tree-reducer';
 import useJourney from './hooks/journey.hook';
-import { AppContext } from '../../global-state';
 import TermsConditions from './terms-conditions';
 import Text from './text';
 import Unknown from './unknown';
@@ -35,6 +34,8 @@ import NewUserIcon from '../../components/icons/new-user-icon';
 import FingerPrintIcon from '../../components/icons/finger-print-icon';
 import IdentityProvider from './identity-provider';
 import Protect from './protect';
+import { ThemeContext } from '../../context/theme.context';
+import { OidcContext } from '../../context/oidc.context';
 
 /**
  * @function Form - React component for managing the user authentication journey
@@ -55,7 +56,8 @@ export default function Form({ action, bottomMessage, followUp, topMessage, jour
    * and index 1 having the "setter" method to set new state values.
    */
   // Used for setting global authentication state
-  const [state, methods] = useContext(AppContext);
+  const [_, methods] = useContext(OidcContext);
+  const theme = useContext(ThemeContext);
   // Map action to form metadata: title, button text and tree
   const [formMetadata] = useReducer(treeReducer, treeReducer(null, action, journey));
   // Used for redirection after success
@@ -209,7 +211,7 @@ export default function Form({ action, bottomMessage, followUp, topMessage, jour
         <div className="cstm_form-icon  align-self-center mb-3">
           {action.type === 'login' ? <KeyIcon size="72px" /> : <NewUserIcon size="72px" />}
         </div>
-        <h1 className={`text-center fs-2 mb-3 ${state.theme.textClass}`}>
+        <h1 className={`text-center fs-2 mb-3 ${theme.textClass}`}>
           {formMetadata.titleText}
         </h1>
         {topMessage}

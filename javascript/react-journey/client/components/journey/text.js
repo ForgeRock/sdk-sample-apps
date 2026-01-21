@@ -11,7 +11,7 @@
 import React, { useContext } from 'react';
 
 import { DEBUGGER } from '../../constants';
-import { AppContext } from '../../global-state';
+import { ThemeContext } from '../../context/theme.context';
 
 /**
  * @function Text- React component used for displaying text callback
@@ -20,7 +20,7 @@ import { AppContext } from '../../global-state';
  * @returns {Object} - React component object
  */
 export default function Text({ callback, inputName }) {
-  const [state] = useContext(AppContext);
+  const theme = useContext(ThemeContext);
 
   /** *************************************************************************
    * SDK INTEGRATION POINT
@@ -83,7 +83,7 @@ export default function Text({ callback, inputName }) {
   return (
     <div className={`cstm_form-floating form-floating mb-3`}>
       <input
-        className={`cstm_form-control form-control ${validationClass} bg-transparent ${state.theme.textClass} ${state.theme.borderClass}`}
+        className={`cstm_form-control form-control ${validationClass} bg-transparent ${theme.textClass} ${theme.borderClass}`}
         defaultValue={existingValue}
         id={inputName}
         name={inputName}

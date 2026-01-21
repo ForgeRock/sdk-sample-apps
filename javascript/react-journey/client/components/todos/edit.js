@@ -10,7 +10,7 @@
 
 import React, { useContext, useRef } from 'react';
 
-import { AppContext } from '../../global-state';
+import { ThemeContext } from '../../context/theme.context';
 
 /**
  * @function Edit - Used for a single todo for edit within a modal popup
@@ -21,7 +21,7 @@ import { AppContext } from '../../global-state';
  * @returns {Object} - React component object
  */
 export default function Edit({ selectedEditTodo, setSelectedEditTodo, editTodo }) {
-  const [state] = useContext(AppContext);
+  const theme = useContext(ThemeContext);
   const textInput = useRef(null);
 
   function updateTitle(e) {
@@ -50,17 +50,17 @@ export default function Edit({ selectedEditTodo, setSelectedEditTodo, editTodo }
     >
       <div className={`modal-dialog`}>
         <div
-          className={`modal-content  ${state.theme.cardBgClass} ${state.theme.textClass} ${state.theme.borderClass}`}
+          className={`modal-content  ${theme.cardBgClass} ${theme.textClass} ${theme.borderClass}`}
         >
-          <div className={`modal-header ${state.theme.borderClass}`}>
-            <h4 className={`modal-title ${state.theme.textClass}`}>Edit Todo</h4>
+          <div className={`modal-header ${theme.borderClass}`}>
+            <h4 className={`modal-title ${theme.textClass}`}>Edit Todo</h4>
           </div>
           <form onSubmit={(e) => submit(e, 'form')} className="modal-body">
             <div className="cstm_todos-input cstm_form-floating form-floating flex-grow-1">
               <input
                 id="editTodo"
                 type="text"
-                className={`cstm_form-control form-control bg-transparent ${state.theme.textClass} ${state.theme.borderClass}`}
+                className={`cstm_form-control form-control bg-transparent ${theme.textClass} ${theme.borderClass}`}
                 value={selectedEditTodo ? selectedEditTodo.title : ''}
                 onChange={updateTitle}
                 ref={textInput}
@@ -69,7 +69,7 @@ export default function Edit({ selectedEditTodo, setSelectedEditTodo, editTodo }
               <label htmlFor="editTodo">Update todo text</label>
             </div>
           </form>
-          <div className={`modal-footer ${state.theme.borderClass}`}>
+          <div className={`modal-footer ${theme.borderClass}`}>
             <button
               id="closeEditModalBtn"
               type="button"

@@ -11,7 +11,7 @@
 import React, { useContext } from 'react';
 
 import { DEBUGGER } from '../../constants';
-import { AppContext } from '../../global-state';
+import { ThemeContext } from '../../context/theme.context';
 
 /**
  * @function Choice - React component used for displaying choices
@@ -20,7 +20,7 @@ import { AppContext } from '../../global-state';
  * @returns {Object} - React component object
  */
 export default function Choice({ callback, inputName }) {
-  const [state] = useContext(AppContext);
+  const theme = useContext(ThemeContext);
 
   /** *************************************************************************
    * SDK INTEGRATION POINT
@@ -56,7 +56,7 @@ export default function Choice({ callback, inputName }) {
         onChange={setValue}
         id={inputName}
         name="selected"
-        className={`cstm_form-select form-select bg-transparent ${state.theme.textClass} ${state.theme.borderClass}`}
+        className={`cstm_form-select form-select bg-transparent ${theme.textClass} ${theme.borderClass}`}
       >
         {choiceOptions.map(function (option, idx) {
           return (
