@@ -11,7 +11,7 @@
 import React, { useContext, useState } from 'react';
 
 import { DEBUGGER } from '../../constants';
-import { AppContext } from '../../global-state';
+import { ThemeContext } from '../../context/theme.context';
 import EyeIcon from '../icons/eye-icon';
 
 /**
@@ -22,7 +22,7 @@ import EyeIcon from '../icons/eye-icon';
  * @returns {Object} - React component object
  */
 export default function Password({ callback, errorMessage, inputName }) {
-  const [state] = useContext(AppContext);
+  const theme = useContext(ThemeContext);
 
   /** *************************************************************************
    * SDK INTEGRATION POINT
@@ -106,7 +106,7 @@ export default function Password({ callback, errorMessage, inputName }) {
       <input
         className={`cstm_input-password form-control ${
           validationClass || ''
-        } border-end-0 bg-transparent ${state.theme.textClass} ${state.theme.borderClass}`}
+        } border-end-0 bg-transparent ${theme.textClass} ${theme.borderClass}`}
         id={inputName}
         name={inputName}
         onChange={setValue}
@@ -116,7 +116,7 @@ export default function Password({ callback, errorMessage, inputName }) {
       />
       <label htmlFor={inputName}>{passwordLabel}</label>
       <button
-        className={`cstm_input-icon border-start-0 input-group-text bg-transparent ${state.theme.textClass} ${state.theme.borderClass}`}
+        className={`cstm_input-icon border-start-0 input-group-text bg-transparent ${theme.textClass} ${theme.borderClass}`}
         onClick={toggleVisibility}
         type="button"
       >

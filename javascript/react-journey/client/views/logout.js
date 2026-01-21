@@ -9,8 +9,8 @@
  */
 
 import React, { useContext, useEffect } from 'react';
-import { AppContext } from '../global-state';
 import Loading from '../components/utilities/loading';
+import { OidcContext } from '../context/oidc.context';
 
 /**
  * @function Logout - React view for Logout
@@ -21,7 +21,7 @@ export default function Logout() {
    * The destructing of the hook's array results in index 0 having the state value,
    * and index 1 having the "setter" method to set new state values.
    */
-  const [, { setAuthentication, setEmail, setUser }] = useContext(AppContext);
+  const [, { setAuthentication, setEmail, setUser }] = useContext(OidcContext);
 
   useEffect(() => {
     /**
