@@ -18,12 +18,15 @@ import reducer from '../components/todos/reducer';
 import Todo from '../components/todos/todo';
 import apiRequest from '../utilities/request';
 import { ThemeContext } from '../context/theme.context';
+import { OidcContext } from '../context/oidc.context';
+import { Link } from 'react-router-dom';
 
 /**
  * @function Todos - React view for retrieving & displaying todo collection
  * @returns {Object} - React component object
  */
 export default function Todos() {
+  const [{ oidcClient }] = useContext(OidcContext);
   /**
    * Use local, component state for todos. Though, this could be moved to
    * the global state if that's preferred over doing API calls in React views.
@@ -32,11 +35,12 @@ export default function Todos() {
    */
   const theme = useContext(ThemeContext);
   const [hasFetched, setFetched] = useState(false);
+  const [apiError, setApiError] = useState(null);
   const [todos, dispatch] = useReducer(reducer, []);
   const [selectedDeleteTodo, setSelectedDeleteTodo] = useState(null);
   const [selectedEditTodo, setSelectedEditTodo] = useState(null);
 
-  useTodoFetch(dispatch, setFetched);
+  useTodoFetch(dispatch, setFetched, setApiError);
 
   function addTodo(newTodo) {
     dispatch({ type: 'add-todo', payload: { todo: newTodo } });
@@ -44,24 +48,29 @@ export default function Todos() {
 
   async function completeTodo(_id, completed) {
     dispatch({ type: 'complete-todo', payload: { _id, completed } });
-    await apiRequest(`todos/${_id}`, 'POST', { completed });
+    await apiRequest(`todos/${_id}`, 'POST', { completed }, oidcClient);
   }
 
   async function deleteTodo() {
     dispatch({ type: 'delete-todo', payload: { _id: selectedDeleteTodo._id } });
-    await apiRequest(`todos/${selectedDeleteTodo._id}`, 'DELETE');
+    await apiRequest(`todos/${selectedDeleteTodo._id}`, 'DELETE', undefined, oidcClient);
   }
 
   async function editTodo({ _id, title }) {
     dispatch({ type: 'edit-todo', payload: { _id, title } });
-    await apiRequest(`todos/${_id}`, 'POST', { title });
+    await apiRequest(`todos/${_id}`, 'POST', { title }, oidcClient);
   }
 
   /**
-   * Dynamic React component for rendering either the loading component
-   * or the Todos collection component.
+   * Dynamic React component for rendering either the loading component,
+   * an error message, or the Todos collection component.
    */
-  const Todos = hasFetched ? (
+  const Todos = apiError ? (
+    <div className="alert alert-warning m-3" role="alert">
+      <strong>Unable to load todos:</strong>
+      {apiError}
+    </div>
+  ) : hasFetched ? (
     <ul className={`list-group list-group-flush mb-1 ${theme.listGroupClass}`}>
       {/**
        * We we've fetched the todos, iterate over them for display.

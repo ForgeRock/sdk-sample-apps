@@ -18,7 +18,7 @@ module.exports = () => {
   const localEnv = dotenv.config().parsed || {};
 
   // Use process environment variables for prod, but fallback to local .env for dev
-  const SERVER_URL = process.env.SERVER_URL || localEnv.SERVER_URL;
+  const SERVER_URL = process.env.SERVER_URL || localEnv.SERVER_URL; // todo: remove once wellknown is supported by journey client
   const APP_URL = process.env.APP_URL || localEnv.APP_URL;
   const API_URL = process.env.API_URL || localEnv.API_URL;
   const DEBUGGER_OFF = process.env.DEBUGGER_OFF || localEnv.DEBUGGER_OFF;
@@ -32,6 +32,7 @@ module.exports = () => {
   const WELLKNOWN_URL = process.env.WELLKNOWN_URL || localEnv.WELLKNOWN_URL;
   const INIT_PROTECT = process.env.INIT_PROTECT || localEnv.INIT_PROTECT;
   const PINGONE_ENV_ID = process.env.PINGONE_ENV_ID || localEnv.PINGONE_ENV_ID;
+  const REST_OAUTH_SECRET = process.env.REST_OAUTH_SECRET || localEnv.REST_OAUTH_SECRET;
 
   return {
     // Point to the top level source file
@@ -129,6 +130,7 @@ module.exports = () => {
         'process.env.WELLKNOWN_URL': JSON.stringify(WELLKNOWN_URL),
         'process.env.INIT_PROTECT': JSON.stringify(INIT_PROTECT),
         'process.env.PINGONE_ENV_ID': JSON.stringify(PINGONE_ENV_ID),
+        'process.env.REST_OAUTH_SECRET': JSON.stringify(REST_OAUTH_SECRET),
       }),
     ],
   };

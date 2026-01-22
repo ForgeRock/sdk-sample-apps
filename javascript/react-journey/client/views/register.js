@@ -14,6 +14,7 @@ import { Link } from 'react-router-dom';
 import BackHome from '../components/utilities/back-home';
 import Card from '../components/layout/card';
 import { ThemeContext } from '../context/theme.context';
+import { OidcContext } from '../context/oidc.context';
 import apiRequest from '../utilities/request';
 import Form from '../components/journey/form';
 
@@ -23,9 +24,10 @@ import Form from '../components/journey/form';
  */
 export default function Register() {
   const theme = useContext(ThemeContext);
+  const [{ oidcClient }] = useContext(OidcContext);
 
   async function initUserInDb() {
-    await apiRequest(`users`, 'POST');
+    await apiRequest(`users`, 'POST', undefined, oidcClient);
   }
 
   return (
