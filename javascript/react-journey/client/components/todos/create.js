@@ -12,6 +12,7 @@ import React, { useContext, useRef, useState } from 'react';
 
 import apiRequest from '../../utilities/request';
 import { ThemeContext } from '../../context/theme.context';
+import { OidcContext } from '../../context/oidc.context';
 
 /**
  * @function CreateTodo - React component for displaying the input and button pair for todo creation
@@ -21,6 +22,7 @@ import { ThemeContext } from '../../context/theme.context';
  */
 export default function CreateTodo({ addTodo }) {
   const theme = useContext(ThemeContext);
+  const [{ oidcClient }] = useContext(OidcContext);
 
   const [creatingTodo, setCreatingTodo] = useState(false);
   const textInput = useRef(null);
@@ -31,7 +33,7 @@ export default function CreateTodo({ addTodo }) {
     setCreatingTodo(true);
 
     const title = e.target.elements[0].value;
-    const newTodo = await apiRequest('todos', 'POST', { title });
+    const newTodo = await apiRequest('todos', 'POST', { title }, oidcClient);
 
     addTodo(newTodo);
     setCreatingTodo(false);
