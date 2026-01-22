@@ -8,20 +8,19 @@
  * of the MIT license. See the LICENSE file for details.
  */
 
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-
+import { useEffect, useContext } from 'react';
+import { OidcContext } from '../../context/oidc.context';
 import apiRequest from '../../utilities/request';
 
 /**
  * @function useTodoFetch - A custom React hook for fetching todos from API
  * @param {Function} dispatch - The function to pass in an action with data to result in new state
  * @param {Function} setFetched - A function for setting the state of hasFetched
- * @param {string} todosLength - The todo collection
+ * @param {Function} setApiError - A function for setting the state of API error messages
  * @returns {undefined} - this doesn't directly return anything, but calls dispatch to set data
  */
-export default function useTodoFetch(dispatch, setFetched) {
-  const navigate = useNavigate();
+export default function useTodoFetch(dispatch, setFetched, setApiError) {
+  const [{ oidcClient }] = useContext(OidcContext);
 
   /**
    * Since we are making an API call, which is a side-effect,
@@ -31,11 +30,14 @@ export default function useTodoFetch(dispatch, setFetched) {
   useEffect(() => {
     async function getTodos() {
       // Request the todos from our resource API
-      const fetchedTodos = await apiRequest('todos', 'GET');
+      const fetchedTodos = await apiRequest('todos', 'GET', undefined, oidcClient);
 
-      // TODO: improve error handling
       if (fetchedTodos.error) {
-        return navigate('/login');
+        setApiError(
+          'The Todo API server is not running. Please start it with `npm run start:todo-api` from the javascript directory.',
+        );
+        setFetched(false);
+        return;
       }
       setFetched(true);
       dispatch({ type: 'init-todos', payload: { todos: fetchedTodos } });
