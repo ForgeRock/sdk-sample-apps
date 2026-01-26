@@ -23,7 +23,7 @@ export const CENTRALIZED_LOGIN = process.env.CENTRALIZED_LOGIN;
 export const SESSION_URL = `${SERVER_URL}json/realms/root/sessions`;
 export const SCOPE = process.env.SCOPE;
 export const WELLKNOWN_URL = process.env.WELLKNOWN_URL;
-export const INIT_PROTECT = process.env.INIT_PROTECT === 'true';
+export const INIT_PROTECT = process.env.INIT_PROTECT;
 export const PINGONE_ENV_ID = process.env.PINGONE_ENV_ID;
 
 const redirectUri = `${window.location.origin}/${
