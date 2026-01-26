@@ -49,7 +49,7 @@ export default function useJourney({ action, formMetadata, resumeUrl }) {
   // User state
   const [user, setUser] = useState(null);
 
-  const [{oidcClient}] = useContext(OidcContext);
+  const [{ oidcClient }] = useContext(OidcContext);
 
   useEffect(() => {
     async function initJourney() {

@@ -11,11 +11,11 @@ import { createContext } from 'react';
 
 /**
  * @function initTheme - Initialize the global theme based on user preference
- * @param {boolean} prefersDarkTheme - User preference for dark theme
  * @returns {Object} - Theme configuration object
  */
-export function initTheme(prefersDarkTheme) {
+export function initTheme() {
   let theme;
+  const prefersDarkTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
   if (prefersDarkTheme) {
     document.body.classList.add('cstm_bg-dark', 'bg-dark');
     theme = {

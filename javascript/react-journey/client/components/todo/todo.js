@@ -37,9 +37,7 @@ export default function Todo({ completeTodo, setSelectedDeleteTodo, setSelectedE
   }, [item]);
 
   return (
-    <li
-      className={`cstm_todo-item list-group-item list-group-item-action p-0 ${theme.textClass}`}
-    >
+    <li className={`cstm_todo-item list-group-item list-group-item-action p-0 ${theme.textClass}`}>
       <div className="row">
         <div className="col">
           <input

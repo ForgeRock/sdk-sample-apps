@@ -23,9 +23,9 @@ import { ThemeContext } from '../context/theme.context';
  */
 export default function Login() {
   const theme = useContext(ThemeContext);
-  
+
   // Used for setting global authentication state
-  const [{oidcClient}, methods] = useContext(OidcContext);
+  const [{ oidcClient }, methods] = useContext(OidcContext);
 
   // Used for redirection after success
   const navigate = useNavigate();

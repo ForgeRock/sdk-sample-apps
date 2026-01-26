@@ -29,7 +29,7 @@ function useAuthValidation(auth, setAuth) {
    */
   const [isValid, setValid] = useState('unknown');
 
-  const [{oidcClient}] = useContext(OidcContext);
+  const [{ oidcClient }] = useContext(OidcContext);
 
   useEffect(() => {
     async function validateAccessToken() {

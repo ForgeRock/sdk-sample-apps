@@ -8,28 +8,58 @@
  * of the MIT license. See the LICENSE file for details.
  */
 
-import { useState, createContext } from 'react';
+import { useState, createContext, useEffect } from 'react';
+import { oidc } from '@forgerock/oidc-client';
 import { DEBUGGER } from '../constants';
+
+const email = window.sessionStorage.getItem('sdk_email');
+const username = window.sessionStorage.getItem('sdk_username');
 
 /**
  * @function useInitOidcState - A custom hook to get initial OIDC state for managing user authentication
- * @param {Object} props - The object representing React's props
- * @param {string} props.email - User's email
- * @param {boolean} props.isAuthenticated - Boolean value of user's auth status
- * @param {string} props.username - User's username
- * @param {Object} props.oidcClient - The OIDC client
- * @returns {Array} - OIDC state values and state methods
+ * @returns {Array} - OIDC client, state values and state methods
  */
-export function useInitOidcState({ email, isAuthenticated, username, oidcClient }) {
+export function useInitOidcState(config) {
   /**
    * Create state properties for "global" OIDC state.
-   * Using internal names that differ from external to prevent shadowing.
-   * The destructing of the hook's array results in index 0 having the state value,
-   * and index 1 having the "setter" method to set new state values.
+   * The destructing of the hook's array results in index 0 having the state values,
+   * and index 1 having the "setter" methods to set new state values.
    */
-  const [authenticated, setAuthentication] = useState(isAuthenticated || false);
+  const [oidcClient, setOidcClient] = useState(null);
+  const [authenticated, setAuthentication] = useState(false);
   const [mail, setEmail] = useState(email || '');
   const [name, setUser] = useState(username || '');
+
+  useEffect(() => {
+    async function initOidcClient() {
+      /** *************************************************************************
+       * SDK INTEGRATION POINT
+       * Summary: Initialize OIDC client and get OAuth/OIDC tokens from storage
+       * --------------------------------------------------------------------------
+       * Details: The OIDC client is used to manage authorization, tokens, and users.
+       * We intitialize it at bootstrap to check for stored tokens. If we have them,
+       * we can cautiously assume the user is authenticated. The OIDC client will
+       * later be stored in React Context and used throughout the app.
+       * Note: We chose to initialize the OIDC client here for readability,
+       * but it can be done outside of the React component for better performance.
+       ************************************************************************* */
+      if (DEBUGGER) debugger;
+      let client = await oidc({ config });
+      if ('error' in client) {
+        console.error(`Error initializing OIDC client: ${client.error}`);
+        client = null;
+      } else {
+        const tokens = await client.token.get();
+        const isAuthenticated = !tokens.error;
+        setAuthentication(isAuthenticated);
+      }
+      setOidcClient(client);
+    }
+
+    if (!oidcClient) {
+      initOidcClient();
+    }
+  }, [oidcClient]);
 
   /**
    * @function setAuthenticationWrapper - A wrapper for storing authentication state

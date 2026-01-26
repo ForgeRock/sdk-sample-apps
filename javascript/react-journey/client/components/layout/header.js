@@ -33,24 +33,11 @@ export default function Header() {
   const [state] = useContext(OidcContext);
   const theme = useContext(ThemeContext);
   const location = useLocation();
-  const [params] = useSearchParams();
-
-  const centralLogin = params.get('centralLogin');
-  const journey = params.get('journey');
-
-  const queryParams = {};
-
-  if (centralLogin) {
-    queryParams.centralLogin = centralLogin;
-  }
-
-  if (journey) {
-    queryParams.journey = journey;
-  }
+  const [queryParams] = useSearchParams();
 
   const urlQueryParams = {
     pathname: '/login',
-    search: new URLSearchParams(queryParams).toString(),
+    search: queryParams.toString(),
   };
 
   let TodosItem;
@@ -105,9 +92,7 @@ export default function Header() {
             <li>
               <div className={`dropdown-header border-bottom ${theme.borderClass}`}>
                 <p
-                  className={`fw-bold fs-6 mb-0 ${
-                    theme.textClass ? theme.textClass : 'text-dark'
-                  }`}
+                  className={`fw-bold fs-6 mb-0 ${theme.textClass ? theme.textClass : 'text-dark'}`}
                 >
                   {state.username}
                 </p>

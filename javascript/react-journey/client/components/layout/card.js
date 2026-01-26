@@ -21,9 +21,7 @@ export default function Card(props) {
   const theme = useContext(ThemeContext);
 
   return (
-    <div
-      className={`card shadow-sm p-5 mb-2 w-100 ${theme.cardBgClass} ${theme.textClass}`}
-    >
+    <div className={`card shadow-sm p-5 mb-2 w-100 ${theme.cardBgClass} ${theme.textClass}`}>
       {props.children}
     </div>
   );

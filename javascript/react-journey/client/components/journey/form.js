@@ -211,9 +211,7 @@ export default function Form({ action, bottomMessage, followUp, topMessage, jour
         <div className="cstm_form-icon  align-self-center mb-3">
           {action.type === 'login' ? <KeyIcon size="72px" /> : <NewUserIcon size="72px" />}
         </div>
-        <h1 className={`text-center fs-2 mb-3 ${theme.textClass}`}>
-          {formMetadata.titleText}
-        </h1>
+        <h1 className={`text-center fs-2 mb-3 ${theme.textClass}`}>{formMetadata.titleText}</h1>
         {topMessage}
         <form
           className="cstm_form"
