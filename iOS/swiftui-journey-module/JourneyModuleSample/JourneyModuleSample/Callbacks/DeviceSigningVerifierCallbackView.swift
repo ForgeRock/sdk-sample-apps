@@ -48,13 +48,13 @@ struct DeviceSigningVerifierCallbackView: View {
             For using a custom view for PIN collection, you can provide a CustomPinCollector
             through the configuration as shown below:
             
-            let result = await callback.sign { config in
+            let result = await callback.sign { @Sendable config in
                 config.pinCollector = CustomPinCollector()
             }
              
              For more advanced configuration with retry logic and custom prompts:
              
-            let result = await callback.sign { config in
+            let result = await callback.sign { @Sendable config in
                 let appPinConfig = AppPinConfig(
                     prompt: Prompt(title: "Verify Identity", subtitle: "Sign Transaction", description: "Enter your PIN to sign"),
                     pinRetry: 3,
@@ -65,7 +65,7 @@ struct DeviceSigningVerifierCallbackView: View {
              
              For biometric authenticators during signing, you can also use BiometricAuthenticatorConfig:
              
-            let result = await callback.sign { config in
+            let result = await callback.sign { @Sendable config in
                 let biometricConfig = BiometricAuthenticatorConfig(
                     keyTag: "my-custom-signing-key"
                 )
@@ -76,7 +76,7 @@ struct DeviceSigningVerifierCallbackView: View {
              
              You can also configure with a logger for monitoring signing operations:
              
-            let result = await callback.sign { config in
+            let result = await callback.sign { @Sendable config in
                 let customLogger = Logger.logger // or your custom logger implementation
                 
                 let biometricConfig = BiometricAuthenticatorConfig(
@@ -89,7 +89,7 @@ struct DeviceSigningVerifierCallbackView: View {
              
              For custom user key selection when multiple keys are available:
              
-            let result = await callback.sign { config in
+            let result = await callback.sign { @Sendable config in
                 // Use a custom UI for selecting from multiple device keys
                 config.userKeySelector = CustomUserKeySelector()
             }
