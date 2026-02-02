@@ -56,7 +56,7 @@ export default function Form({ action, bottomMessage, followUp, topMessage, jour
    * and index 1 having the "setter" method to set new state values.
    */
   // Used for setting global authentication state
-  const [_, methods] = useContext(OidcContext);
+  const [, methods] = useContext(OidcContext);
   const theme = useContext(ThemeContext);
   // Map action to form metadata: title, button text and tree
   const [formMetadata] = useReducer(treeReducer, treeReducer(null, action, journey));

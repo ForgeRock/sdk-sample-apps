@@ -36,9 +36,8 @@ test.describe('React Journey - Todo', () => {
   });
 
   // Log in, create a todo, log out, then log back in and retrieve the todo
-  // Note: This test is skipped to prevent exposing the confidential client secret.
-  // To run this test, ensure REST_OAUTH_SECRET is set in your .env
-  test.skip('Get todos, pass', async ({ page }) => {
+  // Note: To run this test, ensure REST_OAUTH_SECRET is set in your .env
+  test('Get todos, pass', async ({ page }) => {
     // Create a todo
     await page.getByPlaceholder('What needs doing?').fill(todoText);
     await page.getByRole('button', { name: 'Create' }).click();
