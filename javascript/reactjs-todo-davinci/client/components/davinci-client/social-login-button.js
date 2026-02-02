@@ -12,7 +12,7 @@ import React from 'react';
 export default function SocialLoginButton({ collector, updater, isLoading }) {
   return (
     <button
-      type="submit"
+      type="button"
       className="btn btn-primary w-100 mb-2"
       disabled={isLoading}
       onClick={async () => {
