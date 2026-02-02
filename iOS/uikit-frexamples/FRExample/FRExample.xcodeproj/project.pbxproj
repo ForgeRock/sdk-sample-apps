@@ -628,7 +628,7 @@
 			repositoryURL = "https://github.com/ForgeRock/forgerock-ios-sdk";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 4.8.0;
+				minimumVersion = 4.8.4;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

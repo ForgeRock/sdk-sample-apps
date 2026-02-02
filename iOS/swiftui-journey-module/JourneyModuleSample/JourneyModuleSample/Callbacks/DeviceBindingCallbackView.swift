@@ -47,13 +47,13 @@ struct DeviceBindingCallbackView: View {
              For using a custom view for PIN collection, you can provide a CustomPinCollector
              through the configuration as shown below:
              
-            let result = await callback.bind { config in
+            let result = await callback.bind { @Sendable config in
                 config.pinCollector = CustomPinCollector()
             }
              
              For more advanced configuration, you can create a custom AppPinConfig:
              
-            let result = await callback.bind { config in
+            let result = await callback.bind { @Sendable config in
                 let appPinConfig = AppPinConfig(
                     prompt: Prompt(title: "Enter PIN", subtitle: "Security", description: "Enter your 4-digit PIN"),
                     pinRetry: 5,
@@ -64,7 +64,7 @@ struct DeviceBindingCallbackView: View {
              
              For biometric authenticators, you can also use BiometricAuthenticatorConfig:
              
-            let result = await callback.bind { config in
+            let result = await callback.bind { @Sendable config in
                 let biometricConfig = BiometricAuthenticatorConfig(
                     keyTag: "my-custom-biometric-key"
                 )
@@ -75,7 +75,7 @@ struct DeviceBindingCallbackView: View {
              
              You can also configure with a logger for debugging:
              
-            let result = await callback.bind { config in
+            let result = await callback.bind { @Sendable config in
                 // Create a custom logger instance
                 let customLogger = Logger.logger // or your custom logger implementation
                 

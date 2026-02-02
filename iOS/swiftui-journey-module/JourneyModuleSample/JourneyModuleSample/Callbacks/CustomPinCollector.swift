@@ -41,7 +41,8 @@ import Combine
  * **Thread Safety:**
  * The collectPin method ensures UI operations are performed on the main thread using DispatchQueue.main.async.
  */
-class CustomPinCollector: PinCollector {
+
+nonisolated class CustomPinCollector: PinCollector {
     
     func collectPin(prompt: Prompt, completion: @escaping @Sendable (String?) -> Void) {
         DispatchQueue.main.async {
