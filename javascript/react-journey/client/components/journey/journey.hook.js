@@ -8,7 +8,7 @@
  * of the MIT license. See the LICENSE file for details.
  */
 
-import { useContext, useEffect, useState, useCallback } from 'react';
+import { useContext, useEffect, useState, useCallback, useRef } from 'react';
 import { CONFIG, DEBUGGER } from '../../constants.js';
 import { htmlDecode } from '../../utilities/decode.js';
 import { OidcContext } from '../../context/oidc.context.js';
@@ -56,6 +56,8 @@ export default function useJourney({ action, formMetadata, resumeUrl }) {
   const [submittingForm, setSubmittingForm] = useState(false);
   // User state
   const [user, setUser] = useState(null);
+  // Guard to prevent resubmitting the same step
+  const processedSubmissionRef = useRef(null);
 
   const [{ oidcClient }] = useContext(OidcContext);
 
@@ -113,7 +115,7 @@ export default function useJourney({ action, formMetadata, resumeUrl }) {
     if (!journeyClient) {
       initJourney();
     }
-  }, [journeyClient]);
+  }, [formMetadata.tree, journeyClient, resumeUrl]);
 
   /**
    * @function authorize - The function to call when we get a LoginSuccess
@@ -181,6 +183,13 @@ export default function useJourney({ action, formMetadata, resumeUrl }) {
      * @returns {undefined}
      */
     async function setStep(prev) {
+      // Guard to prevent resubmitting the same step
+      const currentSubmissionId = prev?.payload?.authId || JSON.stringify(prev);
+      if (processedSubmissionRef.current === currentSubmissionId) {
+        return;
+      }
+      processedSubmissionRef.current = currentSubmissionId;
+      
       /** *********************************************************************
        * SDK INTEGRATION POINT
        * Summary: Call the journey client's next method to submit the current step.
@@ -286,7 +295,16 @@ export default function useJourney({ action, formMetadata, resumeUrl }) {
     if (submissionStep && journeyClient) {
       setStep(submissionStep);
     }
-  }, [action.type, formMetadata.tree, submissionStep, journeyClient]);
+  }, [
+    action.type,
+    formMetadata.tree,
+    submissionStep,
+    journeyClient,
+    oidcClient,
+    resumeUrl,
+    stepCount,
+    authorize,
+  ]);
 
   /**
    * @function redirect - Redirects the user to the specified URL in the step

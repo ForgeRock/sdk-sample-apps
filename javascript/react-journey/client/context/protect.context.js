@@ -54,7 +54,7 @@ export function useInitProtect(config) {
     if (protectInitMode === 'bootstrap' && !protectApi) {
       bootstrapProtect();
     }
-  }, [protectApi]);
+  }, [config, protectApi]);
 
   /**
    * Returns an array with Protect API or null at index zero and setter at index one

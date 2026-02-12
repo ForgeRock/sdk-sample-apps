@@ -12,7 +12,7 @@ import { test, expect } from '@playwright/test';
 import { password, username } from './utils/demo-user';
 
 test('React Journey - Login with Centralized Login', async ({ page }) => {
-  await page.goto('https://localhost:8443/?centralLogin=true');
+  await page.goto('http://localhost:8443/?centralLogin=true');
 
   await page.getByRole('link', { name: 'Sign In', exact: true }).click();
 

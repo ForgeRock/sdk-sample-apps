@@ -10,7 +10,7 @@
 import { test, expect } from '@playwright/test';
 import { username, password } from './utils/demo-user';
 
-const BASE_URL = 'https://localhost:8443/';
+const BASE_URL = 'http://localhost:8443/';
 
 test.describe('React Journey - Todo', () => {
   const todoText = 'Test create todo' + Date.now();
