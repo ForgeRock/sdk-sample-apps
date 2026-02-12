@@ -14,7 +14,7 @@ import { v4 as uuid } from 'uuid';
 const userName = uuid();
 
 test('React Journey - Register user', async ({ page }) => {
-  await page.goto('https://localhost:8443/');
+  await page.goto('http://localhost:8443/');
   await page.getByRole('link', { name: 'Sign Up' }).click();
   await page.getByLabel('Username').fill(userName);
   await page.getByLabel('First Name').fill('newUser');

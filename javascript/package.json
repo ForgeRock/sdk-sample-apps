@@ -6,7 +6,7 @@
   "author": "",
   "license": "ISC",
   "workspaces": [
-    "./angular-todo/",
+    "./Archived/angular-todo/",
     "./Archived/angular-todo-davinci/",
     "./Archived/embedded-login-davinci/",
     "./Archived/central-login-oidc/",
@@ -19,12 +19,10 @@
   ],
   "scripts": {
     "todo-api": "npm start --workspace todo-api",
-    "angular-todo": "npm start --workspace angular-todo",
     "reactjs-todo-journey": "npm start --workspace reactjs-todo-journey",
     "reactjs-todo-oidc": "npm start --workspace reactjs-todo-oidc",
     "reactjs-todo-dv": "npm start --workspace reactjs-todo-davinci",
     "start:embedded-login": "npm start --workspace embedded-login",
-    "start:angular-todo": "npm-run-all --parallel todo-api angular-todo",
     "start:reactjs-todo-journey": "npm-run-all --parallel todo-api reactjs-todo-journey",
     "start:reactjs-todo-oidc": "npm-run-all --parallel todo-api reactjs-todo-oidc",
     "start:reactjs-todo-dv": "npm-run-all --parallel todo-api reactjs-todo-dv",
