@@ -3,7 +3,7 @@
  *
  * header.js
  *
- * Copyright (c) 2025 Ping Identity Corporation. All rights reserved.
+ * Copyright (c) 2025 - 2026 Ping Identity Corporation. All rights reserved.
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
  */
@@ -12,7 +12,8 @@ import React, { useContext } from 'react';
 import { Link, useLocation, useSearchParams } from 'react-router-dom';
 
 import AccountIcon from '../icons/account-icon';
-import { AppContext } from '../../global-state';
+import { OidcContext } from '../../context/oidc.context.js';
+import { ThemeContext } from '../../context/theme.context.js';
 import PingIcon from '../icons/ping-icon';
 import HomeIcon from '../icons/home-icon';
 import ReactIcon from '../icons/react-icon';
@@ -24,31 +25,18 @@ import TodosIcon from '../icons/todos-icon';
  */
 export default function Header() {
   /**
-   * Collects the global state for detecting user auth for rendering
-   * appropriate navigational items.
+   * Reads OIDC auth state from OidcContext for rendering appropriate navigational items.
    * The destructing of the hook's array results in index 0 having the state value,
    * and index 1 having the "setter" method to set new state values.
    */
-  const [state] = useContext(AppContext);
+  const [oidcState] = useContext(OidcContext);
+  const theme = useContext(ThemeContext);
   const location = useLocation();
   const [params] = useSearchParams();
 
-  const centralLogin = params.get('centralLogin');
-  const journey = params.get('journey');
-
-  const queryParams = {};
-
-  if (centralLogin) {
-    queryParams.centralLogin = centralLogin;
-  }
-
-  if (journey) {
-    queryParams.journey = journey;
-  }
-
   const urlQueryParams = {
     pathname: '/login',
-    search: new URLSearchParams(queryParams).toString(),
+    search: params.toString(),
   };
 
   let TodosItem;
@@ -57,7 +45,7 @@ export default function Header() {
   /**
    * Render different navigational items depending on authenticated status
    */
-  if (state.isAuthenticated) {
+  if (oidcState.isAuthenticated) {
     TodosItem = [
       <li
         key="home"
@@ -97,19 +85,17 @@ export default function Header() {
             <AccountIcon classes="cstm_profile-icon" size="48px" />
           </button>
           <ul
-            className={`dropdown-menu dropdown-menu-end shadow-sm pb-0 ${state.theme.dropdownClass}`}
+            className={`dropdown-menu dropdown-menu-end shadow-sm pb-0 ${theme.dropdownClass}`}
             aria-labelledby="account_dropdown"
           >
             <li>
-              <div className={`dropdown-header border-bottom ${state.theme.borderClass}`}>
+              <div className={`dropdown-header border-bottom ${theme.borderClass}`}>
                 <p
-                  className={`fw-bold fs-6 mb-0 ${
-                    state.theme.textClass ? state.theme.textClass : 'text-dark'
-                  }`}
+                  className={`fw-bold fs-6 mb-0 ${theme.textClass ? theme.textClass : 'text-dark'}`}
                 >
-                  {state.username}
+                  {oidcState.username}
                 </p>
-                <p className="mb-2">{state.email}</p>
+                <p className="mb-2">{oidcState.email}</p>
               </div>
             </li>
             <li>
@@ -127,7 +113,7 @@ export default function Header() {
       <div className="d-flex py-3">
         <Link
           className={`cstm_login-link py-2 px-3 mx-1 ${
-            state.theme.mode === 'dark' ? 'cstm_login-link_dark' : ''
+            theme.mode === 'dark' ? 'cstm_login-link_dark' : ''
           }`}
           to={urlQueryParams}
         >
@@ -139,16 +125,16 @@ export default function Header() {
 
   return (
     <nav
-      className={`navbar navbar-expand ${state.theme.navbarClass} ${state.theme.borderHighContrastClass} py-0 border-bottom`}
+      className={`navbar navbar-expand ${theme.navbarClass} ${theme.borderHighContrastClass} py-0 border-bottom`}
     >
       <div className="cstm_container container-fluid d-flex align-items-stretch">
         <Link
           to="/"
           className={`cstm_navbar-brand ${
-            state.isAuthenticated ? 'cstm_navbar-brand_auth' : ''
+            oidcState.isAuthenticated ? 'cstm_navbar-brand_auth' : ''
           } navbar-brand ${
-            state.isAuthenticated ? 'd-none d-sm-none d-md-block' : ''
-          } py-3 pe-4 me-4 ${state.theme.borderHighContrastClass}`}
+            oidcState.isAuthenticated ? 'd-none d-sm-none d-md-block' : ''
+          } py-3 pe-4 me-4 ${theme.borderHighContrastClass}`}
         >
           <PingIcon size="31px" /> + <ReactIcon size="38px" />
         </Link>

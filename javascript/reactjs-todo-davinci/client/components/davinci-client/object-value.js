@@ -1,9 +1,9 @@
 import React, { useContext, useState } from 'react';
-import { AppContext } from '../../global-state';
+import { ThemeContext } from '../../context/theme.context.js';
 
 export default function ObjectValueComponent({ collector, inputName, updater, submitForm }) {
   const [selected, setSelected] = useState(collector.output.options[0].value);
-  const [state] = useContext(AppContext);
+  const theme = useContext(ThemeContext);
 
   const handleChange = (event) => {
     event.preventDefault();
@@ -18,7 +18,7 @@ export default function ObjectValueComponent({ collector, inputName, updater, su
       <div className="d-flex flex-column align-items-center mt-2 mb-2">
         <label
           htmlFor="device-select"
-          className={`form-label cstm_subhead-text mb-4 fw-bold text-center ${state.theme.textMutedClass}`}
+          className={`form-label cstm_subhead-text mb-4 fw-bold text-center ${theme.textMutedClass}`}
         >
           {collector.output.label || 'select an option'}
         </label>

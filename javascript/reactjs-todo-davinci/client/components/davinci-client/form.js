@@ -3,7 +3,7 @@
  *
  * form.js
  *
- * Copyright (c) 2025 Ping Identity Corporation. All rights reserved.
+ * Copyright (c) 2025 - 2026 Ping Identity Corporation. All rights reserved.
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
  */
@@ -25,7 +25,9 @@ import KeyIcon from '../icons/key-icon';
 import NewUserIcon from '../icons/new-user-icon';
 import Loading from '../utilities/loading.js';
 import { updateProtectCollector } from '../utilities/protect.utils.js';
-import { AppContext } from '../../global-state.js';
+import { OidcContext } from '../../context/oidc.context.js';
+import { ProtectContext } from '../../context/protect.context.js';
+import { ThemeContext } from '../../context/theme.context.js';
 import useDavinci from './hooks/davinci.hook.js';
 import useOAuth from './hooks/oauth.hook.js';
 
@@ -36,14 +38,16 @@ import useOAuth from './hooks/oauth.hook.js';
 export default function Form() {
   /**
    * Compose the state used in this view.
-   * First, we will use the global state methods found in the App Context.
+   * First, we will use OidcContext for auth setters and ThemeContext for theming.
    * Then, we will create local state to manage the login flow.
    *
    * The destructing of the hook's array results in index 0 having the state value,
    * and index 1 having the "setter" methods to set new state values.
    */
 
-  const [{ theme }, methods] = useContext(AppContext);
+  const theme = useContext(ThemeContext);
+  const [, methods] = useContext(OidcContext);
+  const [protectApi] = useContext(ProtectContext);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -74,7 +78,7 @@ export default function Form() {
 
   /**
    * If the user successfully authenticates, let React complete
-   * rendering, then complete setting the global state and redirect to home.
+   * rendering, then update OidcContext auth state and redirect to home.
    */
   useEffect(() => {
     async function finalizeAuthState() {
@@ -84,7 +88,7 @@ export default function Form() {
        */
       if (user) {
         /**
-         * Set user state/info on "global state"
+         * Set user state/info on OidcContext
          */
         methods.setUser(`${user.given_name ?? ''} ${user.family_name ?? ''}`);
         methods.setEmail(user.email);
@@ -107,28 +111,21 @@ export default function Form() {
     event.preventDefault();
     setIsLoading(true);
 
-    try {
-      // Update the Protect collector with the data collected
-      /**
-       * Todo: Move updating the Protect collector into the Protect component.
-       * For now, this ensures it is updated before submitting the form while
-       * collecting as much data as possible.
-       */
-      const protectCollector = collectors.find(
-        (collector) => collector.type === 'ProtectCollector',
-      );
+    // Update the Protect collector with the data collected
+    /**
+     * Todo: Move updating the Protect collector into the Protect component.
+     * For now, this ensures it is updated before submitting the form while
+     * collecting as much data as possible.
+     */
+    const protectCollector = collectors.find((collector) => collector.type === 'ProtectCollector');
 
-      if (protectCollector) {
-        await updateProtectCollector(updater(protectCollector));
-      }
-
-      // Submit all collectors and set the next node in the flow
-      await setNext();
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsLoading(false);
+    if (protectCollector) {
+      await updateProtectCollector(updater(protectCollector), protectApi);
     }
+
+    // Submit all collectors and set the next node in the flow
+    await setNext();
+    setIsLoading(false);
   }
 
   /**

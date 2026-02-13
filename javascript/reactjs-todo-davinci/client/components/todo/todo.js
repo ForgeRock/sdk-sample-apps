@@ -3,14 +3,14 @@
  *
  * todo.js
  *
- * Copyright (c) 2025 Ping Identity Corporation. All rights reserved.
+ * Copyright (c) 2025 - 2026 Ping Identity Corporation. All rights reserved.
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
  */
 
 import React, { useContext, useEffect, useState } from 'react';
 
-import { AppContext } from '../../global-state';
+import { ThemeContext } from '../../context/theme.context.js';
 import ActionIcon from '../icons/action-icon';
 import TodoIcon from '../icons/todo-icon';
 
@@ -22,7 +22,7 @@ import TodoIcon from '../icons/todo-icon';
  * @returns {Object} - React JSX view
  */
 export default function Todo({ completeTodo, setSelectedDeleteTodo, setSelectedEditTodo, item }) {
-  const [state] = useContext(AppContext);
+  const theme = useContext(ThemeContext);
 
   /**
    * The destructing of the hook's array results in index 0 having the state value,
@@ -38,9 +38,7 @@ export default function Todo({ completeTodo, setSelectedDeleteTodo, setSelectedE
   }, [item]);
 
   return (
-    <li
-      className={`cstm_todo-item list-group-item list-group-item-action p-0 ${state.theme.textClass}`}
-    >
+    <li className={`cstm_todo-item list-group-item list-group-item-action p-0 ${theme.textClass}`}>
       <div className="row">
         <div className="col">
           <input
@@ -67,7 +65,7 @@ export default function Todo({ completeTodo, setSelectedDeleteTodo, setSelectedE
             <ActionIcon />
           </button>
           <ul
-            className={`dropdown-menu dropdown-menu-end shadow-sm ${state.theme.dropdownClass}`}
+            className={`dropdown-menu dropdown-menu-end shadow-sm ${theme.dropdownClass}`}
             aria-labelledby={`todo_action_${todo._id}`}
           >
             <li>

@@ -3,23 +3,21 @@
  *
  * route.js
  *
- * Copyright (c) 2025 Ping Identity Corporation. All rights reserved.
+ * Copyright (c) 2025 - 2026 Ping Identity Corporation. All rights reserved.
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
  */
 
-import { UserManager } from '@forgerock/javascript-sdk';
 import React, { useContext, useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
-
 import { DEBUGGER } from '../constants';
 import Loading from '../components/utilities/loading';
-import { AppContext } from '../global-state';
+import { OidcContext } from '../context/oidc.context.js';
 
 /**
  * @function useAuthValidation - Custom hook for validating user authentication
  * @param {boolean} auth - client state on whether user is authenticated
- * @param {function} setAuth - global state method for setting user authentication status
+ * @param {function} setAuth - OidcContext setter for updating authentication status
  * @returns {Array}
  */
 function useAuthValidation(auth, setAuth) {
@@ -29,6 +27,7 @@ function useAuthValidation(auth, setAuth) {
    * This has three possible states: 'unknown', 'valid' and 'invalid'.
    */
   const [isValid, setValid] = useState('unknown');
+  const [{ oidcClient }] = useContext(OidcContext);
 
   useEffect(() => {
     async function validateAccessToken() {
@@ -39,24 +38,23 @@ function useAuthValidation(auth, setAuth) {
         /**
          * If we they have been authenticated, validate that assumption
          */
-        try {
-          /** *****************************************************************
-           * SDK INTEGRATION POINT
-           * Summary: Optional client-side route access validation
-           * ------------------------------------------------------------------
-           * Details: Here, you could just make sure tokens exist –
-           * TokenStorage.get() – or, validate tokens, renew expiry timers,
-           * session checks ... Below, we are calling the userinfo endpoint to
-           * ensure valid tokens before continuing, but it's optional.
-           ***************************************************************** */
-          if (DEBUGGER) debugger;
-          await UserManager.getCurrentUser();
-          setValid('valid');
-        } catch (err) {
-          console.info(`Info: route validation; ${err}`);
-
+        /** *****************************************************************
+         * SDK INTEGRATION POINT
+         * Summary: Optional client-side route access validation
+         * ------------------------------------------------------------------
+         * Details: We call the userinfo endpoint via `oidcClient.user.info()`
+         * to confirm the user's access token is still valid before granting
+         * route access. If the call fails or returns an error, the user is
+         * considered unauthenticated and redirected to login.
+         ***************************************************************** */
+        if (DEBUGGER) debugger;
+        const user = await oidcClient.user.info();
+        if ('error' in user) {
           setAuth(false);
           setValid('invalid');
+          console.info(`Info: route validation; ${user.error}`);
+        } else {
+          setValid('valid');
         }
       } else {
         /**
@@ -87,9 +85,7 @@ function useAuthValidation(auth, setAuth) {
  * @returns {Object} - Wrapped React Router component
  */
 export function ProtectedRoute({ children }) {
-  // Get "global" state from Context API
-  const [{ isAuthenticated }, { setAuthentication }] = useContext(AppContext);
-  // Custom hook for validating user's access token
+  const [{ isAuthenticated }, { setAuthentication }] = useContext(OidcContext);
   const [{ isValid }] = useAuthValidation(isAuthenticated, setAuthentication);
 
   switch (isValid) {
