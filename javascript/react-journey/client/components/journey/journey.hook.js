@@ -3,17 +3,25 @@
  *
  * journey.hook.js
  *
- * Copyright (c) 2026 Ping Identity Ping Identity Corporation. All rights reserved.
+ * Copyright (c) 2026 Ping Identity Corporation. All rights reserved.
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
  */
 
-import { useContext, useEffect, useState } from 'react';
-import createJourneyClient from './journey-client.utils.js';
-import { DEBUGGER } from '../../../constants.js';
-import { htmlDecode } from '../../../utilities/decode.js';
-import { OidcContext } from '../../../context/oidc.context.js';
-import { callbackType } from '@forgerock/journey-client';
+import { useContext, useEffect, useState, useCallback } from 'react';
+import { CONFIG, DEBUGGER } from '../../constants.js';
+import { htmlDecode } from '../../utilities/decode.js';
+import { OidcContext } from '../../context/oidc.context.js';
+import { callbackType, journey } from '@forgerock/journey-client';
+
+/**
+ * @function isGenericError - Helper function to determine if a step is a GenericError
+ * @param {Object} step - The step to check
+ * @returns {boolean} - True if the step is a GenericError, false otherwise
+ */
+function isGenericError(step) {
+  return 'error' in step;
+}
 
 /**
  *
@@ -61,21 +69,44 @@ export default function useJourney({ action, formMetadata, resumeUrl }) {
        ********************************************************************* */
       if (DEBUGGER) debugger;
       try {
-        const client = await createJourneyClient();
+        const client = await journey({ config: CONFIG });
         setJourneyClient(client);
 
         if (resumeUrl) {
           /**
-           * If we were redirected here from an IDP with a resumeUrl, then resume the flow
+           * If we were redirected here from an IDP with a resumeUrl, then resume the journey
            */
-          const resumeStep = await client?.resume(resumeUrl);
-          setRenderStep(resumeStep);
+          const resumeStep = await client.resume(resumeUrl);
+
+          if ('error' in resumeStep) {
+            console.error('Error resuming journey:', resumeStep.error);
+          }
+
+          // Continue the journey
+          setSubmissionStep(resumeStep);
         } else {
-          const initialStep = await client?.start({ journey: formMetadata.tree });
+          let initialStep = await client.start({ journey: formMetadata.tree });
+
+          if ('error' in initialStep) {
+            console.error('Error starting journey:', initialStep.error);
+            initialStep = {
+              payload: {
+                message: 'Unable to start journey',
+              },
+            };
+          }
+
           setRenderStep(initialStep);
         }
       } catch (error) {
         console.error(`Error initializing journey; ${error}`);
+        const initialStep = {
+          payload: {
+            message: 'Error initializing journey',
+          },
+        };
+
+        setRenderStep(initialStep);
       }
     }
 
@@ -85,15 +116,11 @@ export default function useJourney({ action, formMetadata, resumeUrl }) {
   }, [journeyClient]);
 
   /**
-   * Since we have API calls to AM, we need to handle these requests as side-effects.
-   * This will allow the view to render, but update/re-render after the request completes.
+   * @function authorize - The function to call when we get a LoginSuccess
+   * @returns {undefined}
    */
-  useEffect(() => {
-    /**
-     * @function getOAuth - The function to call when we get a LoginSuccess
-     * @returns {undefined}
-     */
-    async function getOAuth() {
+  const authorize = useCallback(
+    async function OAuth() {
       /** *********************************************************************
        * SDK INTEGRATION POINT
        * Summary: Get OAuth/OIDC tokens with Authorization Code Flow w/PKCE.
@@ -139,22 +166,21 @@ export default function useJourney({ action, formMetadata, resumeUrl }) {
       } else {
         setUser(user);
       }
-    }
+    },
+    [oidcClient],
+  );
 
+  /**
+   * Since we have API calls to AM, we need to handle these requests as side-effects.
+   * This will allow the view to render, but update/re-render after the request completes.
+   */
+  useEffect(() => {
     /**
-     * @function getStep - The function for calling AM with a previous step to get a new step
+     * @function setStep - The function for calling AM with a previous step to get a new step
      * @param {Object} prev - This is the previous step that should contain the input for AM
      * @returns {undefined}
      */
     async function setStep(prev) {
-      /**
-       * Save previous step information just in case we have a total
-       * form failure due to 400 response from Ping.
-       */
-      const previousStage = prev?.getStage && prev.getStage();
-      const previousCallbacks = prev?.callbacks;
-      const previousPayload = prev?.payload;
-
       /** *********************************************************************
        * SDK INTEGRATION POINT
        * Summary: Call the journey client's next method to submit the current step.
@@ -165,36 +191,35 @@ export default function useJourney({ action, formMetadata, resumeUrl }) {
       if (DEBUGGER) debugger;
       let nextStep;
 
-      try {
-        if (resumeUrl) {
-          nextStep = await journeyClient.resume(resumeUrl);
-        } else {
-          nextStep = await journeyClient.next(prev);
-        }
-        setStepCount((current) => current + 1);
-      } catch (err) {
-        console.error(`Error: failure in next step request; ${err}`);
+      if (!isGenericError(prev)) {
+        nextStep = await journeyClient.next(prev);
 
-        /**
-         * Setup an object to display failure message
-         */
-        nextStep = {
-          type: 'LoginFailure',
-          payload: {
-            message: 'Unknown request failure',
-          },
-        };
+        if (isGenericError(nextStep)) {
+          console.error('Error getting next journey step:', nextStep.error);
+        } else {
+          setStepCount((current) => current + 1);
+        }
       }
 
       /**
        * Condition for handling start, error handling and completion
        * of login journey.
        */
-      if (!nextStep || nextStep.type === 'LoginFailure') {
+      if (
+        !nextStep ||
+        nextStep.type === 'LoginFailure' ||
+        isGenericError(nextStep) ||
+        isGenericError(prev)
+      ) {
         /**
          * Handle basic form error
          */
-        setFormFailureMessage(nextStep ? htmlDecode(nextStep.payload.message) : 'Login failure');
+        const errorMessage =
+          nextStep && !isGenericError(nextStep)
+            ? htmlDecode(nextStep.payload.message)
+            : 'Login failure';
+
+        setFormFailureMessage(errorMessage);
 
         /** *******************************************************************
          * SDK INTEGRATION POINT
@@ -204,22 +229,11 @@ export default function useJourney({ action, formMetadata, resumeUrl }) {
          * method again to get a fresh authId.
          ******************************************************************* */
         if (DEBUGGER) debugger;
-        let newStep;
+        const newStep = await journeyClient.start({ journey: formMetadata.tree });
 
-        try {
-          newStep = await journeyClient.start({ tree: formMetadata.tree });
-        } catch (err) {
-          console.error(`Error: failure in new step request; ${err}`);
-
-          /**
-           * Setup an object to display failure message
-           */
-          newStep = {
-            type: 'LoginFailure',
-            payload: {
-              message: 'Unknown request failure',
-            },
-          };
+        if ('error' in newStep) {
+          console.error('Error starting journey:', newStep.error);
+          setFormFailureMessage('Unable to restart journey');
         }
 
         /** *******************************************************************
@@ -234,12 +248,18 @@ export default function useJourney({ action, formMetadata, resumeUrl }) {
          * so the user doesn't have to refill the form.
          ******************************************************************* */
         if (DEBUGGER) debugger;
-        if (stepCount === 1 && newStep.type === 'Step' && newStep.getStage() === previousStage) {
-          newStep.callbacks = previousCallbacks;
-          newStep.payload = {
-            ...previousPayload,
-            authId: newStep.payload.authId,
-          };
+        if (!isGenericError(prev)) {
+          const previousStage = prev?.getStage && prev.getStage();
+          const previousCallbacks = prev?.callbacks;
+          const previousPayload = prev?.payload;
+
+          if (stepCount === 1 && newStep.type === 'Step' && newStep.getStage() === previousStage) {
+            newStep.callbacks = previousCallbacks;
+            newStep.payload = {
+              ...previousPayload,
+              authId: newStep.payload.authId,
+            };
+          }
         }
 
         setRenderStep(newStep);
@@ -249,7 +269,7 @@ export default function useJourney({ action, formMetadata, resumeUrl }) {
         setStepCount(0);
 
         // User is authenticated, now call for OAuth tokens
-        await getOAuth();
+        await authorize();
       } else {
         /**
          * If we got here, then the form submission was both successful
@@ -288,6 +308,12 @@ export default function useJourney({ action, formMetadata, resumeUrl }) {
       }
     } catch (error) {
       console.error(`Error during redirect; ${error}`);
+      const step = {
+        payload: {
+          message: 'Unable to redirect',
+        },
+      };
+      setRenderStep(step);
     }
   }
 
