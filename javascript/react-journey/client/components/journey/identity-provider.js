@@ -3,7 +3,7 @@
  *
  * identity-provider.js
  *
- * Copyright (c) 2026 Ping Identity Ping Identity Corporation. All rights reserved.
+ * Copyright (c) 2026 Ping Identity Corporation. All rights reserved.
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
  */
@@ -48,7 +48,7 @@ export default function IdentityProvider({ callback }) {
   return identityProviders.map((provider, idx) => {
     const providerName = provider.uiConfig.buttonDisplayName ?? 'an identity provider';
     return (
-      <div key={provider.uiConfig.buttonDisplayName ?? 'localAuthentication' + idx}>
+      <div key={(provider.uiConfig.buttonDisplayName ?? 'localAuthentication') + idx}>
         <button
           className={providersClass[provider.uiConfig.buttonDisplayName]}
           onClick={(e) => {
