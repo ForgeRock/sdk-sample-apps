@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { ThemeContext } from '../../context/theme.context.js';
 
-export default function ObjectValueComponent({ collector, inputName, updater, submitForm }) {
+export default function ObjectValueComponent({ collector, updater }) {
   const [selected, setSelected] = useState(collector.output.options[0].value);
   const theme = useContext(ThemeContext);
 
@@ -28,13 +28,18 @@ export default function ObjectValueComponent({ collector, inputName, updater, su
           value={selected}
           onChange={handleChange}
         >
+          <option value="" disabled>
+            Select an option
+          </option>
           {collector.output.options.map((option) => (
             <option key={option.value + option.label} value={option.value}>
               {option.label}
             </option>
           ))}
         </select>
-        <button className="mt-5 justify-content w-100 btn btn-primary">Next</button>
+        <button className="mt-5 justify-content w-100 btn btn-primary" disabled={!selected}>
+          Next
+        </button>
       </div>
     );
   } else if (collector.type === 'PhoneNumberCollector') {

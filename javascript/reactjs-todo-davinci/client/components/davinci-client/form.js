@@ -30,6 +30,7 @@ import { ProtectContext } from '../../context/protect.context.js';
 import { ThemeContext } from '../../context/theme.context.js';
 import useDavinci from './hooks/davinci.hook.js';
 import useOAuth from './hooks/oauth.hook.js';
+import FidoCollector from './fido-collector.js';
 
 /**
  * @function Form - React view for managing the user authentication journey
@@ -59,6 +60,12 @@ export default function Form() {
     { formName, formAction, node, collectors },
     { getError, setNext, startNewFlow, updater, externalIdp },
   ] = useDavinci();
+
+  useEffect(() => {
+    if (collectors) {
+      console.log('Current collectors:', collectors);
+    }
+  }, [collectors]);
 
   /**
    * Upon successful login, set the authorization code and state used in the custom
@@ -188,6 +195,16 @@ export default function Form() {
             updater={externalIdp}
             isLoading={isLoading}
             key={collectorName}
+          />
+        );
+      case 'FidoRegistrationCollector':
+      case 'FidoAuthenticationCollector':
+        return (
+          <FidoCollector
+            collector={collector}
+            updater={updater(collector)}
+            key={collectorName}
+            submitForm={setNext}
           />
         );
       case 'ProtectCollector':
