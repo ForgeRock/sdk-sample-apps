@@ -86,6 +86,10 @@ npm run start:reactjs-todo-dv
 
 Now, you should be able to visit `http://localhost:8443`, which is your web app or client (the Relying Party in OAuth terms). This client will make requests to your PingOne instance, (the Authorization Server in OAuth terms), which will be running on whatever domain you set, and `http://localhost:9443` as the REST API for your todos (the Resource Server).
 
+### Running FIDO e2e tests
+To be able to run FIDO e2e tests, you need to pass an env variable along with the file name or relative path, like so
+`FIDO=true npm run e2e -- javascript/reactjs-todo-davinci/e2e/davinci-fido.spec.js`
+
 ## Learn About Integration Touchpoints
 
 This project has a debugging statements that can be activated which causes the app to pause execution at each SDK integration point. It will have a comment above the `debugger` statement explaining the purpose of the integration.
