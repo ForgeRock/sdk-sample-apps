@@ -1,8 +1,6 @@
 import { defineConfig, devices } from '@playwright/test';
 
-const url = process.env.PLAYWRIGHT_TEST_BASE_URL || process.env.FIDO ? 'http://localhost:5829' : 'http://localhost:8443';
-const port = process.env.FIDO ? '5829' : '8443';
-const webOauthClient = process.env.FIDO ? "20dd0ed0-bb9b-4c8f-9a60-9ebeb4b348e0" : "724ec718-c41c-4d51-98b0-84a583f450f9";
+const url = process.env.PLAYWRIGHT_TEST_BASE_URL || 'http://localhost:8443';
 
 export default defineConfig({
   testDir: 'e2e',
@@ -28,8 +26,8 @@ export default defineConfig({
         API_URL: 'http://localhost:9443',
         DEBUGGER_OFF: 'true',
         DEVELOPMENT: 'false',
-        PORT: port,
-        WEB_OAUTH_CLIENT: webOauthClient,
+        PORT: '8443',
+        WEB_OAUTH_CLIENT: "724ec718-c41c-4d51-98b0-84a583f450f9",
         SCOPE: "openid profile email phone name revoke",
         WELLKNOWN_URL: "https://auth.pingone.ca/02fb4743-189a-4bc7-9d6c-a919edfe6447/as/.well-known/openid-configuration",
         PINGONE_ENV_ID: "02fb4743-189a-4bc7-9d6c-a919edfe6447"
@@ -50,6 +48,25 @@ export default defineConfig({
       },
       ignoreHTTPSErrors: true,
     },
+    // Uncomment the server below to be able run e2e FIDO tests
+    // {
+    //   command: 'npm run start',
+    //   url: 'http://localhost:5829',
+    //   timeout: 120 * 1000,
+    //   reuseExistingServer: !process.env.CI,
+    //   cwd: './',
+    //   env: {
+    //     API_URL: 'http://localhost:9443',
+    //     DEBUGGER_OFF: 'true',
+    //     DEVELOPMENT: 'false',
+    //     PORT: '5829',
+    //     WEB_OAUTH_CLIENT: "20dd0ed0-bb9b-4c8f-9a60-9ebeb4b348e0",
+    //     SCOPE: "openid profile email phone name revoke",
+    //     WELLKNOWN_URL: "https://auth.pingone.ca/02fb4743-189a-4bc7-9d6c-a919edfe6447/as/.well-known/openid-configuration",
+    //     PINGONE_ENV_ID: "02fb4743-189a-4bc7-9d6c-a919edfe6447"
+    //   },
+    //   ignoreHTTPSErrors: true,
+    // },
   ],
   /* Configure projects for major browsers */
   projects: [

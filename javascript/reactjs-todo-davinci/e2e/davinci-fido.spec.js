@@ -13,6 +13,8 @@ const password = 'FakePassword#123';
 
 test.use({ browserName: 'chromium' });
 
+// these tests are skipped and should be run manually because there is a limit on the number of FIDO registrations for each user
+// to be able to run these tests, uncomment server with 5829 port in the playwright.config.ts file
 test.describe.skip('WebAuthn Virtual Authenticator Setup', () => {
   let cdpClient;
   let authenticatorId;
@@ -44,13 +46,8 @@ test.describe.skip('WebAuthn Virtual Authenticator Setup', () => {
   });
 
   test('should successfully register a new WebAuthn credential and authenticate', async ({ page }) => {
-    // Log browser console errors
-    page.on('console', msg => {
-      if (msg.type() === 'error') console.error('BROWSER ERROR:', msg.text());
-    });
-
     await page.goto(
-      '/?acrValue=98f2c058aae71ec09eb268db6810ff3c',
+      'http://localhost:5829/?acrValue=98f2c058aae71ec09eb268db6810ff3c',
     );
     await expect(page).toHaveURL(
       'http://localhost:5829/?acrValue=98f2c058aae71ec09eb268db6810ff3c',
@@ -74,8 +71,11 @@ test.describe.skip('WebAuthn Virtual Authenticator Setup', () => {
     await expect(page.getByLabel('MFA Device Selection -')).toHaveValue('FIDO2');
     await page.getByRole('button', { name: 'Next' }).click();
 
-    // Wait for UI/network activity to complete
-    await page.waitForTimeout(1500);
+    // Wait until the WebAuthn registration ceremony has actually produced a credential
+    await expect.poll(async () => {
+      const { credentials } = await cdpClient.send('WebAuthn.getCredentials', { authenticatorId });
+      return credentials.length;
+    }).toBe(1);
 
     const { credentials: recordedCredentials } = await cdpClient.send('WebAuthn.getCredentials', {
       authenticatorId,
@@ -91,34 +91,24 @@ test.describe.skip('WebAuthn Virtual Authenticator Setup', () => {
     const initialSignCount = recordedCredentials[0].signCount;
 
     await page.getByRole('link', { name: 'DEVICE_AUTHENTICATION' }).click();
-    await expect(page.getByLabel('MFA Device Selection -')).toContainText('Select an optionBiometrics/Security Key');
+    await expect(page.getByLabel('MFA Device Selection -')).toContainText('Biometrics/Security Key');
     await expect(page.getByLabel('MFA Device Selection -')).toBeVisible();
     await page.getByLabel('MFA Device Selection -').selectOption('815e5114-94e2-403f-a1bc-84cc88c1111a');
     await page.getByRole('button', { name: 'Next' }).click();
-    
-    // Wait for UI/network activity to complete
-    await page.waitForTimeout(1500);
 
-    const credentialsAfterAuth = await cdpClient.send('WebAuthn.getCredentials', {
-      authenticatorId,
-    });
-    expect(credentialsAfterAuth.credentials).toHaveLength(1);
-
-    // Signature counter should have incremented after successful authentication/assertion
-    expect(credentialsAfterAuth.credentials[0].signCount).toBeGreaterThan(initialSignCount);
+    // Wait until a successful assertion increments the credential signature counter
+    await expect.poll(async () => {
+      const { credentials } = await cdpClient.send('WebAuthn.getCredentials', { authenticatorId });
+      return credentials[0]?.signCount;
+    }).toBeGreaterThan(initialSignCount);
 
     // Verify we're back at home page if successful
     await expect(page.getByText('FIDO2 Test Form')).toBeVisible();
   });
 
   test('should fail to register a new WebAuthn credential', async ({ page }) => {
-    // Log browser console errors
-    page.on('console', msg => {
-      if (msg.type() === 'error') console.error('BROWSER ERROR:', msg.text());
-    });
-
     await page.goto(
-      '/?acrValue=98f2c058aae71ec09eb268db6810ff3c',
+      'http://localhost:5829/?acrValue=98f2c058aae71ec09eb268db6810ff3c',
     );
     await expect(page).toHaveURL(
       'http://localhost:5829/?acrValue=98f2c058aae71ec09eb268db6810ff3c',
@@ -150,13 +140,8 @@ test.describe.skip('WebAuthn Virtual Authenticator Setup', () => {
   });
 
   test('should fail to authenticate after registration with a new WebAuthn credential', async ({ page }) => {
-    // Log browser console errors
-    page.on('console', msg => {
-      if (msg.type() === 'error') console.error('BROWSER ERROR:', msg.text());
-    });
-
     await page.goto(
-      '/?acrValue=98f2c058aae71ec09eb268db6810ff3c',
+      'http://localhost:5829/?acrValue=98f2c058aae71ec09eb268db6810ff3c',
     );
     await expect(page).toHaveURL(
       'http://localhost:5829/?acrValue=98f2c058aae71ec09eb268db6810ff3c',
@@ -180,8 +165,11 @@ test.describe.skip('WebAuthn Virtual Authenticator Setup', () => {
     await expect(page.getByLabel('MFA Device Selection -')).toHaveValue('FIDO2');
     await page.getByRole('button', { name: 'Next' }).click();
 
-    // Wait for UI/network activity to complete
-    await page.waitForTimeout(1500);
+    // Wait until the WebAuthn registration ceremony has actually produced a credential
+    await expect.poll(async () => {
+      const { credentials } = await cdpClient.send('WebAuthn.getCredentials', { authenticatorId });
+      return credentials.length;
+    }).toBe(1);
 
     const { credentials: recordedCredentials } = await cdpClient.send('WebAuthn.getCredentials', {
       authenticatorId,
@@ -197,7 +185,7 @@ test.describe.skip('WebAuthn Virtual Authenticator Setup', () => {
     const initialSignCount = recordedCredentials[0].signCount;
 
     await page.getByRole('link', { name: 'DEVICE_AUTHENTICATION' }).click();
-    await expect(page.getByLabel('MFA Device Selection -')).toContainText('Select an optionBiometrics/Security Key');
+    await expect(page.getByLabel('MFA Device Selection -')).toContainText('Biometrics/Security Key');
     await expect(page.getByLabel('MFA Device Selection -')).toBeVisible();
     await page.getByLabel('MFA Device Selection -').selectOption('815e5114-94e2-403f-a1bc-84cc88c1111a');
     await page.getByRole('button', { name: 'Next' }).click();

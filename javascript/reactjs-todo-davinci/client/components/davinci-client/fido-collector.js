@@ -71,10 +71,6 @@ export default function FidoCollector({ collector, updater, submitForm }) {
     }
   }, [collector]);
 
-  if (collector.type !== 'FidoRegistrationCollector' && collector.type !== 'FidoAuthenticationCollector') {
-    return <div role="alert">Unsupported FIDO collector type</div>;
-  }
-
   return (
     <div className="my-3" aria-busy={isLoading ? "true" : undefined}>
       {error && (
@@ -85,9 +81,8 @@ export default function FidoCollector({ collector, updater, submitForm }) {
             className="btn btn-primary w-100 my-4"
             onClick={() => handleFido()}
             disabled={isLoading}
-            aria-label="Try the FIDO operation again"
           >
-            <span>Try Again</span>
+            Try Again
           </button>
         </div>
       )}

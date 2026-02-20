@@ -61,12 +61,6 @@ export default function Form() {
     { getError, setNext, startNewFlow, updater, externalIdp },
   ] = useDavinci();
 
-  useEffect(() => {
-    if (collectors) {
-      console.log('Current collectors:', collectors);
-    }
-  }, [collectors]);
-
   /**
    * Upon successful login, set the authorization code and state used in the custom
    * useOAuth hook to start the OAuth process.
