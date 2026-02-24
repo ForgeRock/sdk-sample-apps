@@ -22,7 +22,7 @@ import Combine
 ///   - Redirect URI
 ///   - Discovery Endpoint
 ///   - Browser settings
-public let oidcLogin = OidcWeb.createOidcWeb { config in
+public let oidcLogin = OidcWebClient.createOidcWebClient { config in
     //TODO: Provide here the Server configuration. Add the PingOne/PingAM Discovery Endpoint and the OAuth2.0 client details
     config.browserMode = .login
     config.browserType = .authSession

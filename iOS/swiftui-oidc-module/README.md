@@ -2,7 +2,7 @@
 
 # SwiftUI OIDC Module Sample Application 
 
-A comprehensive iOS sample application demonstrating browser-based OIDC (OpenID Connect) authentication using the Ping iOS SDK's OIDC Module and `OidcWeb.createOidcWeb` API.
+A comprehensive iOS sample application demonstrating browser-based OIDC (OpenID Connect) authentication using the Ping iOS SDK's OIDC Module and `OidcWebClient.createOidcWebClient` API.
 
 ## Overview
 
@@ -48,10 +48,10 @@ OidcExample/
 ### Key Components
 
 #### OidcLoginViewModel.swift
-The core configuration file that initializes the OIDC Web instance using `OidcWeb.createOidcWeb`:
+The core configuration file that initializes the OIDC Web instance using `OidcWebClient.createOidcWebClient`:
 
 ```swift
-public let oidcLogin = OidcWeb.createOidcWeb { config in
+public let oidcLogin = OidcWebClient.createOidcWebClient { config in
     config.browserMode = .login
     config.browserType = .authSession
     config.logger = LogManager.standard
@@ -162,23 +162,23 @@ Before running the sample, configure your OAuth 2.0 client with:
 
 5. **Build and run** on a simulator or physical device
 
-## Understanding OidcWeb.createOidcWeb
+## Understanding OidcWebClient.createOidcWebClient
 
-### What is OidcWeb?
+### What is OidcWebClient?
 
-`OidcWeb` is the primary interface for implementing browser-based OIDC authentication in iOS applications using the Ping iOS SDK. It handles:
+`OidcWebClient` is the primary interface for implementing browser-based OIDC authentication in iOS applications using the Ping iOS SDK. It handles:
 - OAuth 2.0 authorization code flow with PKCE
 - Browser session management
 - Token acquisition, storage, and refresh
 - User profile retrieval
 - Secure logout
 
-### Creating an OidcWeb Instance
+### Creating an OidcWebClient Instance
 
 The `OidcWeb.createOidcWeb` method creates a configured OIDC client:
 
 ```swift
-public let oidcLogin = OidcWeb.createOidcWeb { config in
+public let oidcLogin = OidcWebClient.createOidcWebClient { config in
     // Browser configuration
     config.browserMode = .login        // Use for authentication
     config.browserType = .authSession  // ASWebAuthenticationSession
@@ -369,7 +369,7 @@ oidcValue.scopes = Set(["openid", "profile"])
 | Feature | OIDC Web (This Sample) | DaVinci Embedded |
 |---------|----------------------|------------------|
 | Login UI | Browser-based (centralized) | Native app UI |
-| Configuration | `OidcWeb.createOidcWeb` | `DaVinci.createDaVinci` |
+| Configuration | `OidcWebClient.createOidcWebClient` | `DaVinci.createDaVinci` |
 | Module | `PingOidc.OidcModule.config` | `PingDavinci.OidcModule.config` |
 | Flow Control | OAuth provider | DaVinci orchestration |
 | Customization | Limited (provider's UI) | Full control |
