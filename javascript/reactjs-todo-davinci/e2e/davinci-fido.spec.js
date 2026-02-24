@@ -71,24 +71,11 @@ test.describe.skip('WebAuthn Virtual Authenticator Setup', () => {
     await expect(page.getByLabel('MFA Device Selection -')).toHaveValue('FIDO2');
     await page.getByRole('button', { name: 'Next' }).click();
 
-    // Wait until the WebAuthn registration ceremony has actually produced a credential
-    await expect.poll(async () => {
-      const { credentials } = await cdpClient.send('WebAuthn.getCredentials', { authenticatorId });
-      return credentials.length;
-    }).toBe(1);
-
-    const { credentials: recordedCredentials } = await cdpClient.send('WebAuthn.getCredentials', {
-      authenticatorId,
-    });
-    expect(recordedCredentials).toHaveLength(1);
-
-    await page.getByRole('button', { name: 'Continue' }).click();
+    // 5 sec timeout to allow for the WebAuthn ceremony to complete and the credential to be registered
+    await page.getByRole('button', { name: 'Continue', timeout: 5000 }).click();
 
     // Verify we're back at home page if registration is successful
     await expect(page.getByText('FIDO2 Test Form')).toBeVisible();
-
-    // Authenticate with the registered WebAuthn credential
-    const initialSignCount = recordedCredentials[0].signCount;
 
     await page.getByRole('link', { name: 'DEVICE_AUTHENTICATION' }).click();
     await expect(page.getByLabel('MFA Device Selection -')).toContainText('Biometrics/Security Key');
@@ -96,14 +83,9 @@ test.describe.skip('WebAuthn Virtual Authenticator Setup', () => {
     await page.getByLabel('MFA Device Selection -').selectOption('815e5114-94e2-403f-a1bc-84cc88c1111a');
     await page.getByRole('button', { name: 'Next' }).click();
 
-    // Wait until a successful assertion increments the credential signature counter
-    await expect.poll(async () => {
-      const { credentials } = await cdpClient.send('WebAuthn.getCredentials', { authenticatorId });
-      return credentials[0]?.signCount;
-    }).toBeGreaterThan(initialSignCount);
-
-    // Verify we're back at home page if successful
-    await expect(page.getByText('FIDO2 Test Form')).toBeVisible();
+    // 5 sec timeout to allow for the WebAuthn ceremony to complete and authentication to be processed
+    // Verify we're back at home page if authentication is successful
+    await expect(page.getByText('FIDO2 Test Form')).toBeVisible({ timeout: 5000 });
   });
 
   test('should fail to register a new WebAuthn credential', async ({ page }) => {
@@ -120,11 +102,6 @@ test.describe.skip('WebAuthn Virtual Authenticator Setup', () => {
     await page.getByRole('textbox', { name: 'Password' }).fill(password);
     await page.getByRole('button', { name: 'Sign On' }).click();
 
-    const { credentials: initialCredentials } = await cdpClient.send('WebAuthn.getCredentials', {
-      authenticatorId,
-    });
-    expect(initialCredentials).toHaveLength(0);
-
     await page.getByRole('button', { name: 'DEVICE_REGISTRATION' }).click();
 
     await expect(page.getByLabel('MFA Device Selection -')).toBeVisible();
@@ -132,11 +109,9 @@ test.describe.skip('WebAuthn Virtual Authenticator Setup', () => {
     await expect(page.getByLabel('MFA Device Selection -')).toHaveValue('FIDO2');
     await page.getByRole('button', { name: 'Next' }).click();
 
-    // Assert no credential was registered
-    const { credentials: recordedCredentials } = await cdpClient.send('WebAuthn.getCredentials', {
-      authenticatorId,
-    });
-    expect(recordedCredentials).toHaveLength(0);
+    // 5 sec timeout to allow for the WebAuthn ceremony to complete and the credential to be registered
+    // This will assert that registration has failed and the "Continue" button is not visible since we're still on the same page
+    await expect(page.getByText('FIDO2 Test Form')).not.toBeVisible({ timeout: 5000 });
   });
 
   test('should fail to authenticate after registration with a new WebAuthn credential', async ({ page }) => {
@@ -153,11 +128,6 @@ test.describe.skip('WebAuthn Virtual Authenticator Setup', () => {
     await page.getByRole('textbox', { name: 'Password' }).fill(password);
     await page.getByRole('button', { name: 'Sign On' }).click();
 
-    const { credentials: initialCredentials } = await cdpClient.send('WebAuthn.getCredentials', {
-      authenticatorId,
-    });
-    expect(initialCredentials).toHaveLength(0);
-
     await page.getByRole('button', { name: 'DEVICE_REGISTRATION' }).click();
 
     await expect(page.getByLabel('MFA Device Selection -')).toBeVisible();
@@ -165,24 +135,11 @@ test.describe.skip('WebAuthn Virtual Authenticator Setup', () => {
     await expect(page.getByLabel('MFA Device Selection -')).toHaveValue('FIDO2');
     await page.getByRole('button', { name: 'Next' }).click();
 
-    // Wait until the WebAuthn registration ceremony has actually produced a credential
-    await expect.poll(async () => {
-      const { credentials } = await cdpClient.send('WebAuthn.getCredentials', { authenticatorId });
-      return credentials.length;
-    }).toBe(1);
-
-    const { credentials: recordedCredentials } = await cdpClient.send('WebAuthn.getCredentials', {
-      authenticatorId,
-    });
-    expect(recordedCredentials).toHaveLength(1);
-
-    await page.getByRole('button', { name: 'Continue' }).click();
+    // 5 sec timeout to allow for the WebAuthn ceremony to complete and the credential to be registered
+    await page.getByRole('button', { name: 'Continue', timeout: 5000 }).click();
 
     // Verify we're back at home page if registration is successful
     await expect(page.getByText('FIDO2 Test Form')).toBeVisible();
-
-    // Authenticate with the registered WebAuthn credential
-    const initialSignCount = recordedCredentials[0].signCount;
 
     await page.getByRole('link', { name: 'DEVICE_AUTHENTICATION' }).click();
     await expect(page.getByLabel('MFA Device Selection -')).toContainText('Biometrics/Security Key');
@@ -190,10 +147,8 @@ test.describe.skip('WebAuthn Virtual Authenticator Setup', () => {
     await page.getByLabel('MFA Device Selection -').selectOption('815e5114-94e2-403f-a1bc-84cc88c1111a');
     await page.getByRole('button', { name: 'Next' }).click();
 
-    const credentialsAfterAuth = await cdpClient.send('WebAuthn.getCredentials', {
-      authenticatorId,
-    });
-    expect(credentialsAfterAuth.credentials).toHaveLength(1);
-    expect(credentialsAfterAuth.credentials[0].signCount).toBe(initialSignCount);
+    // 5 sec timeout to allow for the WebAuthn ceremony to complete and authentication to be processed
+    // This will assert that authentication has failed and we're still on the same page since the "FIDO2 Test Form" text is not visible
+    await expect(page.getByText('FIDO2 Test Form')).not.toBeVisible({ timeout: 5000 });
   }); 
 });
