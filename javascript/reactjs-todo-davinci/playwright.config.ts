@@ -63,7 +63,6 @@ export default defineConfig({
     //     WEB_OAUTH_CLIENT: "20dd0ed0-bb9b-4c8f-9a60-9ebeb4b348e0",
     //     SCOPE: "openid profile email phone name revoke",
     //     WELLKNOWN_URL: "https://auth.pingone.ca/02fb4743-189a-4bc7-9d6c-a919edfe6447/as/.well-known/openid-configuration",
-    //     PINGONE_ENV_ID: "02fb4743-189a-4bc7-9d6c-a919edfe6447"
     //   },
     //   ignoreHTTPSErrors: true,
     // },
