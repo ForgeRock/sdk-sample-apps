@@ -30,9 +30,13 @@ export default function FidoCollector({ collector, updater, submitForm }) {
     try {
       let response;
       if (collector.type === 'FidoRegistrationCollector') {
-        response = await fidoClient.register(collector.output.config.publicKeyCredentialCreationOptions);
+        response = await fidoClient.register(
+          collector.output.config.publicKeyCredentialCreationOptions,
+        );
       } else if (collector.type === 'FidoAuthenticationCollector') {
-        response = await fidoClient.authenticate(collector.output.config.publicKeyCredentialRequestOptions);
+        response = await fidoClient.authenticate(
+          collector.output.config.publicKeyCredentialRequestOptions,
+        );
       } else {
         setError('Unsupported FIDO collector type');
         setIsLoading(false);
@@ -63,7 +67,8 @@ export default function FidoCollector({ collector, updater, submitForm }) {
   // Auto-trigger registration or authentication on mount or collector change
   useEffect(() => {
     if (
-      (collector.type === 'FidoRegistrationCollector' || collector.type === 'FidoAuthenticationCollector') &&
+      (collector.type === 'FidoRegistrationCollector' ||
+        collector.type === 'FidoAuthenticationCollector') &&
       !isLoading &&
       !hasAttempted
     ) {
@@ -72,7 +77,7 @@ export default function FidoCollector({ collector, updater, submitForm }) {
   }, [collector]);
 
   return (
-    <div className="my-3" aria-busy={isLoading ? "true" : undefined}>
+    <div className="my-3" aria-busy={isLoading ? 'true' : undefined}>
       {error && (
         <div className="text-danger text-center" role="alert" aria-live="assertive">
           <div>{error}</div>
