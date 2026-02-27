@@ -72,11 +72,11 @@ test.describe.skip('WebAuthn Virtual Authenticator Setup', () => {
 
     // Authenticate with the newly registered credential
     await page.getByRole('link', { name: 'DEVICE_AUTHENTICATION' }).click();
-    await expect(page.getByLabel('MFA Device Selection -')).toBeVisible();
-    await page
-      .getByLabel('MFA Device Selection -')
-      .last()
-      .selectOption({ label: 'Biometrics/Security Key' });
+    const deviceSelector = page.getByLabel('MFA Device Selection -');
+    await expect(deviceSelector).toBeVisible();
+    const options = deviceSelector.locator('option').filter({ hasText: 'Biometrics/Security Key' });
+    const lastValue = await options.last().getAttribute('value');
+    await deviceSelector.selectOption(lastValue);
     await page.getByRole('button', { name: 'Next' }).click();
 
     // Verify we're back at home page if authentication is successful
@@ -146,11 +146,11 @@ test.describe.skip('WebAuthn Virtual Authenticator Setup', () => {
 
     // Try to authenticate with the newly registered credential
     await page.getByRole('link', { name: 'DEVICE_AUTHENTICATION' }).click();
-    await expect(page.getByLabel('MFA Device Selection -')).toBeVisible();
-    await page
-      .getByLabel('MFA Device Selection -')
-      .last()
-      .selectOption({ label: 'Biometrics/Security Key' });
+    const deviceSelector = page.getByLabel('MFA Device Selection -');
+    await expect(deviceSelector).toBeVisible();
+    const options = deviceSelector.locator('option').filter({ hasText: 'Biometrics/Security Key' });
+    const lastValue = await options.last().getAttribute('value');
+    await deviceSelector.selectOption(lastValue);
     await page.getByRole('button', { name: 'Next' }).click();
 
     // Assert that authentication has failed
