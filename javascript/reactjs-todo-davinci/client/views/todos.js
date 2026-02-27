@@ -3,7 +3,7 @@
  *
  * todos.js
  *
- * Copyright (c) 2025 Ping Identity Corporation. All rights reserved.
+ * Copyright (c) 2025 - 2026 Ping Identity Corporation. All rights reserved.
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
  */
@@ -11,7 +11,8 @@
 import React, { useContext, Fragment, useReducer, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import { AppContext } from '../global-state';
+import { OidcContext } from '../context/oidc.context';
+import { ThemeContext } from '../context/theme.context.js';
 import CreateTodo from '../components/todos/create';
 import DeleteModal from '../components/todos/delete';
 import EditModal from '../components/todos/edit';
@@ -27,18 +28,19 @@ import apiRequest from '../utilities/request';
 export default function Todos() {
   /**
    * Use local, component state for todos. Though, this could be moved to
-   * the global state if that's preferred over doing API calls in React views.
+   * a shared context if that's preferred over doing API calls in React views.
    * The destructing of the hook's array results in index 0 having the state value,
    * and index 1 having the "setter" method to set new state values.
    */
-  const [state] = useContext(AppContext);
+  const theme = useContext(ThemeContext);
+  const [{ oidcClient }] = useContext(OidcContext);
   const [hasFetched, setFetched] = useState(false);
   const [apiError, setApiError] = useState(null);
   const [todos, dispatch] = useReducer(reducer, []);
   const [selectedDeleteTodo, setSelectedDeleteTodo] = useState(null);
   const [selectedEditTodo, setSelectedEditTodo] = useState(null);
 
-  useTodoFetch(dispatch, setFetched, setApiError);
+  useTodoFetch(dispatch, setFetched, setApiError, oidcClient);
 
   function addTodo(newTodo) {
     dispatch({ type: 'add-todo', payload: { todo: newTodo } });
@@ -46,17 +48,17 @@ export default function Todos() {
 
   async function completeTodo(_id, completed) {
     dispatch({ type: 'complete-todo', payload: { _id, completed } });
-    await apiRequest(`todos/${_id}`, 'POST', { completed });
+    await apiRequest(`todos/${_id}`, 'POST', { completed }, oidcClient);
   }
 
   async function deleteTodo() {
     dispatch({ type: 'delete-todo', payload: { _id: selectedDeleteTodo._id } });
-    await apiRequest(`todos/${selectedDeleteTodo._id}`, 'DELETE');
+    await apiRequest(`todos/${selectedDeleteTodo._id}`, 'DELETE', undefined, oidcClient);
   }
 
   async function editTodo({ _id, title }) {
     dispatch({ type: 'edit-todo', payload: { _id, title } });
-    await apiRequest(`todos/${_id}`, 'POST', { title });
+    await apiRequest(`todos/${_id}`, 'POST', { title }, oidcClient);
   }
 
   /**
@@ -69,7 +71,7 @@ export default function Todos() {
       <Link to="/login">Please sign in to continue.</Link>
     </div>
   ) : hasFetched ? (
-    <ul className={`list-group list-group-flush mb-1 ${state.theme.listGroupClass}`}>
+    <ul className={`list-group list-group-flush mb-1 ${theme.listGroupClass}`}>
       {/**
        * We we've fetched the todos, iterate over them for display.
        * If no todos were returned, show the "no todos" message.
@@ -98,7 +100,7 @@ export default function Todos() {
     </ul>
   ) : (
     <p
-      className={`d-flex justify-content-center align-items-center border-top px-3 ${state.theme.borderClass}`}
+      className={`d-flex justify-content-center align-items-center border-top px-3 ${theme.borderClass}`}
     >
       <span className="spinner-border text-primary my-2" role="status"></span>
       <span className="p-3 fs-5">Collecting your todos ...</span>
@@ -108,9 +110,9 @@ export default function Todos() {
   return (
     <Fragment>
       <div className={`cstm_container container-fluid`}>
-        <h1 className={`mt-5 ${state.theme.textClass}`}>Your Todos</h1>
+        <h1 className={`mt-5 ${theme.textClass}`}>Your Todos</h1>
         <p className="fs-6 text-muted">Create and manage your todos.</p>
-        <div className={`card shadow-sm mb-5 ${state.theme.cardBgClass}`}>
+        <div className={`card shadow-sm mb-5 ${theme.cardBgClass}`}>
           <CreateTodo addTodo={addTodo} />
           {Todos}
         </div>

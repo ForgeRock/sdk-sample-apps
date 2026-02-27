@@ -3,13 +3,13 @@
  *
  * oauth.hook.js
  *
- * Copyright (c) 2025 Ping Identity Corporation. All rights reserved.
+ * Copyright (c) 2025 - 2026 Ping Identity Corporation. All rights reserved.
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
  */
 
-import { useEffect, useState } from 'react';
-import { TokenManager, UserManager } from '@forgerock/javascript-sdk';
+import { useEffect, useState, useContext } from 'react';
+import { OidcContext } from '../../../context/oidc.context.js';
 import { DEBUGGER } from '../../../constants.js';
 
 /**
@@ -20,6 +20,7 @@ export default function useOAuth() {
   const [user, setUser] = useState(null);
   const [authCode, setAuthCode] = useState(null);
   const [authState, setAuthState] = useState(null);
+  const [{ oidcClient }] = useContext(OidcContext);
 
   /**
    * @function setCode - A function that sets the hook's local authorization state
@@ -42,20 +43,18 @@ export default function useOAuth() {
     async function getOAuth() {
       /** *********************************************************************
        * SDK INTEGRATION POINT
-       * Summary: Get OAuth/OIDC tokens with Authorization Code Flow w/PKCE.
+       * Summary: Exchange authorization code for OAuth/OIDC tokens.
        * ----------------------------------------------------------------------
-       * Details: Since we have successfully authenticated the user, we can now
-       * get the OAuth2/OIDC tokens. We are passing the `forceRenew` option to
-       * ensure we get fresh tokens, regardless of existing tokens.
+       * Details: After a successful login, we receive an authorization
+       * code and state. We pass both to `oidcClient.token.exchange()` to
+       * complete the Authorization Code Flow w/PKCE and store the resulting
+       * tokens via the OIDC client.
        ************************************************************************* */
       if (DEBUGGER) debugger;
-      try {
-        await TokenManager.getTokens({
-          query: { code: authCode, state: authState },
-          forceRenew: true,
-        });
-      } catch (err) {
-        console.error(`Error: get tokens; ${err}`);
+      const tokens = await oidcClient.token.exchange(authCode, authState);
+      if ('error' in tokens) {
+        console.error(`Error: get tokens; ${tokens.error}`);
+        return;
       }
 
       /** *********************************************************************
@@ -67,12 +66,12 @@ export default function useOAuth() {
        * user info in the UI.
        ********************************************************************* */
       if (DEBUGGER) debugger;
-      try {
-        const user = await UserManager.getCurrentUser();
-        setUser(user);
-      } catch (err) {
-        console.error(`Error: get current user; ${err}`);
+      const user = await oidcClient.user.info();
+      if ('error' in user) {
+        console.error(`Error: get current user; ${user.error}`);
         setUser(null);
+      } else {
+        setUser(user);
       }
     }
 

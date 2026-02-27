@@ -3,7 +3,7 @@
  *
  * fetch.js
  *
- * Copyright (c) 2025 Ping Identity Corporation. All rights reserved.
+ * Copyright (c) 2025 - 2026 Ping Identity Corporation. All rights reserved.
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
  */
@@ -17,9 +17,10 @@ import apiRequest from '../../utilities/request';
  * @param {Function} dispatch - The function to pass in an action with data to result in new state
  * @param {Function} setFetched - A function for setting the state of hasFetched
  * @param {Function} setApiError - A function for setting API error messages
+ * @param {Object} oidcClient - The OIDC client instance
  * @returns {undefined} - this doesn't directly return anything, but calls dispatch to set data
  */
-export default function useTodoFetch(dispatch, setFetched, setApiError) {
+export default function useTodoFetch(dispatch, setFetched, setApiError, oidcClient) {
   /**
    * Since we are making an API call, which is a side-effect,
    * we will wrap this in a useEffect, which will re-render the
@@ -28,7 +29,7 @@ export default function useTodoFetch(dispatch, setFetched, setApiError) {
   useEffect(() => {
     async function getTodos() {
       // Request the todos from our resource API
-      const fetchedTodos = await apiRequest('todos', 'GET');
+      const fetchedTodos = await apiRequest('todos', 'GET', undefined, oidcClient);
 
       if (fetchedTodos.error) {
         setApiError(
@@ -43,6 +44,6 @@ export default function useTodoFetch(dispatch, setFetched, setApiError) {
 
     getTodos();
 
-    // There are no dependencies needed as all methods/functions are "stable"
+    // oidcClient is guaranteed non-null by the loading gate in index.js
   }, []);
 }
