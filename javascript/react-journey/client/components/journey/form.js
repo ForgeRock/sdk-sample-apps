@@ -3,7 +3,7 @@
  *
  * form.js
  *
- * Copyright (c) 2026 Ping Identity Ping Identity Corporation. All rights reserved.
+ * Copyright (c) 2026 Ping Identity Corporation. All rights reserved.
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
  */
@@ -19,7 +19,7 @@ import Kba from './kba';
 import Loading from '../utilities/loading';
 import Password from './password';
 import treeReducer from './tree-reducer';
-import useJourney from './hooks/journey.hook';
+import useJourney from './journey.hook';
 import TermsConditions from './terms-conditions';
 import Text from './text';
 import Unknown from './unknown';
@@ -240,6 +240,6 @@ export default function Form({ action, bottomMessage, followUp, topMessage, jour
     /**
      * Just in case things blow up.
      */
-    return <Alert message={renderStep.payload.message} type="error" />;
+    return <Alert message={renderStep.payload?.message || formFailureMessage} type="error" />;
   }
 }
