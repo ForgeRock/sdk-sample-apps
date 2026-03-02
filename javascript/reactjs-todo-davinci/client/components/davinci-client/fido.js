@@ -1,7 +1,7 @@
 /*
  * ping-sample-web-react-davinci
  *
- * fido-collector.js
+ * fido.js
  *
  * Copyright (c) 2026 Ping Identity Corporation. All rights reserved.
  * This software may be modified and distributed under the terms
@@ -12,13 +12,13 @@ import React, { useState, useEffect } from 'react';
 import { fido } from '@forgerock/davinci-client';
 
 /**
- * FidoCollector React component for FIDO registration and authentication
+ * FidoComponent React component for FIDO registration and authentication
  * @param {Object} props
  * @param {Object} props.collector - FidoRegistrationCollector or FidoAuthenticationCollector
  * @param {Function} props.updater - Updater function for collector
  * @param {Function} props.submitForm - Function to call to advance the flow
  */
-export default function FidoCollector({ collector, updater, submitForm }) {
+export default function FidoComponent({ collector, updater, submitForm }) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [hasAttempted, setHasAttempted] = useState(false); // for registration auto-trigger
@@ -27,41 +27,37 @@ export default function FidoCollector({ collector, updater, submitForm }) {
   async function handleFido() {
     setIsLoading(true);
     setError(null);
-    try {
-      let response;
-      if (collector.type === 'FidoRegistrationCollector') {
-        response = await fidoClient.register(
-          collector.output.config.publicKeyCredentialCreationOptions,
-        );
-      } else if (collector.type === 'FidoAuthenticationCollector') {
-        response = await fidoClient.authenticate(
-          collector.output.config.publicKeyCredentialRequestOptions,
-        );
-      } else {
-        setError('Unsupported FIDO collector type');
-        setIsLoading(false);
-        return;
-      }
 
-      if ('error' in response) {
-        setError(response.error?.message || response?.message || 'FIDO error');
-        console.error(response);
-      } else {
-        const updateResult = updater(response);
-        if (updateResult && 'error' in updateResult) {
-          setError(updateResult.error?.message || 'Update error');
-          console.error(updateResult.error?.message);
-        } else {
-          await submitForm();
-        }
-      }
-    } catch (err) {
-      setError(err.message || 'Unexpected error');
-      console.error(err);
-    } finally {
+    let response;
+    if (collector.type === 'FidoRegistrationCollector') {
+      response = await fidoClient.register(
+        collector.output.config.publicKeyCredentialCreationOptions,
+      );
+    } else if (collector.type === 'FidoAuthenticationCollector') {
+      response = await fidoClient.authenticate(
+        collector.output.config.publicKeyCredentialRequestOptions,
+      );
+    } else {
+      setError('Unsupported FIDO collector type');
       setIsLoading(false);
-      setHasAttempted(true);
+      return;
     }
+
+    if ('error' in response) {
+      setError(response.error?.message || response?.message || 'FIDO error');
+      console.error(response);
+    } else {
+      const updateResult = updater(response);
+      if (updateResult && 'error' in updateResult) {
+        setError(updateResult.error?.message || 'Update error');
+        console.error(updateResult.error?.message);
+      } else {
+        await submitForm();
+      }
+    }
+
+    setIsLoading(false);
+    setHasAttempted(true);
   }
 
   // Auto-trigger registration or authentication on mount or collector change

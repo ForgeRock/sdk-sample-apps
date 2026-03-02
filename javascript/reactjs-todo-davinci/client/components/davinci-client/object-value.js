@@ -37,9 +37,7 @@ export default function ObjectValueComponent({ collector, updater }) {
             </option>
           ))}
         </select>
-        <button className="mt-5 justify-content w-100 btn btn-primary" disabled={!selected}>
-          Next
-        </button>
+        <button className="mt-5 justify-content w-100 btn btn-primary">Next</button>
       </div>
     );
   } else if (collector.type === 'PhoneNumberCollector') {

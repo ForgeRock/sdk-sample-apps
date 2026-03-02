@@ -89,10 +89,10 @@ test.describe.skip('WebAuthn Virtual Authenticator Setup', () => {
       'http://localhost:5829/?acrValue=98f2c058aae71ec09eb268db6810ff3c',
     );
 
-    // Disable automatic presence simulation to simulate registration failure
-    await cdpClient.send('WebAuthn.setAutomaticPresenceSimulation', {
+    // Set isUserVerified to false to simulate registration failure
+    await cdpClient.send('WebAuthn.setUserVerified', {
       authenticatorId,
-      enabled: false,
+      isUserVerified: false,
     });
 
     // Sign in to enable FIDO MFA flow
@@ -109,10 +109,8 @@ test.describe.skip('WebAuthn Virtual Authenticator Setup', () => {
     await page.getByRole('button', { name: 'Next' }).click();
 
     // Assert that registration has failed
-    await expect(page.getByRole('heading', { name: 'FIDO2 Registration' })).toBeVisible();
-    await expect(
-      page.getByRole('button', { name: 'Continue' }).click({ trial: true, timeout: 5000 }),
-    ).rejects.toThrow();
+    await expect(page.getByRole('alert')).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Try Again' })).toBeVisible();
   });
 
   test('should fail to authenticate with an existing WebAuthn credential', async ({ page }) => {
@@ -138,10 +136,10 @@ test.describe.skip('WebAuthn Virtual Authenticator Setup', () => {
     // Verify we're back at home page if registration is successful
     await expect(page.getByText('FIDO2 Test Form')).toBeVisible();
 
-    // Disable automatic presence simulation to simulate authentication failure
-    await cdpClient.send('WebAuthn.setAutomaticPresenceSimulation', {
+    // Set isUserVerified to false to simulate authentication failure
+    await cdpClient.send('WebAuthn.setUserVerified', {
       authenticatorId,
-      enabled: false,
+      isUserVerified: false,
     });
 
     // Try to authenticate with the newly registered credential
@@ -154,13 +152,7 @@ test.describe.skip('WebAuthn Virtual Authenticator Setup', () => {
     await page.getByRole('button', { name: 'Next' }).click();
 
     // Assert that authentication has failed
-    await expect(page.getByRole('heading', { name: 'FIDO2 Authentication' })).toBeVisible();
-
-    // Try to click on a non-existent device regsitration button to confirm that we're still on the authentication page and not navigated back to home page
-    await expect(
-      page
-        .getByRole('button', { name: 'DEVICE_REGISTRATION' })
-        .click({ trial: true, timeout: 5000 }),
-    ).rejects.toThrow();
+    await expect(page.getByRole('alert')).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Try Again' })).toBeVisible();
   });
 });
