@@ -1,14 +1,17 @@
-import React, { useContext, useState } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { ThemeContext } from '../../context/theme.context.js';
 
-export default function ObjectValueComponent({ collector, inputName, updater, submitForm }) {
+export default function ObjectValueComponent({ collector, updater }) {
   const [selected, setSelected] = useState(collector.output.options[0].value);
   const theme = useContext(ThemeContext);
+
+  useEffect(() => {
+    updater(selected);
+  }, [selected]);
 
   const handleChange = (event) => {
     event.preventDefault();
     setSelected(event.target.value);
-    updater(event.target.value);
   };
   if (
     collector.type === 'DeviceAuthenticationCollector' ||

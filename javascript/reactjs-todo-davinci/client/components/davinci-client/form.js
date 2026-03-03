@@ -30,6 +30,7 @@ import { ProtectContext } from '../../context/protect.context.js';
 import { ThemeContext } from '../../context/theme.context.js';
 import useDavinci from './hooks/davinci.hook.js';
 import useOAuth from './hooks/oauth.hook.js';
+import FidoComponent from './fido.js';
 
 /**
  * @function Form - React view for managing the user authentication journey
@@ -188,6 +189,16 @@ export default function Form() {
             updater={externalIdp}
             isLoading={isLoading}
             key={collectorName}
+          />
+        );
+      case 'FidoRegistrationCollector':
+      case 'FidoAuthenticationCollector':
+        return (
+          <FidoComponent
+            collector={collector}
+            updater={updater(collector)}
+            key={collectorName}
+            submitForm={setNext}
           />
         );
       case 'ProtectCollector':

@@ -57,7 +57,8 @@
     "start": "webpack serve --mode development",
     "lint": "eslint . --fix",
     "e2e": "playwright test",
-    "e2e:ui": "playwright test --ui"
+    "e2e:ui": "playwright test --ui",
+    "format": "prettier --write ."
   },
   "author": "",
   "license": "ISC"
