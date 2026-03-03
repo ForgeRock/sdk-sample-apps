@@ -3,7 +3,7 @@
  *
  * request.js
  *
- * Copyright (c) 2026 Ping Identity Ping Identity Corporation. All rights reserved.
+ * Copyright (c) 2026 Ping Identity Corporation. All rights reserved.
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
  */
@@ -11,10 +11,11 @@
 import { API_URL, DEBUGGER } from '../constants';
 
 /**
- * @function request - A convenience function for wrapping around HttpClient
+ * @function request - A convenience function for wrapping around https requests
  * @param {string} resource - the resource path for the API server
  * @param {string} method - the method (GET, POST, etc) for the API server
  * @param {string} data - the data to POST against the API server
+ * @param {Object} oidcClient - the OIDC client instance
  * @return {Object} - JSON response from API
  */
 export default async function apiRequest(resource, method, data, oidcClient) {
@@ -30,6 +31,10 @@ export default async function apiRequest(resource, method, data, oidcClient) {
      *********************************************************************** */
     if (DEBUGGER) debugger;
     const tokens = await oidcClient.token.get();
+    if ('error' in tokens) {
+      throw new Error(`Failed to retrieve access token; ${tokens.error}`);
+    }
+
     const request = fetch(`${API_URL}/${resource}`, {
       body: data && JSON.stringify(data),
       headers: {
