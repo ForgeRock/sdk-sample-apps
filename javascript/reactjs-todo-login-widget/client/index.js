@@ -8,7 +8,7 @@
  * of the MIT license. See the LICENSE file for details.
  */
 
-import { configuration, protect, user } from '@forgerock/login-widget';
+import { configuration, protect } from '@forgerock/login-widget';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
@@ -22,7 +22,8 @@ import {
   REALM_PATH,
   PINGONE_ENV_ID,
 } from './constants';
-import { AppContext, useGlobalStateMgmt } from './global-state';
+import { initTheme, ThemeContext } from './context/theme.context';
+import { useInitAuthState, AuthContext } from './context/auth.context';
 
 /**
  * This import will produce a separate CSS file linked in the index.html
@@ -71,56 +72,23 @@ configuration().set({
 /**
  * Initialize the React application
  */
-(async function initAndHydrate() {
-  /** *************************************************************************
-   * LOGIN WIDGET INTEGRATION POINT
-   * Summary: Get OAuth/OIDC tokens
-   * --------------------------------------------------------------------------
-   * Details: We can immediately call user.tokens().get() to check for stored
-   * tokens. If we have them, you can cautiously assume the user is
-   * authenticated.
-   ************************************************************************* */
-  if (DEBUGGER) debugger;
-  let isAuthenticated;
-  try {
-    const event = await user.tokens().get();
-    isAuthenticated = !!event?.response?.accessToken;
-  } catch (err) {
-    console.error(`Error: token retrieval for hydration; ${err}`);
-  }
-
+(function initAndHydrate() {
   /**
-   * Pull custom values from outside of the app to (re)hydrate state.
-   */
-  const prefersDarkTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const email = window.sessionStorage.getItem('sdk_email');
-  const username = window.sessionStorage.getItem('sdk_username');
-  const rootEl = document.getElementById('root');
-
-  if (prefersDarkTheme) {
-    document.body.classList.add('cstm_bg-dark', 'bg-dark');
-  }
-
-  /**
-   * @function Init - Initializes React and global state
+   * @function Init - Initializes React, State, and Protect
    * @returns {Object} - React component object
    */
   function Init() {
     /**
-     * This leverages "global state" with React's Context API.
+     * This leverages context with React's Context API.
      * This can be useful to share state with any component without
      * having to pass props through deeply nested components,
      * authentication status and theme state are good examples.
      *
-     * If global state becomes a more complex function of the app,
+     * If context becomes a more complex function of the app,
      * something like Redux might be a better option.
      */
-    const stateMgmt = useGlobalStateMgmt({
-      email,
-      isAuthenticated,
-      prefersDarkTheme,
-      username,
-    });
+    const auth = useInitAuthState();
+    const theme = initTheme();
 
     /**
      * Initialize PingOne Protect as early as possible in the application for data collection.
@@ -134,13 +102,17 @@ configuration().set({
     }
 
     return (
-      <AppContext.Provider value={stateMgmt}>
-        <Router />
-      </AppContext.Provider>
+      <ThemeContext.Provider value={theme}>
+        <AuthContext.Provider value={auth}>
+          <Router />
+        </AuthContext.Provider>
+      </ThemeContext.Provider>
     );
   }
 
+  const rootEl = document.getElementById('root');
   const root = ReactDOM.createRoot(rootEl);
+
   // Mounts the React app to the existing root element
   root.render(<Init />);
 })();

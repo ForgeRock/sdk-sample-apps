@@ -10,7 +10,7 @@
 
 import React, { useContext } from 'react';
 
-import { AppContext } from '../../global-state';
+import { ThemeContext } from '../../context/theme.context';
 
 /**
  * @function Loading - Used to display a loading message
@@ -19,14 +19,14 @@ import { AppContext } from '../../global-state';
  * @returns {Object} - React component object
  */
 export default function Loading({ classes, message }) {
-  const [state] = useContext(AppContext);
+  const theme = useContext(ThemeContext);
   return (
     <div className="container">
       <p className={classes}>
         <span className="d-flex justify-content-center my-2">
           <span className="cstm_loading-spinner spinner-border text-primary" role="status"></span>
         </span>
-        <span className={`d-flex justify-content-center p-3 fs-5 ${state.theme.textClass}`}>
+        <span className={`d-flex justify-content-center p-3 fs-5 ${theme.textClass}`}>
           {message}
         </span>
       </p>

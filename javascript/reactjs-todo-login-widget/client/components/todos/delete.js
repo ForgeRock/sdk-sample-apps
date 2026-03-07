@@ -10,7 +10,7 @@
 
 import React, { useContext } from 'react';
 
-import { AppContext } from '../../global-state';
+import { ThemeContext } from '../../context/theme.context';
 
 /**
  * @function Delete - Used for display a modal that ensures intention for todo deletion
@@ -19,7 +19,7 @@ import { AppContext } from '../../global-state';
  * @returns {Object} - React component object
  */
 export default function Delete({ deleteTodo }) {
-  const [state] = useContext(AppContext);
+  const theme = useContext(ThemeContext);
 
   return (
     <div
@@ -32,12 +32,12 @@ export default function Delete({ deleteTodo }) {
     >
       <div className={`modal-dialog`}>
         <div
-          className={`modal-content  ${state.theme.cardBgClass} ${state.theme.textClass} ${state.theme.borderClass}`}
+          className={`modal-content  ${theme.cardBgClass} ${theme.textClass} ${theme.borderClass}`}
         >
           <div className="modal-body pt-4 px-4">
             <p>Are you sure you want to delete this todo?</p>
           </div>
-          <div className={`modal-footer p-3 ${state.theme.borderClass}`}>
+          <div className={`modal-footer p-3 ${theme.borderClass}`}>
             <button
               type="button"
               data-bs-toggle="modal"

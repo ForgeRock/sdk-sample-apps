@@ -12,7 +12,7 @@ import Widget, { component, journey } from '@forgerock/login-widget';
 import React, { createContext, useCallback, useContext, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { AppContext } from '../global-state';
+import { AuthContext } from '../context/auth.context';
 
 // This context exposes a small public API
 // Consumers don't need access to the widget instance or subscription details
@@ -27,7 +27,7 @@ const LoginWidgetContext = createContext({
  * @returns {Object} - React component
  */
 export function LoginWidgetProvider({ children }) {
-  const [, setter] = useContext(AppContext);
+  const [, setAuth] = useContext(AuthContext);
   const navigate = useNavigate();
 
   // `component()` and `journey()` return objects
@@ -58,9 +58,9 @@ export function LoginWidgetProvider({ children }) {
       if (event?.user?.successful) {
         if (event?.user?.response) {
           const user = event.user.response;
-          setter.setUser(user.name);
-          setter.setEmail(user.email);
-          setter.setAuthentication(true);
+          setAuth.setUser(user.name);
+          setAuth.setEmail(user.email);
+          setAuth.setAuthentication(true);
         }
       }
     });
@@ -71,7 +71,7 @@ export function LoginWidgetProvider({ children }) {
       componentEventUnsub();
       journeyEventUnsub();
     };
-  }, [componentEvents, journeyEvents, setter, navigate]);
+  }, [componentEvents, journeyEvents, setAuth, navigate]);
 
   useEffect(() => {
     // Create the widget once per Provider mount

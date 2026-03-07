@@ -15,7 +15,7 @@ import { Navigate } from 'react-router-dom';
 
 import { DEBUGGER } from '../constants';
 import Loading from '../components/utilities/loading';
-import { AppContext } from '../global-state';
+import { AuthContext } from '../context/auth.context';
 
 /**
  * @function useAuthValidation - Custom hook for validating user authentication
@@ -89,7 +89,7 @@ function useAuthValidation(auth, setAuth) {
  */
 export function ProtectedRoute({ children }) {
   // Get "global" state from Context API
-  const [{ isAuthenticated }, { setAuthentication }] = useContext(AppContext);
+  const [{ isAuthenticated }, { setAuthentication }] = useContext(AuthContext);
   // Custom hook for validating user's access token
   const [{ isValid }] = useAuthValidation(isAuthenticated, setAuthentication);
 

@@ -10,7 +10,7 @@
 
 import React, { useContext } from 'react';
 
-import { AppContext } from '../../global-state';
+import { ThemeContext } from '../../context/theme.context';
 
 /**
  * @function Card - React component that displays the alert icon representing the a warning
@@ -19,12 +19,10 @@ import { AppContext } from '../../global-state';
  * @returns {Object} - React JSX Object
  */
 export default function Card(props) {
-  const [state] = useContext(AppContext);
+  const theme = useContext(ThemeContext);
 
   return (
-    <div
-      className={`card shadow-sm p-5 mb-2 w-100 ${state.theme.cardBgClass} ${state.theme.textClass}`}
-    >
+    <div className={`card shadow-sm p-5 mb-2 w-100 ${theme.cardBgClass} ${theme.textClass}`}>
       {props.children}
     </div>
   );
