@@ -11,7 +11,7 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 
-import { LoginWidgetProvider } from './utilities/widget';
+import { LoginWidgetContext, useInitLoginWidgetState } from './context/widget.context';
 import { ProtectedRoute } from './utilities/route';
 import Todos from './views/todos';
 import Footer from './components/layout/footer';
@@ -34,9 +34,11 @@ function ScrollToTop() {
  * @returns {Object} - React component object
  */
 export default function Router() {
+  const loginWidget = useInitLoginWidgetState();
+
   return (
     <BrowserRouter>
-      <LoginWidgetProvider>
+      <LoginWidgetContext.Provider value={loginWidget}>
         <Routes>
           <Route
             path="todos"
@@ -61,7 +63,7 @@ export default function Router() {
             }
           />
         </Routes>
-      </LoginWidgetProvider>
+      </LoginWidgetContext.Provider>
     </BrowserRouter>
   );
 }

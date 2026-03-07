@@ -10,9 +10,10 @@
 
 import React, { Fragment, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { useLoginWidget } from '../utilities/widget';
+import { LoginWidgetContext } from '../context/widget.context';
 
-import { AppContext } from '../global-state';
+import { AuthContext } from '../context/auth.context';
+import { ThemeContext } from '../context/theme.context';
 import VerifiedIcon from '../components/icons/verified-icon';
 
 /**
@@ -26,12 +27,13 @@ export default function Home() {
    * The destructing of the hook's array results in index 0 having the state value,
    * and index 1 having the "setter" method to set new state values.
    */
-  const [state] = useContext(AppContext);
-  const { openModal } = useLoginWidget();
+  const [auth] = useContext(AuthContext);
+  const theme = useContext(ThemeContext);
+  const { openModal } = useContext(LoginWidgetContext);
 
-  const createAccountText = !state.isAuthenticated ? (
+  const createAccountText = !auth.isAuthenticated ? (
     <Fragment>
-      <h2 className={`fs-4 fw-normal pt-3 pb-1 ${state.theme.textClass}`}>Getting started</h2>
+      <h2 className={`fs-4 fw-normal pt-3 pb-1 ${theme.textClass}`}>Getting started</h2>
       <p>
         <a
           href="#"
@@ -47,11 +49,11 @@ export default function Home() {
     </Fragment>
   ) : null;
 
-  const LoginAlert = state.isAuthenticated ? (
+  const LoginAlert = auth.isAuthenticated ? (
     <p className="alert alert-success d-flex align-items-center mt-5" role="alert">
       <VerifiedIcon classes="cstm_verified-alert-icon" size="36px" />
       <span className="ps-2">
-        Welcome back, {state.username}!{' '}
+        Welcome back, {auth.username}!{' '}
         <Link className="cstm_verified-alert-link" to="/todos">
           Manage your todos here
         </Link>
@@ -61,27 +63,27 @@ export default function Home() {
   ) : null;
 
   return (
-    <div className={`cstm_container container-fluid ${state.theme.textClass}`}>
+    <div className={`cstm_container container-fluid ${theme.textClass}`}>
       {LoginAlert}
-      <h1 className={`cstm_head-text text-center ${state.theme.textClass}`}>
+      <h1 className={`cstm_head-text text-center ${theme.textClass}`}>
         Protect with Ping; Develop with React.js
       </h1>
 
-      <p className={`cstm_subhead-text fs-3 mb-4 fw-bold ${state.theme.textMutedClass}`}>
+      <p className={`cstm_subhead-text fs-3 mb-4 fw-bold ${theme.textMutedClass}`}>
         Learn how to develop Ping protected, web apps with the{' '}
-        <a className={`${state.theme.textMutedClass}`} href="https://reactjs.org/">
+        <a className={`${theme.textMutedClass}`} href="https://react.dev/">
           React.js
         </a>{' '}
         library and our{' '}
         <a
-          className={`${state.theme.textMutedClass}`}
+          className={`${theme.textMutedClass}`}
           href="https://github.com/ForgeRock/forgerock-web-login-framework"
         >
           Login Widget
         </a>
         .
       </p>
-      <h2 className={`fs-4 fw-normal pt-3 pb-1 ${state.theme.textClass}`}>About this project</h2>
+      <h2 className={`fs-4 fw-normal pt-3 pb-1 ${theme.textClass}`}>About this project</h2>
       <p>
         The purpose of this sample web app is to demonstrate how the Login Widget is implemented
         within a fully-functional application using a popular framework. The source code for{' '}

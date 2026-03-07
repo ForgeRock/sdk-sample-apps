@@ -2,12 +2,12 @@
 
 ## Disclaimers
 
-This sample code is provided "as is" and is not a supported product of Ping. It's purpose is solely to demonstrate how the Login Widget can be implemented within a React application. Also, this is not a demonstration of React itself or instructional for _how_ to build a React app. There are many aspects to routing, state management, tooling and other aspects to building a React app that are outside of the scope of this project. For information about creating a React app, [visit React's official documentation](https://reactjs.org/docs/create-a-new-react-app.html).
+This sample code is provided "as is" and is not a supported product of Ping. It's purpose is solely to demonstrate how the Login Widget can be implemented within a React application. Also, this is not a demonstration of React itself or instructional for _how_ to build a React app. There are many aspects to routing, state management, tooling and other aspects to building a React app that are outside of the scope of this project. For information about creating a React app, [visit React's official documentation](https://react.dev/learn/creating-a-react-app).
 
 ## Requirements
 
 1. An instance of Ping's Access Manager (AM), either within a Ping's Advanced Identity Cloud tenant, your own private installation or locally installed on your computer
-2. Node >= 14.2.0 (recommended: install via [official package installer](https://nodejs.org/en/))
+2. Node >= 24.2.0 (recommended: install via [official package installer](https://nodejs.org/en/))
 3. Knowledge of using the Terminal/Command Line
 4. Ability to generate security certs (recommended: mkcert ([installation instructions here](https://github.com/FiloSottile/mkcert#installation))
 5. This project "cloned" to your computer
@@ -123,10 +123,11 @@ For local development, if you want to turn these debuggers off, you can set the 
 
 To modify the client portion of this project, you'll need to be familiar with the following React patterns:
 
-1. [Functional components and composition](https://reactjs.org/docs/components-and-props.html)
-2. [Hooks (including custom hooks)](https://reactjs.org/docs/hooks-intro.html)
-3. [Context API](https://reactjs.org/docs/hooks-reference.html#usecontext)
-4. [React Router](https://reactrouter.com/)
+1. [Components](https://react.dev/reference/react/Component)
+2. [Hooks (including custom hooks)](https://react.dev/reference/react/hooks)
+3. [React Router](https://reactrouter.com/)
+4. [Context API](https://react.dev/reference/react/useContext)
+5. [Refs](https://react.dev/reference/react/useRef)
 
 You'll also want a [basic understanding of Webpack](https://webpack.js.org/concepts/) and the following:
 
