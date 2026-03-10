@@ -1,0 +1,48 @@
+# Multi-stage build for todo-api
+# Production-optimized Node.js backend
+
+# Build stage
+FROM node:18.17.0-alpine AS builder
+
+WORKDIR /app
+
+# Copy workspace root package files
+COPY package*.json ./
+
+# Copy todo-api package files
+COPY todo-api/package*.json ./todo-api/
+
+# Install all dependencies (workspace-aware)
+# This installs dependencies for the root and all workspaces
+RUN npm ci
+
+# Runtime stage
+FROM node:18.17.0-alpine
+
+WORKDIR /app
+
+# Copy workspace root package files
+COPY package*.json ./
+
+# Copy todo-api package files and source
+COPY todo-api ./todo-api/
+
+# Copy node_modules from builder
+# Note: npm workspaces hoist all dependencies to root node_modules
+COPY --from=builder /app/node_modules ./node_modules
+
+# Create directories for PouchDB databases
+RUN mkdir -p /app/todo-api/todos /app/todo-api/users && \
+    chown -R node:node /app
+
+# Switch to non-root user
+USER node
+
+# Expose API port
+EXPOSE 9443
+
+# Set working directory to todo-api
+WORKDIR /app/todo-api
+
+# Start the API server
+CMD ["node", "src/index.js"]
