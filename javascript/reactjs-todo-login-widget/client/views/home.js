@@ -8,9 +8,8 @@
  * of the MIT license. See the LICENSE file for details.
  */
 
-import React, { Fragment, useContext } from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { LoginWidgetContext } from '../context/widget.context';
 
 import { AuthContext } from '../context/auth.context';
 import { ThemeContext } from '../context/theme.context';
@@ -29,25 +28,6 @@ export default function Home() {
    */
   const [auth] = useContext(AuthContext);
   const theme = useContext(ThemeContext);
-  const { openModal } = useContext(LoginWidgetContext);
-
-  const createAccountText = !auth.isAuthenticated ? (
-    <Fragment>
-      <h2 className={`fs-4 fw-normal pt-3 pb-1 ${theme.textClass}`}>Getting started</h2>
-      <p>
-        <a
-          href="#"
-          onClick={(e) => {
-            e.preventDefault();
-            openModal();
-          }}
-        >
-          Sign in
-        </a>{' '}
-        to get things done!
-      </p>
-    </Fragment>
-  ) : null;
 
   const LoginAlert = auth.isAuthenticated ? (
     <p className="alert alert-success d-flex align-items-center mt-5" role="alert">
@@ -91,9 +71,10 @@ export default function Home() {
           this project can be found on Github
         </a>{' '}
         and run locally for experimentation. For more on our SDKs,{' '}
-        <a href="https://sdks.forgerock.com/">you can find our official SDK documentation here.</a>
+        <a href="https://docs.pingidentity.com/sdks/latest/index.html">
+          you can find our official SDK documentation here.
+        </a>
       </p>
-      {createAccountText}
     </div>
   );
 }

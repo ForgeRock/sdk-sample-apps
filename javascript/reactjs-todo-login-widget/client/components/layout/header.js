@@ -12,13 +12,13 @@ import React, { useContext } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 import AccountIcon from '../icons/account-icon';
-import { LoginWidgetContext } from '../../context/widget.context';
 import ForgeRockIcon from '../icons/forgerock-icon';
 import HomeIcon from '../icons/home-icon';
 import ReactIcon from '../icons/react-icon';
 import TodosIcon from '../icons/todos-icon';
 import { AuthContext } from '../../context/auth.context';
 import { ThemeContext } from '../../context/theme.context';
+import { useLoginWidget } from '../../hooks/useLoginWidget';
 
 /**
  * @function Header - Header React view
@@ -34,7 +34,7 @@ export default function Header() {
   const [auth] = useContext(AuthContext);
   const theme = useContext(ThemeContext);
   const location = useLocation();
-  const { openModal } = useContext(LoginWidgetContext);
+  const { openModal } = useLoginWidget();
 
   let TodosItem;
   let LoginOrOutItem;
