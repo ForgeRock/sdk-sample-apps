@@ -48,21 +48,27 @@ export function useLoginWidget() {
     });
 
     const journeyEventUnsub = journeyEvents.subscribe((event) => {
+      const authSetters = setAuthRef.current;
+
       if (event?.user?.successful && event?.user?.response) {
         const loggedInUser = event.user.response;
-        const authSetters = setAuthRef.current;
+        authSetters?.setError?.('');
         authSetters?.setUser?.(loggedInUser.name);
         authSetters?.setEmail?.(loggedInUser.email);
         authSetters?.setAuthentication?.(true);
-      } else {
-        if (event && typeof event === 'object') {
-          for (const [scope, payload] of Object.entries(event)) {
-            if (payload && typeof payload === 'object' && payload.error) {
-              console.error(`[login-widget] ${scope} error:`, payload.error);
+      } else if (event && typeof event === 'object' && event?.journey?.completed) {
+        let errorSet = false;
+
+        for (const [scope, payload] of Object.entries(event)) {
+          if (payload && typeof payload === 'object' && payload.error) {
+            console.error(`[login-widget] ${scope} error:`, payload.error);
+
+            if (!errorSet) {
+              const message = payload.error?.message || 'Authentication error';
+              authSetters?.setError?.(message);
+              errorSet = true;
             }
           }
-        } else {
-          console.error('[login-widget] Unexpected event payload (expected object):', event);
         }
       }
     });
@@ -88,6 +94,8 @@ export function useLoginWidget() {
   }, []);
 
   function openModal() {
+    const authSetters = setAuthRef.current;
+    authSetters?.setError?.('');
     journeyEvents.start();
     componentEvents.open();
   }

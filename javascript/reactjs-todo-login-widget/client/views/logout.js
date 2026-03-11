@@ -23,7 +23,7 @@ export default function Logout() {
    * The destructing of the hook's array results in index 0 having the state value,
    * and index 1 having the "setter" method to set new state values.
    */
-  const [, { setAuthentication, setEmail, setUser }] = useContext(AuthContext);
+  const [, { setAuthentication, setEmail, setUser, setError }] = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -37,6 +37,7 @@ export default function Logout() {
         setAuthentication(false);
         setEmail('');
         setUser('');
+        setError('');
 
         // Allow for enough time to communicate the action
         setTimeout(() => navigate('/'), 1000);

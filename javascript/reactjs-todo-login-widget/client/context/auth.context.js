@@ -26,6 +26,7 @@ export function useInitAuthState() {
   const [authenticated, setAuthentication] = useState(false);
   const [mail, setEmail] = useState(() => window.sessionStorage.getItem('sdk_email') || '');
   const [name, setUser] = useState(() => window.sessionStorage.getItem('sdk_username') || '');
+  const [error, setError] = useState('');
 
   useEffect(() => {
     /** *************************************************************************
@@ -79,7 +80,20 @@ export function useInitAuthState() {
         console.error(`Error: logout did not successfully complete; ${err}`);
       }
     }
+
+    if (value === true) {
+      setError('');
+    }
     setAuthentication(value);
+  }
+
+  /**
+   * @function setErrorWrapper - A wrapper for setting auth-related errors
+   * @param {string} value - error message
+   * @returns {void}
+   */
+  function setErrorWrapper(value) {
+    setError(value || '');
   }
 
   /**
@@ -110,11 +124,13 @@ export function useInitAuthState() {
       isAuthenticated: authenticated,
       email: mail,
       username: name,
+      error,
     },
     {
       setAuthentication: setAuthenticationWrapper,
       setEmail: setEmailWrapper,
       setUser: setUserWrapper,
+      setError: setErrorWrapper,
     },
   ];
 }

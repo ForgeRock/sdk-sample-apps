@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom';
 
 import { AuthContext } from '../context/auth.context';
 import { ThemeContext } from '../context/theme.context';
-import VerifiedIcon from '../components/icons/verified-icon';
+import Alert from '../components/utilities/alert';
 
 /**
  * @function Home - React view for Home
@@ -29,21 +29,26 @@ export default function Home() {
   const [auth] = useContext(AuthContext);
   const theme = useContext(ThemeContext);
 
+  const ErrorAlert = auth.error ? <Alert message={auth.error} type="error" /> : null;
+
   const LoginAlert = auth.isAuthenticated ? (
-    <p className="alert alert-success d-flex align-items-center mt-5" role="alert">
-      <VerifiedIcon classes="cstm_verified-alert-icon" size="36px" />
-      <span className="ps-2">
-        Welcome back, {auth.username}!{' '}
-        <Link className="cstm_verified-alert-link" to="/todos">
-          Manage your todos here
-        </Link>
-        .
-      </span>
-    </p>
+    <Alert
+      message={
+        <>
+          Welcome back, {auth.username}!{' '}
+          <Link className="cstm_verified-alert-link" to="/todos">
+            Manage your todos here
+          </Link>
+          .
+        </>
+      }
+      type="success"
+    />
   ) : null;
 
   return (
     <div className={`cstm_container container-fluid ${theme.textClass}`}>
+      {ErrorAlert}
       {LoginAlert}
       <h1 className={`cstm_head-text text-center ${theme.textClass}`}>
         Protect with Ping; Develop with React.js
