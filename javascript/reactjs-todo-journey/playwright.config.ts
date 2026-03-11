@@ -17,7 +17,7 @@ export default defineConfig({
   },
   webServer: [
     {
-      command: 'npm run start:reactjs-todo',
+      command: 'npm run start:reactjs-todo-journey',
       url,
       timeout: 120 * 1000,
       reuseExistingServer: !process.env.CI,
