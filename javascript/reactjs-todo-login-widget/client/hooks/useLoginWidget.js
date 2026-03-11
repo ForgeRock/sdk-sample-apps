@@ -56,11 +56,11 @@ export function useLoginWidget() {
         authSetters?.setUser?.(loggedInUser.name);
         authSetters?.setEmail?.(loggedInUser.email);
         authSetters?.setAuthentication?.(true);
-      } else if (event && typeof event === 'object' && event?.journey?.completed) {
+      } else if (event?.journey?.completed) {
         let errorSet = false;
 
         for (const [scope, payload] of Object.entries(event)) {
-          if (payload && typeof payload === 'object' && payload.error) {
+          if (payload?.error) {
             console.error(`[login-widget] ${scope} error:`, payload.error);
 
             if (!errorSet) {

@@ -1,5 +1,5 @@
 /*
- * ping-sample-web-react-journey
+ * forgerock-sample-web-react
  *
  * theme.context.js
  *
