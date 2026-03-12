@@ -80,7 +80,9 @@ export default function Home() {
           this project can be found on Github
         </a>{' '}
         and run locally for experimentation. For more on our SDKs,{' '}
-        <a href="https://sdks.forgerock.com/">you can find our official SDK documentation here.</a>
+        <a href="https://docs.pingidentity.com/sdks/latest/index.html">
+          you can find our official SDK documentation here.
+        </a>
       </p>
       {createAccountText}
     </div>
