@@ -11,7 +11,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    >
+    android:fitsSystemWindows="true">
 
     <TextView
         android:id="@+id/empty_account_list"
@@ -19,8 +19,7 @@
         android:layout_height="match_parent"
         android:padding="8dp"
         android:gravity="center"
-        android:text="@string/no_accounts"
-        />
+        android:text="@string/no_accounts" />
 
     <GridView
         android:id="@+id/account_list"
@@ -34,7 +33,6 @@
         android:padding="1dp"
         android:stretchMode="columnWidth"
         android:verticalSpacing="1dp"
-        android:background="@color/white"
-        />
+        android:background="@color/white" />
 
 </LinearLayout>
