@@ -43,15 +43,13 @@ Change the name of `.env.example` to `.env` and replace the bracketed values (e.
 Example with annotations:
 
 ```text
-SERVER_URL=<<<URL to your AM instance, for example https://example.com/am>>>
-WELLKNOWN_URL=<<<Realm well-known URL, for example https://example.com/am/oauth2/alpha/.well-known/openid-configuration>>>
+API_URL=http://localhost:9443
+DEBUGGER_OFF=true
+DEVELOPMENT=true
 REALM_PATH=<<<Realm path, for example alpha>>>
 WEB_OAUTH_CLIENT=<<<Your Web OAuth client name/ID>>>
 SCOPE="openid profile email"
-API_URL=http://localhost:9443
-REST_OAUTH_CLIENT=<<<Your API OAuth client name/ID>>>
-REST_OAUTH_SECRET=<<<Your API OAuth client secret>>>
-DEBUGGER_OFF=true
+WELLKNOWN_URL=<<<Realm well-known URL, for example https://example.com/am/oauth2/alpha/.well-known/openid-configuration>>>
 INIT_PROTECT=bootstrap
 PINGONE_ENV_ID=<<<Optional: required only when using PingOne Protect callback collection>>>
 ```
