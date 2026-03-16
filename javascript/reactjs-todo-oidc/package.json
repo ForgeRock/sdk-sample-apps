@@ -38,10 +38,8 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
-    "@forgerock/javascript-sdk": "latest",
     "@forgerock/oidc-client": "latest",
     "@forgerock/protect": "latest",
-    "@forgerock/ping-protect": "latest",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",

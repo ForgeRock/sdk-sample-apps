@@ -11,6 +11,9 @@ todo-api/users/*
 reactjs-todo-journey/public/*
 !reactjs-todo-journey/public/index.html
 !reactjs-todo-journey/public/callback.html
+reactjs-todo-oidc/public/*
+!reactjs-todo-oidc/public/index.html
+!reactjs-todo-oidc/public/callback.html
 /test-results/
 /playwright-report/
 /blob-report/
