@@ -30,7 +30,7 @@ module.exports = () => {
     devtool: 'source-map',
     // The location of where the built files are placed
     output: {
-      path: path.resolve(__dirname, 'public'),
+      path: path.resolve(__dirname, 'dist'),
       filename: '[name].js',
     },
     // Dictates some behavior in Webpack, "development" is a bit quicker

@@ -59,7 +59,7 @@ export function useInitOidcState(config) {
     if (!oidcClient) {
       initOidcClient();
     }
-  }, [oidcClient]);
+  }, [config, oidcClient]);
 
   /**
    * @function setAuthenticationWrapper - A wrapper for storing authentication state
