@@ -187,17 +187,13 @@ struct ContentView: View {
                     .scaledToFit()
                     .frame(width: 80, height: 80)
                 
-                Text("Ping SDK")
+                Text("Orchestration SDK")
                     .font(.system(size: 28, weight: .bold))
                     .foregroundColor(.white)
                 
                 Text("Journey Module Sample")
                     .font(.system(size: 14, weight: .medium))
                     .foregroundColor(.white.opacity(0.9))
-                
-                Text(sdkVersion)
-                    .font(.system(size: 13, design: .monospaced))
-                    .foregroundColor(.white.opacity(0.7))
             }
             .padding(.vertical, 10)
         }

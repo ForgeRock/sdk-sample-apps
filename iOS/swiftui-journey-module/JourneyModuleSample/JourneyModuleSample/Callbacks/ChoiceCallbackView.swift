@@ -31,25 +31,32 @@ struct ChoiceCallbackView: View {
     @State var selectedIndex: Int = 0
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Picker(callback.prompt, selection: $selectedIndex) {
-                ForEach(callback.choices.indices, id: \.self) { index in
-                    Text(callback.choices[index]).tag(index)
+        HStack {
+            Spacer()
+            Text("\(callback.prompt):")
+                .font(.headline)
+                .foregroundColor(.primary)
+            Spacer()
+            VStack(alignment: .leading, spacing: 8) {
+                Picker(callback.prompt, selection: $selectedIndex) {
+                    ForEach(callback.choices.indices, id: \.self) { index in
+                        Text(callback.choices[index]).tag(index)
+                    }
+                }
+                .pickerStyle(.menu)
+                .padding()
+                .background(
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(Color.gray, lineWidth: 1)
+                )
+                .onChange(of: selectedIndex) { newValue in
+                    callback.selectedIndex = newValue
                 }
             }
-            .pickerStyle(.menu)
             .padding()
-            .background(
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color.gray, lineWidth: 1)
-            )
-            .onChange(of: selectedIndex) { newValue in
-                callback.selectedIndex = newValue
+            .onAppear {
+                selectedIndex = callback.selectedIndex
             }
-        }
-        .padding()
-        .onAppear {
-            selectedIndex = callback.selectedIndex
         }
     }
 }
