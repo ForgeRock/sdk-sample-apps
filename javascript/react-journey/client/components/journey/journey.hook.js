@@ -8,7 +8,7 @@
  * of the MIT license. See the LICENSE file for details.
  */
 
-import { useContext, useEffect, useState, useCallback } from 'react';
+import { useContext, useEffect, useState, useCallback, useRef } from 'react';
 import { CONFIG, DEBUGGER } from '../../constants.js';
 import { htmlDecode } from '../../utilities/decode.js';
 import { OidcContext } from '../../context/oidc.context.js';
@@ -51,7 +51,8 @@ export default function useJourney({ action, formMetadata, resumeUrl }) {
   // Step to submit
   const [submissionStep, setSubmissionStep] = useState(null);
   // Count steps
-  const [stepCount, setStepCount] = useState(0);
+  // Store steps in a ref to avoid re-triggering setStep infinitely
+  const stepCount = useRef(0);
   // Processing submission
   const [submittingForm, setSubmittingForm] = useState(false);
   // User state
@@ -113,7 +114,7 @@ export default function useJourney({ action, formMetadata, resumeUrl }) {
     if (!journeyClient) {
       initJourney();
     }
-  }, [journeyClient]);
+  }, [formMetadata.tree, journeyClient, resumeUrl]);
 
   /**
    * @function authorize - The function to call when we get a LoginSuccess
@@ -197,7 +198,7 @@ export default function useJourney({ action, formMetadata, resumeUrl }) {
         if (isGenericError(nextStep)) {
           console.error('Error getting next journey step:', nextStep.error);
         } else {
-          setStepCount((current) => current + 1);
+          stepCount.current += 1;
         }
       }
 
@@ -266,7 +267,7 @@ export default function useJourney({ action, formMetadata, resumeUrl }) {
         setSubmittingForm(false);
       } else if (nextStep.type === 'LoginSuccess') {
         // Clear out step count
-        setStepCount(0);
+        stepCount.current = 0;
 
         // User is authenticated, now call for OAuth tokens
         await authorize();
@@ -286,7 +287,15 @@ export default function useJourney({ action, formMetadata, resumeUrl }) {
     if (submissionStep && journeyClient) {
       setStep(submissionStep);
     }
-  }, [action.type, formMetadata.tree, submissionStep, journeyClient]);
+  }, [
+    action.type,
+    formMetadata.tree,
+    submissionStep,
+    journeyClient,
+    oidcClient,
+    resumeUrl,
+    authorize,
+  ]);
 
   /**
    * @function redirect - Redirects the user to the specified URL in the step

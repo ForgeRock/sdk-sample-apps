@@ -46,5 +46,5 @@ export default function useTodoFetch(dispatch, setFetched, setApiError) {
     getTodos();
 
     // There are no dependencies needed as all methods/functions are "stable"
-  }, []);
+  }, [dispatch, oidcClient, setApiError, setFetched]);
 }

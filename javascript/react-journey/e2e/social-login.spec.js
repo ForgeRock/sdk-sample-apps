@@ -11,7 +11,7 @@
 import { test, expect } from '@playwright/test';
 
 test('React Journey - Login with social login', async ({ page }) => {
-  await page.goto('https://localhost:8443/?journey=TEST_LoginWithSocial');
+  await page.goto('http://localhost:8443/?journey=TEST_LoginWithSocial');
   await page.getByRole('link', { name: 'Sign In', exact: true }).click();
 
   await expect(page.getByLabel('User Name')).toBeEmpty();

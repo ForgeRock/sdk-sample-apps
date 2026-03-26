@@ -8,10 +8,10 @@
  * of the MIT license. See the LICENSE file for details.
  */
 
-import { test, expect, describe } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { displayName, password, username } from './utils/demo-user';
 
-describe('React Journey - Login with Protect', () => {
+test.describe('React Journey - Login with Protect', () => {
   test('should succeed when initialized by callback', async ({ page }) => {
     const logs = [];
     page.on('console', async (msg) => {
@@ -19,7 +19,7 @@ describe('React Journey - Login with Protect', () => {
       return Promise.resolve(true);
     });
 
-    await page.goto('https://localhost:8443?journey=TEST_Protect&initProtect=journey');
+    await page.goto('http://localhost:8443/?journey=TEST_Protect&initProtect=journey');
     await page.getByRole('link', { name: 'Sign In', exact: true }).click();
 
     await page.getByLabel('User Name').fill(username);
@@ -41,7 +41,7 @@ describe('React Journey - Login with Protect', () => {
       return Promise.resolve(true);
     });
 
-    await page.goto('https://localhost:8443?journey=TEST_Protect&initProtect=bootstrap');
+    await page.goto('http://localhost:8443/?journey=TEST_Protect&initProtect=bootstrap');
     await page.getByRole('link', { name: 'Sign In', exact: true }).click();
 
     await page.getByLabel('User Name').fill(username);

@@ -31,7 +31,7 @@ test.skip('React Journey - Register and Authenticate with WebAuthN', async ({ pa
   });
   const authenticatorId = response.authenticatorId;
 
-  await page.goto('https://localhost:8443/?journey=TEST_WebAuthn-Registration');
+  await page.goto('http://localhost:8443/?journey=TEST_WebAuthn-Registration');
 
   const { credentials: initialCredentials } = await cdpSession.send('WebAuthn.getCredentials', {
     authenticatorId,
@@ -58,7 +58,7 @@ test.skip('React Journey - Register and Authenticate with WebAuthN', async ({ pa
   // Authenticate with the registered WebAuthn credential
   const initialSignCount = recordedCredentials[0].signCount;
 
-  await page.goto('https://localhost:8443/?journey=TEST_WebAuthnAuthentication');
+  await page.goto('http://localhost:8443/?journey=TEST_WebAuthnAuthentication');
 
   await page.getByRole('link', { name: 'Sign In', exact: true }).click();
   await page.getByLabel('User Name').fill(username);

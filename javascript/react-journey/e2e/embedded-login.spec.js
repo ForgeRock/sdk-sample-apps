@@ -12,7 +12,7 @@ import { test, expect } from '@playwright/test';
 import { password, username, displayName } from './utils/demo-user';
 
 test('React Journey - Login with embedded login', async ({ page }) => {
-  await page.goto('https://localhost:8443/');
+  await page.goto('http://localhost:8443/');
   await page.getByRole('link', { name: 'Sign In', exact: true }).click();
 
   // failed login
@@ -23,7 +23,7 @@ test('React Journey - Login with embedded login', async ({ page }) => {
   await expect(page.getByText('Login failure')).toBeVisible();
 
   // successful login
-  await page.goto('https://localhost:8443/');
+  await page.goto('http://localhost:8443/');
   await page.getByRole('link', { name: 'Sign In', exact: true }).click();
 
   await page.getByLabel('User Name').fill(username);
