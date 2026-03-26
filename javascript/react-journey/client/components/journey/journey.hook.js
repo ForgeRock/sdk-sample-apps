@@ -51,13 +51,12 @@ export default function useJourney({ action, formMetadata, resumeUrl }) {
   // Step to submit
   const [submissionStep, setSubmissionStep] = useState(null);
   // Count steps
-  const [stepCount, setStepCount] = useState(0);
+  // Store steps in a ref to avoid re-triggering setStep infinitely
+  const stepCount = useRef(0);
   // Processing submission
   const [submittingForm, setSubmittingForm] = useState(false);
   // User state
   const [user, setUser] = useState(null);
-  // Guard to prevent resubmitting the same step
-  const processedSubmissionRef = useRef(null);
 
   const [{ oidcClient }] = useContext(OidcContext);
 
@@ -183,13 +182,6 @@ export default function useJourney({ action, formMetadata, resumeUrl }) {
      * @returns {undefined}
      */
     async function setStep(prev) {
-      // Guard to prevent resubmitting the same step
-      const currentSubmissionId = prev?.payload?.authId || JSON.stringify(prev);
-      if (processedSubmissionRef.current === currentSubmissionId) {
-        return;
-      }
-      processedSubmissionRef.current = currentSubmissionId;
-      
       /** *********************************************************************
        * SDK INTEGRATION POINT
        * Summary: Call the journey client's next method to submit the current step.
@@ -206,7 +198,7 @@ export default function useJourney({ action, formMetadata, resumeUrl }) {
         if (isGenericError(nextStep)) {
           console.error('Error getting next journey step:', nextStep.error);
         } else {
-          setStepCount((current) => current + 1);
+          stepCount.current += 1;
         }
       }
 
@@ -275,7 +267,7 @@ export default function useJourney({ action, formMetadata, resumeUrl }) {
         setSubmittingForm(false);
       } else if (nextStep.type === 'LoginSuccess') {
         // Clear out step count
-        setStepCount(0);
+        stepCount.current = 0;
 
         // User is authenticated, now call for OAuth tokens
         await authorize();
@@ -302,7 +294,6 @@ export default function useJourney({ action, formMetadata, resumeUrl }) {
     journeyClient,
     oidcClient,
     resumeUrl,
-    stepCount,
     authorize,
   ]);
 
