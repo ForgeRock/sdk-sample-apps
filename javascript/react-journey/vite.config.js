@@ -22,10 +22,6 @@ export default defineConfig(({ mode }) => {
     server: {
       port: PORT,
       open: true,
-      headers: {
-        'Service-Worker-Allowed': '/',
-        'Service-Worker': 'script',
-      },
       strictPort: true,
     },
     plugins: [react()],

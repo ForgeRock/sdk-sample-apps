@@ -7,7 +7,7 @@
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
  */
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { protect } from '@forgerock/protect';
 import { callbackType } from '@forgerock/journey-client';
 import { DEBUGGER, INIT_PROTECT } from '../../constants';
@@ -26,6 +26,8 @@ const protectInitMode = INIT_PROTECT || urlParams.get('initProtect');
 export default function Protect({ step, setSubmissionStep }) {
   const [loadingMessage, setLoadingMessage] = useState('');
   const [protectApi, setProtectApi] = useContext(ProtectContext);
+  // Store the Protect API in a ref to avoid re-triggering handleProtect infinitely
+  const protectApiRef = useRef(protectApi);
 
   useEffect(() => {
     async function handleProtect() {
@@ -73,7 +75,7 @@ export default function Protect({ step, setSubmissionStep }) {
         setLoadingMessage('Evaluating PingOne Protect...');
 
         const callback = step.getCallbackOfType(callbackType.PingOneProtectEvaluationCallback);
-        const data = await protectApi.getData();
+        const data = await protectApiRef.current.getData();
 
         if (typeof data !== 'string' && 'error' in data) {
           console.error(`Failed to retrieve data from PingOne Protect: ${data.error}`);
@@ -93,7 +95,7 @@ export default function Protect({ step, setSubmissionStep }) {
     }
 
     handleProtect();
-  }, [step, setLoadingMessage, setSubmissionStep, protectApi, setProtectApi]);
+  }, [step, setLoadingMessage, setSubmissionStep, setProtectApi]);
 
   return <Loading message={loadingMessage} />;
 }
