@@ -1,7 +1,4 @@
 /*
- * ping-sample-web-react-journey
- *
- * demo-user.js
  *
  * Copyright (c) 2026 Ping Identity Corporation. All rights reserved.
  * This software may be modified and distributed under the terms

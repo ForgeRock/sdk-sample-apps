@@ -1,20 +1,10 @@
-/*
- * ping-sample-web-react-journey
- *
- * register-new-user.spec.js
- *
- * Copyright (c) 2026 Ping Identity Corporation. All rights reserved.
- * This software may be modified and distributed under the terms
- * of the MIT license. See the LICENSE file for details.
- */
-
 import { test, expect } from '@playwright/test';
 import { v4 as uuid } from 'uuid';
 
 const userName = uuid();
 
-test('React Journey - Register user', async ({ page }) => {
-  await page.goto('http://localhost:8443/');
+test('React - Register user', async ({ page }) => {
+  await page.goto('https://localhost:8443/');
   await page.getByRole('link', { name: 'Sign Up' }).click();
   await page.getByLabel('Username').fill(userName);
   await page.getByLabel('First Name').fill('newUser');
