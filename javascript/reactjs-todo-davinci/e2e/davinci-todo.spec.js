@@ -50,5 +50,6 @@ test.describe('React - Davinci Todo', () => {
 
     // Log back in and find the created todo
     await goToTodosPage(page);
+    await expect(page.getByText(todoText, { exact: true })).toBeVisible();
   });
 });

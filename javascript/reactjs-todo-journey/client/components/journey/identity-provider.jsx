@@ -1,13 +1,13 @@
 /*
- * forgerock-sample-web-react
+ * ping-sample-web-react-journey
  *
  * identity-provider.js
  *
- * Copyright (c) 2024 - 2026 Ping Identity Corporation. All rights reserved.
+ * Copyright (c) 2026 Ping Identity Corporation. All rights reserved.
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
  */
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { DEBUGGER } from '../../constants';
 import GoogleIcon from '../icons/google-icon';
 import AppleIcon from '../icons/apple-icon';
@@ -19,7 +19,7 @@ import AppleIcon from '../icons/apple-icon';
  */
 export default function IdentityProvider({ callback }) {
   useEffect(() => {
-    function initialiseIdp() {
+    function initializeIdp() {
       const localAuthentication = callback
         .getProviders()
         .filter((provider) => provider.provider === 'localAuthentication');
@@ -28,7 +28,7 @@ export default function IdentityProvider({ callback }) {
         callback.setProvider('localAuthentication');
       }
     }
-    initialiseIdp();
+    initializeIdp();
   }, [callback]);
 
   const providersClass = {
@@ -48,7 +48,7 @@ export default function IdentityProvider({ callback }) {
   return identityProviders.map((provider, idx) => {
     const providerName = provider.uiConfig.buttonDisplayName ?? 'an identity provider';
     return (
-      <div key={provider.uiConfig.buttonDisplayName ?? 'localAuthentication' + idx}>
+      <div key={(provider.uiConfig.buttonDisplayName ?? 'localAuthentication') + idx}>
         <button
           className={providersClass[provider.uiConfig.buttonDisplayName]}
           onClick={(e) => {

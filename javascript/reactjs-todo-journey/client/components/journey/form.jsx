@@ -1,14 +1,14 @@
 /*
- * forgerock-sample-web-react
+ * ping-sample-web-react-journey
  *
  * form.js
  *
- * Copyright (c) 2024 - 2026 Ping Identity Corporation. All rights reserved.
+ * Copyright (c) 2026 Ping Identity Corporation. All rights reserved.
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
  */
 
-import React, { Fragment, useEffect, useContext, useReducer } from 'react';
+import { Fragment, useEffect, useContext, useReducer } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import Boolean from './boolean';
@@ -19,21 +19,23 @@ import Kba from './kba';
 import Loading from '../utilities/loading';
 import Password from './password';
 import treeReducer from './tree-reducer';
-import useJourneyHandler from './journey-state';
-import { AppContext } from '../../global-state';
+import useJourney from './journey.hook';
 import TermsConditions from './terms-conditions';
 import Text from './text';
 import Unknown from './unknown';
 import Button from './button';
 import TextOutput from './text-output';
 import Confirmation from './confirmation';
-import { FRWebAuthn, WebAuthnStepType, FRAuth, CallbackType } from '@forgerock/javascript-sdk';
-import WebAuthn from './web-authn';
+import WebAuthnComponent from './web-authn';
+import { callbackType } from '@forgerock/journey-client';
+import { WebAuthn, WebAuthnStepType } from '@forgerock/journey-client/webauthn';
 import KeyIcon from '../../components/icons/key-icon';
 import NewUserIcon from '../../components/icons/new-user-icon';
 import FingerPrintIcon from '../../components/icons/finger-print-icon';
 import IdentityProvider from './identity-provider';
 import Protect from './protect';
+import { ThemeContext } from '../../context/theme.context';
+import { OidcContext } from '../../context/oidc.context';
 
 /**
  * @function Form - React component for managing the user authentication journey
@@ -50,13 +52,14 @@ export default function Form({ action, bottomMessage, followUp, topMessage, jour
    * First, we will use the global state methods found in the App Context.
    * Then, we will create local state to manage the login journey.
    *
-   * The destructuring of the hook's array results in index 0 having the state value,
+   * The destructing of the hook's array results in index 0 having the state value,
    * and index 1 having the "setter" method to set new state values.
    */
   // Used for setting global authentication state
-  const [state, methods] = useContext(AppContext);
+  const [, methods] = useContext(OidcContext);
+  const theme = useContext(ThemeContext);
   // Map action to form metadata: title, button text and tree
-  const [form] = useReducer(treeReducer, treeReducer(null, action, journey));
+  const [formMetadata] = useReducer(treeReducer, treeReducer(null, action, journey));
   // Used for redirection after success
   const navigate = useNavigate();
   const [params] = useSearchParams();
@@ -75,8 +78,8 @@ export default function Form({ action, bottomMessage, followUp, topMessage, jour
    */
   const [
     { formFailureMessage, renderStep, submittingForm, user },
-    { setSubmissionStep, setSubmittingForm },
-  ] = useJourneyHandler({ action, form, resumeUrl });
+    { setSubmissionStep, setSubmittingForm, redirect },
+  ] = useJourney({ formMetadata, resumeUrl });
 
   /**
    * If the user successfully authenticates, let React complete
@@ -107,7 +110,7 @@ export default function Form({ action, bottomMessage, followUp, topMessage, jour
     finalizeAuthState();
 
     // Only `user` is a needed dependency, all others are "stable"
-  }, [user]);
+  }, [followUp, methods, navigate, user]);
 
   /**
    * Iterate through callbacks received from AM and map the callback to the
@@ -118,12 +121,13 @@ export default function Form({ action, bottomMessage, followUp, topMessage, jour
     const name = cb?.payload?.input?.[0].name;
     /** *********************************************************************
      * SDK INTEGRATION POINT
-     * Summary:SDK callback method for getting the callback type
+     * Summary: SDK callback method for getting the callback type
      * ----------------------------------------------------------------------
      * Details: This method is helpful in quickly identifying the callback
      * when iterating through an unknown list of AM callbacks
      ********************************************************************* */
     if (DEBUGGER) debugger;
+
     switch (cb.getType()) {
       case 'ChoiceCallback':
         return <Choice callback={cb} inputName={name} key={name} />;
@@ -158,12 +162,12 @@ export default function Form({ action, bottomMessage, followUp, topMessage, jour
    *
    * Once we have a step, we then need to ensure we don't already have a
    * success or failure. If we have a step but don't have a success or
-   * failure, we will likely have callbacks that we will need to present'
+   * failure, we will likely have callbacks that we will need to present
    * to the user in their render component form.
    */
   if (!renderStep) {
     /**
-     * Since there is no step information we need to call AM to retrieve the
+     * Since there is no step information, we need to call AM to retrieve the
      * instructions for rendering the login form.
      */
     return <Loading message="Checking your session ..." />;
@@ -175,27 +179,27 @@ export default function Form({ action, bottomMessage, followUp, topMessage, jour
     return <Loading message="Success! Redirecting ..." />;
   } else if (
     renderStep.type === 'Step' &&
-    FRWebAuthn.getWebAuthnStepType(renderStep) !== WebAuthnStepType.None
+    WebAuthn.getWebAuthnStepType(renderStep) !== WebAuthnStepType.None
   ) {
     return (
       <>
         <div className="cstm_form-icon align-self-center mb-3">
           <FingerPrintIcon size="72px" />
         </div>
-        <WebAuthn step={renderStep} setSubmissionStep={setSubmissionStep} />
+        <WebAuthnComponent step={renderStep} setSubmissionStep={setSubmissionStep} />
       </>
     );
   } else if (
     renderStep.type === 'Step' &&
-    (renderStep.getCallbacksOfType(CallbackType.PingOneProtectInitializeCallback).length ||
-      renderStep.getCallbacksOfType(CallbackType.PingOneProtectEvaluationCallback).length)
+    (renderStep.getCallbacksOfType(callbackType.PingOneProtectInitializeCallback).length ||
+      renderStep.getCallbacksOfType(callbackType.PingOneProtectEvaluationCallback).length)
   ) {
     return <Protect step={renderStep} setSubmissionStep={setSubmissionStep} />;
   } else if (
     renderStep.type === 'Step' &&
-    renderStep.getCallbacksOfType(CallbackType.RedirectCallback).length
+    renderStep.getCallbacksOfType(callbackType.RedirectCallback).length
   ) {
-    FRAuth.redirect(renderStep);
+    redirect(renderStep);
     return <Loading message="Redirecting ..." />;
   } else if (renderStep.type === 'Step') {
     /**
@@ -207,7 +211,7 @@ export default function Form({ action, bottomMessage, followUp, topMessage, jour
         <div className="cstm_form-icon  align-self-center mb-3">
           {action.type === 'login' ? <KeyIcon size="72px" /> : <NewUserIcon size="72px" />}
         </div>
-        <h1 className={`text-center fs-2 mb-3 ${state.theme.textClass}`}>{form.titleText}</h1>
+        <h1 className={`text-center fs-2 mb-3 ${theme.textClass}`}>{formMetadata.titleText}</h1>
         {topMessage}
         <form
           className="cstm_form"
@@ -227,7 +231,7 @@ export default function Form({ action, bottomMessage, followUp, topMessage, jour
              */
             renderStep.callbacks.map(mapCallbacksToComponents)
           }
-          <Button buttonText={form.buttonText} submittingForm={submittingForm} />
+          <Button buttonText={formMetadata.buttonText} submittingForm={submittingForm} />
         </form>
         {bottomMessage}
       </Fragment>
@@ -236,6 +240,6 @@ export default function Form({ action, bottomMessage, followUp, topMessage, jour
     /**
      * Just in case things blow up.
      */
-    return <Alert message={renderStep.payload.message} type="error" />;
+    return <Alert message={renderStep.payload?.message || formFailureMessage} type="error" />;
   }
 }

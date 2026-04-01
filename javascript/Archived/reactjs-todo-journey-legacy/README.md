@@ -20,9 +20,9 @@ Once you have the 5 requirements above met, we can build the project.
 
 #### Configure CORS
 
-1. Allowed origins: `https://react.example.com:8443`
+1. Allowed origins: `https://localhost:8443`
 2. Allowed methods: `GET` `POST`
-3. Allowed headers: `Content-Type` `X-Requested-With` `Accept-API-Version` `Authorization`
+3. Allowed headers: `Content-Type` `X-Requested-With` X-Requested-Platform` `Accept-API-Version` `Authorization`
 4. Allow credentials: enable
 
 #### Create Your OAuth Clients
@@ -46,6 +46,9 @@ Note: The sample app currently supports the following callbacks only:
 - BooleanAttributeInputCallback
 - KbaCreateCallback
 - TermsAndConditionsCallback
+- TextOutputCallback
+- ConfirmationCallback
+- SelectIdPCallback
 
 ### Configure Your `.env` File
 
@@ -54,9 +57,9 @@ Change the name of `.env.example` to `.env` and replace the bracketed values (e.
 Example with annotations:
 
 ```text
-SERVER_URL=<<<URL to your AM/ PingOne instance>>>
-APP_URL=https://react.example.com:8443 # in develop we do not use this variable for dynamic deployment reasons
-API_URL=https://api.example.com:9443
+SERVER_URL=<<<URL to your AM instance>>>
+APP_URL=https://localhost:8443 # in develop we do not use this variable for dynamic deployment reasons
+API_URL=http://localhost:9443
 DEBUGGER_OFF=false
 JOURNEY_LOGIN=Login
 JOURNEY_REGISTER=Registration
@@ -71,25 +74,6 @@ WEB_OAUTH_CLIENT=<<<Your Web OAuth client name/ID>>>
 ```sh
 # Install all dependencies (no need to pass the -w option)
 npm install
-
-# run sample app project
-# only if you want to see the app build, the serve command will do this for you
-npm run build -w reactjs-todo-journey # if in workspace root
-
-npm run build # if in the reactjs-todo-journey folder
-```
-
-### Update Your `/etc/hosts` File
-
-Now you'll need to update your `hosts` (`/etc/hosts` if on a Mac) to allow for domain aliases:
-
-```sh
-sudo vim /etc/hosts
-```
-
-```text
-# hosts file aliases
-127.0.0.1 react.example.com api.example.com
 ```
 
 ### Run the Servers
@@ -97,23 +81,21 @@ sudo vim /etc/hosts
 Now, run the below commands to start the processes needed for building the application and running the servers for both client and API server:
 
 ```sh
-# In one terminal window, run the following watch command
-npm run start:reactjs-todo-journey # only if in root
-
-npm start # if in reactjs-todo-journey folder
+# In one terminal window, run the following watch command from the root of the repository
+npm run start:reactjs-todo-journey
 ```
 
-Now, you should be able to visit `https://react.example.com:8443`, which is your web app or client (the Relying Party in OAuth terms). This client will make requests to your AM instance, (the Authorization Server in OAuth terms), which will be running on whatever domain you set, and `https://api.example.com:9443` as the REST API for your todos (the Resource Server).
+Now, you should be able to visit `https://localhost:8443`, which is your web app or client (the Relying Party in OAuth terms). This client will make requests to your AM instance, (the Authorization Server in OAuth terms), which will be running on whatever domain you set, and `http://localhost:9443` as the REST API for your todos (the Resource Server).
 
 ### Accept Cert Exceptions
 
-You will likely have to accept the security certificate exceptions for both your React app and the Node.js server. To accept the cert form the Node.js server, you can visit `https://api.example.com:9443/healthcheck` in your browser. Once you receive "OK", your Node.js server is running on the correct domain and port, and the cert is accepted.
+You will likely have to accept the security certificate exceptions for both your React app and the Node.js server. To accept the cert form the Node.js server, you can visit `http://localhost:9443/healthcheck` in your browser. Once you receive "OK", your Node.js server is running on the correct domain and port, and the cert is accepted.
 
 ## Learn About Integration Touchpoints
 
 This project has a debugging statements that can be activated which causes the app to pause execution at each SDK integration point. It will have a comment above the `debugger` statement explaining the purpose of the integration.
 
-If you'd like to use this feature as a learning tool, [open the live app](https://fr-react-todos.crbrl.io/) and then open the developer tools of your browser. Rerun the app with the developer tools open, and it will automatically pause at these points of integration.
+If you'd like to use this feature as a learning tool, open the developer tools of your browser and rerun the app locally. It will automatically pause at these points of integration.
 
 For local development, if you want to turn these debuggers off, you can set the environment variable of `DEBUGGER_OFF` to true.
 

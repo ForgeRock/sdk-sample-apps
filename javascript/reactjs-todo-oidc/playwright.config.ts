@@ -1,6 +1,10 @@
 import { defineConfig, devices } from '@playwright/test';
 
 const url = process.env.PLAYWRIGHT_TEST_BASE_URL || 'https://localhost:8443';
+import * as dotenv from 'dotenv';
+
+// Load environment variables from .env file
+dotenv.config({ path: '.env' });
 
 export default defineConfig({
   testDir: 'e2e',
