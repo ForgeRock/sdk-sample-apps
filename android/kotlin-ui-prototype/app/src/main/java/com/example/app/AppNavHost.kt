@@ -43,6 +43,7 @@ import org.forgerock.android.auth.Action
 import org.forgerock.android.auth.FRRequestInterceptor
 import org.forgerock.android.auth.Request
 import org.forgerock.android.auth.RequestInterceptorRegistry
+import androidx.core.net.toUri
 
 @Composable
 fun AppNavHost(navController: NavHostController,
@@ -110,7 +111,8 @@ fun AppNavHost(navController: NavHostController,
                     override fun intercept(request: Request, tag: Action?): Request {
                         return if (tag?.payload?.getString("tree").equals(USER_PROFILE_JOURNEY)) {
                             request.newBuilder()
-                                .url(Uri.parse(request.url().toString())
+                                .url(
+                                    request.url().toString().toUri()
                                     .buildUpon()
                                     .appendQueryParameter("ForceAuth", "true").toString())
                                 .build()
