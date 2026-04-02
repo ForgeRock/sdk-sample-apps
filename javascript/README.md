@@ -24,38 +24,23 @@ We provide samples that demonstrate both methods.
 
 ### Integrate with PingOne Advanced Identity Cloud / PingAM:
 
-To try out the Ping JavaScript SDK please look at one of our samples:
-
-- [**Embedded login - `embedded-login`**](./embedded-login/README.md)
-
-  - A barebones example of how to use the `@forgerock/javascript-sdk` in a vanilla html & javascript app with embedded login. The sample supports the OOTB Login Journey with Username and Password.
-
 - [**React Todo Journey - `reactjs-todo-journey`**](./reactjs-todo-journey/README.md)
 
-  - Todo application that involves authentication and authorization of a user to post Todos with the `@forgerock/javascript-sdk` in ReactJS.
+  - Todo application that involves authentication and authorization of a user to post Todos with the `@forgerock/journey-client` and `@forgerock/oidc-client` packages in ReactJS.
     This sample is focused on embedded journey login patterns, including callback-rich experiences such as WebAuthN and social login.
 
-- [**Angular Todo - `angular-todo`**](./angular-todo/README.md)
-  
-  - Todo application that involves authentication and authorization of a user to post Todos with the `@forgerock/javascript-sdk` in Angular.
-    The main branch includes many flavors of callbacks, including WebAuthN, embedded login, and social login.
+### Integrate with PingOne DaVinci:
 
-### Integrate with flows - PingOne DaVinci:
+- [**React Todo DaVinci - `reactjs-todo-davinci`**](./reactjs-todo-davinci/README.md)
 
-- [**React Todo DaVinci - `reactjs-todo-davinci`**](./reactjs-todo-davinci/)
-
-  - Todo application that involves authentication and authorization of a user to post Todos with DaVinci in ReactJS.
+  - Todo application that involves authentication and authorization of a user to post Todos with the `@forgerock/davinci-client` and `@forgerock/oidc-client` packages in ReactJS.
   Demonstrates handling DaVinci flows and collectors.
 
 ### OIDC Login:
 
 - [**React Todo OIDC - `reactjs-todo-oidc`**](./reactjs-todo-oidc/README.md)
 
-  - React todo sample app for centralized OIDC login using the current OIDC client patterns.
-
-- Archived vanilla OIDC samples:
-  - [`Archived/central-login-oidc`](./Archived/central-login-oidc/README.md)
-  - [`Archived/central-login-oidc-client`](./Archived/central-login-oidc-client/README.md)
+  - React todo sample app for centralized OIDC login using the current OIDC client patterns and the `@forgerock/oidc-client` package.
 
 ## Documentation
 
