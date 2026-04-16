@@ -2,7 +2,7 @@
 //  AccessTokenViewModel.swift
 //  Davinci
 //
-//  Copyright (c) 2024 - 2025 Ping Identity Corporation. All rights reserved.
+//  Copyright (c) 2024 - 2026 Ping Identity Corporation. All rights reserved.
 //
 //  This software may be modified and distributed under the terms
 //  of the MIT license. See the LICENSE file for details.
@@ -34,7 +34,7 @@ class AccessTokenViewModel: ObservableObject {
     /// - Logs the success or failure result using `PingLogger`.
     func accessToken() async {
         /// Request the token from the DaVinci SDK
-        let token = await davinci.user()?.token()
+        let token = await davinci.daVinciUser()?.token()
         
         /// Process the token result
         switch token {
