@@ -34,7 +34,7 @@ class AccessTokenViewModel: ObservableObject {
     /// - Logs the success or failure result using `PingLogger`.
     func accessToken() async {
         /// Request the token from the DaVinci SDK
-        let token = await davinci.user()?.token()
+        let token = await davinci.daVinciUser()?.token()
         
         /// Process the token result
         switch token {

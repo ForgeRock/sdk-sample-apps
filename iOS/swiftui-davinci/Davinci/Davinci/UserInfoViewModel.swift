@@ -34,7 +34,7 @@ class UserInfoViewModel: ObservableObject {
     /// - Updates the `userInfo` property with the fetched data or an error message.
     /// - Logs success and error messages using `PingLogger`.
     func fetchUserInfo() async {
-        let userInfo = await davinci.user()?.userinfo(cache: false)
+        let userInfo = await davinci.daVinciUser()?.userinfo(cache: false)
         switch userInfo {
         case .success(let userInfoDictionary):
             // On success, format the dictionary into a string and update `userInfo`.

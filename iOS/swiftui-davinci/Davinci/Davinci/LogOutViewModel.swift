@@ -23,7 +23,7 @@ class LogOutViewModel: ObservableObject {
     /// - Updates the `logout` property with a completion message upon success.
     func logout() async {
         /// Call the DaVinci SDK's logout method
-        await davinci.user()?.logout()
+        await davinci.daVinciUser()?.logout()
         /// Update the UI on the main thread
         await MainActor.run {
             logout =  "Logout completed"
