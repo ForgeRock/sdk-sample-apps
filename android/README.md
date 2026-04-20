@@ -1,11 +1,6 @@
-<p align="center">
-  <a href="https://github.com/ForgeRock/sdk-sample-apps">
-    <img src="https://www.pingidentity.com/content/dam/picr/nav/Ping-Logo-2.svg" alt="Ping Identity Logo">
-  </a>
-  <hr/>
-</p>
+[![Ping Identity](https://www.pingidentity.com/content/dam/picr/nav/Ping-Logo-2.svg)](https://github.com/ForgeRock/sdk-sample-apps)
 
-## Samples
+## Android Samples
 
 _Ping provides these Android samples to help demonstrate SDK functionality/implementation. They are provided "as is" and are not official products of Ping and are not officially supported._
 
@@ -23,37 +18,18 @@ We provide samples that demonstrate both methods.
 
 ### Integrate with Auth Journeys - PingOne Advanced Identity Cloud / PingAM:
 
-To try out the Ping Android SDK please look at one of our samples:
-
-- [**Java Authenticator - `/java-authenticator`**](./java-authenticator/)
-  
-  - This Authenticator sample app supports registration of multiple accounts and multiple different authentication methods in each account, such as push notifications and one-time passwords.
-
-- [**Java UI prototype - `/java-ui-prototype`**](./java-ui-prototype/)
-  
-  - An example Android project making full use of the Android SDK with a prototyping UI. Allows to explore the SDK uses in detail with example calls for running Journeys, getting OAuth2.0 tokens, User Info and more. 
-  (https://docs.pingidentity.com/sdks/latest/sdks/tutorials/android/index.html)
-
-- [**Java Quickstart - `/java-quickstart`**](./java-quickstart/)
-  
-  - An example Android project written in Java making use of the SDK. The sample supports the OOTB Login Journey with Username and Password. (https://docs.pingidentity.com/sdks/latest/sdks/tutorials/android/index.html)
-
-- [**Kotlin Quickstart - `/kotlin-quickstart`**](./kotlin-quickstart/)
-  
-  - An example Android project written in Java making use of the SDK. The sample supports the OOTB Login Journey with Username and Password. (https://docs.pingidentity.com/sdks/latest/sdks/tutorials/android/index.html)
-
-- [**Kotlin UI prototype - `/kotlin-ui-prototype`**](./kotlin-ui-prototype/)
+- [**Kotlin Journey - `/kotlin-journey`**](./kotlin-journey/)
   
   - An example Android project making full use of the Android SDK with a prototyping UI, written in Kotlin. Allows to explore the SDK uses in detail with example calls for running Journeys, getting OAuth2.0 tokens, User Info and more. 
-  (https://docs.pingidentity.com/sdks/latest/sdks/tutorials/android/index.html)
+  (https://developer.pingidentity.com/orchsdks/journey/index.html)
 
 
 ### Integrate with flows - PingOne DaVinci:
 
 - [**Kotlin DaVinci - `/kotlin-davinci`**](./kotlin-davinci/)
-  - An example Android project making use of the OOTB PingOne Sign on With Sessions flow in DaVinci environments and found in the marketplace.       Demonstrates use cases such as user authentication, registration, and account recovery.
+  - An example Android project making use of the OOTB PingOne Sign on With Sessions flow in DaVinci environments and found in the marketplace. Demonstrates use cases such as user authentication, registration, and account recovery.
 
-    (https://docs.pingidentity.com/sdks/latest/davinci/tutorials/android/index.html)
+    (https://developer.pingidentity.com/orchsdks/davinci/index.html)
 
 ### OIDC Login:
 
@@ -64,12 +40,11 @@ To try out the Ping Android SDK please look at one of our samples:
     Can be used with PingOne Advanced Identity Cloud,
     PingOne, PingOne DaVinci (via a PingOne application),
     PingAM, and PingFederate.
-    (https://docs.pingidentity.com/sdks/latest/oidc/index.html)
-
+    (https://developer.pingidentity.com/orchsdks/oidc/index.html)
 
 ## Documentation
 
-Detailed [documentation](https://docs.pingidentity.com/sdks) is provided, and includes topics such as:
+Detailed [documentation](https://developer.pingidentity.com/orchsdks/index.html) is provided, and includes topics such as:
 
 - Tutorial walkthroughs for each server
 - Integrating functionality such as PingOne Protect, WebAuthn, and more
@@ -81,5 +56,11 @@ Detailed [documentation](https://docs.pingidentity.com/sdks) is provided, and in
 - Latest Android Studio
 - Java 17+
 - Gradle 8.6+
-- Ping Advanced Identity Cloud or Ping AM 7.1 and above
-- Android API level 23+
+- Ping Advanced Identity Cloud or PingAM 7.1 and above
+- Android API level 29+
+
+## License
+
+This software may be modified and distributed under the terms of the MIT license. See the LICENSE file for details.
+
+© Copyright 2024-2026 Ping Identity Corporation. All rights reserved.

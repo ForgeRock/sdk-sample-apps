@@ -1,9 +1,4 @@
-<p align="center">
-  <a href="https://github.com/ForgeRock/sdk-sample-apps">
-    <img src="https://www.pingidentity.com/content/dam/picr/nav/Ping-Logo-2.svg" alt="Ping Identity Logo">
-  </a>
-  <hr/>
-</p>
+[![Ping Identity](https://www.pingidentity.com/content/dam/picr/nav/Ping-Logo-2.svg)](https://github.com/ForgeRock/sdk-sample-apps)
 
 ## Samples
 
@@ -33,15 +28,29 @@ Detailed [documentation](https://docs.pingidentity.com/sdks) is provided, and in
 
 ## Requirements
 
-JavaScript
+**JavaScript**
 - Please use a modern web browser like Chrome, Safari, or Firefox
 - Node >= 18
 
-iOS
+**iOS**
 - Latest Xcode
+- iOS 16+
 
-Android
+**Android**
 - Latest Android Studio
 - Java 17+
 - Gradle 8.6+
-- Android API level 23+
+- Android API level 29+
+
+## Disclaimer
+
+> **This code is provided by Ping Identity Corporation ("Ping") on an "as is" basis, without warranty of any kind, to the fullest extent permitted by law.
+> Ping Identity Corporation does not represent or warrant or make any guarantee regarding the use of this code or the accuracy, timeliness or completeness of any data or information relating to this code, and Ping Identity Corporation hereby disclaims all warranties whether express, or implied or statutory, including without limitation the implied warranties of merchantability, fitness for a particular purpose, and any warranty of non-infringement.
+> Ping Identity Corporation shall not have any liability arising out of or related to any use, implementation or configuration of this code, including but not limited to use for any commercial purpose.
+> Any action or suit relating to the use of the code may be brought only in the courts of a jurisdiction wherein Ping Identity Corporation resides or in which Ping Identity Corporation conducts its primary business, and under the laws of that jurisdiction excluding its conflict-of-law provisions.**
+
+## License
+
+This software may be modified and distributed under the terms of the MIT license. See the [LICENSE](./LICENSE) file for details.
+
+© Copyright 2024-2026 Ping Identity Corporation. All rights reserved.
