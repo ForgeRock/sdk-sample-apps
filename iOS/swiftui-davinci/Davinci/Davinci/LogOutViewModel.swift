@@ -2,7 +2,7 @@
 //  LogOutViewModel.swift
 //  Davinci
 //
-//  Copyright (c) 2024 - 2025 Ping Identity Corporation. All rights reserved.
+//  Copyright (c) 2024 - 2026 Ping Identity Corporation. All rights reserved.
 //
 //  This software may be modified and distributed under the terms
 //  of the MIT license. See the LICENSE file for details.
@@ -23,7 +23,7 @@ class LogOutViewModel: ObservableObject {
     /// - Updates the `logout` property with a completion message upon success.
     func logout() async {
         /// Call the DaVinci SDK's logout method
-        await davinci.user()?.logout()
+        await davinci.daVinciUser()?.logout()
         /// Update the UI on the main thread
         await MainActor.run {
             logout =  "Logout completed"
