@@ -8,8 +8,7 @@ Our samples showcase functionality of our SDKs to get you up and running,
 whether you are using PingOne Advanced Identity Cloud, PingAM,
 OIDC (Redirect) Login, or PingOne DaVinci, we've got you covered.
 
-Explore the many use cases
-the Ping SDKs have to offer by referring to each respective SDK:
+Explore the many use cases the Ping Orchestration SDKs have to offer by referring to each respective SDK:
 
 - [JavaScript](./javascript/)
 
@@ -19,7 +18,7 @@ the Ping SDKs have to offer by referring to each respective SDK:
 
 ## Documentation
 
-Detailed [documentation](https://docs.pingidentity.com/sdks) is provided, and includes topics such as:
+Detailed [documentation](https://developer.pingidentity.com/orchsdks/index.html) is provided, and includes topics such as:
 
 - Tutorial walkthroughs for each server
 - Integrating functionality such as PingOne Protect, WebAuthn, and more
@@ -27,6 +26,9 @@ Detailed [documentation](https://docs.pingidentity.com/sdks) is provided, and in
 - API Reference documentation
 
 ## Requirements
+
+**Ping Identity platform**
+- PingOne DaVinci or Ping Advanced Identity Cloud / PingAM [Supported Versions](https://support.pingidentity.com/s/article/Ping-Identity-EOL-Tracker)
 
 **JavaScript**
 - Please use a modern web browser like Chrome, Safari, or Firefox

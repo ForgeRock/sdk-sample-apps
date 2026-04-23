@@ -42,23 +42,6 @@ We provide samples that demonstrate both methods.
     PingAM, and PingFederate.
     (https://developer.pingidentity.com/orchsdks/oidc/index.html)
 
-## Documentation
-
-Detailed [documentation](https://developer.pingidentity.com/orchsdks/index.html) is provided, and includes topics such as:
-
-- Tutorial walkthroughs for each server
-- Integrating functionality such as PingOne Protect, WebAuthn, and more
-- Code snippets
-- API Reference documentation
-
-## Requirements
-
-- Latest Android Studio
-- Java 17+
-- Gradle 8.6+
-- Ping Advanced Identity Cloud or PingAM 7.1 and above
-- Android API level 29+
-
 ## License
 
 This software may be modified and distributed under the terms of the MIT license. See the LICENSE file for details.

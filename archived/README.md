@@ -7,11 +7,11 @@
 >
 >**The ForgeRock SDK v4.x entered a maintenance-only phase on April 15, 2026, and its end-of-support is scheduled for April 15, 2028. During this period, the SDK will only receive critical bug fixes and security updates.**
 
-## Recommended Action: Migrate to Ping SDK v2.x
+## Recommended Action: Migrate to Ping Orchestration SDK v2.x
 
-We strongly recommend migrating to the Ping SDK v2.x. New sample applications and [migration guides](https://developer.pingidentity.com/orchsdks/journey/migration.html) are available to assist with this transition.
+We strongly recommend migrating to the Ping Orchestration SDK v2.x. New sample applications and [migration guides](https://developer.pingidentity.com/orchsdks/journey/migration.html) are available to assist with this transition.
 
-Adopting the latest Ping SDK ensures the security, compatibility, and stability of your solutions, offering improved features, enhanced performance, and continued support from Ping.
+Adopting the latest Ping Orchestration SDK ensures the security, compatibility, and stability of your solutions, offering improved features, enhanced performance, and continued support from Ping.
 
 ## License
 

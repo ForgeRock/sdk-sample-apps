@@ -1,11 +1,6 @@
-<p align="center">
-  <a href="https://github.com/ForgeRock/sdk-sample-apps">
-    <img src="https://www.pingidentity.com/content/dam/picr/nav/Ping-Logo-2.svg" alt="Ping Identity Logo">
-  </a>
-  <hr/>
-</p>
+[![Ping Identity](https://www.pingidentity.com/content/dam/picr/nav/Ping-Logo-2.svg)](https://github.com/ForgeRock/sdk-sample-apps)
 
-## Samples
+## JavaScript Samples
 
 _Ping provides these samples to help demonstrate SDK functionality/implementation. They are provided "as is" and are not official products of Ping and are not officially supported._
 
@@ -42,17 +37,8 @@ We provide samples that demonstrate both methods.
 
   - React todo sample app for centralized OIDC login using the current OIDC client patterns and the `@forgerock/oidc-client` package.
 
-## Documentation
+## License
 
-Detailed [documentation](https://docs.pingidentity.com/sdks) is provided, and includes topics such as:
+This software may be modified and distributed under the terms of the MIT license. See the LICENSE file for details.
 
-- Tutorial walkthroughs for each server
-- Integrating functionality such as PingOne Protect, WebAuthn, and more
-- Code snippets
-- API Reference documentation
-
-## Requirements
-
-JavaScript
-- Please use a modern web browser like Chrome, Safari, or Firefox
-- Node >= 18
+© Copyright 2024-2026 Ping Identity Corporation. All rights reserved.
