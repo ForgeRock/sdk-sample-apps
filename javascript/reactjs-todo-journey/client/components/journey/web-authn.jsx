@@ -11,6 +11,7 @@
 import { WebAuthn, WebAuthnStepType } from '@forgerock/journey-client/webauthn';
 import { useEffect, useState, useContext } from 'react';
 import { ThemeContext } from '../../context/theme.context';
+import { traceJourney, traceStep } from '../../utilities/journey-trace';
 /**
  * @function WebAuthn - Footer React component
  * @returns {Object} - React component object
@@ -25,23 +26,53 @@ export default function WebAuthnComponent({ step, setSubmissionStep }) {
   });
   useEffect(() => {
     async function performWebAuthn() {
+      traceStep('webauthn:handle:start', step, {
+        webAuthnStep,
+      });
+
       try {
         if (webAuthnStep === WebAuthnStepType.Registration) {
           setState({
             header: 'Registering your device',
             message: 'Your device will be used to verify your identity',
           });
-          await WebAuthn.register(step);
+          traceStep('webauthn:registration:request', step, {
+            webAuthnStep,
+          });
+          const result = await WebAuthn.register(step);
+          traceJourney('webauthn:registration:response', {
+            webAuthnStep,
+            result,
+            step,
+          });
         } else {
           setState({
             header: 'Verifying your identity',
             message: 'Use your device to verify your identity',
           });
-          await WebAuthn.authenticate(step);
+          traceStep('webauthn:authentication:request', step, {
+            webAuthnStep,
+          });
+          const result = await WebAuthn.authenticate(step);
+          traceJourney('webauthn:authentication:response', {
+            webAuthnStep,
+            result,
+            step,
+          });
         }
+        traceStep('webauthn:submit-step', step, {
+          webAuthnStep,
+        });
         setSubmissionStep(step);
-      // eslint-disable-next-line no-unused-vars
-      } catch (_) {
+      } catch (error) {
+        traceJourney('webauthn:error', {
+          error,
+          webAuthnStep,
+          step,
+        });
+        traceStep('webauthn:submit-step-after-error', step, {
+          webAuthnStep,
+        });
         setSubmissionStep(step);
       }
     }

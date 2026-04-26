@@ -25,6 +25,7 @@ export const SCOPE = import.meta.env.VITE_SCOPE;
 export const WELLKNOWN_URL = import.meta.env.VITE_WELLKNOWN_URL;
 export const INIT_PROTECT = import.meta.env.VITE_INIT_PROTECT;
 export const PINGONE_ENV_ID = import.meta.env.VITE_PINGONE_ENV_ID;
+export const JOURNEY_TRACE = import.meta.env.VITE_JOURNEY_TRACE === 'true';
 
 const redirectUri = `${window.location.origin}/${
   CENTRALIZED_LOGIN === 'true' || centralLoginParam === 'true'

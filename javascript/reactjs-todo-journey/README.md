@@ -63,15 +63,29 @@ Change the name of `.env.example` to `.env` and fill the environment variables w
 Example with annotations:
 
 ```text
-WELLKNOWN_URL=<<<Wellknown URL to your AM instance>>>
-APP_URL=https://localhost:8443 # in develop we do not use this variable for dynamic deployment reasons
-API_URL=http://localhost:9443
-DEBUGGER_OFF=false
-JOURNEY_LOGIN=Login
-JOURNEY_REGISTER=Registration
+VITE_WELLKNOWN_URL=<<<Wellknown URL to your AM instance>>>
+VITE_API_URL=http://localhost:9443
+VITE_PORT=8443
+VITE_DEBUGGER_OFF=false
+VITE_DEVELOPMENT=true
+VITE_JOURNEY_TRACE=true
+VITE_JOURNEY_LOGIN=Login
+VITE_JOURNEY_REGISTER=Registration
+VITE_REALM_PATH=<<<Realm path of AM>>>
+VITE_WEB_OAUTH_CLIENT=<<<Your Web OAuth client name/ID>>>
+VITE_SCOPE='openid profile email'
+VITE_CENTRALIZED_LOGIN=false
+```
+
+Configure the shared Todo API server separately in `../todo-api/.env`:
+
+```text
+SERVER_TYPE=AIC
+SERVER_URL=<<<AM URL for your AIC tenant>>>
+PORT=9443
 REALM_PATH=<<<Realm path of AM>>>
-WEB_OAUTH_CLIENT=<<<Your Web OAuth client name/ID>>>
-SCOPE='openid profile email'
+REST_OAUTH_CLIENT=<<<Confidential OAuth client ID>>>
+REST_OAUTH_SECRET=<<<Confidential OAuth client secret>>>
 ```
 
 ### Installing Dependencies and Run Build
@@ -104,7 +118,24 @@ This project has a debugging statements that can be activated which causes the a
 
 If you'd like to use this feature as a learning tool, open the developer tools of your browser and rerun the app locally. It will automatically pause at these points of integration.
 
-For local development, if you want to turn these debuggers off, you can set the environment variable of `DEBUGGER_OFF` to true.
+For local development, if you want to turn these debuggers off, you can set the environment variable of `VITE_DEBUGGER_OFF` to true.
+
+## Trace AIC Journey Activity
+
+Set `VITE_JOURNEY_TRACE=true` in `.env` to record structured local journey trace events. When enabled, the app logs `[Ping Journey Trace]` entries to the browser console and stores the same entries on `window.__PING_JOURNEY_TRACE__`.
+
+The trace includes journey start/resume, received steps, callback payloads, outgoing `journeyClient.next(step)` submissions, failure/restart handling, redirects, OAuth calls, PingOne Protect, and WebAuthn registration/authentication events.
+
+Useful DevTools commands:
+
+```js
+window.__PING_JOURNEY_TRACE__
+window.__PING_JOURNEY_TRACE_HELPERS__.copy()
+window.__PING_JOURNEY_TRACE_HELPERS__.download()
+window.__PING_JOURNEY_TRACE_HELPERS__.clear()
+```
+
+`VITE_JOURNEY_TRACE=true` records full local payloads, including credentials, tokens, authIds, PingOne Protect data, MFA values, and WebAuthn artifacts when those values are present. Keep it for local troubleshooting only and review exported traces before sharing them.
 
 ## Modifying This Project
 

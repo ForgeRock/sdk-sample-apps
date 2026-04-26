@@ -10,6 +10,7 @@
 import { createContext, useState, useEffect } from 'react';
 import { protect } from '@forgerock/protect';
 import { DEBUGGER, INIT_PROTECT } from '../constants';
+import { traceJourney } from '../utilities/journey-trace';
 
 const urlParams = new URLSearchParams(window.location.search);
 const protectInitMode = INIT_PROTECT || urlParams.get('initProtect');
@@ -41,10 +42,22 @@ export function useInitProtect(config) {
        * but it can be done outside of the React component for better performance.
        ************************************************************************* */
       if (DEBUGGER) debugger;
+      traceJourney('protect:bootstrap:request', {
+        initMode: protectInitMode,
+        config,
+      });
       const api = protect(config);
       const result = await api.start();
+      traceJourney('protect:bootstrap:response', {
+        initMode: protectInitMode,
+        result,
+      });
       if (result?.error) {
         console.error(`Error initializing Protect: ${result.error}`);
+        traceJourney('protect:bootstrap:error', {
+          initMode: protectInitMode,
+          result,
+        });
       } else {
         console.log('Protect initialized at bootstrap for data collection');
       }

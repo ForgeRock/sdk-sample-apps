@@ -13,6 +13,7 @@ import { CONFIG, DEBUGGER } from '../../constants.js';
 import { htmlDecode } from '../../utilities/decode.js';
 import { OidcContext } from '../../context/oidc.context.js';
 import { callbackType, journey } from '@forgerock/journey-client';
+import { snapshotStep, traceJourney, traceStep } from '../../utilities/journey-trace.js';
 
 /**
  * @function isGenericError - Helper function to determine if a step is a GenericError
@@ -20,7 +21,7 @@ import { callbackType, journey } from '@forgerock/journey-client';
  * @returns {boolean} - True if the step is a GenericError, false otherwise
  */
 function isGenericError(step) {
-  return 'error' in step;
+  return Boolean(step && 'error' in step);
 }
 
 /**
@@ -69,26 +70,56 @@ export default function useJourney({ formMetadata, resumeUrl }) {
        ********************************************************************* */
       if (DEBUGGER) debugger;
       try {
+        traceJourney('journey:init:start', {
+          tree: formMetadata.tree,
+          config: CONFIG,
+          resumeUrl,
+        });
+
         const client = await journey({ config: CONFIG });
         setJourneyClient(client);
+        traceJourney('journey:init:success', {
+          tree: formMetadata.tree,
+          resumeUrl,
+        });
 
         if (resumeUrl) {
           /**
            * If we were redirected here from an IDP with a resumeUrl, then resume the journey
            */
+          traceJourney('journey:resume:request', {
+            resumeUrl,
+          });
           const resumeStep = await client.resume(resumeUrl);
+          traceStep('journey:resume:received-step', resumeStep, {
+            resumeUrl,
+          });
 
-          if ('error' in resumeStep) {
+          if (isGenericError(resumeStep)) {
             console.error('Error resuming journey:', resumeStep.error);
+            traceJourney('journey:resume:error', {
+              error: resumeStep.error,
+              response: resumeStep,
+            });
           }
 
           // Continue the journey
           setSubmissionStep(resumeStep);
         } else {
+          traceJourney('journey:start:request', {
+            tree: formMetadata.tree,
+          });
           let initialStep = await client.start({ journey: formMetadata.tree });
+          traceStep('journey:start:received-step', initialStep, {
+            tree: formMetadata.tree,
+          });
 
-          if ('error' in initialStep) {
+          if (isGenericError(initialStep)) {
             console.error('Error starting journey:', initialStep.error);
+            traceJourney('journey:start:error', {
+              error: initialStep.error,
+              response: initialStep,
+            });
             initialStep = {
               payload: {
                 message: 'Unable to start journey',
@@ -96,16 +127,27 @@ export default function useJourney({ formMetadata, resumeUrl }) {
             };
           }
 
+          traceStep('journey:render-step', initialStep, {
+            source: 'start',
+          });
           setRenderStep(initialStep);
         }
       } catch (error) {
         console.error(`Error initializing journey; ${error}`);
+        traceJourney('journey:init:error', {
+          error,
+          tree: formMetadata.tree,
+          resumeUrl,
+        });
         const initialStep = {
           payload: {
             message: 'Error initializing journey',
           },
         };
 
+        traceStep('journey:render-step', initialStep, {
+          source: 'init-error',
+        });
         setRenderStep(initialStep);
       }
     }
@@ -130,12 +172,23 @@ export default function useJourney({ formMetadata, resumeUrl }) {
        * to receive code and state which we can then exchange for tokens.
        ************************************************************************* */
       if (DEBUGGER) debugger;
+      traceJourney('oauth:authorize:request');
 
       const response = await oidcClient.authorize.background();
+      traceJourney('oauth:authorize:response', {
+        response,
+      });
+
       if ('error' in response) {
         console.error('Authorization Error:', response);
+        traceJourney('oauth:authorize:error', {
+          response,
+        });
 
         if (response.redirectUrl) {
+          traceJourney('oauth:authorize:redirect', {
+            redirectUrl: response.redirectUrl,
+          });
           window.location.assign(response.redirectUrl);
         } else {
           console.log('Authorization failed with no ability to redirect:', response);
@@ -143,9 +196,20 @@ export default function useJourney({ formMetadata, resumeUrl }) {
         return;
       } else if ('code' in response && 'state' in response) {
         // Handle success response from background authorization
+        traceJourney('oauth:token:request', {
+          code: response.code,
+          state: response.state,
+        });
         const tokenResponse = await oidcClient.token.exchange(response.code, response.state);
+        traceJourney('oauth:token:response', {
+          response: tokenResponse,
+        });
+
         if ('error' in tokenResponse) {
           console.error('Token error:', tokenResponse);
+          traceJourney('oauth:token:error', {
+            response: tokenResponse,
+          });
           return;
         }
       }
@@ -159,9 +223,17 @@ export default function useJourney({ formMetadata, resumeUrl }) {
        * user info in the UI.
        ********************************************************************* */
       if (DEBUGGER) debugger;
+      traceJourney('oauth:userinfo:request');
       const user = await oidcClient.user.info();
+      traceJourney('oauth:userinfo:response', {
+        response: user,
+      });
+
       if ('error' in user) {
         console.error('Error getting user:', user);
+        traceJourney('oauth:userinfo:error', {
+          response: user,
+        });
         setUser({});
       } else {
         setUser(user);
@@ -192,13 +264,30 @@ export default function useJourney({ formMetadata, resumeUrl }) {
       let nextStep;
 
       if (!isGenericError(prev)) {
+        traceStep('journey:next:request', prev, {
+          tree: formMetadata.tree,
+          stepCount: stepCount.current,
+        });
         nextStep = await journeyClient.next(prev);
+        traceStep('journey:next:response', nextStep, {
+          tree: formMetadata.tree,
+          stepCount: stepCount.current,
+        });
 
         if (isGenericError(nextStep)) {
           console.error('Error getting next journey step:', nextStep.error);
+          traceJourney('journey:next:error', {
+            error: nextStep.error,
+            response: nextStep,
+          });
         } else {
           stepCount.current += 1;
         }
+      } else {
+        traceJourney('journey:next:skipped-generic-error', {
+          tree: formMetadata.tree,
+          previousStep: snapshotStep(prev),
+        });
       }
 
       /**
@@ -220,6 +309,12 @@ export default function useJourney({ formMetadata, resumeUrl }) {
             : 'Login failure';
 
         setFormFailureMessage(errorMessage);
+        traceJourney('journey:failure', {
+          tree: formMetadata.tree,
+          errorMessage,
+          previousStep: snapshotStep(prev),
+          responseStep: snapshotStep(nextStep),
+        });
 
         /** *******************************************************************
          * SDK INTEGRATION POINT
@@ -229,10 +324,20 @@ export default function useJourney({ formMetadata, resumeUrl }) {
          * method again to get a fresh authId.
          ******************************************************************* */
         if (DEBUGGER) debugger;
+        traceJourney('journey:restart:request', {
+          tree: formMetadata.tree,
+        });
         const newStep = await journeyClient.start({ journey: formMetadata.tree });
+        traceStep('journey:restart:received-step', newStep, {
+          tree: formMetadata.tree,
+        });
 
-        if ('error' in newStep) {
+        if (isGenericError(newStep)) {
           console.error('Error starting journey:', newStep.error);
+          traceJourney('journey:restart:error', {
+            error: newStep.error,
+            response: newStep,
+          });
           setFormFailureMessage('Unable to restart journey');
         }
 
@@ -259,14 +364,26 @@ export default function useJourney({ formMetadata, resumeUrl }) {
               ...previousPayload,
               authId: newStep.payload.authId,
             };
+            traceJourney('journey:restart:repopulate-previous-callbacks', {
+              tree: formMetadata.tree,
+              previousStage,
+              previousStep: snapshotStep(prev),
+              restartedStep: snapshotStep(newStep),
+            });
           }
         }
 
+        traceStep('journey:render-step', newStep, {
+          source: 'restart',
+        });
         setRenderStep(newStep);
         setSubmittingForm(false);
       } else if (nextStep.type === 'LoginSuccess') {
         // Clear out step count
         stepCount.current = 0;
+        traceStep('journey:success', nextStep, {
+          tree: formMetadata.tree,
+        });
 
         // User is authenticated, now call for OAuth tokens
         await authorize();
@@ -275,6 +392,9 @@ export default function useJourney({ formMetadata, resumeUrl }) {
          * If we got here, then the form submission was both successful
          * and requires additional step rendering.
          */
+        traceStep('journey:render-step', nextStep, {
+          source: 'next',
+        });
         setRenderStep(nextStep);
         setSubmittingForm(false);
       }
@@ -309,15 +429,24 @@ export default function useJourney({ formMetadata, resumeUrl }) {
 
     try {
       if (step.getCallbacksOfType(callbackType.RedirectCallback).length) {
+        traceStep('journey:redirect:request', step);
         await journeyClient.redirect(step);
+        traceStep('journey:redirect:complete', step);
       }
     } catch (error) {
       console.error(`Error during redirect; ${error}`);
+      traceJourney('journey:redirect:error', {
+        error,
+        step: snapshotStep(step),
+      });
       const step = {
         payload: {
           message: 'Unable to redirect',
         },
       };
+      traceStep('journey:render-step', step, {
+        source: 'redirect-error',
+      });
       setRenderStep(step);
     }
   }

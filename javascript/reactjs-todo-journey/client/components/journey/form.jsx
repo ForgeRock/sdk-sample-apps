@@ -36,6 +36,7 @@ import IdentityProvider from './identity-provider';
 import Protect from './protect';
 import { ThemeContext } from '../../context/theme.context';
 import { OidcContext } from '../../context/oidc.context';
+import { traceJourney, traceStep } from '../../utilities/journey-trace';
 
 /**
  * @function Form - React component for managing the user authentication journey
@@ -92,6 +93,12 @@ export default function Form({ action, bottomMessage, followUp, topMessage, jour
        * If we do, let's set the user data and redirect back to home.
        */
       if (user) {
+        traceJourney('journey:app-auth-state:finalize', {
+          action: action.type,
+          tree: formMetadata.tree,
+          user,
+        });
+
         /**
          * Set user state/info on "global state"
          */
@@ -110,7 +117,7 @@ export default function Form({ action, bottomMessage, followUp, topMessage, jour
     finalizeAuthState();
 
     // Only `user` is a needed dependency, all others are "stable"
-  }, [followUp, methods, navigate, user]);
+  }, [action.type, followUp, formMetadata.tree, methods, navigate, user]);
 
   /**
    * Iterate through callbacks received from AM and map the callback to the
@@ -220,6 +227,10 @@ export default function Form({ action, bottomMessage, followUp, topMessage, jour
             // Indicate form processing
             setSubmittingForm(true);
             // set currently rendered step as step to be submitted
+            traceStep('journey:form:submit', renderStep, {
+              action: action.type,
+              tree: formMetadata.tree,
+            });
             setSubmissionStep(renderStep);
           }}
         >

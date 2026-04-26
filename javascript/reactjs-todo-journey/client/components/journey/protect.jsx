@@ -13,6 +13,7 @@ import { callbackType } from '@forgerock/journey-client';
 import { DEBUGGER, INIT_PROTECT } from '../../constants';
 import Loading from '../utilities/loading';
 import { ProtectContext } from '../../context/protect.context';
+import { traceJourney, traceStep } from '../../utilities/journey-trace';
 
 const urlParams = new URLSearchParams(window.location.search);
 const protectInitMode = INIT_PROTECT || urlParams.get('initProtect');
@@ -31,6 +32,10 @@ export default function Protect({ step, setSubmissionStep }) {
 
   useEffect(() => {
     async function handleProtect() {
+      traceStep('protect:handle:start', step, {
+        initMode: protectInitMode,
+      });
+
       if (
         protectInitMode === 'journey' &&
         step.getCallbacksOfType(callbackType.PingOneProtectInitializeCallback).length
@@ -49,14 +54,27 @@ export default function Protect({ step, setSubmissionStep }) {
 
         const callback = step.getCallbackOfType(callbackType.PingOneProtectInitializeCallback);
         const config = callback.getConfig();
+        traceJourney('protect:initialize:request', {
+          initMode: protectInitMode,
+          callback: callback.payload,
+          config,
+        });
 
         const api = protect(config);
         setProtectApi(api);
 
         const result = await api.start();
+        traceJourney('protect:initialize:response', {
+          initMode: protectInitMode,
+          result,
+        });
 
         if (result?.error) {
           console.error(`Error initializing Protect: ${result.error}`);
+          traceJourney('protect:initialize:error', {
+            initMode: protectInitMode,
+            result,
+          });
           setLoadingMessage('Error initializing Protect');
         } else {
           console.log('Protect initialized by callback for data collection');
@@ -75,13 +93,26 @@ export default function Protect({ step, setSubmissionStep }) {
         setLoadingMessage('Evaluating PingOne Protect...');
 
         const callback = step.getCallbackOfType(callbackType.PingOneProtectEvaluationCallback);
+        traceJourney('protect:evaluation:get-data:request', {
+          callback: callback.payload,
+        });
         const data = await protectApiRef.current.getData();
+        traceJourney('protect:evaluation:get-data:response', {
+          data,
+        });
 
         if (typeof data !== 'string' && 'error' in data) {
           console.error(`Failed to retrieve data from PingOne Protect: ${data.error}`);
+          traceJourney('protect:evaluation:get-data:error', {
+            data,
+          });
           setLoadingMessage('Failed to retrieve data from PingOne Protect');
         } else {
           callback.setData(data);
+          traceJourney('protect:evaluation:set-callback-data', {
+            callback: callback.payload,
+            data,
+          });
           console.log('Data set on Protect evaluation callback');
           setLoadingMessage('');
         }
@@ -91,6 +122,9 @@ export default function Protect({ step, setSubmissionStep }) {
        * Set the submission step to either proceed with initialization or perform the Protect risk
        * assessment and continue with the journey
        */
+      traceStep('protect:submit-step', step, {
+        initMode: protectInitMode,
+      });
       setSubmissionStep(step);
     }
 
