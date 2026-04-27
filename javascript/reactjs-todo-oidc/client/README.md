@@ -1,7 +1,6 @@
 # React JS Todo OIDC Client
 
-This folder contains the React client for `reactjs-todo-oidc`, which demonstrates centralized OIDC login with `@forgerock/oidc-client`.
-Unlike journey-based samples, this client does not render embedded login callbacks and does not expose a `/register` route.
+This folder contains the React client for `reactjs-todo-oidc`, which demonstrates centralized OIDC login with `@forgerock/oidc-client`. Unlike journey-based samples, this client does not render embedded login callbacks and does not expose a `/register` route.
 
 ## Authentication flow
 
@@ -16,24 +15,19 @@ Unlike journey-based samples, this client does not render embedded login callbac
 Copy `.env.example` to `.env` at `javascript/reactjs-todo-oidc/.env`, then set values for your environment:
 
 ```text
-SERVER_URL=<<<URL to your AM instance, for example https://example.com/am>>>
-WELLKNOWN_URL=<<<Realm well-known URL, for example https://example.com/am/oauth2/alpha/.well-known/openid-configuration>>>
-REALM_PATH=<<<Realm path, for example alpha>>>
+WELLKNOWN_URL=<<<Well-known URL, for example https://example.com/am/oauth2/alpha/.well-known/openid-configuration>>>
 WEB_OAUTH_CLIENT=<<<Your Web OAuth client name/ID>>>
 SCOPE="openid profile email"
 API_URL=http://localhost:9443
-REST_OAUTH_CLIENT=<<<Your API OAuth client name/ID>>>
-REST_OAUTH_SECRET=<<<Your API OAuth client secret>>>
 DEBUGGER_OFF=true
-INIT_PROTECT=bootstrap
-PINGONE_ENV_ID=<<<Optional: required only when using PingOne Protect callback collection>>>
+SERVER=PINGAM
 ```
 
 Notes:
 
 - `WELLKNOWN_URL` is the source of truth for OIDC discovery in this sample.
 - `SCOPE` should include `openid` so logout and userinfo flows have the expected token set.
-- `SERVER_URL` is kept in `.env` for parity with sample conventions, though OIDC discovery uses `WELLKNOWN_URL`.
+- `SERVER` is used to derive the user name from either PingAM or PingOne
 
 ## Running locally
 

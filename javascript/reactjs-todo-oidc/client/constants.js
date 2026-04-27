@@ -12,11 +12,9 @@ export const API_URL = process.env.API_URL;
 // Yes, the debugger boolean is intentionally reversed
 export const DEBUGGER = process.env.DEBUGGER_OFF === 'false';
 export const WEB_OAUTH_CLIENT = process.env.WEB_OAUTH_CLIENT;
-export const REALM_PATH = process.env.REALM_PATH;
 export const SCOPE = process.env.SCOPE;
 export const WELLKNOWN_URL = process.env.WELLKNOWN_URL;
-export const INIT_PROTECT = process.env.INIT_PROTECT;
-export const PINGONE_ENV_ID = process.env.PINGONE_ENV_ID;
+export const SERVER = process.env.SERVER;
 
 export const CONFIG = {
   clientId: WEB_OAUTH_CLIENT,
@@ -25,5 +23,4 @@ export const CONFIG = {
   serverConfig: {
     wellknown: WELLKNOWN_URL,
   },
-  realmPath: REALM_PATH,
 };

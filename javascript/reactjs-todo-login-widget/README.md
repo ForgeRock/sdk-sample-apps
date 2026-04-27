@@ -9,7 +9,7 @@ This sample code is provided "as is" and is not a supported product of Ping. It'
 1. An instance of Ping's Access Manager (AM), either within a Ping's Advanced Identity Cloud tenant, your own private installation or locally installed on your computer
 2. Node >= 24.2.0 (recommended: install via [official package installer](https://nodejs.org/en/))
 3. Knowledge of using the Terminal/Command Line
-4. Ability to generate security certs (recommended: mkcert ([installation instructions here](https://github.com/FiloSottile/mkcert#installation))
+4. Ability to generate security certs (recommended: mkcert ([installation instructions here](https://github.com/FiloSottile/mkcert#installation)))
 5. This project "cloned" to your computer
 
 ## Setup
@@ -35,21 +35,6 @@ Once you have the 5 requirements above met, we can build the project.
 1. Login
 2. Register
 
-Note: The sample app currently supports the following callbacks only:
-
-- NameCallback
-- PasswordCallback
-- ChoiceCallback
-- ValidatedCreateUsernameCallback
-- ValidatedCreatePasswordCallback
-- StringAttributeInputCallback
-- BooleanAttributeInputCallback
-- KbaCreateCallback
-- TermsAndConditionsCallback
-- TextOutputCallback
-- ConfirmationCallback
-- SelectIdPCallback
-
 ### Configure Your `.env` File
 
 Change the name of `.env.example` to `.env` and replace the bracketed values (e.g. `<<<helper-text>>>`) with your values.
@@ -57,22 +42,25 @@ Change the name of `.env.example` to `.env` and replace the bracketed values (e.
 Example with annotations:
 
 ```text
-SERVER_URL=<<<URL to your AM instance>>>
 APP_URL=https://localhost:8443 # in develop we do not use this variable for dynamic deployment reasons
+SERVER_URL=<<<URL to your AM instance>>>
+WEB_OAUTH_CLIENT=<<<Your Web OAuth client name/ID>>>
+SCOPE='openid profile email'
+PORT=8443
 API_URL=http://localhost:9443
-DEBUGGER_OFF=false
+DEBUGGER_OFF=true
+DEVELOPMENT=true
 JOURNEY_LOGIN=Login
 JOURNEY_REGISTER=Registration
 REALM_PATH=<<<Realm path of AM>>>
-WEB_OAUTH_CLIENT=<<<Your Web OAuth client name/ID>>>
 ```
 
 ### Installing Dependencies and Run Build
 
-**Run from root of repo**: since this sample app uses npm's workspaces, we recommend running the npm commands from the root of the repo.
+**Run from `/javascript` root**: since this sample app uses npm's workspaces, we recommend running the npm commands from the root of the `/javascript` folder.
 
 ```sh
-# Install all dependencies (no need to pass the -w option)
+# Install all dependencies
 npm install
 ```
 
@@ -81,7 +69,7 @@ npm install
 Now, run the below commands to start the processes needed for building the application and running the servers for both client and API server:
 
 ```sh
-# In one terminal window, run the following watch command from the root of the repository
+# In one terminal window, run the following command from the `/javascript` directory
 npm run start:reactjs-todo-lw
 ```
 

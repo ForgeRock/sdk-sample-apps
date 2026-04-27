@@ -13,20 +13,15 @@ import ReactDOM from 'react-dom/client';
 
 import Loading from './components/utilities/loading';
 import { OidcContext, useInitOidcState } from './context/oidc.context';
-import { useInitProtect, ProtectContext } from './context/protect.context';
 import { ThemeContext, initTheme } from './context/theme.context';
 import Router from './router';
-import { DEBUGGER, INIT_PROTECT, PINGONE_ENV_ID } from './constants';
+import { DEBUGGER } from './constants';
 
 /**
  * This import will produce a separate CSS file linked in the index.html
  * Webpack will detect this and transpile, process and generate the needed CSS file
  */
 import './styles/index.scss';
-
-if (DEBUGGER) debugger;
-const urlParams = new URLSearchParams(window.location.search);
-const protectInitMode = INIT_PROTECT || urlParams.get('initProtect');
 
 /**
  * Initialize the React application
@@ -48,13 +43,12 @@ const protectInitMode = INIT_PROTECT || urlParams.get('initProtect');
      * If global state becomes a more complex function of the app,
      * something like Redux might be a better option.
      */
+    if (DEBUGGER) debugger;
     const theme = initTheme();
     const oidcState = useInitOidcState();
-    const protectState = useInitProtect({ envId: PINGONE_ENV_ID });
     const [{ oidcClient }] = oidcState;
-    const [protectApi] = protectState;
 
-    if (!oidcClient || (protectInitMode === 'bootstrap' && !protectApi)) {
+    if (!oidcClient) {
       return (
         <ThemeContext.Provider value={theme}>
           <OidcContext.Provider value={oidcState}>
@@ -67,9 +61,7 @@ const protectInitMode = INIT_PROTECT || urlParams.get('initProtect');
     return (
       <ThemeContext.Provider value={theme}>
         <OidcContext.Provider value={oidcState}>
-          <ProtectContext.Provider value={protectState}>
-            <Router />
-          </ProtectContext.Provider>
+          <Router />
         </OidcContext.Provider>
       </ThemeContext.Provider>
     );

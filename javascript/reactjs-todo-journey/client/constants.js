@@ -11,7 +11,6 @@
 const urlParams = new URLSearchParams(window.location.search);
 const centralLoginParam = urlParams.get('centralLogin');
 
-export const SERVER_URL = import.meta.env.VITE_SERVER_URL;
 export const API_URL = import.meta.env.VITE_API_URL;
 // Yes, the debugger boolean is intentionally reversed
 export const DEBUGGER = import.meta.env.VITE_DEBUGGER_OFF === 'false';
@@ -20,7 +19,6 @@ export const JOURNEY_REGISTER = import.meta.env.VITE_JOURNEY_REGISTER;
 export const WEB_OAUTH_CLIENT = import.meta.env.VITE_WEB_OAUTH_CLIENT;
 export const REALM_PATH = import.meta.env.VITE_REALM_PATH;
 export const CENTRALIZED_LOGIN = import.meta.env.VITE_CENTRALIZED_LOGIN;
-export const SESSION_URL = `${SERVER_URL}json/realms/root/sessions`;
 export const SCOPE = import.meta.env.VITE_SCOPE;
 export const WELLKNOWN_URL = import.meta.env.VITE_WELLKNOWN_URL;
 export const INIT_PROTECT = import.meta.env.VITE_INIT_PROTECT;

@@ -10,7 +10,7 @@
  */
 import { test, expect } from '@playwright/test';
 import { asyncEvents } from './utils/async-events';
-import { username, password } from './utils/demo-user';
+import { amUsername, amPassword } from './utils/demo-user';
 
 const BASE_URL = 'https://localhost:8443';
 
@@ -25,8 +25,8 @@ test.describe.serial('React - OIDC Todo', () => {
     await page.goto(BASE_URL);
 
     await clickLink('Sign In', 'https://openam-sdks.forgeblocks.com/');
-    await page.getByLabel('User Name').fill(username);
-    await page.getByRole('textbox', { name: 'Password' }).fill(password);
+    await page.getByLabel('User Name').fill(amUsername);
+    await page.getByRole('textbox', { name: 'Password' }).fill(amPassword);
     await page.getByRole('button', { name: 'Next' }).click();
 
     await page.getByRole('link', { name: 'Todos', exact: true }).click();

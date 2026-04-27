@@ -7,7 +7,7 @@
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
  */
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState, useCallback } from 'react';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import BackHome from '../components/utilities/back-home';
 import Loading from '../components/utilities/loading';
@@ -40,12 +40,10 @@ export default function Login() {
 
   // Get environment variable
   const isCentralizedLogin = CENTRALIZED_LOGIN === 'true' || centralLogin === 'true';
-  const [state, setState] = useState({
-    loadingMessage: '',
-  });
+  const [loadingMessage, setLoadingMessage] = useState('');
 
-  useEffect(() => {
-    async function authorize(codeParam, stateParam) {
+  const authorize = useCallback(
+    async function authorizeCallback(codeParam, stateParam) {
       /** *****************************************************************
        * SDK INTEGRATION POINT
        * Summary: Get OAuth/OIDC tokens and user info
@@ -57,20 +55,27 @@ export default function Login() {
 
       const tokenResponse = await oidcClient.token.exchange(codeParam, stateParam);
       if ('error' in tokenResponse) {
+        setLoadingMessage('Sign in failed. Please try again.');
         console.error('Token exchange error:', tokenResponse);
+        return;
       }
 
       const user = await oidcClient.user.info();
       if ('error' in user) {
+        setLoadingMessage('Sign in failed. Please try again.');
         console.error('Error getting user:', user);
+        return;
       }
 
       methods.setUser(user.name);
       methods.setEmail(user.email);
       methods.setAuthentication(true);
       navigate('/');
-    }
+    },
+    [oidcClient, methods, navigate],
+  );
 
+  useEffect(() => {
     async function checkCentralizedLogin() {
       if (isCentralizedLogin) {
         if (codeParam && stateParam) {
@@ -79,12 +84,10 @@ export default function Login() {
            * the URL will include code and state query parameters that need to
            * be passed in to complete the OAuth flow giving the user access
            */
-          setState({
-            loadingMessage: 'Success! Redirecting ...',
-          });
+          setLoadingMessage('Success! Redirecting ...');
           await authorize(codeParam, stateParam);
         } else if (errorParam) {
-          // Do nothing as it will redirect for central login
+          setLoadingMessage('Sign in failed. Please try again.');
         } else {
           /** *****************************************************************
            * SDK INTEGRATION POINT
@@ -95,21 +98,28 @@ export default function Login() {
            ***************************************************************** */
           if (DEBUGGER) debugger;
 
-          setState({
-            loadingMessage: 'Redirecting ...',
-          });
+          setLoadingMessage('Redirecting ...');
 
           const authorizeUrl = await oidcClient.authorize.url();
           if (typeof authorizeUrl !== 'string' && 'error' in authorizeUrl) {
+            setLoadingMessage('Sign in failed. Please try again.');
             console.error('Authorization URL Error:', authorizeUrl);
-          } else {
-            window.location.assign(authorizeUrl);
+            return;
           }
+
+            window.location.assign(authorizeUrl);
         }
       }
     }
     checkCentralizedLogin();
-  }, [codeParam, errorParam, isCentralizedLogin, methods, navigate, oidcClient, stateParam]);
+  }, [
+    authorize,
+    codeParam,
+    errorParam,
+    isCentralizedLogin,
+    oidcClient,
+    stateParam,
+  ]);
 
   if (!isCentralizedLogin) {
     return (
@@ -134,7 +144,10 @@ export default function Login() {
     return (
       <div className="cstm_container_v-centered container-fluid d-flex align-items-center">
         <div className="w-100">
-          <Loading message={state.loadingMessage} />
+          <BackHome />
+          <Card>
+            <Loading message={loadingMessage} />
+          </Card>
         </div>
       </div>
     );
