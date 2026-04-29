@@ -22,6 +22,7 @@
   "dependencies": {
     "@forgerock/journey-client": "latest",
     "@forgerock/oidc-client": "latest",
+    "@forgerock/protect": "latest",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.19.0"

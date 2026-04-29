@@ -42,7 +42,6 @@ Change the name of `.env.example` to `.env` and replace the bracketed values (e.
 Example with annotations:
 
 ```text
-APP_URL=https://localhost:8443 # in develop we do not use this variable for dynamic deployment reasons
 SERVER_URL=<<<URL to your AM instance>>>
 WEB_OAUTH_CLIENT=<<<Your Web OAuth client name/ID>>>
 SCOPE='openid profile email'

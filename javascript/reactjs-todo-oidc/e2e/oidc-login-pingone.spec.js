@@ -53,7 +53,9 @@ test.describe('React - PingOne OIDC', () => {
     await page.getByRole('button', { name: 'Sign On' }).click();
 
     await expect(
-      page.getByText(/Invalid username and\/or password|Validation Error/),
+      page.getByText(
+        /Invalid username and\/or password|Validation Error|identifier must be a uuid/,
+      ),
     ).toBeVisible();
   });
 

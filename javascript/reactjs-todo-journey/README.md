@@ -63,7 +63,6 @@ Change the name of `.env.example` to `.env` and fill the environment variables w
 Example with annotations:
 
 ```text
-VITE_APP_URL=https://localhost:8443 # in develop we do not use this variable for dynamic deployment reasons
 VITE_WELLKNOWN_URL=<<<Wellknown URL to your AM instance>>>
 VITE_WEB_OAUTH_CLIENT=<<<Your Web OAuth client name/ID>>>
 VITE_API_URL=http://localhost:9443

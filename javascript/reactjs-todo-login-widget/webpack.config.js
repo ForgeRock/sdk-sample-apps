@@ -20,7 +20,6 @@ module.exports = () => {
   // Use process environment variables for prod, but fallback to local .env for dev
   const PORT = process.env.PORT || localEnv.PORT || '8443';
   const SERVER_URL = process.env.SERVER_URL || localEnv.SERVER_URL;
-  const APP_URL = process.env.APP_URL || localEnv.APP_URL;
   const API_URL = process.env.API_URL || localEnv.API_URL;
   const DEBUGGER_OFF = process.env.DEBUGGER_OFF || localEnv.DEBUGGER_OFF;
   const DEVELOPMENT = process.env.DEVELOPMENT || localEnv.DEVELOPMENT;
@@ -115,7 +114,6 @@ module.exports = () => {
       new webpack.DefinePlugin({
         // Inject all the environment variable into the Webpack build
         'process.env.SERVER_URL': JSON.stringify(SERVER_URL),
-        'process.env.APP_URL': JSON.stringify(APP_URL),
         'process.env.API_URL': JSON.stringify(API_URL),
         'process.env.DEBUGGER_OFF': JSON.stringify(DEBUGGER_OFF),
         'process.env.JOURNEY_LOGIN': JSON.stringify(JOURNEY_LOGIN),

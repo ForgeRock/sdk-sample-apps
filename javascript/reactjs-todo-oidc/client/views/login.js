@@ -68,45 +68,41 @@ export default function Login() {
 
   useEffect(() => {
     async function handleCentralizedLogin() {
-      try {
-        if (codeParam && stateParam) {
-          /**
-           * When the user returns to this app after successfully logging in,
-           * the URL will include code and state query parameters that need to
-           * be passed in to complete the OAuth flow giving the user access
-           */
-          setLoadingMessage('Success! Redirecting ...');
-          await authorize(codeParam, stateParam);
-        } else if (errorParam) {
+      if (codeParam && stateParam) {
+        /**
+         * When the user returns to this app after successfully logging in,
+         * the URL will include code and state query parameters that need to
+         * be passed in to complete the OAuth flow giving the user access
+         */
+        setLoadingMessage('Success! Redirecting ...');
+        await authorize(codeParam, stateParam);
+      } else if (errorParam) {
+        setLoadingMessage('Sign in failed. Please try again.');
+      } else {
+        /** *****************************************************************
+         * SDK INTEGRATION POINT
+         * Summary: Redirect the user to the authorization URL
+         * ------------------------------------------------------------------
+         * Details: Use the OIDC client to get an authorization URL to redirect
+         * the user to sign in.
+         ***************************************************************** */
+        if (DEBUGGER) debugger;
+
+        setLoadingMessage('Redirecting ...');
+
+        const authorizeUrl = await oidcClient.authorize.url();
+        if (typeof authorizeUrl !== 'string' && 'error' in authorizeUrl) {
           setLoadingMessage('Sign in failed. Please try again.');
-        } else {
-          /** *****************************************************************
-           * SDK INTEGRATION POINT
-           * Summary: Redirect the user to the authorization URL
-           * ------------------------------------------------------------------
-           * Details: Use the OIDC client to get an authorization URL to redirect
-           * the user to sign in.
-           ***************************************************************** */
-          if (DEBUGGER) debugger;
-
-          setLoadingMessage('Redirecting ...');
-
-          const authorizeUrl = await oidcClient.authorize.url();
-          if (typeof authorizeUrl !== 'string' && 'error' in authorizeUrl) {
-            setLoadingMessage('Sign in failed. Please try again.');
-            console.error(`Error: centralized login; ${authorizeUrl.error}`);
-            return;
-          }
-
-          window.location.assign(authorizeUrl);
+          console.error(`Error: centralized login; ${authorizeUrl.error}`);
+          return;
         }
-      } catch (error) {
-        console.error(`Error: centralized login; ${error}`);
+
+        window.location.assign(authorizeUrl);
       }
     }
 
     handleCentralizedLogin();
-  }, [authorize, codeParam, errorParam, methods, navigate, oidcClient, stateParam]);
+  }, [authorize, codeParam, errorParam, oidcClient, stateParam]);
 
   return (
     <div className="cstm_container_v-centered container-fluid d-flex align-items-center">

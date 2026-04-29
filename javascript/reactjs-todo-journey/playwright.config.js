@@ -47,7 +47,6 @@ export default defineConfig({
         VITE_SCOPE: 'profile openid email',
         VITE_WEB_OAUTH_CLIENT: 'WebOAuthClient',
         VITE_REALM_PATH: 'alpha',
-        VITE_CENTRALIZED_LOGIN: 'false',
         VITE_PINGONE_ENV_ID: '02fb4743-189a-4bc7-9d6c-a919edfe6447',
       },
       ignoreHTTPSErrors: true,

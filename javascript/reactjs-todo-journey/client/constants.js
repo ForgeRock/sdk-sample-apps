@@ -8,9 +8,6 @@
  * of the MIT license. See the LICENSE file for details.
  */
 
-const urlParams = new URLSearchParams(window.location.search);
-const centralLoginParam = urlParams.get('centralLogin');
-
 export const API_URL = import.meta.env.VITE_API_URL;
 // Yes, the debugger boolean is intentionally reversed
 export const DEBUGGER = import.meta.env.VITE_DEBUGGER_OFF === 'false';
@@ -18,17 +15,10 @@ export const JOURNEY_LOGIN = import.meta.env.VITE_JOURNEY_LOGIN;
 export const JOURNEY_REGISTER = import.meta.env.VITE_JOURNEY_REGISTER;
 export const WEB_OAUTH_CLIENT = import.meta.env.VITE_WEB_OAUTH_CLIENT;
 export const REALM_PATH = import.meta.env.VITE_REALM_PATH;
-export const CENTRALIZED_LOGIN = import.meta.env.VITE_CENTRALIZED_LOGIN;
 export const SCOPE = import.meta.env.VITE_SCOPE;
 export const WELLKNOWN_URL = import.meta.env.VITE_WELLKNOWN_URL;
 export const INIT_PROTECT = import.meta.env.VITE_INIT_PROTECT;
 export const PINGONE_ENV_ID = import.meta.env.VITE_PINGONE_ENV_ID;
-
-const redirectUri = `${window.location.origin}/${
-  CENTRALIZED_LOGIN === 'true' || centralLoginParam === 'true'
-    ? 'login?centralLogin=true'
-    : 'callback.html'
-}`;
 
 /** ***************************************************************************
  * SDK INTEGRATION POINT
@@ -47,7 +37,7 @@ const redirectUri = `${window.location.origin}/${
  *************************************************************************** */
 export const CONFIG = {
   clientId: WEB_OAUTH_CLIENT,
-  redirectUri,
+  redirectUri: `${window.location.origin}/callback.html`,
   scope: SCOPE,
   serverConfig: {
     wellknown: WELLKNOWN_URL,
