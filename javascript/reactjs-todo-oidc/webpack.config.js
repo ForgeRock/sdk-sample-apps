@@ -18,18 +18,14 @@ module.exports = () => {
   const localEnv = dotenv.config().parsed || {};
 
   // Use process environment variables for prod, but fallback to local .env for dev
-  const SERVER_URL = process.env.SERVER_URL || localEnv.SERVER_URL;
-  const APP_URL = process.env.APP_URL || localEnv.APP_URL;
+  const PORT = process.env.PORT || localEnv.PORT || '8443';
   const API_URL = process.env.API_URL || localEnv.API_URL;
   const DEBUGGER_OFF = process.env.DEBUGGER_OFF || localEnv.DEBUGGER_OFF;
   const DEVELOPMENT = process.env.DEVELOPMENT || localEnv.DEVELOPMENT;
   const WEB_OAUTH_CLIENT = process.env.WEB_OAUTH_CLIENT || localEnv.WEB_OAUTH_CLIENT;
-  const REALM_PATH = process.env.REALM_PATH || localEnv.REALM_PATH;
   const SCOPE = process.env.SCOPE || localEnv.SCOPE;
-  const SERVER_TYPE = process.env.SERVER_TYPE || localEnv.SERVER_TYPE;
   const WELLKNOWN_URL = process.env.WELLKNOWN_URL || localEnv.WELLKNOWN_URL;
-  const INIT_PROTECT = process.env.INIT_PROTECT || localEnv.INIT_PROTECT;
-  const PINGONE_ENV_ID = process.env.PINGONE_ENV_ID || localEnv.PINGONE_ENV_ID;
+  const SERVER = process.env.SERVER || localEnv.SERVER;
 
   return {
     // Point to the top level source file
@@ -107,24 +103,19 @@ module.exports = () => {
       client: {
         overlay: false,
       },
-      port: 8443,
+      port: PORT,
       historyApiFallback: true,
     },
     plugins: [
       new MiniCssExtractPlugin(),
       new webpack.DefinePlugin({
         // Inject all the environment variable into the Webpack build
-        'process.env.SERVER_URL': JSON.stringify(SERVER_URL),
-        'process.env.APP_URL': JSON.stringify(APP_URL),
         'process.env.API_URL': JSON.stringify(API_URL),
         'process.env.DEBUGGER_OFF': JSON.stringify(DEBUGGER_OFF),
         'process.env.WEB_OAUTH_CLIENT': JSON.stringify(WEB_OAUTH_CLIENT),
-        'process.env.REALM_PATH': JSON.stringify(REALM_PATH),
         'process.env.SCOPE': JSON.stringify(SCOPE),
-        'process.env.SERVER_TYPE': JSON.stringify(SERVER_TYPE),
         'process.env.WELLKNOWN_URL': JSON.stringify(WELLKNOWN_URL),
-        'process.env.INIT_PROTECT': JSON.stringify(INIT_PROTECT),
-        'process.env.PINGONE_ENV_ID': JSON.stringify(PINGONE_ENV_ID),
+        'process.env.SERVER': JSON.stringify(SERVER),
       }),
     ],
   };

@@ -8,10 +8,10 @@ module.exports = () => {
   const localEnv = dotenv.config().parsed || {};
 
   // Use process environment variables for prod, but fallback to local .env for dev
+  const PORT = process.env.PORT || localEnv.PORT || '8443';
   const API_URL = process.env.API_URL || localEnv.API_URL;
   const DEBUGGER_OFF = process.env.DEBUGGER_OFF || localEnv.DEBUGGER_OFF;
   const DEVELOPMENT = process.env.DEVELOPMENT || localEnv.DEVELOPMENT;
-  const PORT = process.env.PORT || localEnv.PORT;
   const WEB_OAUTH_CLIENT = process.env.WEB_OAUTH_CLIENT || localEnv.WEB_OAUTH_CLIENT;
   const SCOPE = process.env.SCOPE || localEnv.SCOPE;
   const WELLKNOWN_URL = process.env.WELLKNOWN_URL || localEnv.WELLKNOWN_URL;

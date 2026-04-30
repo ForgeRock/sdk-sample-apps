@@ -18,18 +18,16 @@ module.exports = () => {
   const localEnv = dotenv.config().parsed || {};
 
   // Use process environment variables for prod, but fallback to local .env for dev
+  const PORT = process.env.PORT || localEnv.PORT || '8443';
   const SERVER_URL = process.env.SERVER_URL || localEnv.SERVER_URL;
-  const APP_URL = process.env.APP_URL || localEnv.APP_URL;
   const API_URL = process.env.API_URL || localEnv.API_URL;
   const DEBUGGER_OFF = process.env.DEBUGGER_OFF || localEnv.DEBUGGER_OFF;
   const DEVELOPMENT = process.env.DEVELOPMENT || localEnv.DEVELOPMENT;
   const JOURNEY_LOGIN = process.env.JOURNEY_LOGIN || localEnv.JOURNEY_LOGIN;
   const JOURNEY_REGISTER = process.env.JOURNEY_REGISTER || localEnv.JOURNEY_REGISTER;
   const WEB_OAUTH_CLIENT = process.env.WEB_OAUTH_CLIENT || localEnv.WEB_OAUTH_CLIENT;
-  const CENTRALIZED_LOGIN = process.env.CENTRALIZED_LOGIN || localEnv.CENTRALIZED_LOGIN;
   const REALM_PATH = process.env.REALM_PATH || localEnv.REALM_PATH;
   const SCOPE = process.env.SCOPE || localEnv.SCOPE;
-  const SERVER_TYPE = process.env.SERVER_TYPE || localEnv.SERVER_TYPE;
   const PINGONE_ENV_ID = process.env.PINGONE_ENV_ID || localEnv.PINGONE_ENV_ID;
 
   return {
@@ -108,7 +106,7 @@ module.exports = () => {
       client: {
         overlay: false,
       },
-      port: 8443,
+      port: PORT,
       historyApiFallback: true,
     },
     plugins: [
@@ -116,16 +114,13 @@ module.exports = () => {
       new webpack.DefinePlugin({
         // Inject all the environment variable into the Webpack build
         'process.env.SERVER_URL': JSON.stringify(SERVER_URL),
-        'process.env.APP_URL': JSON.stringify(APP_URL),
         'process.env.API_URL': JSON.stringify(API_URL),
         'process.env.DEBUGGER_OFF': JSON.stringify(DEBUGGER_OFF),
         'process.env.JOURNEY_LOGIN': JSON.stringify(JOURNEY_LOGIN),
         'process.env.JOURNEY_REGISTER': JSON.stringify(JOURNEY_REGISTER),
         'process.env.WEB_OAUTH_CLIENT': JSON.stringify(WEB_OAUTH_CLIENT),
-        'process.env.CENTRALIZED_LOGIN': JSON.stringify(CENTRALIZED_LOGIN),
         'process.env.REALM_PATH': JSON.stringify(REALM_PATH),
         'process.env.SCOPE': JSON.stringify(SCOPE),
-        'process.env.SERVER_TYPE': JSON.stringify(SERVER_TYPE),
         'process.env.PINGONE_ENV_ID': JSON.stringify(PINGONE_ENV_ID),
       }),
     ],

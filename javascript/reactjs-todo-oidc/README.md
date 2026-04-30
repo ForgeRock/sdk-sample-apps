@@ -6,35 +6,50 @@ This sample code is provided "as is" and is not a supported product of Ping. Its
 
 ## Requirements
 
-1. An instance of Ping's Access Manager (AM), either within Ping Advanced Identity Cloud, your own private installation, or locally installed on your computer
+1. A PingOne tenant or instance of Ping's Access Manager (PingAM), either within Ping Advanced Identity Cloud, your own private installation, or locally installed on your computer
 2. Node >= 18 (recommended: install via the [official package installer](https://nodejs.org/en/))
 3. Knowledge of using the Terminal/Command Line
-4. Ability to generate security certs (recommended: mkcert; [installation instructions here](https://github.com/FiloSottile/mkcert#installation))
-5. This project cloned to your computer
+4. This project cloned to your computer
 
 ## Setup
 
-Once you have the 5 requirements above met, we can build the project.
+Once you have the requirements above met, we can build the project.
 
-### Set Up Your AM Instance
+### Set Up A Public Client
+Choose to set up either a PingOne or PingAM/PingAIC instance
 
-#### Configure CORS
+#### Set Up Your AM Instance
+
+##### Configure CORS
 
 1. Allowed origins: `https://localhost:8443`
 2. Allowed methods: `GET` `POST`
 3. Allowed headers: `Content-Type` `X-Requested-With` `X-Requested-Platform` `Accept-API-Version` `Authorization`
 4. Allow credentials: enable
 
-#### Create Your OAuth Clients
+##### Create Your OAuth Clients
 
 1. Create a public (SPA) OAuth client for the web app: no secret, scopes including `openid profile email`, implicit consent enabled, and no "token authentication endpoint method".
    - Redirect URI: `https://localhost:8443/callback.html`
    - Post logout redirect URI: `https://localhost:8443/`
 2. Create a confidential (Node.js) OAuth client for the API server: with a secret, default scope of `am-introspect-all-tokens`, and `client_secret_basic` as the "token authentication endpoint method".
 
-#### Configure OIDC Discovery
+#### Setup Your PingOne application
 
-Set your `.env` values to point to your realm-specific OpenID configuration endpoint (`WELLKNOWN_URL`) and keep `SCOPE` configured with at least `openid`.
+1. Create a new OIDC Web App
+
+##### Configuration
+
+1. CORS Allowed origins: `https://localhost:8443`
+2. Token Auth Method: None
+3. Signoff URLs: https://localhost:8443/logout
+4. Redirect URIs: https://localhost:8443/callback.html
+5. Response Type: Code
+6. Grant Type: Authorization Code
+
+##### Resources (scopes)
+
+1. openid profile email phone name revoke
 
 ### Configure Your `.env` File
 
@@ -43,23 +58,22 @@ Change the name of `.env.example` to `.env` and replace the bracketed values (e.
 Example with annotations:
 
 ```text
-API_URL=http://localhost:9443
-DEBUGGER_OFF=true
-DEVELOPMENT=true
-REALM_PATH=<<<Realm path, for example alpha>>>
 WEB_OAUTH_CLIENT=<<<Your Web OAuth client name/ID>>>
 SCOPE="openid profile email"
-WELLKNOWN_URL=<<<Realm well-known URL, for example https://example.com/am/oauth2/alpha/.well-known/openid-configuration>>>
-INIT_PROTECT=bootstrap
-PINGONE_ENV_ID=<<<Optional: required only when using PingOne Protect callback collection>>>
+WELLKNOWN_URL=<<<Well-known URL, for example https://example.com/am/oauth2/alpha/.well-known/openid-configuration>>>
+SERVER=PINGAM
+API_URL=http://localhost:9443
+PORT=8443
+DEBUGGER_OFF=true
+DEVELOPMENT=true
 ```
 
 ### Installing Dependencies and Run Build
 
-Run commands from the JavaScript workspace root:
+**Run from root of `/javascript`**: since this sample app uses npm's workspaces, we recommend running the npm commands from the root of the `/javascript` folder.
 
 ```sh
-cd javascript
+# Install all dependencies
 npm install
 ```
 
@@ -68,15 +82,11 @@ npm install
 Run the command below to start both the client app and `todo-api`:
 
 ```sh
-cd javascript
+# In a terminal window, run the following command from the `/javascript` folder
 npm run start:reactjs-todo-oidc
 ```
 
-Now, you should be able to visit `https://localhost:8443`, which is your web app or client (the Relying Party in OAuth terms). This client will make requests to your AM instance (the Authorization Server in OAuth terms), and `http://localhost:9443` as the REST API for your todos (the Resource Server).
-
-### Accept Cert Exceptions
-
-You will likely have to accept security certificate exceptions for both your React app and the Node.js server. To accept the cert from the Node.js server, you can visit `http://localhost:9443/healthcheck` in your browser. Once you receive `OK`, your Node.js server is running on the correct domain and port, and the cert is accepted.
+Now, you should be able to visit `https://localhost:8443`, which is your web app or client (the Relying Party in OAuth terms). This client will make requests to PingAM or PingOne (the Authorization Server in OAuth terms), and `http://localhost:9443` as the REST API for your todos (the Resource Server).
 
 ## Learn About Integration Touchpoints
 

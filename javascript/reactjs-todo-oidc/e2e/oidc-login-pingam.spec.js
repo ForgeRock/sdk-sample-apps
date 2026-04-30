@@ -1,7 +1,7 @@
 /*
  * ping-sample-web-react-todo-oidc
  *
- * oidc-login.spec.js
+ * oidc-login-pingam.spec.js
  *
  * Copyright (c) 2026 Ping Identity Corporation. All rights reserved.
  * This software may be modified and distributed under the terms
@@ -9,7 +9,7 @@
  *
  */
 import { test, expect } from '@playwright/test';
-import { password, username } from './utils/demo-user';
+import { amPassword, amUsername } from './utils/demo-user';
 
 const BASE_URL = 'https://localhost:8443';
 
@@ -26,7 +26,7 @@ function getConfiguredOidcHost() {
   return new URL(configuredWellKnownUrl).hostname;
 }
 
-async function submitLoginForm(page, testUsername = username, testPassword = password) {
+async function submitLoginForm(page, testUsername = amUsername, testPassword = amPassword) {
   const usernameField = page.getByLabel('Username');
   const userNameField = page.getByLabel('User Name');
 

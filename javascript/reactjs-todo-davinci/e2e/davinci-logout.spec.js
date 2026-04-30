@@ -6,7 +6,7 @@
  *
  */
 import { test, expect } from '@playwright/test';
-import { username, password } from './utils/demo-user';
+import { username, password, displayName } from './utils/demo-user';
 
 const BASE_URL = 'http://localhost:8443';
 
@@ -18,7 +18,7 @@ test.describe('React - DaVinci Logout', () => {
     await page.getByLabel('Username').fill(username);
     await page.getByLabel('Password').fill(password);
     await page.getByRole('button', { name: 'Sign On' }).click();
-    await expect(page.getByText('Welcome back, JS DaVinci Sample Apps E2E!')).toBeVisible();
+    await expect(page.getByText(`Welcome back, ${displayName}!`)).toBeVisible();
     await expect(page.getByText('Protect with Ping')).toBeVisible();
 
     // Logout
@@ -26,7 +26,7 @@ test.describe('React - DaVinci Logout', () => {
     await page.getByRole('link', { name: 'Sign Out' }).click();
     await page.waitForURL(BASE_URL + '/logout');
     await page.waitForURL(BASE_URL);
-    await expect(page.getByText('Welcome back')).not.toBeVisible();
+    await expect(page.getByText(`Welcome back, ${displayName}!`)).not.toBeVisible();
     await expect(page.getByText('Protect with Ping')).toBeVisible();
   });
 });

@@ -42,6 +42,7 @@ jobs:
           (cd reactjs-todo-journey && npm run e2e -- --shard=${{ matrix.shardIndex }}/4)
           (cd reactjs-todo-oidc && npm run e2e -- --shard=${{ matrix.shardIndex }}/4)
           (cd reactjs-todo-davinci && npm run e2e -- --shard=${{ matrix.shardIndex }}/4)
+          (cd reactjs-todo-login-widget && npm run e2e -- --shard=${{ matrix.shardIndex }}/4)
         env:
           REST_OAUTH_SECRET: ${{ secrets.REST_OAUTH_SECRET }}
 
@@ -56,3 +57,5 @@ jobs:
             ./javascript/reactjs-todo-oidc/playwright-report
             ./javascript/reactjs-todo-davinci/test-results
             ./javascript/reactjs-todo-davinci/playwright-report
+            ./javascript/reactjs-todo-login-widget/test-results
+            ./javascript/reactjs-todo-login-widget/playwright-report

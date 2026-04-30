@@ -63,15 +63,16 @@ Change the name of `.env.example` to `.env` and fill the environment variables w
 Example with annotations:
 
 ```text
-WELLKNOWN_URL=<<<Wellknown URL to your AM instance>>>
-APP_URL=https://localhost:8443 # in develop we do not use this variable for dynamic deployment reasons
-API_URL=http://localhost:9443
-DEBUGGER_OFF=false
-JOURNEY_LOGIN=Login
-JOURNEY_REGISTER=Registration
-REALM_PATH=<<<Realm path of AM>>>
-WEB_OAUTH_CLIENT=<<<Your Web OAuth client name/ID>>>
-SCOPE='openid profile email'
+VITE_WELLKNOWN_URL=<<<Wellknown URL to your AM instance>>>
+VITE_WEB_OAUTH_CLIENT=<<<Your Web OAuth client name/ID>>>
+VITE_API_URL=http://localhost:9443
+VITE_PORT=8443
+VITE_DEBUGGER_OFF=true
+VITE_DEVELOPMENT=true
+VITE_SCOPE='openid profile email'
+VITE_JOURNEY_LOGIN=Login
+VITE_JOURNEY_REGISTER=Registration
+VITE_REALM_PATH=<<<Realm path of AM>>>
 ```
 
 ### Installing Dependencies and Run Build
@@ -79,7 +80,7 @@ SCOPE='openid profile email'
 **Run from `/javascript` root**: Since this sample app uses npm's workspaces, we recommend running the npm commands from the root of the `/javascript` folder.
 
 ```sh
-# Install all dependencies (no need to pass the -w option)
+# Install all dependencies
 npm install
 ```
 

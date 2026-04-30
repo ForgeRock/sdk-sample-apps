@@ -67,7 +67,7 @@ export default function Home() {
         library, our{' '}
         <a
           className={`${theme.textMutedClass}`}
-          href="https://docs.pingidentity.com/sdks/latest/oidc/index.html"
+          href="https://github.com/ForgeRock/ping-javascript-sdk/"
         >
           JavaScript SDK{' '}
         </a>
@@ -88,7 +88,7 @@ export default function Home() {
           this project can be found on Github
         </a>{' '}
         and run locally for experimentation. For more on our SDKs,{' '}
-        <a href="https://docs.pingidentity.com/sdks/latest/index.html">
+        <a href="https://developer.pingidentity.com/orchsdks/index.html">
           you can find our official SDK documentation here.
         </a>
       </p>

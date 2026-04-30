@@ -57,14 +57,13 @@ Change the name of `.env.example` to `.env` and replace the dummy values (e.g. `
 Example with annotations:
 
 ```text
+WELLKNOWN_URL=<<PingOne wellknown url>>
+WEB_OAUTH_CLIENT=<<PingOne application client id>>
 API_URL=http://localhost:9443
 DEBUGGER_OFF=true
 DEVELOPMENT=true
 PORT=8443
-CLIENT_ID=<<PingOne application client id>>
-REDIRECT_URI=http://localhost:8443
 SCOPE="openid profile email phone name revoke"
-WELLKNOWN_URL=<<PingOne wellknown url>>/
 ```
 
 ### Installing Dependencies
@@ -72,7 +71,7 @@ WELLKNOWN_URL=<<PingOne wellknown url>>/
 **Run from root of `/javascript`**: since this sample app uses npm's workspaces, we recommend running the npm commands from the root of the `/javascript` folder.
 
 ```sh
-# Install all dependencies (no need to pass the -w option)
+# Install all dependencies
 npm install
 ```
 
@@ -81,7 +80,7 @@ npm install
 Now, run the below commands to start the processes needed for building the application and running the servers for both client and API server:
 
 ```sh
-# In one terminal window, run the following watch command from the root of the repository
+# In a terminal window, run the following command from the /javascript folder
 npm run start:reactjs-todo-dv
 ```
 

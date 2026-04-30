@@ -68,14 +68,8 @@ export function useInitAuthState() {
        ********************************************************************* */
       if (DEBUGGER) debugger;
       try {
-        if (process.env.SERVER_TYPE === 'PINGONE') {
-          await user.logout({
-            logoutRedirectUri: `${window.location.origin}`,
-          });
-        } else {
-          await user.logout();
-          location.assign(`${document.location.origin}/`);
-        }
+        await user.logout();
+        location.assign(`${document.location.origin}/`);
       } catch (err) {
         console.error(`Error: logout did not successfully complete; ${err}`);
       }
