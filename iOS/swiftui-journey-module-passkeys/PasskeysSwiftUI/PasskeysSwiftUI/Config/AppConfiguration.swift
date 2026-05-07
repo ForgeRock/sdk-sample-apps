@@ -24,13 +24,13 @@ enum UserDefaultsKey {
 }
 
 enum ServerConfig {
-    static let serverUrl = "https://openam-bafaloukas.forgeblocks.com/am"
-    static let realm = "alpha"
-    static let cookieName = "386c0d288cac4b9"
-    static let clientId = "iosClient"
+    static let serverUrl = "<#YOUR_SERVER_URL#>"             // e.g. "https://your-tenant.forgeblocks.com/am"
+    static let realm = "<#YOUR_REALM#>"                     // e.g. "alpha"
+    static let cookieName = "<#YOUR_COOKIE_NAME#>"          // Session cookie name from your AM config
+    static let clientId = "<#YOUR_CLIENT_ID#>"              // OAuth 2.0 client ID
     static let scopes: Set<String> = ["openid", "profile", "email", "address"]
-    static let redirectUri = "frauth://com.forgerock.ios.frexample"
-    static let discoveryEndpoint = "https://openam-bafaloukas.forgeblocks.com/am/oauth2/alpha/.well-known/openid-configuration"
+    static let redirectUri = "<#YOUR_REDIRECT_URI#>"        // Must match your OAuth 2.0 client config
+    static let discoveryEndpoint = "<#YOUR_DISCOVERY_ENDPOINT#>" // e.g. "https://your-tenant.forgeblocks.com/am/oauth2/<realm>/.well-known/openid-configuration"
 }
 
 @MainActor

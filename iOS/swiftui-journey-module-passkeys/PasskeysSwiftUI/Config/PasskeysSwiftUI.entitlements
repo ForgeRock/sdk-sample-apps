@@ -4,8 +4,8 @@
 <dict>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>webcredentials:openam-bafaloukas.forgeblocks.com?mode=develop</string>
-		<string>webcredentials:openam-bafaloukas.forgeblocks.com</string>
+		<string>webcredentials:your-server-domain.com?mode=develop</string>
+		<string>webcredentials:your-server-domain.com</string>
 	</array>
 </dict>
 </plist>
