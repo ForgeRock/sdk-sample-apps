@@ -6,13 +6,13 @@
   "author": "",
   "license": "ISC",
   "workspaces": [
-    "./Archived/angular-todo/",
-    "./Archived/angular-todo-davinci/",
-    "./Archived/embedded-login-davinci/",
-    "./Archived/central-login-oidc/",
-    "./Archived/central-login-oidc-client/",
-    "./Archived/reactjs-todo-journey-legacy/",
-    "./Archived/embedded-login/",
+    "./archived/javascript/angular-todo/",
+    "./archived/javascript/angular-todo-davinci/",
+    "./archived/javascript/embedded-login-davinci/",
+    "./archived/javascript/central-login-oidc/",
+    "./archived/javascript/central-login-oidc-client/",
+    "./archived/javascript/reactjs-todo-journey-legacy/",
+    "./archived/javascript/embedded-login/",
     "./javascript/reactjs-todo-davinci/",
     "./javascript/reactjs-todo-journey/",
     "./javascript/reactjs-todo-oidc/",
@@ -53,8 +53,5 @@
   "lint-staged": {
     "*.{js,jsx,ts,tsx, .cjs}": "prettier --write",
     "*.{html,json}": "prettier --write"
-  },
-  "dependencies": {
-    "@forgerock/davinci-client": "latest"
   }
 }
