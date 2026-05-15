@@ -28,8 +28,11 @@ struct LoginScreen: View {
                         .foregroundColor(.secondary)
                 }
             } else if viewModel.isMfaRegistrationNode {
-                // MFA registration is handled automatically — show progress or success
-                MfaRegistrationView(isRegistering: viewModel.isMfaRegistering) {
+                // MFA registration is handled automatically — show progress, success, or error
+                MfaRegistrationView(
+                    isRegistering: viewModel.isMfaRegistering,
+                    errorMessage: viewModel.mfaRegistrationError
+                ) {
                     Task { await viewModel.submitNode() }
                 }
             } else if let node = viewModel.currentNode,
@@ -228,8 +231,10 @@ struct CallbackView: View {
 /// Shown when the Journey node contains an MFA registration URI.
 /// Automatically registers the credential while showing a spinner, then presents
 /// a success state with a Continue button so the user can advance the Journey.
+/// If registration fails, shows an error message with a retry option.
 struct MfaRegistrationView: View {
     let isRegistering: Bool
+    let errorMessage: String?
     let onContinue: () -> Void
 
     var body: some View {
@@ -243,6 +248,19 @@ struct MfaRegistrationView: View {
                     Text("Registering MFA…")
                         .font(.headline)
                     Text("Setting up your authenticator. This will only take a moment.")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, 32)
+                }
+            } else if let error = errorMessage {
+                VStack(spacing: 16) {
+                    Image(systemName: "exclamationmark.shield.fill")
+                        .font(.system(size: 60))
+                        .foregroundColor(.red)
+                    Text("Registration Failed")
+                        .font(.headline)
+                    Text(error)
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                         .multilineTextAlignment(.center)
@@ -266,7 +284,7 @@ struct MfaRegistrationView: View {
             Spacer()
 
             Button(action: onContinue) {
-                Text("Continue")
+                Text(errorMessage != nil ? "Retry" : "Continue")
                     .fontWeight(.semibold)
                     .frame(maxWidth: .infinity)
                     .padding()

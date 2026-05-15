@@ -29,6 +29,7 @@ class JourneyManager: ObservableObject {
     @Published var currentNode: Node?
     @Published var isLoading = false
     @Published var isMfaRegistering = false
+    @Published var mfaRegistrationError: String?
     @Published var errorMessage: String?
     @Published var isAuthenticated = false
     @Published var userId: String?
@@ -121,9 +122,20 @@ class JourneyManager: ObservableObject {
         }
     }
 
+    /// Returns true if the given node contains a `HiddenValueCallback` that carries
+    /// an MFA registration URI. Single source of truth used by both this manager
+    /// and `LoginViewModel.isMfaRegistrationNode`.
+    static func nodeIsMfaRegistration(_ node: Node) -> Bool {
+        guard let continueNode = node as? ContinueNode else { return false }
+        return continueNode.callbacks.contains { callback in
+            guard let hidden = callback as? HiddenValueCallback else { return false }
+            return hidden.valueId == "mfaDeviceRegistration" && !hidden.value.isEmpty
+        }
+    }
+
     /// Detects a HiddenValueCallback containing an MFA registration URI and registers
-    /// the credential automatically. Sets isMfaRegistering while the work is in progress
-    /// so the UI can show a spinner, then clears it when done.
+    /// the credential automatically. Sets `isMfaRegistering` while work is in progress
+    /// so the UI can show a spinner. Surfaces any failure via `mfaRegistrationError`.
     private func detectAndHandleMfaRegistration(in node: Node) async {
         guard let continueNode = node as? ContinueNode else { return }
 
@@ -133,47 +145,36 @@ class JourneyManager: ObservableObject {
                   !hiddenCallback.value.isEmpty else { continue }
 
             isMfaRegistering = true
-            await registerMfaCredential(uri: hiddenCallback.value)
-            isMfaRegistering = false
+            mfaRegistrationError = nil
+            defer { isMfaRegistering = false }
+
+            do {
+                try await registerMfaCredential(uri: hiddenCallback.value)
+            } catch {
+                mfaRegistrationError = error.localizedDescription
+            }
             return
         }
     }
 
-    /// Registers an MFA credential from the Journey flow.
-    private func registerMfaCredential(uri: String) async {
+    /// Registers an MFA credential from the Journey flow. Throws on failure.
+    private func registerMfaCredential(uri: String) async throws {
         let parseResult = QRCodeParser.parse(uri)
 
         switch parseResult {
         case .oath(let oathUri):
-            do {
-                _ = try await oathManager.addCredentialFromUri(oathUri)
-            } catch {
-                print("Failed to register OATH credential from Journey: \(error)")
-            }
+            _ = try await oathManager.addCredentialFromUri(oathUri)
 
         case .push(let pushUri):
-            do {
-                _ = try await pushManager.addCredentialFromUri(pushUri)
-            } catch {
-                print("Failed to register Push credential from Journey: \(error)")
-            }
+            _ = try await pushManager.addCredentialFromUri(pushUri)
 
         case .mfa(let mfaUri):
-            // Register both - let the SDK handle the mfauth:// format
-            do {
-                _ = try await oathManager.addCredentialFromUri(mfaUri)
-            } catch {
-                print("Failed to register OATH credential from Journey mfauth://: \(error)")
-            }
-            
-            do {
-                _ = try await pushManager.addCredentialFromUri(mfaUri)
-            } catch {
-                print("Failed to register Push credential from Journey mfauth://: \(error)")
-            }
+            // Register both — let the SDK handle the mfauth:// format
+            _ = try await oathManager.addCredentialFromUri(mfaUri)
+            _ = try await pushManager.addCredentialFromUri(mfaUri)
 
         case .invalid(let message):
-            print("Invalid MFA registration URI from Journey: \(message)")
+            throw AppError.qrCodeError(message)
         }
     }
 

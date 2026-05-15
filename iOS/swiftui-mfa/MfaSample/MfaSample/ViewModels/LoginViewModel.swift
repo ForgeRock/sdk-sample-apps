@@ -24,18 +24,15 @@ class LoginViewModel: ObservableObject {
     @Published var currentNode: Node?
     @Published var isLoading = false
     @Published var isMfaRegistering = false
+    @Published var mfaRegistrationError: String?
     @Published var errorMessage: String?
     @Published var shouldDismiss = false
 
-    /// True when the current node contains an MFA registration URI that has been
-    /// (or is being) registered automatically. The UI uses this to show the
-    /// "Registering MFA…" / "Continue" state instead of the normal callback list.
+    /// True when the current node is an MFA registration node. Delegates to
+    /// `JourneyManager.nodeIsMfaRegistration` — single source of truth.
     var isMfaRegistrationNode: Bool {
-        guard let continueNode = currentNode as? ContinueNode else { return false }
-        return continueNode.callbacks.contains { callback in
-            guard let hidden = callback as? HiddenValueCallback else { return false }
-            return hidden.valueId == "mfaDeviceRegistration" && !hidden.value.isEmpty
-        }
+        guard let node = currentNode else { return false }
+        return JourneyManager.nodeIsMfaRegistration(node)
     }
 
     // MARK: - Callback Values
@@ -60,6 +57,9 @@ class LoginViewModel: ObservableObject {
 
         journeyManager.$isMfaRegistering
             .assign(to: &$isMfaRegistering)
+
+        journeyManager.$mfaRegistrationError
+            .assign(to: &$mfaRegistrationError)
 
         journeyManager.$errorMessage
             .assign(to: &$errorMessage)

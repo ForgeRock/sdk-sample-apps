@@ -252,6 +252,8 @@ Dependencies are managed via Swift Package Manager, pointing to `https://github.
 
    > **Note:** `AppConfiguration.swift` initialises the OATH and Push SDK clients only — you do not need to modify it unless you want to customise `OathClient` or `PushClient` storage/logging options.
 
+   > **URL scheme registration:** The `redirectUri` scheme (e.g. `com.example.mfasample`) must be registered in `Info.plist` under `CFBundleURLTypes` / `CFBundleURLSchemes`, otherwise the OAuth2 redirect will not be handled by the app at runtime. In Xcode: **Target → Info → URL Types → +**, set the URL Scheme to the scheme portion of your redirect URI.
+
 5. **Set the Journey name** in [MfaSample/ViewModels/LoginViewModel.swift](MfaSample/MfaSample/ViewModels/LoginViewModel.swift):
    ```swift
    // TODO: Replace "Login" with the name of the Journey tree on your server
