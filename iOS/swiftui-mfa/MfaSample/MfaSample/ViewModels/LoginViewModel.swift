@@ -23,8 +23,20 @@ class LoginViewModel: ObservableObject {
     // MARK: - Published State
     @Published var currentNode: Node?
     @Published var isLoading = false
+    @Published var isMfaRegistering = false
     @Published var errorMessage: String?
     @Published var shouldDismiss = false
+
+    /// True when the current node contains an MFA registration URI that has been
+    /// (or is being) registered automatically. The UI uses this to show the
+    /// "Registering MFA…" / "Continue" state instead of the normal callback list.
+    var isMfaRegistrationNode: Bool {
+        guard let continueNode = currentNode as? ContinueNode else { return false }
+        return continueNode.callbacks.contains { callback in
+            guard let hidden = callback as? HiddenValueCallback else { return false }
+            return hidden.valueId == "mfaDeviceRegistration" && !hidden.value.isEmpty
+        }
+    }
 
     // MARK: - Callback Values
     /// Dictionary to store callback values by callback type and index.
@@ -40,12 +52,14 @@ class LoginViewModel: ObservableObject {
 
     // MARK: - Setup
     private func setupObservers() {
-        // Observe journey manager state
         journeyManager.$currentNode
             .assign(to: &$currentNode)
 
         journeyManager.$isLoading
             .assign(to: &$isLoading)
+
+        journeyManager.$isMfaRegistering
+            .assign(to: &$isMfaRegistering)
 
         journeyManager.$errorMessage
             .assign(to: &$errorMessage)

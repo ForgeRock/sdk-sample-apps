@@ -28,6 +28,7 @@ class JourneyManager: ObservableObject {
     // MARK: - Published State
     @Published var currentNode: Node?
     @Published var isLoading = false
+    @Published var isMfaRegistering = false
     @Published var errorMessage: String?
     @Published var isAuthenticated = false
     @Published var userId: String?
@@ -112,33 +113,29 @@ class JourneyManager: ObservableObject {
     /// Processes a node and handles MFA registration.
     private func processNode(_ node: Node) async {
         if node is SuccessNode {
-            // Authentication successful
             isAuthenticated = true
-
-            // Note: Token retrieval would be done through the OidcModule
-            // For now, we'll mark as authenticated
             currentNode = nil
         } else {
-            // Continue with next node
             currentNode = node
-
-            // Check for MFA registration callbacks
             await detectAndHandleMfaRegistration(in: node)
         }
     }
 
-    /// Detects and handles HiddenValueCallback for MFA device registration.
+    /// Detects a HiddenValueCallback containing an MFA registration URI and registers
+    /// the credential automatically. Sets isMfaRegistering while the work is in progress
+    /// so the UI can show a spinner, then clears it when done.
     private func detectAndHandleMfaRegistration(in node: Node) async {
         guard let continueNode = node as? ContinueNode else { return }
 
         for callback in continueNode.callbacks {
-            if let hiddenCallback = callback as? HiddenValueCallback,
-               hiddenCallback.valueId == "mfaDeviceRegistration",
-               !hiddenCallback.value.isEmpty {
+            guard let hiddenCallback = callback as? HiddenValueCallback,
+                  hiddenCallback.valueId == "mfaDeviceRegistration",
+                  !hiddenCallback.value.isEmpty else { continue }
 
-                // Parse the URI and register the credential
-                await registerMfaCredential(uri: hiddenCallback.value)
-            }
+            isMfaRegistering = true
+            await registerMfaCredential(uri: hiddenCallback.value)
+            isMfaRegistering = false
+            return
         }
     }
 
