@@ -63,6 +63,14 @@ class LoginViewModel: ObservableObject {
     /// Starts the login journey.
     func startLogin() async {
         do {
+            // TODO: Replace "Login" with the name of the Journey tree configured on your server.
+            //
+            // PingAM / AIC: the tree name is set in AM Admin > Authentication > Trees.
+            //               Common names: "Login", "MFARegistration", "Registration".
+            // PingOne:      the flow name is the DaVinci flow or Journey policy name shown
+            //               in PingOne Admin > Authentication > Policies.
+            //
+            // The name here must match exactly (case-sensitive) what is configured on the server.
             try await journeyManager.startJourney(journeyName: "Login")
         } catch {
             errorMessage = error.localizedDescription

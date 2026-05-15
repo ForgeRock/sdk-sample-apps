@@ -13,6 +13,7 @@ import Combine
 import PingJourney
 import PingOrchestrate
 import PingJourneyPlugin
+import PingOidc
 
 /// Manager for Journey-based authentication and MFA registration.
 @MainActor
@@ -36,13 +37,93 @@ class JourneyManager: ObservableObject {
 
     // MARK: - Initialization
     private init() {
-        // Create Journey instance with default configuration
-        journey = Journey.createJourney { config in
-            // TODO: Configure with actual server details
-            config.serverUrl = "https://your-server.example.com/am"
-            config.realm = "alpha"
-            config.cookie = "iPlanetDirectoryPro"
+        // ---------------------------------------------------------------------------
+        // STEP 1 — Choose your deployment model and uncomment the matching block.
+        //
+        // This app supports two server configurations:
+        //   A) PingAM / PingOne Advanced Identity Cloud (AIC)
+        //   B) PingOne (standalone, using the PingOne Journey API)
+        //
+        // Only one block should be active at a time.
+        // ---------------------------------------------------------------------------
+
+        // ---------------------------------------------------------------------------
+        // OPTION A — PingAM / PingOne Advanced Identity Cloud (AIC)
+        //
+        // Required values:
+        //   serverUrl  — Base URL of your AM instance, e.g.:
+        //                  PingOne AIC: "https://<tenant>.forgeblocks.com/am"
+        //                  Self-hosted PingAM: "https://am.example.com/openam"
+        //   realm      — The AM realm your Journey is published in.
+        //                  Cloud tenants typically use "alpha" or "bravo".
+        //   cookie     — AM session cookie name. Cloud default: "iPlanetDirectoryPro".
+        //                  Check AM Admin > Realms > Authentication > Settings.
+        //
+        // OIDC values (used to exchange the Journey session for OAuth2 tokens):
+        //   clientId          — OAuth2 client ID registered in AM.
+        //   redirectUri       — Custom-scheme URI registered on the AM client, e.g.
+        //                        "com.example.mfasample://oauth2redirect"
+        //   discoveryEndpoint — OIDC discovery document URL. For AIC / AM use:
+        //                        "https://<tenant>.forgeblocks.com/am/oauth2/<realm>/.well-known/openid-configuration"
+        //   scopes            — Requested OAuth2 scopes. Must include "openid".
+        // ---------------------------------------------------------------------------
+        journey = Journey.createJourney { journeyConfig in
+            // TODO: Replace with your PingAM / AIC server URL
+            journeyConfig.serverUrl = "https://<tenant>.forgeblocks.com/am"
+            // TODO: Replace with your realm name ("alpha" is the default for cloud tenants)
+            journeyConfig.realm = "alpha"
+            // TODO: Replace with your AM session cookie name
+            journeyConfig.cookie = "iPlanetDirectoryPro"
+
+            journeyConfig.module(PingJourney.OidcModule.config) { oidcConfig in
+                // TODO: Replace with your OAuth2 client ID registered in AM
+                oidcConfig.clientId = "<your-client-id>"
+                // TODO: Replace with your OAuth2 redirect URI (must match the AM client registration)
+                oidcConfig.redirectUri = "com.example.mfasample://oauth2redirect"
+                // TODO: Replace with your OIDC discovery endpoint
+                // AIC format: "https://<tenant>.forgeblocks.com/am/oauth2/<realm>/.well-known/openid-configuration"
+                oidcConfig.discoveryEndpoint = "https://<tenant>.forgeblocks.com/am/oauth2/alpha/.well-known/openid-configuration"
+                // TODO: Adjust scopes if your AM client requires additional claims
+                oidcConfig.scopes = ["openid", "profile", "email"]
+            }
         }
+
+        // ---------------------------------------------------------------------------
+        // OPTION B — PingOne (standalone)
+        //
+        // Uncomment this block and comment out Option A above.
+        //
+        // Required values:
+        //   serverUrl  — PingOne environment URL. Format:
+        //                  "https://auth.pingone.<region>/<environmentId>/as"
+        //                  Regions: com (NA), eu, ca, ap
+        //                  Find your Environment ID in PingOne Admin > Settings.
+        //   realm      — Not used by PingOne Journey; set to "alpha" as a placeholder.
+        //   cookie     — PingOne session cookie: "ST"
+        //
+        // OIDC values:
+        //   clientId          — Application ID from PingOne Admin > Applications.
+        //   redirectUri       — Redirect URI registered on the PingOne application.
+        //   discoveryEndpoint — PingOne OIDC discovery URL:
+        //                        "https://auth.pingone.<region>/<environmentId>/as/.well-known/openid-configuration"
+        //   scopes            — Must include "openid". Add "profile" and "email" as needed.
+        // ---------------------------------------------------------------------------
+        // journey = Journey.createJourney { journeyConfig in
+        //     // TODO: Replace <region> and <environmentId> with your PingOne values
+        //     journeyConfig.serverUrl = "https://auth.pingone.<region>/<environmentId>/as"
+        //     journeyConfig.realm     = "alpha"
+        //     journeyConfig.cookie    = "ST"
+        //
+        //     journeyConfig.module(PingJourney.OidcModule.config) { oidcConfig in
+        //         // TODO: Replace with your PingOne Application ID
+        //         oidcConfig.clientId = "<your-pingone-app-id>"
+        //         // TODO: Replace with your registered redirect URI
+        //         oidcConfig.redirectUri = "com.example.mfasample://oauth2redirect"
+        //         // TODO: Replace <region> and <environmentId>
+        //         oidcConfig.discoveryEndpoint = "https://auth.pingone.<region>/<environmentId>/as/.well-known/openid-configuration"
+        //         oidcConfig.scopes = ["openid", "profile", "email"]
+        //     }
+        // }
     }
 
     // MARK: - Journey Flow

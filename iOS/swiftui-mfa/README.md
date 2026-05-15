@@ -147,16 +147,23 @@ try await pushManager.respondToNotification(notification, approved: true)
 ```
 
 #### JourneyManager.swift
-Wraps `Journey` to drive server-side authentication flows:
+Wraps `Journey` to drive server-side authentication flows. Contains ready-to-use configuration blocks for both PingAM/AIC and PingOne — uncomment the appropriate block and fill in the `TODO` values:
 
 ```swift
-journey = Journey.createJourney { config in
-    config.serverUrl = "https://your-server.example.com/am"
-    config.realm = "alpha"
-    config.cookie = "iPlanetDirectoryPro"
+journey = Journey.createJourney { journeyConfig in
+    journeyConfig.serverUrl = "https://<tenant>.forgeblocks.com/am"
+    journeyConfig.realm     = "alpha"
+    journeyConfig.cookie    = "iPlanetDirectoryPro"
+
+    journeyConfig.module(PingJourney.OidcModule.config) { oidcConfig in
+        oidcConfig.clientId          = "<your-client-id>"
+        oidcConfig.redirectUri       = "com.example.mfasample://oauth2redirect"
+        oidcConfig.discoveryEndpoint = "https://<tenant>.forgeblocks.com/am/oauth2/alpha/.well-known/openid-configuration"
+        oidcConfig.scopes            = ["openid", "profile", "email"]
+    }
 }
 
-// Start a Journey flow
+// Start a Journey flow (replace "Login" with your Journey tree name)
 try await journeyManager.startJourney(journeyName: "Login")
 
 // Advance to the next node after filling in callbacks
@@ -179,13 +186,14 @@ try await journeyManager.submitNode()
 
 ## Dependencies
 
-The application uses the following Ping iOS SDK modules (branch: `develop`):
+The application uses the following Ping iOS SDK modules (version: `2.0.0+`):
 
 | Module | Purpose |
 |--------|---------|
 | **PingOath** | TOTP/HOTP credential management and code generation |
 | **PingPush** | Push notification credential management and approval flows |
 | **PingJourney** | Journey-based authentication flows and MFA registration |
+| **PingOidc** | OIDC/OAuth2 token exchange after Journey authentication |
 | **PingLogger** | Logging utilities |
 | **PingStorage** | Secure Keychain-backed credential storage |
 | **PingOrchestrate** | Core workflow orchestration (transitive dependency) |
@@ -204,10 +212,16 @@ Dependencies are managed via Swift Package Manager, pointing to `https://github.
 
 ### Server Configuration
 
-#### PingAM / Advanced Identity Cloud Configuration
-1. Enable the OATH and Push authentication modules in your realm
-2. Configure the Journey (authentication tree) with an OATH Registration or Push Registration node
-3. Ensure the `HiddenValueCallback` is configured to relay the registration URI to the app
+#### PingAM / PingOne Advanced Identity Cloud (AIC)
+1. Enable the OATH and Push authentication modules in your realm.
+2. Configure the Journey (authentication tree) with an OATH Registration or Push Registration node.
+3. Ensure the `HiddenValueCallback` is configured to relay the registration URI to the app.
+4. Register an OAuth2/OIDC client in AM with a custom redirect URI (e.g. `com.example.mfasample://oauth2redirect`) and grant the `openid`, `profile`, and `email` scopes.
+
+#### PingOne (standalone)
+1. In PingOne Admin, create an application of type **Native** with the same custom redirect URI.
+2. Enable MFA policies and the relevant OATH/Push authenticator apps.
+3. Note your **Environment ID** and **Application ID** — you will need these for configuration.
 
 ### Installation Steps
 
@@ -224,21 +238,56 @@ Dependencies are managed via Swift Package Manager, pointing to `https://github.
 
 3. **Resolve Swift Package dependencies** (Xcode does this automatically on first open, or via **File > Packages > Resolve Package Versions**).
 
-4. **Configure server settings** in [MfaSample/Core/Configuration/AppConfiguration.swift](MfaSample/MfaSample/Core/Configuration/AppConfiguration.swift) and [MfaSample/Core/Managers/JourneyManager.swift](MfaSample/MfaSample/Core/Managers/JourneyManager.swift):
+4. **Configure the Journey connection** in [MfaSample/Core/Managers/JourneyManager.swift](MfaSample/MfaSample/Core/Managers/JourneyManager.swift).
+
+   The file contains two ready-to-use configuration blocks — one for **PingAM / AIC** and one for **PingOne**. Uncomment the block that matches your environment and fill in the `TODO` values:
+
+   **PingAM / AIC:**
    ```swift
-   // JourneyManager.swift
-   journey = Journey.createJourney { config in
-       config.serverUrl = "https://your-server.example.com/am"
-       config.realm = "alpha"
-       config.cookie = "iPlanetDirectoryPro"
+   journey = Journey.createJourney { journeyConfig in
+       journeyConfig.serverUrl = "https://<tenant>.forgeblocks.com/am"  // TODO: your AM URL
+       journeyConfig.realm     = "alpha"                                 // TODO: your realm
+       journeyConfig.cookie    = "iPlanetDirectoryPro"                   // TODO: your cookie name
+
+       journeyConfig.module(PingJourney.OidcModule.config) { oidcConfig in
+           oidcConfig.clientId          = "<your-client-id>"             // TODO: OAuth2 client ID
+           oidcConfig.redirectUri       = "com.example.mfasample://oauth2redirect" // TODO: redirect URI
+           oidcConfig.discoveryEndpoint = "https://<tenant>.forgeblocks.com/am/oauth2/alpha/.well-known/openid-configuration"
+           oidcConfig.scopes            = ["openid", "profile", "email"]
+       }
    }
    ```
 
-5. **Configure APNs** for push notifications:
-   - Add your push notification entitlement in `MfaSample.entitlements`
-   - Register your Amazon SNS credential in your PingAM environment
+   **PingOne:**
+   ```swift
+   journey = Journey.createJourney { journeyConfig in
+       journeyConfig.serverUrl = "https://auth.pingone.<region>/<environmentId>/as" // TODO: your PingOne URL
+       journeyConfig.realm     = "alpha"
+       journeyConfig.cookie    = "ST"
 
-6. **Build and run** on a physical device (recommended for push and biometric features)
+       journeyConfig.module(PingJourney.OidcModule.config) { oidcConfig in
+           oidcConfig.clientId          = "<your-pingone-app-id>"        // TODO: PingOne Application ID
+           oidcConfig.redirectUri       = "com.example.mfasample://oauth2redirect" // TODO: redirect URI
+           oidcConfig.discoveryEndpoint = "https://auth.pingone.<region>/<environmentId>/as/.well-known/openid-configuration"
+           oidcConfig.scopes            = ["openid", "profile", "email"]
+       }
+   }
+   ```
+
+   > **Note:** `AppConfiguration.swift` initialises the OATH and Push SDK clients only — you do not need to modify it unless you want to customise `OathClient` or `PushClient` storage/logging options.
+
+5. **Set the Journey name** in [MfaSample/ViewModels/LoginViewModel.swift](MfaSample/MfaSample/ViewModels/LoginViewModel.swift):
+   ```swift
+   // TODO: Replace "Login" with the name of the Journey tree on your server
+   try await journeyManager.startJourney(journeyName: "Login")
+   ```
+   The name must match exactly (case-sensitive) the tree name configured in AM Admin > Authentication > Trees (for AIC/AM) or the policy name in PingOne Admin > Authentication > Policies.
+
+6. **Configure APNs** for push notifications:
+   - Add your push notification entitlement in `MfaSample.entitlements`.
+   - Register your APNs certificate or key in your PingAM / PingOne environment.
+
+7. **Build and run** on a physical device (recommended for push and biometric features).
 
 ## Understanding the SDK Modules
 
@@ -293,23 +342,20 @@ try await client.respond(to: notification, approved: true)
 
 ### Journey (PingJourney)
 
-`Journey` drives server-side authentication flows with callback handling:
+`Journey` drives server-side authentication flows with callback handling. See `JourneyManager.swift` for the full configuration block including OIDC token exchange.
 
 ```swift
-let journey = Journey.createJourney { config in
-    config.serverUrl = "https://tenant.example.forgeblocks.com/am"
-    config.realm = "alpha"
-    config.cookie = "iPlanetDirectoryPro"
-}
+// See JourneyManager.swift for Journey.createJourney { ... } configuration
 
-let node = await journey.start("Login")
+// Start a Journey flow
+let node = await journey.start("Login")   // replace "Login" with your Journey tree name
 
 switch node {
 case let continueNode as ContinueNode:
-    // Fill in callbacks and advance
+    // Fill in callbacks and advance to the next node
     for callback in continueNode.callbacks {
         if let nameCallback = callback as? NameCallback {
-            nameCallback.value = "username"
+            nameCallback.name = "username"
         }
     }
     let nextNode = await continueNode.next()
@@ -318,7 +364,8 @@ case is SuccessNode:
     print("Authentication successful")
 
 case let failureNode as FailureNode:
-    print("Failed: \(failureNode.cause?.localizedDescription ?? "Unknown")")
+    // FailureNode.cause is non-optional
+    print("Failed: \(failureNode.cause.localizedDescription)")
 
 default:
     break
@@ -411,8 +458,9 @@ A physical device is **required** for:
 
 **Issue**: Journey authentication fails with "Configuration error"
 **Solution**:
-- Verify `serverUrl`, `realm`, and `cookie` values in [JourneyManager.swift](MfaSample/MfaSample/Core/Managers/JourneyManager.swift)
-- Ensure the Journey name passed to `startJourney` matches the name configured on the server
+- Verify `serverUrl`, `realm`, `cookie`, `clientId`, `redirectUri`, and `discoveryEndpoint` values in [JourneyManager.swift](MfaSample/MfaSample/Core/Managers/JourneyManager.swift)
+- Ensure only one configuration block (PingAM/AIC **or** PingOne) is active — the other must be commented out
+- Ensure the Journey name in [LoginViewModel.swift](MfaSample/MfaSample/ViewModels/LoginViewModel.swift) matches the tree name configured on the server (case-sensitive)
 - Check network connectivity and server availability in the diagnostic logs
 
 **Issue**: Build fails with "Cannot find 'PingOath' in scope"

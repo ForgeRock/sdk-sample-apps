@@ -13,6 +13,7 @@
 		1B9C981A2F104EEE00F1A4EE /* PingOath in Frameworks */ = {isa = PBXBuildFile; productRef = 1B7A9E272EEA110000989A55 /* PingOath */; };
 		1B9C981B2F104EEE00F1A4EE /* PingPush in Frameworks */ = {isa = PBXBuildFile; productRef = 1B7A9E292EEA110000989A55 /* PingPush */; };
 		1B9C981C2F104EEE00F1A4EE /* PingStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 1B7A9E2B2EEA110000989A55 /* PingStorage */; };
+		1B9C981D2F104EEE00F1A4EE /* PingOidc in Frameworks */ = {isa = PBXBuildFile; productRef = 1B7A9E2D2EEA110000989A55 /* PingOidc */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -80,6 +81,7 @@
 				1B9C98192F104EEE00F1A4EE /* PingLogger in Frameworks */,
 				1B9C98182F104EEE00F1A4EE /* PingJourney in Frameworks */,
 				1B9C98172F104EEE00F1A4EE /* PingCommons in Frameworks */,
+				1B9C981D2F104EEE00F1A4EE /* PingOidc in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -146,6 +148,7 @@
 				1B7A9E272EEA110000989A55 /* PingOath */,
 				1B7A9E292EEA110000989A55 /* PingPush */,
 				1B7A9E2B2EEA110000989A55 /* PingStorage */,
+				1B7A9E2D2EEA110000989A55 /* PingOidc */,
 			);
 			productName = MfaExample;
 			productReference = 1B7A9DEC2EEA102800989A55 /* MfaSample.app */;
@@ -675,6 +678,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1B7A9E202EEA110000989A55 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;
 			productName = PingStorage;
+		};
+		1B7A9E2D2EEA110000989A55 /* PingOidc */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B7A9E202EEA110000989A55 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;
+			productName = PingOidc;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
