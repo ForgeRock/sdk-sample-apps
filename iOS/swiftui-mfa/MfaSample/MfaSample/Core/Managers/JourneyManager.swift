@@ -38,17 +38,7 @@ class JourneyManager: ObservableObject {
     // MARK: - Initialization
     private init() {
         // ---------------------------------------------------------------------------
-        // STEP 1 — Choose your deployment model and uncomment the matching block.
-        //
-        // This app supports two server configurations:
-        //   A) PingAM / PingOne Advanced Identity Cloud (AIC)
-        //   B) PingOne (standalone, using the PingOne Journey API)
-        //
-        // Only one block should be active at a time.
-        // ---------------------------------------------------------------------------
-
-        // ---------------------------------------------------------------------------
-        // OPTION A — PingAM / PingOne Advanced Identity Cloud (AIC)
+        // PingAM / PingOne Advanced Identity Cloud (AIC) configuration
         //
         // Required values:
         //   serverUrl  — Base URL of your AM instance, e.g.:
@@ -63,7 +53,7 @@ class JourneyManager: ObservableObject {
         //   clientId          — OAuth2 client ID registered in AM.
         //   redirectUri       — Custom-scheme URI registered on the AM client, e.g.
         //                        "com.example.mfasample://oauth2redirect"
-        //   discoveryEndpoint — OIDC discovery document URL. For AIC / AM use:
+        //   discoveryEndpoint — OIDC discovery document URL:
         //                        "https://<tenant>.forgeblocks.com/am/oauth2/<realm>/.well-known/openid-configuration"
         //   scopes            — Requested OAuth2 scopes. Must include "openid".
         // ---------------------------------------------------------------------------
@@ -87,43 +77,6 @@ class JourneyManager: ObservableObject {
                 oidcConfig.scopes = ["openid", "profile", "email"]
             }
         }
-
-        // ---------------------------------------------------------------------------
-        // OPTION B — PingOne (standalone)
-        //
-        // Uncomment this block and comment out Option A above.
-        //
-        // Required values:
-        //   serverUrl  — PingOne environment URL. Format:
-        //                  "https://auth.pingone.<region>/<environmentId>/as"
-        //                  Regions: com (NA), eu, ca, ap
-        //                  Find your Environment ID in PingOne Admin > Settings.
-        //   realm      — Not used by PingOne Journey; set to "alpha" as a placeholder.
-        //   cookie     — PingOne session cookie: "ST"
-        //
-        // OIDC values:
-        //   clientId          — Application ID from PingOne Admin > Applications.
-        //   redirectUri       — Redirect URI registered on the PingOne application.
-        //   discoveryEndpoint — PingOne OIDC discovery URL:
-        //                        "https://auth.pingone.<region>/<environmentId>/as/.well-known/openid-configuration"
-        //   scopes            — Must include "openid". Add "profile" and "email" as needed.
-        // ---------------------------------------------------------------------------
-        // journey = Journey.createJourney { journeyConfig in
-        //     // TODO: Replace <region> and <environmentId> with your PingOne values
-        //     journeyConfig.serverUrl = "https://auth.pingone.<region>/<environmentId>/as"
-        //     journeyConfig.realm     = "alpha"
-        //     journeyConfig.cookie    = "ST"
-        //
-        //     journeyConfig.module(PingJourney.OidcModule.config) { oidcConfig in
-        //         // TODO: Replace with your PingOne Application ID
-        //         oidcConfig.clientId = "<your-pingone-app-id>"
-        //         // TODO: Replace with your registered redirect URI
-        //         oidcConfig.redirectUri = "com.example.mfasample://oauth2redirect"
-        //         // TODO: Replace <region> and <environmentId>
-        //         oidcConfig.discoveryEndpoint = "https://auth.pingone.<region>/<environmentId>/as/.well-known/openid-configuration"
-        //         oidcConfig.scopes = ["openid", "profile", "email"]
-        //     }
-        // }
     }
 
     // MARK: - Journey Flow
