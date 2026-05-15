@@ -27,6 +27,14 @@ struct LoginScreen: View {
                     Text("Loading...")
                         .foregroundColor(.secondary)
                 }
+            } else if viewModel.isMfaRegistrationNode {
+                // MFA registration is handled automatically — show progress, success, or error
+                MfaRegistrationView(
+                    isRegistering: viewModel.isMfaRegistering,
+                    errorMessage: viewModel.mfaRegistrationError
+                ) {
+                    Task { await viewModel.submitNode() }
+                }
             } else if let node = viewModel.currentNode,
                       let continueNode = node as? ContinueNode {
                 // Node with callbacks
@@ -215,6 +223,79 @@ struct CallbackView: View {
             get: { viewModel.callbackValues[key] ?? "" },
             set: { viewModel.callbackValues[key] = $0 }
         )
+    }
+}
+
+// MARK: - MFA Registration View
+
+/// Shown when the Journey node contains an MFA registration URI.
+/// Automatically registers the credential while showing a spinner, then presents
+/// a success state with a Continue button so the user can advance the Journey.
+/// If registration fails, shows an error message with a retry option.
+struct MfaRegistrationView: View {
+    let isRegistering: Bool
+    let errorMessage: String?
+    let onContinue: () -> Void
+
+    var body: some View {
+        VStack(spacing: 32) {
+            Spacer()
+
+            if isRegistering {
+                VStack(spacing: 16) {
+                    ProgressView()
+                        .scaleEffect(1.5)
+                    Text("Registering MFA…")
+                        .font(.headline)
+                    Text("Setting up your authenticator. This will only take a moment.")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, 32)
+                }
+            } else if let error = errorMessage {
+                VStack(spacing: 16) {
+                    Image(systemName: "exclamationmark.shield.fill")
+                        .font(.system(size: 60))
+                        .foregroundColor(.red)
+                    Text("Registration Failed")
+                        .font(.headline)
+                    Text(error)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, 32)
+                }
+            } else {
+                VStack(spacing: 16) {
+                    Image(systemName: "checkmark.shield.fill")
+                        .font(.system(size: 60))
+                        .foregroundColor(.green)
+                    Text("MFA Registered")
+                        .font(.headline)
+                    Text("Your authenticator has been set up successfully.")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, 32)
+                }
+            }
+
+            Spacer()
+
+            Button(action: onContinue) {
+                Text(errorMessage != nil ? "Retry" : "Continue")
+                    .fontWeight(.semibold)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(isRegistering ? Color.gray : Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(12)
+            }
+            .disabled(isRegistering)
+            .padding(.horizontal)
+            .padding(.bottom, 32)
+        }
     }
 }
 

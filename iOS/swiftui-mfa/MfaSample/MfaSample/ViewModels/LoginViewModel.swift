@@ -23,8 +23,17 @@ class LoginViewModel: ObservableObject {
     // MARK: - Published State
     @Published var currentNode: Node?
     @Published var isLoading = false
+    @Published var isMfaRegistering = false
+    @Published var mfaRegistrationError: String?
     @Published var errorMessage: String?
     @Published var shouldDismiss = false
+
+    /// True when the current node is an MFA registration node. Delegates to
+    /// `JourneyManager.nodeIsMfaRegistration` — single source of truth.
+    var isMfaRegistrationNode: Bool {
+        guard let node = currentNode else { return false }
+        return JourneyManager.nodeIsMfaRegistration(node)
+    }
 
     // MARK: - Callback Values
     /// Dictionary to store callback values by callback type and index.
@@ -40,12 +49,17 @@ class LoginViewModel: ObservableObject {
 
     // MARK: - Setup
     private func setupObservers() {
-        // Observe journey manager state
         journeyManager.$currentNode
             .assign(to: &$currentNode)
 
         journeyManager.$isLoading
             .assign(to: &$isLoading)
+
+        journeyManager.$isMfaRegistering
+            .assign(to: &$isMfaRegistering)
+
+        journeyManager.$mfaRegistrationError
+            .assign(to: &$mfaRegistrationError)
 
         journeyManager.$errorMessage
             .assign(to: &$errorMessage)
@@ -63,6 +77,14 @@ class LoginViewModel: ObservableObject {
     /// Starts the login journey.
     func startLogin() async {
         do {
+            // TODO: Replace "Login" with the name of the Journey tree configured on your server.
+            //
+            // PingAM / AIC: the tree name is set in AM Admin > Authentication > Trees.
+            //               Common names: "Login", "MFARegistration", "Registration".
+            // PingOne:      the flow name is the DaVinci flow or Journey policy name shown
+            //               in PingOne Admin > Authentication > Policies.
+            //
+            // The name here must match exactly (case-sensitive) what is configured on the server.
             try await journeyManager.startJourney(journeyName: "Login")
         } catch {
             errorMessage = error.localizedDescription
