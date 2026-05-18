@@ -46,7 +46,6 @@ export default defineConfig({
           'https://openam-sdks.forgeblocks.com/am/oauth2/alpha/.well-known/openid-configuration',
         VITE_SCOPE: 'profile openid email',
         VITE_WEB_OAUTH_CLIENT: 'WebOAuthClient',
-        VITE_REALM_PATH: 'alpha',
         VITE_PINGONE_ENV_ID: '02fb4743-189a-4bc7-9d6c-a919edfe6447',
       },
       ignoreHTTPSErrors: true,
