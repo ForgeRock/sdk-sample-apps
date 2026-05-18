@@ -14,7 +14,6 @@ export const DEBUGGER = import.meta.env.VITE_DEBUGGER_OFF === 'false';
 export const JOURNEY_LOGIN = import.meta.env.VITE_JOURNEY_LOGIN;
 export const JOURNEY_REGISTER = import.meta.env.VITE_JOURNEY_REGISTER;
 export const WEB_OAUTH_CLIENT = import.meta.env.VITE_WEB_OAUTH_CLIENT;
-export const REALM_PATH = import.meta.env.VITE_REALM_PATH;
 export const SCOPE = import.meta.env.VITE_SCOPE;
 export const WELLKNOWN_URL = import.meta.env.VITE_WELLKNOWN_URL;
 export const INIT_PROTECT = import.meta.env.VITE_INIT_PROTECT;
@@ -42,5 +41,4 @@ export const CONFIG = {
   serverConfig: {
     wellknown: WELLKNOWN_URL,
   },
-  realmPath: REALM_PATH,
 };
