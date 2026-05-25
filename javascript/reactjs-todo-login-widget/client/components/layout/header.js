@@ -9,7 +9,7 @@
  */
 
 import React, { useContext } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useSearchParams } from 'react-router-dom';
 
 import AccountIcon from '../icons/account-icon';
 import ForgeRockIcon from '../icons/forgerock-icon';
@@ -34,6 +34,7 @@ export default function Header() {
   const [auth] = useContext(AuthContext);
   const theme = useContext(ThemeContext);
   const location = useLocation();
+  const [queryParams] = useSearchParams();
   const { openModal } = useLoginWidget();
 
   let TodosItem;
@@ -112,7 +113,7 @@ export default function Header() {
           className={`cstm_login-link py-2 px-3 mx-1 ${
             theme.mode === 'dark' ? 'cstm_login-link_dark' : ''
           }`}
-          onClick={openModal}
+          onClick={() => openModal(queryParams)}
           href="#"
         >
           Sign In
