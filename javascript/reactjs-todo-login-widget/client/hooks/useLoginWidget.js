@@ -93,10 +93,11 @@ export function useLoginWidget() {
     };
   }, []);
 
-  function openModal() {
+  function openModal(queryParams) {
     const authSetters = setAuthRef.current;
+    const journeyName = queryParams?.get('journey');
     authSetters?.setError?.('');
-    journeyEvents.start();
+    journeyEvents.start(journeyName ? { journey: journeyName } : undefined);
     componentEvents.open();
   }
 

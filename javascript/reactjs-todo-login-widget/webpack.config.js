@@ -27,6 +27,7 @@ module.exports = () => {
   const JOURNEY_REGISTER = process.env.JOURNEY_REGISTER || localEnv.JOURNEY_REGISTER;
   const WEB_OAUTH_CLIENT = process.env.WEB_OAUTH_CLIENT || localEnv.WEB_OAUTH_CLIENT;
   const REALM_PATH = process.env.REALM_PATH || localEnv.REALM_PATH;
+  const WELLKNOWN_URL = process.env.WELLKNOWN_URL || localEnv.WELLKNOWN_URL;
   const SCOPE = process.env.SCOPE || localEnv.SCOPE;
   const PINGONE_ENV_ID = process.env.PINGONE_ENV_ID || localEnv.PINGONE_ENV_ID;
 
@@ -120,6 +121,7 @@ module.exports = () => {
         'process.env.JOURNEY_REGISTER': JSON.stringify(JOURNEY_REGISTER),
         'process.env.WEB_OAUTH_CLIENT': JSON.stringify(WEB_OAUTH_CLIENT),
         'process.env.REALM_PATH': JSON.stringify(REALM_PATH),
+        'process.env.WELLKNOWN_URL': JSON.stringify(WELLKNOWN_URL),
         'process.env.SCOPE': JSON.stringify(SCOPE),
         'process.env.PINGONE_ENV_ID': JSON.stringify(PINGONE_ENV_ID),
       }),

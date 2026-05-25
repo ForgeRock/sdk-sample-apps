@@ -31,6 +31,8 @@ export default defineConfig({
         PORT: '8443',
         SERVER_URL: 'https://openam-sdks.forgeblocks.com/am',
         REALM_PATH: 'alpha',
+        WELLKNOWN_URL:
+          'https://openam-sdks.forgeblocks.com/am/oauth2/alpha/.well-known/openid-configuration',
         SCOPE: 'profile me.read email',
         WEB_OAUTH_CLIENT: 'CentralLoginOAuthClient-',
         PINGONE_ENV_ID: '02fb4743-189a-4bc7-9d6c-a919edfe6447',
