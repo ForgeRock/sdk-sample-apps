@@ -1,0 +1,72 @@
+[versions]
+agp = "9.1.1"
+coreKtx = "1.18.0"
+kotlin = "2.3.21"
+appcompat = "1.7.1"
+serialization = "1.9.0"
+composeBom = "2025.08.01"
+compose = "1.9.0"
+compose-material3 = "1.3.2"
+material = "1.13.0"
+materialIconsExtended = "1.7.8"
+
+coilCompose = "2.7.0"
+navVersion = "2.9.3"
+ktor = "3.2.3"
+barcodeScanning = "17.3.0"
+cameraCamera2 = "1.4.2"
+lifecycleRuntimeKtx = "2.9.3"
+firebaseBom = "33.7.0"
+osmdroidAndroid = "6.1.20"
+biometric = "1.4.0-alpha02"
+
+googleServicesPlugin = "4.4.3"
+pluginSserialization = "2.2.10"
+
+# Ping SDK version
+ping = "2.0.0"
+
+[libraries]
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+
+androidx-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+
+compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
+compose-material3 = { module = "androidx.compose.material3:material3", version.ref = "compose-material3" }
+androidx-ui-graphics = { module = "androidx.compose.ui:ui-graphics" }
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navVersion" }
+androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
+androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "cameraCamera2" }
+androidx-camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "cameraCamera2" }
+androidx-camera-view = { module = "androidx.camera:camera-view", version.ref = "cameraCamera2" }
+barcode-scanning = { module = "com.google.mlkit:barcode-scanning", version.ref = "barcodeScanning" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
+
+# Ping Libraries
+ping-oath = { module = "com.pingidentity.sdks:oath", version.ref = "ping" }
+ping-push = { module = "com.pingidentity.sdks:push", version.ref = "ping" }
+ping-journey = { module = "com.pingidentity.sdks:journey", version.ref = "ping" }
+
+# Compose Libraries
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleRuntimeKtx" }
+
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
+ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
+
+firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+osmdroid-android = { module = "org.osmdroid:osmdroid-android", version.ref = "osmdroidAndroid" }
+androidx-biometric = { module = "androidx.biometric:biometric", version.ref = "biometric" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "pluginSserialization" }
+googleServices = { id = "com.google.gms.google-services", version.ref = "googleServicesPlugin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+

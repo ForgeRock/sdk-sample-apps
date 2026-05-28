@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+
+    <!-- For maps display when location is included in notifications -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <!-- Notification permissions -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.PingIdentityAuthenticator"
+        android:name="com.pingidentity.authenticatorapp.AuthenticatorApp">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:theme="@style/Theme.PingIdentityAuthenticator">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="otpauth" android:host="totp" />
+                <data android:scheme="otpauth" android:host="hotp" />
+                <data android:scheme="pushauth" android:host="push" />
+                <data android:scheme="mfauth" android:host="totp" />
+                <data android:scheme="mfauth" android:host="hotp" />
+            </intent-filter>
+        </activity>
+
+        <!-- Firebase Cloud Messaging Service -->
+        <service
+            android:name=".service.PushNotificationService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <!-- Notification Action Receiver -->
+        <receiver
+            android:name=".notification.NotificationActionReceiver"
+            android:exported="false" />
+
+        <!-- Biometric Prompt Activity -->
+        <activity
+            android:name=".notification.BiometricPromptActivity"
+            android:exported="false"
+            android:theme="@style/Theme.PingIdentityAuthenticator.AppCompat"
+            android:launchMode="singleTask"
+            android:taskAffinity=""
+            android:showOnLockScreen="true"
+            android:turnScreenOn="true"
+            android:noHistory="true" />
+
+        <!-- Push Notification Activity -->
+        <activity
+            android:name=".notification.PushNotificationActivity"
+            android:exported="false"
+            android:theme="@style/Theme.PingIdentityAuthenticator"
+            android:launchMode="singleTask"
+            android:taskAffinity=""
+            android:excludeFromRecents="false" />
+    </application>
+
+</manifest>
