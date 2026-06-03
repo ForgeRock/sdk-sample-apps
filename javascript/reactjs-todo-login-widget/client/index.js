@@ -53,25 +53,25 @@ if (DEBUGGER) debugger;
 const urlParams = new URLSearchParams(window.location.search);
 const journeyParam = urlParams.get('journey');
 
-// Configuration with NO journeyClient — never set, ever.
-// Verifies the widget initializes and the app does not crash on load.
 configuration().set({
+  // Minimum required configuration:
+  journeyClient: {
+    serverConfig: {
+      wellknown: WELLKNOWN_URL,
+    },
+  },
   forgerock: {
     serverConfig: {
       baseUrl: SERVER_URL,
       timeout: 3000,
     },
+    // Optional configuration:
     clientId: WEB_OAUTH_CLIENT,
     realmPath: REALM_PATH,
     redirectUri: `${window.location.origin}/callback.html`,
     scope: SCOPE,
     tree: `${journeyParam || JOURNEY_LOGIN}`,
     tokenStore: 'localStorage',
-  },
-  journeyClient: {
-    serverConfig: {
-      wellknown: WELLKNOWN_URL,
-    },
   },
 });
 
