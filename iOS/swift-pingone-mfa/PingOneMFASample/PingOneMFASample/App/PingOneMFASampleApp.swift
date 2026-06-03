@@ -5,7 +5,7 @@ import SwiftUI
 struct PingOneMFASampleApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
-    private let coordinator = AppNavigationCoordinator()
+    @StateObject private var coordinator = AppNavigationCoordinator()
     private let manager = PingOneMFAManager.shared
     private let appConfig = AppConfiguration.shared
 

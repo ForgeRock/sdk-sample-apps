@@ -81,6 +81,7 @@ struct NotificationView: View {
         .padding()
         .onAppear {
             if viewModel.notification.isCancelAuthentication { dismiss() }
+            if viewModel.notification.pushType == .dry { dismiss() }
         }
         .alert(viewModel.isDenied ? "Denied" : "Approved", isPresented: $viewModel.showSuccessAlert) {
             Button("OK") { dismiss() }

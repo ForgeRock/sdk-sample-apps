@@ -59,7 +59,7 @@ struct ScannerScreen: View {
                 scannerDelegate = ScannerBridge(viewModel: viewModel)
             }
         }
-        .onChange(of: viewModel.pairingSuccess) { success in
+        .onChange(of: viewModel.pairingSuccess) { _, success in
             if success {
                 manualKey = ""
                 Task {
@@ -75,14 +75,6 @@ struct ScannerScreen: View {
             Button("OK", role: .cancel) {}
         } message: {
             Text(viewModel.errorMessage ?? "")
-        }
-        .alert("Success", isPresented: Binding(
-            get: { viewModel.successMessage != nil && !viewModel.pairingSuccess },
-            set: { _ in }
-        )) {
-            Button("OK") {}
-        } message: {
-            Text(viewModel.successMessage ?? "")
         }
     }
 }
