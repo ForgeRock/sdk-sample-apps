@@ -1,0 +1,229 @@
+<h2>Section 3 — Screen Designs</h2>
+<p class="subtitle">Three core screens. Click any to select it as a reference point.</p>
+
+<style>
+.phones { display: flex; gap: 24px; flex-wrap: wrap; justify-content: center; margin-top: 16px; }
+.phone-wrap { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.phone-label { font-size: 13px; font-weight: 600; color: #aaa; }
+.phone {
+  width: 200px;
+  background: #111;
+  border-radius: 28px;
+  border: 2px solid #333;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  font-size: 11px;
+}
+.phone-statusbar {
+  background: #111;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  font-size: 9px;
+  color: #666;
+}
+.phone-navbar {
+  background: #1a1a2e;
+  border-bottom: 1px solid #333;
+  padding: 8px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.phone-navbar .title { font-size: 13px; font-weight: 700; color: #fff; }
+.phone-navbar .btn { font-size: 11px; color: #4f8ef7; }
+.phone-body { background: #0e0e1a; min-height: 340px; }
+
+/* Accounts screen */
+.acct-card {
+  margin: 8px 10px;
+  background: #1a1a2e;
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.acct-icon {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #b71c1c, #7f0000);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 14px; flex-shrink: 0;
+}
+.acct-info { flex: 1; }
+.acct-name { font-size: 11px; font-weight: 600; color: #fff; }
+.acct-sub  { font-size: 9px; color: #888; margin-top: 2px; }
+
+/* Scanner screen */
+.scanner-camera {
+  background: #080808;
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.scan-frame {
+  width: 100px; height: 100px;
+  border: 2px solid #fff;
+  border-radius: 8px;
+  position: relative;
+}
+.scan-label { font-size: 9px; color: #fff; position: absolute; top: 12px; width: 100%; text-align: center; }
+.scan-overlay {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,0.55);
+  display: flex; align-items: center; justify-content: center;
+}
+.scanner-bottom {
+  background: rgba(30,30,50,0.95);
+  padding: 10px;
+  border-radius: 10px;
+  margin: 0 8px 8px;
+}
+.mock-input {
+  background: #111;
+  border: 1px solid #333;
+  border-radius: 6px;
+  padding: 6px 8px;
+  color: #888;
+  font-size: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 6px;
+}
+.mock-btn {
+  background: #4f8ef7;
+  color: #fff;
+  border-radius: 6px;
+  padding: 6px;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+/* Notification modal */
+.notif-sheet {
+  background: #1a1a2e;
+  border-radius: 16px 16px 0 0;
+  padding: 12px 10px;
+  margin-top: 80px;
+}
+.notif-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.notif-icon {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #b71c1c, #7f0000);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 14px; flex-shrink: 0;
+}
+.notif-title { font-size: 11px; font-weight: 600; color: #fff; }
+.notif-sub   { font-size: 9px; color: #888; }
+.notif-msg   { background: #111; border-radius: 8px; padding: 8px; font-size: 10px; color: #ccc; margin-bottom: 10px; }
+.notif-btns  { display: flex; gap: 6px; }
+.notif-deny    { flex:1; background: #b71c1c; border-radius: 8px; padding:7px; text-align:center; color:#fff; font-size:10px; font-weight:600; }
+.notif-approve { flex:1; background: #2e7d32; border-radius: 8px; padding:7px; text-align:center; color:#fff; font-size:10px; font-weight:600; }
+</style>
+
+<div class="phones">
+
+  <!-- Screen 1: Accounts -->
+  <div class="phone-wrap">
+    <div class="phone-label">Accounts Screen</div>
+    <div class="phone">
+      <div class="phone-statusbar"><span>9:41</span><span>●●●</span></div>
+      <div class="phone-navbar">
+        <span class="title">MFA Accounts</span>
+        <span class="btn">＋</span>
+      </div>
+      <div class="phone-body" style="padding-top:4px;">
+        <div class="acct-card">
+          <div class="acct-icon">👤</div>
+          <div class="acct-info">
+            <div class="acct-name">John Doe</div>
+            <div class="acct-sub">Region: northAmerica</div>
+            <div class="acct-sub">ID: abc123…</div>
+          </div>
+        </div>
+        <div class="acct-card">
+          <div class="acct-icon">👤</div>
+          <div class="acct-info">
+            <div class="acct-name">Jane Smith</div>
+            <div class="acct-sub">Region: europe</div>
+            <div class="acct-sub">ID: def456…</div>
+          </div>
+        </div>
+        <div style="text-align:center; color:#555; font-size:9px; padding: 20px 0;">Pull to refresh</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Screen 2: Scanner -->
+  <div class="phone-wrap">
+    <div class="phone-label">Scanner Screen</div>
+    <div class="phone">
+      <div class="phone-statusbar"><span>9:41</span><span>●●●</span></div>
+      <div class="phone-navbar">
+        <span class="btn">‹ Back</span>
+        <span class="title">Add Account</span>
+        <span></span>
+      </div>
+      <div class="phone-body">
+        <div class="scanner-camera">
+          <div class="scan-overlay">
+            <div style="text-align:center;">
+              <div class="scan-label">Scan QR Code</div>
+              <div class="scan-frame"></div>
+            </div>
+          </div>
+        </div>
+        <div class="scanner-bottom">
+          <div class="mock-input">Enter pairing key manually</div>
+          <div class="mock-btn">Pair</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Screen 3: Push Notification -->
+  <div class="phone-wrap">
+    <div class="phone-label">Push Notification View</div>
+    <div class="phone">
+      <div class="phone-statusbar"><span>9:41</span><span>●●●</span></div>
+      <div class="phone-navbar">
+        <span class="title">MFA Accounts</span>
+        <span class="btn">＋</span>
+      </div>
+      <div class="phone-body">
+        <div class="notif-sheet">
+          <div class="notif-header">
+            <div class="notif-icon">🔔</div>
+            <div>
+              <div class="notif-title">PingOne MFA Authentication</div>
+              <div class="notif-sub">Approve or deny this request</div>
+            </div>
+          </div>
+          <div class="notif-msg">
+            <div style="font-weight:600; margin-bottom:4px;">Authentication Request</div>
+            <div style="color:#888;">Someone is trying to log in to your account. Do you want to allow this?</div>
+          </div>
+          <div class="notif-btns">
+            <div class="notif-deny">✕ Deny</div>
+            <div class="notif-approve">✓ Approve</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div style="margin-top: 24px; padding: 14px 16px; background: #1a1a2e; border-radius: 8px; font-size: 12px; color: #aaa;">
+  <strong>Notes:</strong><br>
+  • Push Notification View slides up as a bottom sheet over the Accounts Screen<br>
+  • Number-matching challenge (SELECT_NUMBER) shows tappable number buttons instead of Approve button (same as reference)<br>
+  • Empty accounts list shows an empty state with a "Scan QR Code" call-to-action button
+</div>

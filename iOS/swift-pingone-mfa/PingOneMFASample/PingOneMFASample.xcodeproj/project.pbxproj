@@ -195,6 +195,9 @@
 			);
 			mainGroup = 2E7F97D42FD025580033B069;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				2E7F99EE2FD04A250033B069 /* XCLocalSwiftPackageReference "../../../../forgerock-ping-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 2E7F97DE2FD025580033B069 /* Products */;
 			projectDirPath = "";
@@ -570,6 +573,13 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		2E7F99EE2FD04A250033B069 /* XCLocalSwiftPackageReference "../../../../forgerock-ping-ios-sdk" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = "../../../../forgerock-ping-ios-sdk";
+		};
+/* End XCLocalSwiftPackageReference section */
 	};
 	rootObject = 2E7F97D52FD025580033B069 /* Project object */;
 }

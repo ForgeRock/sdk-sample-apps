@@ -1,0 +1,128 @@
+<h2>Proposed Screen Map</h2>
+<p class="subtitle">Which screens should the app include? Click all that apply.</p>
+
+<style>
+  .screen-map {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-top: 16px;
+  }
+  .flow-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .screen-box {
+    background: var(--card-bg, #1e1e2e);
+    border: 2px solid var(--border, #333);
+    border-radius: 12px;
+    padding: 14px 18px;
+    min-width: 160px;
+    text-align: center;
+  }
+  .screen-box.main {
+    border-color: #4f8ef7;
+    background: #1a2540;
+  }
+  .screen-box.optional {
+    border-color: #888;
+    border-style: dashed;
+    opacity: 0.8;
+  }
+  .screen-box h4 {
+    margin: 0 0 4px 0;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .screen-box p {
+    margin: 0;
+    font-size: 11px;
+    color: #888;
+  }
+  .arrow {
+    font-size: 20px;
+    color: #666;
+    flex-shrink: 0;
+  }
+  .badge {
+    display: inline-block;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-top: 4px;
+    font-weight: 600;
+  }
+  .badge.core { background: #1a3a1a; color: #4caf50; }
+  .badge.opt  { background: #3a2a1a; color: #ff9800; }
+</style>
+
+<div class="screen-map">
+  <div class="flow-row">
+    <div class="screen-box main">
+      <h4>Accounts Screen</h4>
+      <p>List from getDeviceInfo()</p>
+      <span class="badge core">CORE</span>
+    </div>
+    <div class="arrow">→</div>
+    <div class="screen-box main">
+      <h4>+ Pairing Sheet</h4>
+      <p>QR Scanner OR manual text entry</p>
+      <span class="badge core">CORE</span>
+    </div>
+  </div>
+
+  <div class="flow-row">
+    <div class="screen-box main">
+      <h4>Push Notification View</h4>
+      <p>In-app approve/deny modal<br/>triggered by APNs</p>
+      <span class="badge core">CORE</span>
+    </div>
+  </div>
+
+  <div style="height:1px; background:#333; margin: 8px 0;"></div>
+  <p style="font-size:12px; color:#888; margin:0;">Optional screens — do you want these?</p>
+
+  <div class="flow-row">
+    <div class="screen-box optional">
+      <h4>OTP Screen</h4>
+      <p>Live countdown + PingOneMFA OTP code</p>
+      <span class="badge opt">OPTIONAL</span>
+    </div>
+    <div class="arrow" style="opacity:0.4">→?</div>
+    <div class="screen-box optional">
+      <h4>Settings / Config</h4>
+      <p>SDK init geo selection (NA / EU / etc.)</p>
+      <span class="badge opt">OPTIONAL</span>
+    </div>
+  </div>
+</div>
+
+<div style="margin-top: 32px;">
+  <h3>Which optional screens should we include?</h3>
+  <p class="subtitle">The 3 core screens (Accounts, Pairing, Push Notification) are definitely in. Select optional additions below.</p>
+  <div class="options" data-multiselect>
+    <div class="option" data-choice="otp" onclick="toggleSelect(this)">
+      <div class="letter">A</div>
+      <div class="content">
+        <h3>OTP Screen</h3>
+        <p>Displays the live PingOneMFA one-time passcode with countdown timer (mirrors PingOneMFAOtpView from the reference app)</p>
+      </div>
+    </div>
+    <div class="option" data-choice="settings" onclick="toggleSelect(this)">
+      <div class="letter">B</div>
+      <div class="content">
+        <h3>Settings / Config Screen</h3>
+        <p>Lets user choose the SDK geo region (northAmerica, europe, etc.) at runtime instead of a hardcoded value</p>
+      </div>
+    </div>
+    <div class="option" data-choice="none" onclick="toggleSelect(this)">
+      <div class="letter">C</div>
+      <div class="content">
+        <h3>None — core screens only</h3>
+        <p>Keep it focused: Accounts + Pairing + Push Notification handling only</p>
+      </div>
+    </div>
+  </div>
+</div>
