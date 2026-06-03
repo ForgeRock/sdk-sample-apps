@@ -35,25 +35,6 @@ export default defineConfig({
     },
     {
       command: 'npm run start',
-      url: 'http://localhost:8444',
-      timeout: 120 * 1000,
-      reuseExistingServer: !process.env.CI,
-      cwd: './',
-      env: {
-        API_URL: 'http://localhost:9443',
-        DEBUGGER_OFF: 'true',
-        DEVELOPMENT: 'false',
-        PORT: '8444',
-        WEB_OAUTH_CLIENT: 'fb456db5-2e08-46d3-adf0-05bf8d26ad60',
-        SCOPE: 'openid profile email phone name revoke',
-        WELLKNOWN_URL:
-          'https://auth.pingone.ca/356a254c-cba3-4ade-be1a-860136e8df01/as/.well-known/openid-configuration',
-        PINGONE_ENV_ID: '356a254c-cba3-4ade-be1a-860136e8df01',
-      },
-      ignoreHTTPSErrors: true,
-    },
-    {
-      command: 'npm run start',
       url: 'http://localhost:9443/healthcheck',
       timeout: 120 * 1000,
       reuseExistingServer: !process.env.CI,

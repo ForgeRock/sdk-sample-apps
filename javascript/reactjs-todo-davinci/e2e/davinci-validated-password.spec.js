@@ -7,13 +7,12 @@
  */
 import { test, expect } from '@playwright/test';
 
-// Uses the 356a254c tenant (port 8444) which has passwordPolicy configured on the
-// registration password field, producing a ValidatedPasswordCollector.
-const BASE_URL = 'http://localhost:8444';
+const BASE_URL = 'http://localhost:8443';
+const CLIENT_ID = 'fb456db5-2e08-46d3-adf0-05bf8d26ad60';
 const ACR_VALUE = '769eecb92f8e66f88005a85e8b939a01';
 
 async function navigateToRegistrationForm(page) {
-  await page.goto(`${BASE_URL}/login?acrValue=${ACR_VALUE}`);
+  await page.goto(`${BASE_URL}/login?clientId=${CLIENT_ID}&acrValue=${ACR_VALUE}`);
   await expect(page.getByRole('heading', { name: 'Select Test Form' })).toBeVisible();
   await page.getByRole('link', { name: 'USER_REGISTRATION' }).click();
   await expect(page.getByRole('heading', { name: 'Example - Registration 1' })).toBeVisible({
@@ -21,11 +20,7 @@ async function navigateToRegistrationForm(page) {
   });
 }
 
-// These tests require the 356a254c PingOne tenant on port 8444.
-// They are skipped in CI where only the 02fb4743 tenant (port 8443) is available.
-// Run locally with both webServers active: npm run e2e -- --grep ValidatedPasswordCollector
 test.describe('React - DaVinci ValidatedPasswordCollector', () => {
-  test.skip(!!process.env.CI, 'Requires 356a254c tenant on port 8444 (not available in CI)');
 
   test('shows password requirements list', async ({ page }) => {
     await navigateToRegistrationForm(page);
