@@ -1,6 +1,7 @@
 // ViewModels/ScannerViewModel.swift
-import Foundation
+import Combine
 import PingOneMFA
+import Foundation
 
 @MainActor
 class ScannerViewModel: ObservableObject {

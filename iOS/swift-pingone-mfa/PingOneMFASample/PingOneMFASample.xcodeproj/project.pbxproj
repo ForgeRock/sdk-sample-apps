@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		2E7F9A882FD067520033B069 /* PingOneMFA in Frameworks */ = {isa = PBXBuildFile; productRef = 2E7F9A872FD067520033B069 /* PingOneMFA */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		2E7F97EB2FD0255A0033B069 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -52,6 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2E7F9A882FD067520033B069 /* PingOneMFA in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +83,7 @@
 				2E7F97DF2FD025580033B069 /* PingOneMFASample */,
 				2E7F97ED2FD0255A0033B069 /* PingOneMFASampleTests */,
 				2E7F97F72FD0255A0033B069 /* PingOneMFASampleUITests */,
+				2E7F9A862FD067520033B069 /* Frameworks */,
 				2E7F97DE2FD025580033B069 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -90,6 +96,13 @@
 				2E7F97F42FD0255A0033B069 /* PingOneMFASampleUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		2E7F9A862FD067520033B069 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -112,6 +125,7 @@
 			);
 			name = PingOneMFASample;
 			packageProductDependencies = (
+				2E7F9A872FD067520033B069 /* PingOneMFA */,
 			);
 			productName = PingOneMFASample;
 			productReference = 2E7F97DD2FD025580033B069 /* PingOneMFASample.app */;
@@ -398,6 +412,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = GNW34Q5DF9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSCameraUsageDescription = "This app uses the camera to scan QR codes for pairing with PingOne MFA.";
@@ -430,6 +445,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = GNW34Q5DF9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSCameraUsageDescription = "This app uses the camera to scan QR codes for pairing with PingOne MFA.";
@@ -582,6 +598,14 @@
 			relativePath = "../../../../forgerock-ping-ios-sdk";
 		};
 /* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		2E7F9A872FD067520033B069 /* PingOneMFA */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2E7F99EE2FD04A250033B069 /* XCLocalSwiftPackageReference "../../../../forgerock-ping-ios-sdk" */;
+			productName = PingOneMFA;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 2E7F97D52FD025580033B069 /* Project object */;
 }
