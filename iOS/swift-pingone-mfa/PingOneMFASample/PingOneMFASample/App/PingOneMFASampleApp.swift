@@ -1,17 +1,25 @@
-//
-//  PingOneMFASampleApp.swift
-//  PingOneMFASample
-//
-//  Created by Giora Krasilshchik on 03/06/2026.
-//
-
+// App/PingOneMFASampleApp.swift
 import SwiftUI
 
 @main
 struct PingOneMFASampleApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+
+    private let coordinator = AppNavigationCoordinator()
+    private let manager = PingOneMFAManager.shared
+    private let appConfig = AppConfiguration.shared
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            NavigationStack(path: $coordinator.path) {
+                AccountsScreen()
+            }
+            .environmentObject(coordinator)
+            .environmentObject(manager)
+            .environmentObject(appConfig)
+            .task {
+                await appConfig.initialize()
+            }
         }
     }
 }
