@@ -1,6 +1,5 @@
 // ViewModels/OtpHeaderViewModel.swift
 import Foundation
-import SwiftUI
 import PingOneMFA
 
 @MainActor
@@ -14,6 +13,7 @@ class OtpHeaderViewModel: ObservableObject {
     private var countdownTimer: Timer?
 
     func startRefreshing() async {
+        guard !isLoading else { return }
         await fetchOtp()
     }
 
