@@ -1,3 +1,13 @@
+/*
+ * ping-sample-web-react-davinci
+ *
+ * single-select.js
+ *
+ * Copyright (c) 2025 - 2026 Ping Identity Corporation. All rights reserved.
+ * This software may be modified and distributed under the terms
+ * of the MIT license. See the LICENSE file for details.
+ */
+
 import React, { useState } from 'react';
 
 export default function SingleSelectComponent({ collector, collectorName, updater }) {
@@ -13,7 +23,7 @@ export default function SingleSelectComponent({ collector, collectorName, update
   };
 
   return (
-    <div className={`mb-5}`} key={collectorName}>
+    <div className={`mb-5`} key={collectorName}>
       <label htmlFor={fieldId} className="form-label fw-semibold mt-2 mb-2">
         {label}
       </label>
