@@ -52,6 +52,11 @@ class OtpHeaderViewModel: ObservableObject {
         } catch {
             errorMessage = "Failed to fetch OTP: \(error.localizedDescription)"
             isLoading = false
+            refreshTask = Task { [weak self] in
+                try? await Task.sleep(nanoseconds: 15_000_000_000)
+                guard let self, !Task.isCancelled else { return }
+                await self.fetchOtp()
+            }
         }
     }
 

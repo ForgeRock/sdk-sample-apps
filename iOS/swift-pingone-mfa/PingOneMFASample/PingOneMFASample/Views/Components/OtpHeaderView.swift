@@ -33,7 +33,7 @@ struct OtpHeaderView: View {
                         .font(.system(size: 22, weight: .bold, design: .monospaced))
                         .foregroundColor(.primary)
                         .tracking(4)
-                    Text("Refreshes in \(viewModel.countdown)s")
+                    Text("Refreshes in \(max(1, viewModel.countdown))s")
                         .font(.system(size: 13, weight: .medium))
                         .foregroundColor(.secondary)
                 } else if viewModel.errorMessage != nil {
