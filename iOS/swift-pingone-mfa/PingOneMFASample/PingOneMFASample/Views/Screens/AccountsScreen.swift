@@ -25,6 +25,7 @@ struct AccountsScreen: View {
                 } else {
                     ScrollView {
                         LazyVStack(spacing: 12) {
+                            OtpHeaderView()
                             ForEach(viewModel.accounts, id: \.id) { account in
                                 AccountCardView(account: account)
                             }
