@@ -6,42 +6,44 @@ struct OtpHeaderView: View {
     @StateObject private var viewModel = OtpHeaderViewModel()
 
     var body: some View {
-        VStack(spacing: 16) {
-            HStack(spacing: 12) {
-                Image(systemName: "number.square.fill")
-                    .font(.system(size: 20))
-                    .foregroundColor(.white)
-                    .frame(width: 44, height: 44)
-                    .background(
-                        LinearGradient(
-                            colors: [.themeButtonBackground, Color(red: 0.6, green: 0.1, blue: 0.1)],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
+        HStack(spacing: 12) {
+            Image(systemName: "number.square.fill")
+                .font(.system(size: 20))
+                .foregroundColor(.white)
+                .frame(width: 44, height: 44)
+                .background(
+                    LinearGradient(
+                        colors: [.themeButtonBackground, Color(red: 0.6, green: 0.1, blue: 0.1)],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
                     )
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                )
+                .clipShape(RoundedRectangle(cornerRadius: 10))
 
-                VStack(alignment: .leading, spacing: 3) {
-                    Text("One-Time Passcode")
-                        .font(.system(size: 15, weight: .semibold))
+            VStack(alignment: .leading, spacing: 3) {
+                Text("One-Time Passcode")
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundColor(.primary)
+
+                if viewModel.isLoading && viewModel.otpInfo == nil {
+                    ProgressView()
+                        .scaleEffect(0.8)
+                } else if let info = viewModel.otpInfo {
+                    Text(info.code)
+                        .font(.system(size: 22, weight: .bold, design: .monospaced))
                         .foregroundColor(.primary)
-
-                    if viewModel.isLoading && viewModel.otpInfo == nil {
-                        ProgressView()
-                            .scaleEffect(0.8)
-                    } else if let info = viewModel.otpInfo {
-                        Text(info.code)
-                            .font(.system(size: 22, weight: .bold, design: .monospaced))
-                            .foregroundColor(.primary)
-                            .tracking(4)
-                        Text("Refreshes in \(viewModel.countdown)s")
-                            .font(.system(size: 13, weight: .medium))
-                            .foregroundColor(.secondary)
-                    }
+                        .tracking(4)
+                    Text("Refreshes in \(viewModel.countdown)s")
+                        .font(.system(size: 13, weight: .medium))
+                        .foregroundColor(.secondary)
+                } else if viewModel.errorMessage != nil {
+                    Text("Unavailable")
+                        .font(.system(size: 15, weight: .medium))
+                        .foregroundColor(.secondary)
                 }
-
-                Spacer()
             }
+
+            Spacer()
         }
         .padding(14)
         .background(Color(.secondarySystemGroupedBackground))
