@@ -9,7 +9,7 @@
  */
 import React, { Fragment, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Readonly from './readonly.js';
+import ReadOnly from './readonly.js';
 import Text from './text.js';
 import Error from './error.js';
 import Password from './password.js';
@@ -19,6 +19,10 @@ import Protect from './protect.js';
 import ObjectValueComponent from './object-value.js';
 import SingleSelect from './single-select.js';
 import FlowLink from './flow-link.js';
+import FidoComponent from './fido.js';
+import PollingComponent from './polling.js';
+import BooleanComponent from './boolean.js';
+import QrCode from './qr-code.js';
 import Unknown from './unknown.js';
 import Alert from './alert.js';
 import KeyIcon from '../icons/key-icon';
@@ -30,7 +34,6 @@ import { ProtectContext } from '../../context/protect.context.js';
 import { ThemeContext } from '../../context/theme.context.js';
 import useDavinci from './hooks/davinci.hook.js';
 import useOAuth from './hooks/oauth.hook.js';
-import FidoComponent from './fido.js';
 
 /**
  * @function Form - React view for managing the user authentication journey
@@ -58,7 +61,7 @@ export default function Form() {
   const [user, setCode] = useOAuth();
   const [
     { formName, formAction, node, collectors },
-    { getError, setNext, startNewFlow, updater, externalIdp },
+    { getError, setNext, startNewFlow, updater, pollStatus, externalIdp },
   ] = useDavinci();
 
   /**
@@ -169,17 +172,28 @@ export default function Form() {
       case 'ERROR_DISPLAY':
         return <Error key={idx + 'err'} getError={getError} />;
       case 'ReadOnlyCollector':
-        return <Readonly key={idx + collectorName} collector={collector} />;
+      case 'RichTextCollector':
+      case 'AgreementCollector':
+        return <ReadOnly key={idx + collectorName} collector={collector} />;
+      case 'ValidatedBooleanCollector':
+        return (
+          <BooleanComponent
+            key={idx + collectorName}
+            collector={collector}
+            updater={updater(collector)}
+            inputName={idx + collectorName}
+          />
+        );
       case 'PhoneNumberCollector':
+      case 'PhoneNumberExtensionCollector':
       case 'DeviceRegistrationCollector':
       case 'DeviceAuthenticationCollector':
         return (
           <ObjectValueComponent
-            inputName={collectorName}
+            inputName={idx + collectorName}
             collector={collector}
             updater={updater(collector)}
-            key={collectorName}
-            submitForm={setNext}
+            key={idx + collectorName}
           />
         );
       case 'IdpCollector':
@@ -201,8 +215,21 @@ export default function Form() {
             submitForm={setNext}
           />
         );
+      case 'PollingCollector':
+        return (
+          <PollingComponent
+            collector={collector}
+            updater={updater(collector)}
+            pollStatus={pollStatus(collector)}
+            cacheKey={node?.cache?.key}
+            key={collectorName}
+            submitForm={setNext}
+          />
+        );
       case 'ProtectCollector':
         return <Protect collector={collector} key={collectorName} />;
+      case 'QrCodeCollector':
+        return <QrCode collector={collector} key={collectorName} />;
       case 'SubmitCollector':
         return <SubmitButton collector={collector} isLoading={isLoading} key={collectorName} />;
       case 'FlowCollector':

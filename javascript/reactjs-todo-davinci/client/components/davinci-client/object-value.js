@@ -1,17 +1,38 @@
+/*
+ * ping-sample-web-react-davinci
+ *
+ * object-value.js
+ *
+ * Copyright (c) 2025 - 2026 Ping Identity Corporation. All rights reserved.
+ * This software may be modified and distributed under the terms
+ * of the MIT license. See the LICENSE file for details.
+ */
+
 import React, { useEffect, useContext, useState } from 'react';
 import { ThemeContext } from '../../context/theme.context.js';
 
-export default function ObjectValueComponent({ collector, updater }) {
-  const [selected, setSelected] = useState(collector.output.options[0].value);
+export default function ObjectValueComponent({ collector, updater, inputName }) {
+  const [selectedDevice, setSelectedDevice] = useState(
+    collector.output.options?.[0]?.value ?? null,
+  );
+  const [phoneValue, setPhoneValue] = useState({
+    phoneNumber: collector.input.value?.phoneNumber ?? '',
+    extension: collector.input.value?.extension ?? '',
+  });
   const theme = useContext(ThemeContext);
 
   useEffect(() => {
-    updater(selected);
-  }, [selected]);
+    if (
+      collector.type === 'DeviceAuthenticationCollector' ||
+      collector.type === 'DeviceRegistrationCollector'
+    ) {
+      updater(selectedDevice);
+    }
+  }, [selectedDevice, updater, collector.type]);
 
-  const handleChange = (event) => {
+  const handleChangeDevice = (event) => {
     event.preventDefault();
-    setSelected(event.target.value);
+    setSelectedDevice(event.target.value);
   };
   if (
     collector.type === 'DeviceAuthenticationCollector' ||
@@ -28,8 +49,8 @@ export default function ObjectValueComponent({ collector, updater }) {
         <select
           id="device-select"
           className="form-select form-select-lg w-100"
-          value={selected}
-          onChange={handleChange}
+          value={selectedDevice}
+          onChange={handleChangeDevice}
         >
           {collector.output.options.map((option) => (
             <option key={option.value + option.label} value={option.value}>
@@ -41,25 +62,86 @@ export default function ObjectValueComponent({ collector, updater }) {
       </div>
     );
   } else if (collector.type === 'PhoneNumberCollector') {
+    const phoneInputId = `${inputName}-phone-number`;
+    const required = collector.input.validation?.some(
+      (validation) => validation.type === 'required' && validation.rule === true,
+    );
+
     return (
       <>
-        <label htmlFor={'form-label phone-number-input'} className={'mb-2 mt-2'}>
+        <label htmlFor={phoneInputId} className={'form-label mb-2 mt-2'}>
           {collector.output.label || 'Phone Number'}
         </label>
         <input
           type="text"
           className={'mb-2 mt-2'}
-          id="phone-number-input"
-          name="phone-number-input"
+          id={phoneInputId}
+          name={phoneInputId}
           placeholder="Enter phone number"
+          value={phoneValue.phoneNumber}
           onChange={(event) => {
-            const selectedValue = event.target.value;
-            if (!selectedValue) {
-              console.error('No value found for the selected option');
-              return;
-            }
-            updater({ phoneNumber: selectedValue, countryCode: collector.input.value.countryCode });
+            const updatedPhone = event.target.value;
+            setPhoneValue((prev) => ({ ...prev, phoneNumber: updatedPhone }));
+            updater({
+              phoneNumber: updatedPhone,
+              countryCode: collector.input.value?.countryCode,
+            });
           }}
+          required={required}
+        />
+      </>
+    );
+  } else if (collector.type === 'PhoneNumberExtensionCollector') {
+    const phoneInputId = `${inputName}-phone-number`;
+    const extensionInputId = `${inputName}-extension`;
+    const required = collector.input.validation?.some(
+      (validation) => validation.type === 'required' && validation.rule === true,
+    );
+    return (
+      <>
+        <label htmlFor={phoneInputId} className={'form-label mb-2 mt-2'}>
+          {collector.output.label || 'Phone Number'}
+        </label>
+        <input
+          type="text"
+          className={'mb-2'}
+          id={phoneInputId}
+          name={phoneInputId}
+          placeholder="Enter phone number"
+          value={phoneValue.phoneNumber}
+          onChange={(event) => {
+            const updatedPhoneNumber = event.target.value;
+            const updatedPhoneValue = { ...phoneValue, phoneNumber: updatedPhoneNumber };
+            setPhoneValue(updatedPhoneValue);
+            updater({
+              phoneNumber: updatedPhoneValue.phoneNumber,
+              countryCode: collector.input.value?.countryCode,
+              extension: updatedPhoneValue.extension,
+            });
+          }}
+          required={required}
+        />
+        <label htmlFor={extensionInputId} className={'form-label mb-2 mt-2'}>
+          {collector.output.extensionLabel || 'Extension'}
+        </label>
+        <input
+          type="text"
+          className={'mb-2'}
+          id={extensionInputId}
+          name={extensionInputId}
+          placeholder="Enter extension"
+          value={phoneValue.extension}
+          onChange={(event) => {
+            const updatedExtension = event.target.value;
+            const updatedPhoneValue = { ...phoneValue, extension: updatedExtension };
+            setPhoneValue(updatedPhoneValue);
+            updater({
+              phoneNumber: updatedPhoneValue.phoneNumber,
+              countryCode: collector.input.value?.countryCode,
+              extension: updatedPhoneValue.extension,
+            });
+          }}
+          required={required}
         />
       </>
     );
