@@ -26,6 +26,11 @@ struct AccountsScreen: View {
                     ScrollView {
                         LazyVStack(spacing: 12) {
                             OtpHeaderView()
+                            Text("Users")
+                                .font(.system(size: 13, weight: .semibold))
+                                .foregroundColor(.secondary)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(.top, 4)
                             ForEach(viewModel.accounts, id: \.id) { account in
                                 AccountCardView(account: account)
                             }

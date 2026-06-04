@@ -21,5 +21,6 @@ struct PingOneMFASampleApp: App {
                 await appConfig.initialize()
             }
         }
+        .windowResizability(.contentSize)
     }
 }

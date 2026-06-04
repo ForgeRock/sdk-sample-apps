@@ -12,15 +12,15 @@ class AccountsViewModel: ObservableObject {
     private let manager: PingOneMFAManager
     private var cancellables = Set<AnyCancellable>()
 
-    init(manager: PingOneMFAManager = .shared) {
-        self.manager = manager
-        manager.$accounts
+    init(manager: PingOneMFAManager? = nil) {
+        self.manager = manager ?? .shared
+        self.manager.$accounts
             .receive(on: RunLoop.main)
             .assign(to: &$accounts)
-        manager.$isLoading
+        self.manager.$isLoading
             .receive(on: RunLoop.main)
             .assign(to: &$isLoading)
-        manager.$errorMessage
+        self.manager.$errorMessage
             .receive(on: RunLoop.main)
             .assign(to: &$errorMessage)
     }
