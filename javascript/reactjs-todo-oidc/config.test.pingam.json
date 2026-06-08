@@ -1,0 +1,8 @@
+{
+  "oidc": {
+    "clientId": "CentralLoginOAuthClient-",
+    "discoveryEndpoint": "https://openam-sdks.forgeblocks.com/am/oauth2/alpha/.well-known/openid-configuration",
+    "scopes": ["openid", "profile", "me.read", "email"],
+    "redirectUri": "https://localhost:8443/callback.html"
+  }
+}

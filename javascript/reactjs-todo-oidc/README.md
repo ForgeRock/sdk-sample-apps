@@ -51,21 +51,40 @@ Choose to set up either a PingOne or PingAM/PingAIC instance
 
 1. openid profile email phone name revoke
 
+### Configure SDK Credentials
+
+> **Note:** Using `config.json` is optional and backward-compatible. If you prefer, you can continue supplying SDK credentials via the `SDK_CONFIG` environment variable (a JSON string). The app falls back to `config.json` only when `SDK_CONFIG` is not set.
+
+Copy `config.example.json` to `config.json` at the app root and fill in your values:
+
+```sh
+cp config.example.json config.json
+```
+
+`config.json` (gitignored):
+
+```json
+{
+  "oidc": {
+    "clientId": "<your-oauth-client-id>",
+    "discoveryEndpoint": "https://<your-domain>/.well-known/openid-configuration",
+    "scopes": ["openid", "profile", "email"],
+    "redirectUri": "https://localhost:8443/callback.html"
+  }
+}
+```
+
 ### Configure Your `.env` File
 
-Change the name of `.env.example` to `.env` and replace the bracketed values (e.g. `<<<helper-text>>>`) with your values.
-
-Example with annotations:
+Change the name of `.env.example` to `.env` and set the remaining runtime values:
 
 ```text
-WEB_OAUTH_CLIENT=<<<Your Web OAuth client name/ID>>>
-SCOPE="openid profile email"
-WELLKNOWN_URL=<<<Well-known URL, for example https://example.com/am/oauth2/alpha/.well-known/openid-configuration>>>
-SERVER=PINGAM
 API_URL=http://localhost:9443
-PORT=8443
 DEBUGGER_OFF=true
 DEVELOPMENT=true
+PORT=8443
+#SERVER - 'PINGAM' or 'PINGONE'
+SERVER=PINGAM
 ```
 
 ### Installing Dependencies and Run Build

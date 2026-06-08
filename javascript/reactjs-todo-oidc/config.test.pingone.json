@@ -1,0 +1,8 @@
+{
+  "oidc": {
+    "clientId": "724ec718-c41c-4d51-98b0-84a583f450f9",
+    "discoveryEndpoint": "https://auth.pingone.ca/02fb4743-189a-4bc7-9d6c-a919edfe6447/as/.well-known/openid-configuration",
+    "scopes": ["openid", "profile", "email", "revoke"],
+    "redirectUri": "https://localhost:8444/callback.html"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "oidc": {
+    "clientId": "<your-oauth-client-id>",
+    "discoveryEndpoint": "https://<your-domain>/.well-known/openid-configuration",
+    "scopes": ["openid", "profile", "email"]
+  }
+}

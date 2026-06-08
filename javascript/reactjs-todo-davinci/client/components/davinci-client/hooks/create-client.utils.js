@@ -9,6 +9,7 @@
  */
 
 import { davinci } from '@forgerock/davinci-client';
+import { makeDavinciConfig } from '@forgerock/sdk-utilities';
 import { CONFIG } from '../../../constants.js';
 
 /**
@@ -17,7 +18,7 @@ import { CONFIG } from '../../../constants.js';
  */
 export default async function createClient() {
   try {
-    const davinciClient = await davinci({ config: CONFIG });
+    const davinciClient = await davinci({ config: makeDavinciConfig(CONFIG) });
     return davinciClient;
   } catch (error) {
     console.error('Error creating DaVinci client');

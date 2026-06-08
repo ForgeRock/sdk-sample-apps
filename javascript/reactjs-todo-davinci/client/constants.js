@@ -8,32 +8,39 @@
  * of the MIT license. See the LICENSE file for details.
  */
 
+/** ***************************************************************************
+ * SDK INTEGRATION POINT
+ * Summary: Configure the DaVinci client
+ * ----------------------------------------------------------------------------
+ * Details: CONFIG uses the unified SDK configuration schema. Pass it to
+ * `makeDavinciConfig(CONFIG)` from `@forgerock/sdk-utilities` before calling
+ * the factory — e.g. `davinci({ config: makeDavinciConfig(CONFIG) })`.
+ *
+ * Local dev: copy config.example.json → config.json and fill in your values.
+ * E2e / CI: set SDK_CONFIG to a JSON string (e.g. from config.test.json).
+ *************************************************************************** */
+import sdkConfigJson from '../config.json';
 export const API_URL = process.env.API_URL;
 // Yes, the debugger boolean is intentionally reversed
 export const DEBUGGER = process.env.DEBUGGER_OFF === 'false';
-export const WEB_OAUTH_CLIENT = process.env.WEB_OAUTH_CLIENT;
-export const SCOPE = process.env.SCOPE;
-export const WELLKNOWN_URL = process.env.WELLKNOWN_URL;
 export const INIT_PROTECT = process.env.INIT_PROTECT;
 export const PINGONE_ENV_ID = process.env.PINGONE_ENV_ID;
-/** ***************************************************************************
- * SDK INTEGRATION POINT
- * Summary: Configure the OIDC client
- * ----------------------------------------------------------------------------
- * Details: The config object below is passed to the `oidc()` initializer in
- * `oidc.context.js` to configure the OIDC client:
- * - clientId: the OAuth 2.0 client ID registered in PingOne
- * - redirectUri: the URI of this app to which the OAuth 2.0 flow redirects
- *   after authentication (points to callback.html for the redirect handler)
- * - scope: the OAuth 2.0 scopes requested from PingOne
- * - serverConfig.wellknown: the OpenID Connect discovery URL for your
- *   PingOne environment, used to resolve authorization/token endpoints
- *************************************************************************** */
+
+const rawConfig = (() => {
+  if (!process.env.SDK_CONFIG) {
+    return sdkConfigJson;
+  }
+  try {
+    return JSON.parse(process.env.SDK_CONFIG);
+  } catch (error) {
+    throw new Error(`Invalid SDK_CONFIG JSON: ${error.message}`);
+  }
+})();
+
 export const CONFIG = {
-  clientId: WEB_OAUTH_CLIENT,
-  redirectUri: `${window.location.origin}/callback.html`,
-  scope: SCOPE,
-  serverConfig: {
-    wellknown: WELLKNOWN_URL,
+  ...rawConfig,
+  oidc: {
+    ...rawConfig.oidc,
+    redirectUri: `${window.location.origin}/callback.html`,
   },
 };

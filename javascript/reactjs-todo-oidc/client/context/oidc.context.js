@@ -9,6 +9,7 @@
  */
 import { useEffect, useState, createContext } from 'react';
 import { oidc } from '@forgerock/oidc-client';
+import { makeOidcConfig } from '@forgerock/sdk-utilities';
 import { CONFIG, DEBUGGER } from '../constants';
 
 const email = window.sessionStorage.getItem('sdk_email');
@@ -38,7 +39,7 @@ export function useInitOidcState() {
        * but it can be done outside of the React component for better performance.
        ************************************************************************* */
       if (DEBUGGER) debugger;
-      let client = await oidc({ config: CONFIG });
+      let client = await oidc({ config: makeOidcConfig(CONFIG) });
       if ('error' in client) {
         console.error(`Error initializing OIDC client: ${client.error}`);
         client = null;
