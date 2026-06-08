@@ -8,6 +8,7 @@ This sample code is provided "as is" and is not a supported product of Ping Iden
 
 - TextCollector
 - PasswordCollector
+- ValidatedPasswordCollector
 - SingleSelectCollector
 - ReadOnlyCollector
 - PhoneNumberCollector
