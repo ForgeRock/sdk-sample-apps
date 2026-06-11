@@ -29,11 +29,12 @@ test.describe('React - DaVinci Protect', () => {
       const method = request.method();
       const requestUrl = request.url();
       const payload = request.postDataJSON();
-      const data = payload.parameters.data.formData.riskSDK;
 
       requests.push(requestUrl);
 
-      if (method === 'POST' && requestUrl.includes('customHTMLTemplate')) {
+      // Only process POST requests with JSON payloads
+      if (method === 'POST' && payload && requestUrl.includes('customHTMLTemplate')) {
+        const data = payload.parameters?.data?.formData?.riskSDK;
         expect(data).toBeDefined();
         expect(data).toMatch(/^R\/o\//);
       }
@@ -73,11 +74,12 @@ test.describe('React - DaVinci Protect', () => {
       const method = request.method();
       const requestUrl = request.url();
       const payload = request.postDataJSON();
-      const data = payload.parameters.data.formData.riskSDK;
 
       requests.push(requestUrl);
 
-      if (method === 'POST' && requestUrl.includes('customHTMLTemplate')) {
+      // Only process POST requests with JSON payloads
+      if (method === 'POST' && payload && requestUrl.includes('customHTMLTemplate')) {
+        const data = payload.parameters?.data?.formData?.riskSDK;
         expect(data).toBeDefined();
         expect(data).toMatch(/^R\/o\//);
       }

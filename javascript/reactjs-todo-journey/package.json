@@ -20,8 +20,8 @@
     "vite": "^5.4.9"
   },
   "dependencies": {
-    "@forgerock/journey-client": "latest",
-    "@forgerock/oidc-client": "latest",
+    "@forgerock/journey-client": "0.0.0-beta-20260611180129",
+    "@forgerock/oidc-client": "0.0.0-beta-20260611180129",
     "@forgerock/protect": "latest",
     "@forgerock/sdk-utilities": "latest",
     "react": "^18.2.0",
