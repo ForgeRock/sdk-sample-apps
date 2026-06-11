@@ -34,7 +34,7 @@
     "clean": "rimraf --glob ./**/javascript/**/node_modules; rimraf --glob ./**/javascript/**/dist; rimraf ./node_modules"
   },
   "devDependencies": {
-    "@playwright/test": "^1.41.2",
+    "@playwright/test": "^1.60.0",
     "@types/node": "^20.11.20",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.11.0",

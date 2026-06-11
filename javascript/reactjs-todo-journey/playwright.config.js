@@ -7,9 +7,8 @@
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
  */
-
-import { defineConfig, devices } from '@playwright/test';
-import * as dotenv from 'dotenv';
+const { defineConfig, devices } = require('@playwright/test');
+const dotenv = require('dotenv');
 import { createRequire } from 'module';
 
 const require = createRequire(import.meta.url);
@@ -20,7 +19,7 @@ dotenv.config({ path: '.env' });
 
 const url = process.env.PLAYWRIGHT_TEST_BASE_URL || 'http://localhost:8443';
 
-export default defineConfig({
+module.exports = defineConfig({
   testDir: 'e2e',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
