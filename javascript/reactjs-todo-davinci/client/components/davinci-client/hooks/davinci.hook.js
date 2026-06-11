@@ -99,12 +99,7 @@ export default function useDavinci() {
    * @returns {function} - A function to call to validate the collector's input
    */
   function validator(collector) {
-    try {
-      return davinciClient.validate(collector);
-    } catch (error) {
-      console.error('Error creating validator for collector:', error);
-      return () => [];
-    }
+    return davinciClient.validate(collector);
   }
 
   /**

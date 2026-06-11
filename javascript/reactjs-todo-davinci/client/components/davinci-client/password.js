@@ -66,7 +66,7 @@ const Password = ({ collector, inputName, updater, validator, verify }) => {
 
     if (validator) {
       const errors = validator(value);
-      setValidationErrors(Array.isArray(errors) ? errors : []);
+      setValidationErrors(errors);
     }
 
     const result = updater(value);
