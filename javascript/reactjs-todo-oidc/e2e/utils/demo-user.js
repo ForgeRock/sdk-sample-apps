@@ -10,5 +10,5 @@ export const amPassword = 'Demo_12345!';
 export const amDisplayName = 'Demo User';
 
 export const p1Username = 'JsDvSampleAppsE2E@user.com';
-export const p1Password = 'Demo_12345!';
+export const p1Password = 'DemoPassword#123';
 export const p1DisplayName = 'JS DaVinci Sample Apps E2E';
