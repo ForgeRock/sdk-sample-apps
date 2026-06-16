@@ -1,67 +1,22 @@
 /*
  * ping-sample-web-react-davinci
  *
- * object-value.js
+ * phone-number.js
  *
- * Copyright (c) 2025 - 2026 Ping Identity Corporation. All rights reserved.
+ * Copyright (c) 2026 Ping Identity Corporation. All rights reserved.
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
  */
 
-import React, { useEffect, useContext, useState } from 'react';
-import { ThemeContext } from '../../context/theme.context.js';
+import React, { useState } from 'react';
 
-export default function ObjectValueComponent({ collector, updater, inputName }) {
-  const [selectedDevice, setSelectedDevice] = useState(
-    collector.output.options?.[0]?.value ?? null,
-  );
+export default function PhoneNumberComponent({ collector, updater, inputName }) {
   const [phoneValue, setPhoneValue] = useState({
     phoneNumber: collector.input.value?.phoneNumber ?? '',
     extension: collector.input.value?.extension ?? '',
   });
-  const theme = useContext(ThemeContext);
 
-  useEffect(() => {
-    if (
-      collector.type === 'DeviceAuthenticationCollector' ||
-      collector.type === 'DeviceRegistrationCollector'
-    ) {
-      updater(selectedDevice);
-    }
-  }, [selectedDevice, updater, collector.type]);
-
-  const handleChangeDevice = (event) => {
-    event.preventDefault();
-    setSelectedDevice(event.target.value);
-  };
-  if (
-    collector.type === 'DeviceAuthenticationCollector' ||
-    collector.type === 'DeviceRegistrationCollector'
-  ) {
-    return (
-      <div className="d-flex flex-column align-items-center mt-2 mb-2">
-        <label
-          htmlFor="device-select"
-          className={`form-label cstm_subhead-text mb-4 fw-bold text-center ${theme.textMutedClass}`}
-        >
-          {collector.output.label || 'select an option'}
-        </label>
-        <select
-          id="device-select"
-          className="form-select form-select-lg w-100"
-          value={selectedDevice}
-          onChange={handleChangeDevice}
-        >
-          {collector.output.options.map((option) => (
-            <option key={option.value + option.label} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-        <button className="mt-5 justify-content w-100 btn btn-primary">Next</button>
-      </div>
-    );
-  } else if (collector.type === 'PhoneNumberCollector') {
+  if (collector.type === 'PhoneNumberCollector') {
     const phoneInputId = `${inputName}-phone-number`;
     const required = collector.input.validation?.some(
       (validation) => validation.type === 'required' && validation.rule === true,
@@ -146,6 +101,6 @@ export default function ObjectValueComponent({ collector, updater, inputName }) 
       </>
     );
   } else {
-    return null; // Or handle other collector types, if applicable
+    return null;
   }
 }

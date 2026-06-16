@@ -20,7 +20,7 @@ export default function ReadOnly({ collector }) {
   } else if (collectorType === 'RichTextCollector') {
     const { richContent } = output;
 
-    if (!richContent.replacements?.length) {
+    if (!richContent?.replacements?.length) {
       return <p>{output.content}</p>;
     }
 
@@ -43,5 +43,7 @@ export default function ReadOnly({ collector }) {
         <p>{content}</p>
       </div>
     );
+  } else {
+    return null;
   }
 }
