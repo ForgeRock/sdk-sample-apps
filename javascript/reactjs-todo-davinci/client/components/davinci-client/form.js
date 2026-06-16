@@ -16,7 +16,8 @@ import Password from './password.js';
 import SocialLoginButton from './social-login-button.js';
 import SubmitButton from './submit-button.js';
 import Protect from './protect.js';
-import ObjectValueComponent from './object-value.js';
+import PhoneNumberComponent from './phone-number.js';
+import DeviceComponent from './device.js';
 import SingleSelect from './single-select.js';
 import FlowLink from './flow-link.js';
 import FidoComponent from './fido.js';
@@ -186,11 +187,18 @@ export default function Form() {
         );
       case 'PhoneNumberCollector':
       case 'PhoneNumberExtensionCollector':
+        return (
+          <PhoneNumberComponent
+            inputName={idx + collectorName}
+            collector={collector}
+            updater={updater(collector)}
+            key={idx + collectorName}
+          />
+        );
       case 'DeviceRegistrationCollector':
       case 'DeviceAuthenticationCollector':
         return (
-          <ObjectValueComponent
-            inputName={idx + collectorName}
+          <DeviceComponent
             collector={collector}
             updater={updater(collector)}
             key={idx + collectorName}

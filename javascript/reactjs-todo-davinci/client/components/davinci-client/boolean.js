@@ -12,7 +12,7 @@ import React, { useState } from 'react';
 import { interpolateRichContent } from '../utilities/rich-content';
 
 export default function BooleanComponent({ collector, inputName, updater }) {
-  const [isChecked, setIsChecked] = useState(collector.output.value);
+  const [isChecked, setIsChecked] = useState(collector.output.value ?? false);
 
   const fieldId = collector.output.key || `${inputName}-checkbox-field`;
 
