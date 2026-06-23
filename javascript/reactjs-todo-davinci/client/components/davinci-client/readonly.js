@@ -16,7 +16,13 @@ export default function ReadOnly({ collector }) {
   const output = collector.output;
 
   if (collectorType === 'ReadOnlyCollector') {
-    return <p>{output.content}</p>;
+    return (
+      <>
+        {/* Display agreement title if it exists */}
+        {output.title && <h3>{output.title}</h3>}
+        <p>{output.content}</p>
+      </>
+    );
   } else if (collectorType === 'RichTextCollector') {
     const { richContent } = output;
 
@@ -25,24 +31,6 @@ export default function ReadOnly({ collector }) {
     }
 
     return <p>{interpolateRichContent(richContent)}</p>;
-  } else if (collectorType === 'AgreementCollector') {
-    const {
-      label: content,
-      titleEnabled: isTitleEnabled,
-      title,
-      enabled: componentEnabled,
-    } = output;
-
-    if (!componentEnabled) {
-      return null;
-    }
-
-    return (
-      <div>
-        {isTitleEnabled && <h4 className="fw-semibold mt-2 mb-2">{title}</h4>}
-        <p>{content}</p>
-      </div>
-    );
   } else {
     return null;
   }
