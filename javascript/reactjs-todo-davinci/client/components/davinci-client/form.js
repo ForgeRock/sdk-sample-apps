@@ -174,8 +174,8 @@ export default function Form() {
         return <Error key={idx + 'err'} getError={getError} />;
       case 'ReadOnlyCollector':
       case 'RichTextCollector':
-      case 'AgreementCollector':
         return <ReadOnly key={idx + collectorName} collector={collector} />;
+      case 'BooleanCollector':
       case 'ValidatedBooleanCollector':
         return (
           <BooleanComponent
