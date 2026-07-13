@@ -9,6 +9,7 @@
  */
 
 const dotenv = require('dotenv');
+const fs = require('fs');
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const webpack = require('webpack');
@@ -22,10 +23,8 @@ module.exports = () => {
   const API_URL = process.env.API_URL || localEnv.API_URL;
   const DEBUGGER_OFF = process.env.DEBUGGER_OFF || localEnv.DEBUGGER_OFF;
   const DEVELOPMENT = process.env.DEVELOPMENT || localEnv.DEVELOPMENT;
-  const WEB_OAUTH_CLIENT = process.env.WEB_OAUTH_CLIENT || localEnv.WEB_OAUTH_CLIENT;
-  const SCOPE = process.env.SCOPE || localEnv.SCOPE;
-  const WELLKNOWN_URL = process.env.WELLKNOWN_URL || localEnv.WELLKNOWN_URL;
   const SERVER = process.env.SERVER || localEnv.SERVER;
+  const SDK_CONFIG = process.env.SDK_CONFIG || null;
 
   return {
     // Point to the top level source file
@@ -108,14 +107,17 @@ module.exports = () => {
     },
     plugins: [
       new MiniCssExtractPlugin(),
+      new webpack.NormalModuleReplacementPlugin(/config\.json$/, (resource) => {
+        if (!fs.existsSync(path.resolve(__dirname, 'config.json'))) {
+          resource.request = resource.request.replace('config.json', 'config.example.json');
+        }
+      }),
       new webpack.DefinePlugin({
         // Inject all the environment variable into the Webpack build
         'process.env.API_URL': JSON.stringify(API_URL),
         'process.env.DEBUGGER_OFF': JSON.stringify(DEBUGGER_OFF),
-        'process.env.WEB_OAUTH_CLIENT': JSON.stringify(WEB_OAUTH_CLIENT),
-        'process.env.SCOPE': JSON.stringify(SCOPE),
-        'process.env.WELLKNOWN_URL': JSON.stringify(WELLKNOWN_URL),
         'process.env.SERVER': JSON.stringify(SERVER),
+        'process.env.SDK_CONFIG': JSON.stringify(SDK_CONFIG),
       }),
     ],
   };

@@ -13,32 +13,36 @@ export const API_URL = import.meta.env.VITE_API_URL;
 export const DEBUGGER = import.meta.env.VITE_DEBUGGER_OFF === 'false';
 export const JOURNEY_LOGIN = import.meta.env.VITE_JOURNEY_LOGIN;
 export const JOURNEY_REGISTER = import.meta.env.VITE_JOURNEY_REGISTER;
-export const WEB_OAUTH_CLIENT = import.meta.env.VITE_WEB_OAUTH_CLIENT;
-export const SCOPE = import.meta.env.VITE_SCOPE;
-export const WELLKNOWN_URL = import.meta.env.VITE_WELLKNOWN_URL;
 export const INIT_PROTECT = import.meta.env.VITE_INIT_PROTECT;
 export const PINGONE_ENV_ID = import.meta.env.VITE_PINGONE_ENV_ID;
-
 /** ***************************************************************************
  * SDK INTEGRATION POINT
  * Summary: Configure the SDK
  * ----------------------------------------------------------------------------
- * Details: Below, you will see the following settings which can be used to
- * configure both the OIDC and Journey clients:
- * - clientId: (OAuth 2.0 only) this is the OAuth 2.0 client you created in Ping,
- *   such as `PingSDKClient`
- * - redirectUri: (OAuth 2.0 only) this is the URI/URL of this app to which the
- *   OAuth 2.0 flow redirects
- * - scope: (OAuth 2.0 only) these are the OAuth scopes that you will request from
- *   Ping
- * - serverConfig: this includes the wellknown URL of your Ping client
- * - realmPath: this is the realm to use within Ping, such as `alpha` or `root`
+ * Details: CONFIG uses the unified SDK configuration schema. Pass it to
+ * `makeOidcConfig(CONFIG)` or `makeJourneyConfig(CONFIG)` from
+ * `@forgerock/sdk-utilities` before calling the respective factory.
+ *
+ * Local dev: copy config.example.json → config.json and fill in your values.
+ * E2e / CI: set VITE_SDK_CONFIG to a JSON string (e.g. from config.test.json).
  *************************************************************************** */
+import sdkConfigJson from '../config.json';
+
+const rawConfig = (() => {
+  if (!import.meta.env.VITE_SDK_CONFIG) {
+    return sdkConfigJson;
+  }
+  try {
+    return JSON.parse(import.meta.env.VITE_SDK_CONFIG);
+  } catch (error) {
+    throw new Error(`Invalid VITE_SDK_CONFIG JSON: ${error.message}`);
+  }
+})();
+
 export const CONFIG = {
-  clientId: WEB_OAUTH_CLIENT,
-  redirectUri: `${window.location.origin}/callback.html`,
-  scope: SCOPE,
-  serverConfig: {
-    wellknown: WELLKNOWN_URL,
+  ...rawConfig,
+  oidc: {
+    ...rawConfig.oidc,
+    redirectUri: rawConfig.oidc?.redirectUri ?? `${window.location.origin}/callback.html`,
   },
 };

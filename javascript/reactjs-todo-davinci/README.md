@@ -35,10 +35,10 @@ Once you have the requirements above met, we can build the project.
 
 #### Configuration
 
-1. CORS Allowed origins: `http://localhost:8443`
+1. CORS Allowed origins: `https://localhost:8443`
 2. Token Auth Method: None
-3. Signoff URLs: http://localhost:8443
-4. Redirect URIs: http://localhost:8443/callback.html
+3. Signoff URLs: https://localhost:8443
+4. Redirect URIs: https://localhost:8443/callback.html
 5. Response Type: Code
 6. Grant Type: Authorization Code
 
@@ -50,20 +50,38 @@ Once you have the requirements above met, we can build the project.
 
 1. DaVinci Policies: Select your DaVinci application
 
+### Configure SDK Credentials
+
+> **Note:** Using `config.json` is optional and backward-compatible. If you prefer, you can continue supplying SDK credentials via the `SDK_CONFIG` environment variable (a JSON string). The app falls back to `config.json` only when `SDK_CONFIG` is not set.
+
+Copy `config.example.json` to `config.json` at the app root and fill in your values:
+
+```sh
+cp config.example.json config.json
+```
+
+`config.json` (gitignored):
+
+```json
+{
+  "oidc": {
+    "clientId": "<your-oauth-client-id>",
+    "discoveryEndpoint": "https://<your-domain>/.well-known/openid-configuration",
+    "scopes": ["openid", "profile", "email"],
+    "redirectUri": "https://localhost:8443/callback.html"
+  }
+}
+```
+
 ### Configure Your `.env` File
 
-Change the name of `.env.example` to `.env` and replace the dummy values (e.g. `$CLIENT_ID`) with your values.
-
-Example with annotations:
+Change the name of `.env.example` to `.env` and set the remaining runtime values:
 
 ```text
-WELLKNOWN_URL=<<PingOne wellknown url>>
-WEB_OAUTH_CLIENT=<<PingOne application client id>>
 API_URL=http://localhost:9443
 DEBUGGER_OFF=true
 DEVELOPMENT=true
 PORT=8443
-SCOPE="openid profile email phone name revoke"
 ```
 
 ### Installing Dependencies

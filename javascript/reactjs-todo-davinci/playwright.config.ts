@@ -1,4 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
+import testConfig from './config.test.json';
 
 const url = process.env.PLAYWRIGHT_TEST_BASE_URL || 'http://localhost:8443';
 
@@ -27,11 +28,8 @@ export default defineConfig({
         DEBUGGER_OFF: 'true',
         DEVELOPMENT: 'false',
         PORT: '8443',
-        WEB_OAUTH_CLIENT: '724ec718-c41c-4d51-98b0-84a583f450f9',
-        SCOPE: 'openid profile email phone name revoke',
-        WELLKNOWN_URL:
-          'https://auth.pingone.ca/02fb4743-189a-4bc7-9d6c-a919edfe6447/as/.well-known/openid-configuration',
         PINGONE_ENV_ID: '02fb4743-189a-4bc7-9d6c-a919edfe6447',
+        SDK_CONFIG: JSON.stringify(testConfig),
       },
       ignoreHTTPSErrors: true,
     },
@@ -61,10 +59,7 @@ export default defineConfig({
     //     DEBUGGER_OFF: 'true',
     //     DEVELOPMENT: 'false',
     //     PORT: '5829',
-    //     WEB_OAUTH_CLIENT: '20dd0ed0-bb9b-4c8f-9a60-9ebeb4b348e0',
-    //     SCOPE: 'openid profile email phone name revoke',
-    //     WELLKNOWN_URL:
-    //       'https://auth.pingone.ca/02fb4743-189a-4bc7-9d6c-a919edfe6447/as/.well-known/openid-configuration',
+    //     SDK_CONFIG: JSON.stringify(testFidoConfig), // re-add: import testFidoConfig from './config.test.fido.json'
     //   },
     //   ignoreHTTPSErrors: true,
     // },

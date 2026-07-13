@@ -56,23 +56,40 @@ Once you have the 5 requirements above met, we can build the project.
 WebAuthn type steps for registration and authentication are also supported
 
 
+### Configure SDK Credentials
+
+> **Note:** Using `config.json` is optional and backward-compatible. If you prefer, you can continue supplying SDK credentials via the `VITE_SDK_CONFIG` environment variable (a JSON string). The app falls back to `config.json` only when `VITE_SDK_CONFIG` is not set.
+
+Copy `config.example.json` to `config.json` at the app root and fill in your values:
+
+```sh
+cp config.example.json config.json
+```
+
+`config.json` (gitignored):
+
+```json
+{
+  "oidc": {
+    "clientId": "<your-oauth-client-id>",
+    "discoveryEndpoint": "https://<your-domain>/.well-known/openid-configuration",
+    "scopes": ["openid", "profile", "email"],
+    "redirectUri": "https://localhost:8443/callback.html"
+  }
+}
+```
+
 ### Configure Your `.env` File
 
-Change the name of `.env.example` to `.env` and fill the environment variables with your values.
-
-Example with annotations:
+Change the name of `.env.example` to `.env` and set the remaining runtime values:
 
 ```text
-VITE_WELLKNOWN_URL=<<<Wellknown URL to your AM instance>>>
-VITE_WEB_OAUTH_CLIENT=<<<Your Web OAuth client name/ID>>>
 VITE_API_URL=http://localhost:9443
 VITE_PORT=8443
 VITE_DEBUGGER_OFF=true
 VITE_DEVELOPMENT=true
-VITE_SCOPE='openid profile email'
 VITE_JOURNEY_LOGIN=Login
 VITE_JOURNEY_REGISTER=Registration
-VITE_REALM_PATH=<<<Realm path of AM>>>
 ```
 
 ### Installing Dependencies and Run Build

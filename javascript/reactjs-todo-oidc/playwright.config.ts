@@ -1,7 +1,9 @@
 import { defineConfig, devices } from '@playwright/test';
+import * as dotenv from 'dotenv';
+import testConfigPingam from './config.test.pingam.json';
+import testConfigPingone from './config.test.pingone.json';
 
 const url = process.env.PLAYWRIGHT_TEST_BASE_URL || 'https://localhost:8443';
-import * as dotenv from 'dotenv';
 
 // Load environment variables from .env file
 dotenv.config({ path: '.env' });
@@ -32,12 +34,9 @@ export default defineConfig({
         DEVELOPMENT: 'false',
         PORT: '8443',
         SERVER: 'PINGAM',
-        WELLKNOWN_URL:
-          'https://openam-sdks.forgeblocks.com/am/oauth2/alpha/.well-known/openid-configuration',
-        SCOPE: 'openid profile me.read email',
-        WEB_OAUTH_CLIENT: 'CentralLoginOAuthClient-',
         REST_OAUTH_CLIENT: 'RestOAuthClient',
         REST_OAUTH_SECRET: process.env.REST_OAUTH_SECRET || '',
+        SDK_CONFIG: JSON.stringify(testConfigPingam),
       },
       ignoreHTTPSErrors: true,
     },
@@ -53,11 +52,8 @@ export default defineConfig({
         DEVELOPMENT: 'false',
         PORT: '8444',
         SERVER: 'PINGONE',
-        WELLKNOWN_URL:
-          'https://auth.pingone.ca/02fb4743-189a-4bc7-9d6c-a919edfe6447/as/.well-known/openid-configuration',
-        SCOPE: 'openid profile email revoke',
-        WEB_OAUTH_CLIENT: '724ec718-c41c-4d51-98b0-84a583f450f9',
         REST_OAUTH_CLIENT: '724ec718-c41c-4d51-98b0-84a583f450f9',
+        SDK_CONFIG: JSON.stringify(testConfigPingone),
       },
       ignoreHTTPSErrors: true,
     },

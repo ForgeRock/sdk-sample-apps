@@ -12,22 +12,43 @@ This folder contains the React client for `reactjs-todo-oidc`, which demonstrate
 
 ## Runtime configuration
 
-Copy `.env.example` to `.env` at `javascript/reactjs-todo-oidc/.env`, then set values for your environment:
+### SDK credentials
+
+Copy `config.example.json` to `config.json` at `javascript/reactjs-todo-oidc/config.json` and fill in your values:
+
+```sh
+cp config.example.json config.json
+```
+
+```json
+{
+  "oidc": {
+    "clientId": "<your-oauth-client-id>",
+    "discoveryEndpoint": "https://<your-domain>/.well-known/openid-configuration",
+    "scopes": ["openid", "profile", "email"],
+    "redirectUri": "https://localhost:8443/callback.html"
+  }
+}
+```
+
+`config.json` is gitignored.
+
+### Runtime env vars
+
+Copy `.env.example` to `.env` at `javascript/reactjs-todo-oidc/.env`:
 
 ```text
-WELLKNOWN_URL=<<<Well-known URL, for example https://example.com/am/oauth2/alpha/.well-known/openid-configuration>>>
-WEB_OAUTH_CLIENT=<<<Your Web OAuth client name/ID>>>
-SCOPE="openid profile email"
 API_URL=http://localhost:9443
 DEBUGGER_OFF=true
+DEVELOPMENT=true
+PORT=8443
+#SERVER - 'PINGAM' or 'PINGONE'
 SERVER=PINGAM
 ```
 
 Notes:
 
-- `WELLKNOWN_URL` is the source of truth for OIDC discovery in this sample.
-- `SCOPE` should include `openid` so logout and userinfo flows have the expected token set.
-- `SERVER` is used to derive the user name from either PingAM or PingOne
+- `SERVER` is used to derive the display name from either PingAM or PingOne token claims.
 
 ## Running locally
 

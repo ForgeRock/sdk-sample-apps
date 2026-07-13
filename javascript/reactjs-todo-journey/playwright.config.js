@@ -10,6 +10,10 @@
 
 import { defineConfig, devices } from '@playwright/test';
 import * as dotenv from 'dotenv';
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
+const testConfig = require('./config.test.json');
 
 // Load environment variables from .env file
 dotenv.config({ path: '.env' });
@@ -42,11 +46,8 @@ export default defineConfig({
         VITE_JOURNEY_LOGIN: 'Login',
         VITE_JOURNEY_REGISTER: 'Registration',
         VITE_PORT: '8443',
-        VITE_WELLKNOWN_URL:
-          'https://openam-sdks.forgeblocks.com/am/oauth2/alpha/.well-known/openid-configuration',
-        VITE_SCOPE: 'profile openid email',
-        VITE_WEB_OAUTH_CLIENT: 'WebOAuthClient',
         VITE_PINGONE_ENV_ID: '02fb4743-189a-4bc7-9d6c-a919edfe6447',
+        VITE_SDK_CONFIG: JSON.stringify(testConfig),
       },
       ignoreHTTPSErrors: true,
     },

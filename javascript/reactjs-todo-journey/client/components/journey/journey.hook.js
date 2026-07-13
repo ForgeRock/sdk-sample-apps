@@ -13,6 +13,7 @@ import { CONFIG, DEBUGGER } from '../../constants.js';
 import { htmlDecode } from '../../utilities/decode.js';
 import { OidcContext } from '../../context/oidc.context.js';
 import { callbackType, journey } from '@forgerock/journey-client';
+import { makeJourneyConfig } from '@forgerock/sdk-utilities';
 
 /**
  * @function isGenericError - Helper function to determine if a step is a GenericError
@@ -69,7 +70,7 @@ export default function useJourney({ formMetadata, resumeUrl }) {
        ********************************************************************* */
       if (DEBUGGER) debugger;
       try {
-        const client = await journey({ config: CONFIG });
+        const client = await journey({ config: makeJourneyConfig(CONFIG) });
         setJourneyClient(client);
 
         if (resumeUrl) {
@@ -253,7 +254,11 @@ export default function useJourney({ formMetadata, resumeUrl }) {
           const previousCallbacks = prev?.callbacks;
           const previousPayload = prev?.payload;
 
-          if (stepCount.current === 1 && newStep.type === 'Step' && newStep.getStage() === previousStage) {
+          if (
+            stepCount.current === 1 &&
+            newStep.type === 'Step' &&
+            newStep.getStage() === previousStage
+          ) {
             newStep.callbacks = previousCallbacks;
             newStep.payload = {
               ...previousPayload,
@@ -286,12 +291,7 @@ export default function useJourney({ formMetadata, resumeUrl }) {
     if (submissionStep && journeyClient) {
       setStep(submissionStep);
     }
-  }, [
-    formMetadata.tree,
-    submissionStep,
-    journeyClient,
-    authorize,
-  ]);
+  }, [formMetadata.tree, submissionStep, journeyClient, authorize]);
 
   /**
    * @function redirect - Redirects the user to the specified URL in the step
