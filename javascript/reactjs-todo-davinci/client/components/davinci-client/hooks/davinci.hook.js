@@ -95,6 +95,14 @@ export default function useDavinci() {
   }
 
   /**
+   * @function pollStatus - Gets the DaVinci client pollStatus function for a collector
+   * @returns {function} - A function to start challenge or continue polling
+   */
+  function pollStatus(collector) {
+    return davinciClient.pollStatus(collector);
+  }
+
+  /**
    * @function setNext - Get the next node in the DaVinci flow
    * @returns {Promise<void>}
    */
@@ -148,6 +156,7 @@ export default function useDavinci() {
       setNext,
       startNewFlow,
       updater,
+      pollStatus,
       externalIdp: davinciClient && davinciClient.externalIdp(),
       getError: davinciClient && davinciClient.getError,
     },

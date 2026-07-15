@@ -11,12 +11,20 @@ This sample code is provided "as is" and is not a supported product of Ping Iden
 - SingleSelectCollector
 - ReadOnlyCollector
 - PhoneNumberCollector
+- PhoneNumberExtensionCollector
 - DeviceRegistrationCollector
 - DeviceAuthenticationCollector
+- FidoRegistrationCollector
+- FidoAuthenticationCollector
 - IdpCollector
 - SubmitCollector
 - FlowCollector
 - ProtectCollector
+- QrCodeCollector
+- RichTextCollector
+- BooleanCollector
+- ValidatedBooleanCollector
+- PollingCollector
 
 ## Requirements
 
