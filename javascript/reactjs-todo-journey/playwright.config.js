@@ -9,9 +9,6 @@
  */
 const { defineConfig, devices } = require('@playwright/test');
 const dotenv = require('dotenv');
-import { createRequire } from 'module';
-
-const require = createRequire(import.meta.url);
 const testConfig = require('./config.test.json');
 
 // Load environment variables from .env file

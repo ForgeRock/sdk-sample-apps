@@ -8,13 +8,13 @@
 import { test, expect } from '@playwright/test';
 
 const BASE_URL = 'http://localhost:8443';
-const ACR_VALUE = '769eecb92f8e66f88005a85e8b939a01';
+const ACR_VALUE = '533a7ff229ca6395afd9dd6deb699944';
 
 async function navigateToRegistrationForm(page) {
   await page.goto(`${BASE_URL}/login?acrValue=${ACR_VALUE}`);
   await expect(page.getByRole('heading', { name: 'Select Test Form' })).toBeVisible();
   await page.getByRole('link', { name: 'USER_REGISTRATION' }).click();
-  await expect(page.getByRole('heading', { name: 'Example - Registration 1' })).toBeVisible({
+  await expect(page.getByRole('heading', { name: 'Example - Registration' })).toBeVisible({
     timeout: 10000,
   });
 }
