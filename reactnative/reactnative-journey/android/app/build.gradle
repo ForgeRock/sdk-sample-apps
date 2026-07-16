@@ -8,6 +8,10 @@
 apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
+// TODO: Push notifications require your own Firebase project. Replace
+// google-services.json in this directory with the one downloaded from your
+// Firebase console (Project settings > Your apps > google-services.json)
+// before this plugin can resolve valid FCM credentials.
 apply plugin: "com.google.gms.google-services"
 project.ext.vectoricons = [
     iconFontsDir: "../../node_modules/react-native-vector-icons/Fonts"
@@ -103,6 +107,9 @@ android {
         resValue "string", "fb_login_protocol_scheme", project.env.get("FACEBOOK_LOGIN_PROTOCOL_SCHEME") ?: ""
         resValue "string", "facebook_client_token", project.env.get("FACEBOOK_CLIENT_TOKEN") ?: ""
     }
+    // TODO: Add KEYSTORE_PASSWORD and KEY_PASSWORD to ~/.gradle/gradle.properties
+    // (or pass them as -PKEYSTORE_PASSWORD=... -PKEY_PASSWORD=... on the command line)
+    // so they resolve to your debug.keystore's actual passwords.
     signingConfigs {
         debug {
             storeFile file('debug.keystore')

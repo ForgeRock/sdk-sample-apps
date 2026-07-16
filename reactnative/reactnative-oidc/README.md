@@ -37,6 +37,8 @@ This repository contains an example React Native project demonstrating OIDC (red
     cp .env.example .env
     ```
 
+    Locate the TODO comment in `.env.example` and replace the placeholder values in `.env` with your configuration.
+
 4. **Redirect URI**: the app's redirect URI scheme is pre-wired to `org.forgerock.oidc://oauth2redirect`. If you pick a different scheme, update the redirect URI values in `.env`, `manifestPlaceholders["appRedirectUriScheme"]` in `android/app/build.gradle`, and the `oauth2redirect` entry of `CFBundleURLTypes` in `ios/PingSampleApp/Info.plist`.
 
 5. **Install dependencies**:

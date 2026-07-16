@@ -37,7 +37,7 @@ This repository contains an example React Native project making full use of the 
     cp .env.example .env
     ```
 
-    Edit `.env` with your values:
+    Locate the TODO comment in `.env.example` and replace the placeholder values in `.env` with your configuration:
 
     ```sh
     JOURNEY_SERVER_URL=https://your-journey-host.example.com/am
@@ -68,7 +68,7 @@ This repository contains an example React Native project making full use of the 
     cd ..
     ```
 
-7. **Android only — keystore setup**: `android/app/build.gradle` signs the debug build with `android/app/debug.keystore` using the alias `androiddebugkey`, and reads the keystore/key passwords from Gradle properties named `KEYSTORE_PASSWORD` and `KEY_PASSWORD`, which aren't set anywhere in this repo. Generate your own debug keystore with that filename and alias:
+7. **Android only — keystore setup**: `android/app/build.gradle` signs the debug build with `android/app/debug.keystore` using the alias `androiddebugkey`, and reads the keystore/key passwords from Gradle properties named `KEYSTORE_PASSWORD` and `KEY_PASSWORD`, which aren't set anywhere in this repo. Locate the TODO comment above `signingConfigs` in `android/app/build.gradle` and generate your own debug keystore with that filename and alias:
 
     ```sh
     keytool -genkeypair -v \
