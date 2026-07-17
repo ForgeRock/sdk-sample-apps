@@ -51,7 +51,7 @@ export function configureOidcStorageInfo(): StorageInfo {
       logger: storageLogger,
     });
     oidcStorage = { config: resolvedConfig };
-    console.log('Created OIDC Storage:', resolvedConfig);
+    storageLogger.debug('Created OIDC Storage:', resolvedConfig);
   }
   return oidcStorage;
 }
@@ -80,7 +80,7 @@ export function configureSessionStorageInfo(): StorageInfo {
       logger: storageLogger,
     });
     sessionStorage = { config: resolvedConfig };
-    console.log('Created Session Storage:', resolvedConfig);
+    storageLogger.debug('Created Session Storage:', resolvedConfig);
   }
   return sessionStorage;
 }
@@ -109,7 +109,7 @@ export function configureBindingUserKeyStorageInfo(): StorageInfo {
       logger: storageLogger,
     });
     bindingUserKeyStorage = { config: resolvedConfig };
-    console.log('Created Binding User Key Storage:', resolvedConfig);
+    storageLogger.debug('Created Binding User Key Storage:', resolvedConfig);
   }
   return bindingUserKeyStorage;
 }
