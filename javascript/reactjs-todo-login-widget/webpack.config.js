@@ -30,6 +30,7 @@ module.exports = () => {
   const WELLKNOWN_URL = process.env.WELLKNOWN_URL || localEnv.WELLKNOWN_URL;
   const SCOPE = process.env.SCOPE || localEnv.SCOPE;
   const PINGONE_ENV_ID = process.env.PINGONE_ENV_ID || localEnv.PINGONE_ENV_ID;
+  const WELLKNOWN_URL = process.env.WELLKNOWN_URL || localEnv.WELLKNOWN_URL;
 
   return {
     // Point to the top level source file
@@ -124,6 +125,7 @@ module.exports = () => {
         'process.env.WELLKNOWN_URL': JSON.stringify(WELLKNOWN_URL),
         'process.env.SCOPE': JSON.stringify(SCOPE),
         'process.env.PINGONE_ENV_ID': JSON.stringify(PINGONE_ENV_ID),
+        'process.env.WELLKNOWN_URL': JSON.stringify(WELLKNOWN_URL),
       }),
     ],
   };

@@ -13,16 +13,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 
 import Router from './router';
-import {
-  DEBUGGER,
-  JOURNEY_LOGIN,
-  WEB_OAUTH_CLIENT,
-  SCOPE,
-  SERVER_URL,
-  REALM_PATH,
-  WELLKNOWN_URL,
-  PINGONE_ENV_ID,
-} from './constants';
+import { DEBUGGER, WEB_OAUTH_CLIENT, SCOPE, WELLKNOWN_URL, PINGONE_ENV_ID } from './constants';
 import { initTheme, ThemeContext } from './context/theme.context';
 import { useInitAuthState, AuthContext } from './context/auth.context';
 
@@ -37,41 +28,25 @@ import './styles/index.scss';
  * Summary: Configure the Login Widget
  * ----------------------------------------------------------------------------
  * Details: Below, you will see the following settings:
- * - clientId: (OAuth 2.0 only) this is the OAuth 2.0 client you created in Ping, such as `ForgeRockSDKClient`
- * - redirectUri: (OAuth 2.0 only) this is the URI/URL of this app to which the
- *   OAuth 2.0 flow redirects
- * - scope: (OAuth 2.0 only) these are the OAuth scopes that you will request from
- *   Ping
- * - serverConfig: this includes the baseUrl of your Ping AM, and should
- *   include the deployment path at the end, such as `/am/` or `/openam/`
- * - realmPath: this is the realm to use within Ping. such as `alpha` or `root`
- * - tree: The authentication journey/tree to use, such as `sdkAuthenticationTree`
- * - tokenStore: The API to use for storing tokens on the client, such as `localStorage` or `sessionStorage`
+ * - journeyClient.serverConfig.wellknown: the OpenID Connect discovery URL used
+ *   by the Journey Client to communicate with Ping AM
+ * - oidcClient.clientId: the OAuth 2.0 client registered in Ping AM
+ * - oidcClient.redirectUri: the URI this app redirects to after OAuth authorization
+ * - oidcClient.scope: the OAuth 2.0 scopes requested from Ping AM
+ * - oidcClient.serverConfig.wellknown: the OpenID Connect discovery URL used
+ *   by the OIDC client for token and userinfo endpoints
  *************************************************************************** */
 if (DEBUGGER) debugger;
 
-const urlParams = new URLSearchParams(window.location.search);
-const journeyParam = urlParams.get('journey');
-
 configuration().set({
-  // Minimum required configuration:
   journeyClient: {
-    serverConfig: {
-      wellknown: WELLKNOWN_URL,
-    },
+    serverConfig: { wellknown: WELLKNOWN_URL },
   },
-  forgerock: {
-    serverConfig: {
-      baseUrl: SERVER_URL,
-      timeout: 3000,
-    },
-    // Optional configuration:
+  oidcClient: {
     clientId: WEB_OAUTH_CLIENT,
-    realmPath: REALM_PATH,
     redirectUri: `${window.location.origin}/callback.html`,
     scope: SCOPE,
-    tree: `${journeyParam || JOURNEY_LOGIN}`,
-    tokenStore: 'localStorage',
+    serverConfig: { wellknown: WELLKNOWN_URL },
   },
 });
 

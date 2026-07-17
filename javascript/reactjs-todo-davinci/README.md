@@ -68,7 +68,7 @@ SCOPE="openid profile email phone name revoke"
 
 ### Installing Dependencies
 
-**Run from root of `/javascript`**: since this sample app uses npm's workspaces, we recommend running the npm commands from the root of the `/javascript` folder.
+**Run from repo root**: since this sample app uses npm's workspaces, we recommend running the npm commands from the root of the `sdk-sample-apps` folder.
 
 ```sh
 # Install all dependencies
@@ -80,7 +80,7 @@ npm install
 Now, run the below commands to start the processes needed for building the application and running the servers for both client and API server:
 
 ```sh
-# In a terminal window, run the following command from the /javascript folder
+# In a terminal window, run the following command from the root of the sdk-sample-apps folder
 npm run start:reactjs-todo-dv
 ```
 
