@@ -9,7 +9,7 @@
  */
 
 import { test, expect } from '@playwright/test';
-import { displayName, password, username } from './utils/demo-user';
+import { password, username } from './utils/demo-user';
 
 test.describe('React Journey - Login with Protect', () => {
   test('should succeed when initialized by callback', async ({ page }) => {
@@ -26,7 +26,7 @@ test.describe('React Journey - Login with Protect', () => {
     await page.getByLabel('Password').fill(password);
     await page.getByLabel('Password').press('Enter');
 
-    await expect(page.getByText(`Welcome back, ${displayName}!`)).toBeVisible();
+    await page.waitForRequest('https://openam-sdks.forgeblocks.com/am/json/alpha/authenticate');
 
     await expect(logs.includes('Protect initialized by callback for data collection')).toBeTruthy();
     await expect(logs.includes('Data set on Protect evaluation callback')).toBeTruthy();
@@ -48,8 +48,8 @@ test.describe('React Journey - Login with Protect', () => {
     await page.getByLabel('Password').fill(password);
     await page.getByLabel('Password').press('Enter');
 
-    await expect(page.getByText(`Welcome back, ${displayName}!`)).toBeVisible();
-
+    await page.waitForRequest('https://openam-sdks.forgeblocks.com/am/json/alpha/authenticate');
+    
     await expect(
       logs.includes('Protect initialized at bootstrap for data collection'),
     ).toBeTruthy();

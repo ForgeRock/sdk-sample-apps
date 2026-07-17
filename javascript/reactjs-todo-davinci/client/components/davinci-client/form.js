@@ -62,7 +62,7 @@ export default function Form() {
   const [user, setCode] = useOAuth();
   const [
     { formName, formAction, node, collectors },
-    { getError, setNext, startNewFlow, updater, pollStatus, externalIdp },
+    { getError, setNext, startNewFlow, updater, validator, pollStatus, externalIdp },
   ] = useDavinci();
 
   /**
@@ -163,6 +163,17 @@ export default function Form() {
             collector={collector}
             inputName={collectorName}
             updater={updater(collector)}
+            key={collectorName}
+          />
+        );
+      case 'ValidatedPasswordCollector':
+        return (
+          <Password
+            collector={collector}
+            inputName={collectorName}
+            updater={updater(collector)}
+            validator={validator(collector)}
+            verify={collector.output.verify}
             key={collectorName}
           />
         );

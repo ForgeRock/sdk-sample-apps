@@ -95,6 +95,14 @@ export default function useDavinci() {
   }
 
   /**
+   * @function validator - Gets the DaVinci client validator function for a collector
+   * @returns {function} - A function to call to validate the collector's input
+   */
+  function validator(collector) {
+    return davinciClient.validate(collector);
+  }
+
+  /**
    * @function pollStatus - Gets the DaVinci client pollStatus function for a collector
    * @returns {function} - A function to start challenge or continue polling
    */
@@ -157,6 +165,7 @@ export default function useDavinci() {
       startNewFlow,
       updater,
       pollStatus,
+      validator,
       externalIdp: davinciClient && davinciClient.externalIdp(),
       getError: davinciClient && davinciClient.getError,
     },
