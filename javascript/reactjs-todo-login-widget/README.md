@@ -42,7 +42,7 @@ Change the name of `.env.example` to `.env` and replace the bracketed values (e.
 Example with annotations:
 
 ```text
-SERVER_URL=<<<URL to your AM instance>>>
+WELLKNOWN_URL=<<<e.g. https://your-tenant.forgeblocks.com/am/oauth2/alpha/.well-known/openid-configuration>>>
 WEB_OAUTH_CLIENT=<<<Your Web OAuth client name/ID>>>
 SCOPE='openid profile email'
 PORT=8443
@@ -51,12 +51,11 @@ DEBUGGER_OFF=true
 DEVELOPMENT=true
 JOURNEY_LOGIN=Login
 JOURNEY_REGISTER=Registration
-REALM_PATH=<<<Realm path of AM>>>
 ```
 
 ### Installing Dependencies and Run Build
 
-**Run from `/javascript` root**: since this sample app uses npm's workspaces, we recommend running the npm commands from the root of the `/javascript` folder.
+**Run from repo root**: since this sample app uses npm's workspaces, we recommend running the npm commands from the root of the `sdk-sample-apps` folder.
 
 ```sh
 # Install all dependencies
@@ -68,7 +67,7 @@ npm install
 Now, run the below commands to start the processes needed for building the application and running the servers for both client and API server:
 
 ```sh
-# In one terminal window, run the following command from the `/javascript` directory
+# In one terminal window, run the following command from the root of the sdk-sample-apps folder
 npm run start:reactjs-todo-lw
 ```
 

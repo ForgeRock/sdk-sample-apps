@@ -38,17 +38,21 @@ export function useInitAuthState() {
      * authenticated.
      ************************************************************************* */
     if (DEBUGGER) debugger;
-    async function hydrateTokens() {
-      try {
-        const event = await user.tokens().get();
-        const isAuthenticated = !!event?.response?.accessToken;
-        setAuthentication(isAuthenticated);
-      } catch (err) {
-        console.error(`Error: token retrieval for hydration; ${err}`);
-      }
-    }
 
-    hydrateTokens();
+    /**
+     * Read the current token store state non-destructively. Using subscribe
+     * (rather than get) avoids triggering a full OIDC authorize flow on page
+     * load. If no tokens are cached the store value will have response: null,
+     * so the user is treated as unauthenticated — correct behaviour. Using
+     * get() was causing interaction_required OIDC errors on re-hydration which
+     * propagated to the login widget's shared oauth store and auto-closed the
+     * modal immediately after opening.
+     */
+    const unsubscribe = user.tokens().subscribe((tokenState) => {
+      const isAuthenticated = !!tokenState?.response?.accessToken;
+      setAuthentication(isAuthenticated);
+    });
+    unsubscribe();
   }, []);
 
   /**
