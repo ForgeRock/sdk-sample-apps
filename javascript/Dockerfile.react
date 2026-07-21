@@ -1,0 +1,97 @@
+# Multi-stage build for React/Webpack apps
+# Supports: reactjs-todo, reactjs-todo-davinci, embedded-login, central-login-oidc
+# Production-optimized build with static file serving
+
+# Build argument for app name
+ARG APP_NAME
+
+# Build stage
+FROM node:18.17.0-alpine AS builder
+
+ARG APP_NAME
+WORKDIR /app
+
+# Copy workspace root files
+COPY package*.json ./
+
+# Copy specific app directory
+COPY ${APP_NAME} ./${APP_NAME}/
+
+# Install dependencies for workspace
+RUN npm ci
+
+# Build the app
+WORKDIR /app/${APP_NAME}
+
+# Note: .env files are automatically included if they exist in the app directory
+# The earlier COPY ${APP_NAME} ./${APP_NAME}/ includes all files not in .dockerignore
+
+# Build the app
+RUN npm run build
+
+# Runtime stage - serve static files with nginx
+FROM nginx:alpine
+
+ARG APP_NAME
+
+# Copy built files from builder
+# React apps output to public/ directory
+COPY --from=builder /app/${APP_NAME}/public /usr/share/nginx/html
+
+# Create nginx configuration
+RUN cat > /etc/nginx/conf.d/default.conf <<'EOF'
+server {
+    listen 8443 ssl;
+    server_name localhost;
+
+    # Self-signed certificate for development
+    ssl_certificate /etc/nginx/ssl/cert.pem;
+    ssl_certificate_key /etc/nginx/ssl/key.pem;
+
+    root /usr/share/nginx/html;
+    index index.html;
+
+    # SPA routing - all routes serve index.html
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    # Security headers
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-XSS-Protection "1; mode=block" always;
+}
+
+server {
+    listen 8080;
+    server_name localhost;
+
+    root /usr/share/nginx/html;
+    index index.html;
+
+    # SPA routing - all routes serve index.html
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    # Security headers
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-XSS-Protection "1; mode=block" always;
+}
+EOF
+
+# Generate self-signed certificate for HTTPS
+RUN mkdir -p /etc/nginx/ssl && \
+    apk add --no-cache openssl && \
+    openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+      -keyout /etc/nginx/ssl/key.pem \
+      -out /etc/nginx/ssl/cert.pem \
+      -subj "/C=US/ST=State/L=City/O=Organization/CN=localhost" && \
+    apk del openssl
+
+# Expose ports (8443 for HTTPS, 8080 for HTTP)
+EXPOSE 8443 8080
+
+# Start nginx
+CMD ["nginx", "-g", "daemon off;"]
