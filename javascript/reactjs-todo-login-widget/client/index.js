@@ -38,6 +38,18 @@ import './styles/index.scss';
  *************************************************************************** */
 if (DEBUGGER) debugger;
 
+/**
+ * Initialize PingOne Protect as early as possible for data collection.
+ * Must run at module scope — not inside a React component — so it fires
+ * exactly once at bootstrap rather than on every render cycle.
+ */
+if (!PINGONE_ENV_ID) {
+  console.error('Missing PingOne environment ID for Protect initialization');
+} else {
+  protect.start({ envId: PINGONE_ENV_ID });
+  console.log('PingOne Protect initialized at bootstrap');
+}
+
 configuration().set({
   journeyClient: {
     serverConfig: { wellknown: WELLKNOWN_URL },
@@ -88,17 +100,6 @@ configuration().set({
      */
     const auth = useInitAuthState(isAuthenticated);
     const theme = initTheme();
-
-    /**
-     * Initialize PingOne Protect as early as possible in the application for data collection.
-     * The PingOne environment ID is required while all other options in the configuration are optional.
-     */
-    if (!PINGONE_ENV_ID) {
-      console.error('Missing PingOne environment ID for Protect initialization');
-    } else {
-      protect.start({ envId: PINGONE_ENV_ID });
-      console.log('PingOne Protect initialized at bootstrap');
-    }
 
     return (
       <ThemeContext.Provider value={theme}>
