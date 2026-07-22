@@ -1,0 +1,2 @@
+#include "Pods/Target Support Files/Pods-PingSampleApp/Pods-PingSampleApp.release.xcconfig"
+#include? "Config.local.xcconfig"
