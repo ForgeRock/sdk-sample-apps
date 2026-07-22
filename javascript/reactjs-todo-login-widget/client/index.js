@@ -8,7 +8,7 @@
  * of the MIT license. See the LICENSE file for details.
  */
 
-import { configuration, protect } from '@forgerock/login-widget';
+import { configuration, protect, user } from '@forgerock/login-widget';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
@@ -53,7 +53,25 @@ configuration().set({
 /**
  * Initialize the React application
  */
-(function initAndHydrate() {
+(async function initAndHydrate() {
+  /** *************************************************************************
+   * LOGIN WIDGET INTEGRATION POINT
+   * Summary: Get OAuth/OIDC tokens before the first render
+   * --------------------------------------------------------------------------
+   * Details: We call user.tokens().get() and await it *before* rendering so the
+   * app's initial auth state is correct on the very first paint. Doing this here
+   * (rather than in a post-mount effect) prevents ProtectedRoute from briefly
+   * seeing a "logged out" state on reload and flashing the sign-in page.
+   ************************************************************************* */
+  if (DEBUGGER) debugger;
+  let isAuthenticated = false;
+  try {
+    const event = await user.tokens().get();
+    isAuthenticated = !!event?.response?.accessToken;
+  } catch (err) {
+    console.error(`Error: token retrieval for hydration; ${err}`);
+  }
+
   /**
    * @function Init - Initializes React, State, and Protect
    * @returns {Object} - React component object
@@ -68,7 +86,7 @@ configuration().set({
      * If context becomes a more complex function of the app,
      * something like Redux might be a better option.
      */
-    const auth = useInitAuthState();
+    const auth = useInitAuthState(isAuthenticated);
     const theme = initTheme();
 
     /**

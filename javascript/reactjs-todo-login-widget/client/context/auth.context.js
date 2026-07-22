@@ -9,51 +9,26 @@
  */
 
 import { user } from '@forgerock/login-widget';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import { DEBUGGER } from '../constants';
 
 /**
  * @function useInitAuthState - Custom hook for managing user authentication and page
+ * @param {boolean|null} isAuthenticated - Auth status resolved before render. The default is `null` ("not yet known") rather than `false` so that if this
+ * value is ever unavailable at call time, ProtectedRoute waits (shows Loading)
  * @returns {Array} - Auth state values and state methods
  */
-export function useInitAuthState() {
+export function useInitAuthState(isAuthenticated = null) {
   /**
    * Create state properties for auth state.
    * The destructing of the hook's array results in index 0 having the state value,
    * and index 1 having the "setter" method to set new state values.
    */
-  const [authenticated, setAuthentication] = useState(false);
+  const [authenticated, setAuthentication] = useState(isAuthenticated);
   const [mail, setEmail] = useState(() => window.sessionStorage.getItem('sdk_email') || '');
   const [name, setUser] = useState(() => window.sessionStorage.getItem('sdk_username') || '');
   const [error, setError] = useState('');
-
-  useEffect(() => {
-    /** *************************************************************************
-     * LOGIN WIDGET INTEGRATION POINT
-     * Summary: Get OAuth/OIDC tokens
-     * --------------------------------------------------------------------------
-     * Details: We can immediately call user.tokens().get() to check for stored
-     * tokens. If we have them, we can cautiously assume the user is
-     * authenticated.
-     ************************************************************************* */
-    if (DEBUGGER) debugger;
-
-    /**
-     * Read the current token store state non-destructively. Using subscribe
-     * (rather than get) avoids triggering a full OIDC authorize flow on page
-     * load. If no tokens are cached the store value will have response: null,
-     * so the user is treated as unauthenticated — correct behaviour. Using
-     * get() was causing interaction_required OIDC errors on re-hydration which
-     * propagated to the login widget's shared oauth store and auto-closed the
-     * modal immediately after opening.
-     */
-    const unsubscribe = user.tokens().subscribe((tokenState) => {
-      const isAuthenticated = !!tokenState?.response?.accessToken;
-      setAuthentication(isAuthenticated);
-    });
-    unsubscribe();
-  }, []);
 
   /**
    * @function setAuthenticationWrapper - A wrapper for storing authentication in sessionStorage
