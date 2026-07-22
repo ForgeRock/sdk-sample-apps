@@ -33,7 +33,6 @@ local.properties
 *.hprof
 .cxx/
 *.keystore
-!debug.keystore
 *.jks
 .kotlin/
 

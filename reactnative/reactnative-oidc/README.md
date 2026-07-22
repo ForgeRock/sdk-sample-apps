@@ -56,7 +56,27 @@ This repository contains an example React Native project demonstrating OIDC (red
     cd ..
     ```
 
-7. **Run the app**:
+7. **Android only — keystore setup**: `android/app/build.gradle` signs the debug build with `android/app/debug.keystore` using the alias `androiddebugkey`, and reads the keystore/key passwords from Gradle properties named `KEYSTORE_PASSWORD` and `KEY_PASSWORD`, which aren't set anywhere in this repo. Generate your own debug keystore with that filename and alias:
+
+    ```sh
+    keytool -genkeypair -v \
+      -keystore android/app/debug.keystore \
+      -alias androiddebugkey \
+      -keyalg RSA -keysize 2048 -validity 10000 \
+      -storepass <your-password> -keypass <your-password> \
+      -dname "CN=Android Debug,O=Android,C=US"
+    ```
+
+    Then add your credentials to your global `~/.gradle/gradle.properties` (create the file if it doesn't exist):
+
+    ```properties
+    KEYSTORE_PASSWORD=<your-password>
+    KEY_PASSWORD=<your-password>
+    ```
+
+    Skipping this step causes the build to fail signing, which then fails app installation.
+
+8. **Run the app**:
 
     ```sh
     yarn ios
