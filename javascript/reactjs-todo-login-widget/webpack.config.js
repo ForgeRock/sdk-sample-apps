@@ -19,16 +19,15 @@ module.exports = () => {
 
   // Use process environment variables for prod, but fallback to local .env for dev
   const PORT = process.env.PORT || localEnv.PORT || '8443';
-  const SERVER_URL = process.env.SERVER_URL || localEnv.SERVER_URL;
   const API_URL = process.env.API_URL || localEnv.API_URL;
   const DEBUGGER_OFF = process.env.DEBUGGER_OFF || localEnv.DEBUGGER_OFF;
   const DEVELOPMENT = process.env.DEVELOPMENT || localEnv.DEVELOPMENT;
   const JOURNEY_LOGIN = process.env.JOURNEY_LOGIN || localEnv.JOURNEY_LOGIN;
   const JOURNEY_REGISTER = process.env.JOURNEY_REGISTER || localEnv.JOURNEY_REGISTER;
   const WEB_OAUTH_CLIENT = process.env.WEB_OAUTH_CLIENT || localEnv.WEB_OAUTH_CLIENT;
-  const REALM_PATH = process.env.REALM_PATH || localEnv.REALM_PATH;
   const SCOPE = process.env.SCOPE || localEnv.SCOPE;
   const PINGONE_ENV_ID = process.env.PINGONE_ENV_ID || localEnv.PINGONE_ENV_ID;
+  const WELLKNOWN_URL = process.env.WELLKNOWN_URL || localEnv.WELLKNOWN_URL;
 
   return {
     // Point to the top level source file
@@ -113,15 +112,14 @@ module.exports = () => {
       new MiniCssExtractPlugin(),
       new webpack.DefinePlugin({
         // Inject all the environment variable into the Webpack build
-        'process.env.SERVER_URL': JSON.stringify(SERVER_URL),
         'process.env.API_URL': JSON.stringify(API_URL),
         'process.env.DEBUGGER_OFF': JSON.stringify(DEBUGGER_OFF),
         'process.env.JOURNEY_LOGIN': JSON.stringify(JOURNEY_LOGIN),
         'process.env.JOURNEY_REGISTER': JSON.stringify(JOURNEY_REGISTER),
         'process.env.WEB_OAUTH_CLIENT': JSON.stringify(WEB_OAUTH_CLIENT),
-        'process.env.REALM_PATH': JSON.stringify(REALM_PATH),
         'process.env.SCOPE': JSON.stringify(SCOPE),
         'process.env.PINGONE_ENV_ID': JSON.stringify(PINGONE_ENV_ID),
+        'process.env.WELLKNOWN_URL': JSON.stringify(WELLKNOWN_URL),
       }),
     ],
   };

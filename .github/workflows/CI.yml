@@ -18,18 +18,14 @@ jobs:
         working-directory: .
     steps:
       - uses: actions/checkout@v4
+      # Cache ~/.npm, not node_modules (breaks across Node versions + `npm ci`):
+      # https://github.com/actions/cache/blob/3edfce9056124e459a23f683a21433670d47daca/examples.md?plain=1#L337
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
-      - uses: actions/cache@v4
-        id: cache
-        with:
-          path: |
-            node_modules
-          key: ${{ runner.os }}-npm-${{matrix.node}}-${{ hashFiles('package-lock.json') }}
+          cache: 'npm'
 
       - run: npm ci
-        if: steps.cache.outputs.cache-hit != 'true'
 
       - name: Lint
         run: npm run lint

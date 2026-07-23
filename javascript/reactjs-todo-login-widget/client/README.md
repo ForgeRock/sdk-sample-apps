@@ -54,12 +54,11 @@ Change the name of `.env.example` to `.env` and replace the bracketed values (e.
 Example with annotations:
 
 ```text
-SERVER_URL=<<<URL to your AM/ PingOne instance>>>
+WELLKNOWN_URL=<<<e.g. https://your-tenant.forgeblocks.com/am/oauth2/alpha/.well-known/openid-configuration>>>
 API_URL=https://api.example.com:9443
 DEBUGGER_OFF=false
 JOURNEY_LOGIN=Login
 JOURNEY_REGISTER=Registration
-REALM_PATH=<<<Realm path of AM>>>
 WEB_OAUTH_CLIENT=<<<Your Web OAuth client name/ID>>>
 ```
 
