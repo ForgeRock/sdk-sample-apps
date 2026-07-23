@@ -46,32 +46,27 @@ if (!PINGONE_ENV_ID) {
    * Summary: Configure the Login Widget, then get tokens before first render
    * --------------------------------------------------------------------------
    * Settings:
-   * - journeyClient.serverConfig.wellknown: OpenID Connect discovery URL used by
-   *   the Journey Client to communicate with Ping AM
+   * - wellknown: the OpenID Connect discovery URL, supplied once at the top level
+   *   and shared by both the Journey Client and the OIDC client
    * - oidcClient.clientId: the OAuth 2.0 client registered in Ping AM
    * - oidcClient.redirectUri: URI this app redirects to after OAuth authorization
    * - oidcClient.scope: the OAuth 2.0 scopes requested from Ping AM
-   * - oidcClient.serverConfig.wellknown: OpenID Connect discovery URL used by the
-   *   OIDC client for token and userinfo endpoints
    *
    * `configure()` is async — it resolves only once the OIDC client is
    * constructed. Awaiting it before `user.tokens().get()` guarantees the token
    * fetch never races the null-client window, so ProtectedRoute sees the correct
    * auth state on the very first paint (no sign-in flash on reload).
    ************************************************************************* */
+  if (DEBUGGER) debugger;
   await configure({
-    journeyClient: {
-      serverConfig: { wellknown: WELLKNOWN_URL },
-    },
+    wellknown: WELLKNOWN_URL,
     oidcClient: {
       clientId: WEB_OAUTH_CLIENT,
       redirectUri: `${window.location.origin}/callback.html`,
       scope: SCOPE,
-      serverConfig: { wellknown: WELLKNOWN_URL },
     },
   });
 
-  if (DEBUGGER) debugger;
   let isAuthenticated = false;
   try {
     const event = await user.tokens().get();
@@ -96,6 +91,17 @@ if (!PINGONE_ENV_ID) {
      */
     const auth = useInitAuthState(isAuthenticated);
     const theme = initTheme();
+
+    /**
+     * Initialize PingOne Protect as early as possible in the application for data collection.
+     * The PingOne environment ID is required while all other options in the configuration are optional.
+     */
+    if (!PINGONE_ENV_ID) {
+      console.error('Missing PingOne environment ID for Protect initialization');
+    } else {
+      protect.start({ envId: PINGONE_ENV_ID });
+      console.log('PingOne Protect initialized at bootstrap');
+    }
 
     return (
       <ThemeContext.Provider value={theme}>
