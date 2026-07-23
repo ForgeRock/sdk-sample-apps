@@ -8,7 +8,7 @@
  * of the MIT license. See the LICENSE file for details.
  */
 
-import { configuration, protect, user } from '@forgerock/login-widget';
+import { configure, protect, user } from '@forgerock/login-widget';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
@@ -23,19 +23,6 @@ import { useInitAuthState, AuthContext } from './context/auth.context';
  */
 import './styles/index.scss';
 
-/** ***************************************************************************
- * LOGIN WIDGET INTEGRATION POINT
- * Summary: Configure the Login Widget
- * ----------------------------------------------------------------------------
- * Details: Below, you will see the following settings:
- * - journeyClient.serverConfig.wellknown: the OpenID Connect discovery URL used
- *   by the Journey Client to communicate with Ping AM
- * - oidcClient.clientId: the OAuth 2.0 client registered in Ping AM
- * - oidcClient.redirectUri: the URI this app redirects to after OAuth authorization
- * - oidcClient.scope: the OAuth 2.0 scopes requested from Ping AM
- * - oidcClient.serverConfig.wellknown: the OpenID Connect discovery URL used
- *   by the OIDC client for token and userinfo endpoints
- *************************************************************************** */
 if (DEBUGGER) debugger;
 
 /**
@@ -50,31 +37,40 @@ if (!PINGONE_ENV_ID) {
   console.log('PingOne Protect initialized at bootstrap');
 }
 
-configuration().set({
-  journeyClient: {
-    serverConfig: { wellknown: WELLKNOWN_URL },
-  },
-  oidcClient: {
-    clientId: WEB_OAUTH_CLIENT,
-    redirectUri: `${window.location.origin}/callback.html`,
-    scope: SCOPE,
-    serverConfig: { wellknown: WELLKNOWN_URL },
-  },
-});
-
 /**
  * Initialize the React application
  */
 (async function initAndHydrate() {
   /** *************************************************************************
    * LOGIN WIDGET INTEGRATION POINT
-   * Summary: Get OAuth/OIDC tokens before the first render
+   * Summary: Configure the Login Widget, then get tokens before first render
    * --------------------------------------------------------------------------
-   * Details: We call user.tokens().get() and await it *before* rendering so the
-   * app's initial auth state is correct on the very first paint. Doing this here
-   * (rather than in a post-mount effect) prevents ProtectedRoute from briefly
-   * seeing a "logged out" state on reload and flashing the sign-in page.
+   * Settings:
+   * - journeyClient.serverConfig.wellknown: OpenID Connect discovery URL used by
+   *   the Journey Client to communicate with Ping AM
+   * - oidcClient.clientId: the OAuth 2.0 client registered in Ping AM
+   * - oidcClient.redirectUri: URI this app redirects to after OAuth authorization
+   * - oidcClient.scope: the OAuth 2.0 scopes requested from Ping AM
+   * - oidcClient.serverConfig.wellknown: OpenID Connect discovery URL used by the
+   *   OIDC client for token and userinfo endpoints
+   *
+   * `configure()` is async — it resolves only once the OIDC client is
+   * constructed. Awaiting it before `user.tokens().get()` guarantees the token
+   * fetch never races the null-client window, so ProtectedRoute sees the correct
+   * auth state on the very first paint (no sign-in flash on reload).
    ************************************************************************* */
+  await configure({
+    journeyClient: {
+      serverConfig: { wellknown: WELLKNOWN_URL },
+    },
+    oidcClient: {
+      clientId: WEB_OAUTH_CLIENT,
+      redirectUri: `${window.location.origin}/callback.html`,
+      scope: SCOPE,
+      serverConfig: { wellknown: WELLKNOWN_URL },
+    },
+  });
+
   if (DEBUGGER) debugger;
   let isAuthenticated = false;
   try {
