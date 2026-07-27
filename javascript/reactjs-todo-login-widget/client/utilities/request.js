@@ -31,8 +31,11 @@ export default async function apiRequest(resource, method, data) {
      * HTTP requests to protected resource APIs.
      *********************************************************************** */
     if (DEBUGGER) debugger;
-    const tokenEvents = user.tokens();
-    const { response: tokens } = await tokenEvents.get();
+    const tokenResult = await user.tokens().get();
+    if (tokenResult?.error) {
+      throw new Error(tokenResult.error.message ?? 'Failed to retrieve access token');
+    }
+    const tokens = tokenResult?.response;
     if (!tokens?.accessToken) {
       throw new Error('Failed to retrieve access token');
     }
