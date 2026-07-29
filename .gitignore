@@ -98,6 +98,7 @@ outputs/*
 
 ## Package Files
 *.jar
+!**/gradle/wrapper/gradle-wrapper.jar
 *.war
 *.nar
 *.ear
