@@ -12,10 +12,12 @@ import 'package:integration_test/integration_test.dart';
 import 'package:flutter_journey/main.dart';
 import 'package:flutter_journey/routing/router.dart';
 
-/// Drives the Login Journey end-to-end against the shared Ping SDK demo/test tenant configured
-/// in `lib/config/env.dart` (see `AGENT_NOTES.md` § Verification tenant). Requires network access
-/// and a reachable tenant — there is no mock, per this project's established verification
-/// approach (Phases 2-6 were all verified against the same tenant).
+/// Drives the Login Journey end-to-end against a real, reachable tenant. Requires network access
+/// and a Journey named `"Login"` returning `NameCallback` + `PasswordCallback` on its first node.
+///
+/// `lib/config/env.dart` ships with placeholder values (`'<server-url>'`, etc.) and must be
+/// replaced with a real tenant's `serverUrl`/`realm`/`cookie` before this test can run at all —
+/// see `flutter-journey/README.md` step 3.
 ///
 /// Run standalone, not combined with `journey_registration_test.dart` in the same test binary —
 /// the native SDK persists the AM session cookie on-device across `Journey` instances within one
@@ -51,7 +53,7 @@ void main() {
 
     await tester.enterText(find.byType(TextField), 'Login');
     await tester.tap(find.text('Start Journey'));
-    await tester.pumpAndSettle(const Duration(seconds: 10));
+    await tester.pumpAndSettle(const Duration(seconds: 20));
 
     expect(find.text('User Name'), findsOneWidget);
     expect(find.text('Password'), findsOneWidget);
@@ -69,18 +71,18 @@ void main() {
 
       await tester.enterText(find.byType(TextField), 'Login');
       await tester.tap(find.text('Start Journey'));
-      await tester.pumpAndSettle(const Duration(seconds: 10));
+      await tester.pumpAndSettle(const Duration(seconds: 20));
 
       final textFields = find.byType(TextField);
       await tester.enterText(textFields.at(0), username);
       await tester.enterText(textFields.at(1), password);
       await tester.tap(find.text('Next'));
-      await tester.pumpAndSettle(const Duration(seconds: 10));
+      await tester.pumpAndSettle(const Duration(seconds: 20));
 
       expect(find.text('Journey completed successfully.'), findsOneWidget);
 
       await tester.tap(find.text('Sign Off'));
-      await tester.pumpAndSettle(const Duration(seconds: 10));
+      await tester.pumpAndSettle(const Duration(seconds: 20));
 
       expect(find.text('Start a Journey'), findsOneWidget);
     },

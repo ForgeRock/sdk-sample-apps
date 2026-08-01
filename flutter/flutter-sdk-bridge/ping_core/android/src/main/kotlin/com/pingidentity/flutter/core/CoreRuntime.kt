@@ -10,9 +10,6 @@ package com.pingidentity.flutter.core
 import com.pingidentity.flutter.core.registry.Registry
 import com.pingidentity.flutter.core.registry.SimpleRegistry
 
-/** Resolves callbacks for a given Journey id, invoked across the Flutter bridge boundary. */
-public typealias JourneyCallbackResolver = suspend (String) -> List<Any>?
-
 /**
  * Central place to hold process-wide registries and shared helpers used by the core module.
  *
@@ -23,14 +20,4 @@ public typealias JourneyCallbackResolver = suspend (String) -> List<Any>?
 object CoreRuntime {
     /** Registry for Journey client instances. */
     val journeyRegistry: Registry = SimpleRegistry()
-
-    /** Resolver that exposes Journey callbacks to other packages; set by `ping_journey`. */
-    @Volatile
-    var journeyCallbackResolver: JourneyCallbackResolver? = null
-
-    /**
-     * Resolves callbacks for the provided Journey id via the registered resolver.
-     */
-    suspend fun resolveJourneyCallbacks(journeyId: String): List<Any>? =
-        journeyCallbackResolver?.invoke(journeyId)
 }

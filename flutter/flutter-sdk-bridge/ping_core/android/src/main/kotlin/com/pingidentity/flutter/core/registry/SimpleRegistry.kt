@@ -29,8 +29,4 @@ class SimpleRegistry : Registry {
     override fun remove(id: String) {
         map.remove(id)
     }
-
-    override fun removeAll() {
-        map.clear()
-    }
 }

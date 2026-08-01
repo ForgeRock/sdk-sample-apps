@@ -11,8 +11,7 @@ import io.flutter.embedding.engine.plugins.FlutterPlugin
 
 /**
  * Trivial [FlutterPlugin] registration so the `ping_core` module loads and links
- * [CoreRuntime] into the app's classloader. Carries no Pigeon/method channel of its own —
- * see DESIGN.md for why the registry lives here instead of in `ping_journey`.
+ * [CoreRuntime] into the app's classloader. Carries no Pigeon/method channel of its own.
  */
 class PingCorePlugin : FlutterPlugin {
     override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {}

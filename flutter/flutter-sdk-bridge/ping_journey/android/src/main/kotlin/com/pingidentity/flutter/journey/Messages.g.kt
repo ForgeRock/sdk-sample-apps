@@ -398,11 +398,20 @@ data class CallbackMessage (
   val name: String? = null,
   /**
    * Validate-without-advancing flag (ValidatedUsername/ValidatedPassword/
-   * Attribute*InputCallback).
+   * Attribute*InputCallback). Read-only: reflects native state at mapping
+   * time; [CallbackValueMessage] has no field to send an updated value back
+   * to native (same limitation as the React Native bridge).
    */
   val validateOnly: Boolean? = null,
   val policies: Map<String?, Any?>? = null,
-  val failedPolicies: List<Map<String?, Any?>?>? = null,
+  /**
+   * Each element is a `Map<String?, Object?>?`. Typed as `List<Object?>?` (rather than
+   * `List<Map<String?, Object?>?>?`) because Pigeon's generated decoder does an unchecked
+   * `.cast<Map<String?, Object?>?>()` on nested collection element types, which throws at
+   * runtime the first time a real (non-empty) map element arrives over the wire — see
+   * `NodeMapper._castFailedPolicies` for the safe elementwise cast this requires on read.
+   */
+  val failedPolicies: List<Any?>? = null,
   /** Whether to mask input (ValidatedPasswordCallback). */
   val echoOn: Boolean? = null,
   /** TextOutputCallback message classification: INFORMATION/WARNING/ERROR/SCRIPT/UNKNOWN. */
@@ -433,7 +442,7 @@ data class CallbackMessage (
       val name = pigeonVar_list[18] as String?
       val validateOnly = pigeonVar_list[19] as Boolean?
       val policies = pigeonVar_list[20] as Map<String?, Any?>?
-      val failedPolicies = pigeonVar_list[21] as List<Map<String?, Any?>?>?
+      val failedPolicies = pigeonVar_list[21] as List<Any?>?
       val echoOn = pigeonVar_list[22] as Boolean?
       val messageType = pigeonVar_list[23] as String?
       val raw = pigeonVar_list[24] as Map<String?, Any?>?

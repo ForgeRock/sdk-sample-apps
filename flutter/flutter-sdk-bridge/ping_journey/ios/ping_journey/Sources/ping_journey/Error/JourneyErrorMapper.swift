@@ -32,12 +32,16 @@ enum JourneyErrorMapper {
         switch error {
         case JourneyHostApiError.journeyNotFound, JourneyHostApiError.stateError:
             type = "state"
-        case JourneyHostApiError.unsupported, JourneyHostApiError.callbackApply:
+        case JourneyHostApiError.callbackApply:
             type = "argument"
+        case JourneyHostApiError.unsupported:
+            // Matches Kotlin's UnsupportedOperationException -> "unsupported" mapping for the
+            // same logical case (an unmapped callback type reaching value application).
+            type = "unsupported"
         default:
             type = "unknown"
         }
-        return PigeonError(code: code, message: String(describing: error), details: type)
+        return PigeonError(code: code, message: plainErrorMessage(for: error), details: type)
     }
 
     /// Classifies an `OidcError` value (not caught via `throws` — returned via `Result.failure`).
@@ -51,4 +55,21 @@ enum JourneyErrorMapper {
         }
         return PigeonError(code: code, message: error.errorMessage, details: type)
     }
+}
+
+/// Plain message text for an arbitrary caught `Error`, preferring `LocalizedError.errorDescription`
+/// (e.g. the native SDK's `ApiError`) and `CustomStringConvertible.description` (e.g.
+/// `JourneyHostApiError`'s own plain-message case payload) over `String(describing:)` — which for a
+/// Swift enum with associated values dumps the case/argument reflection (e.g.
+/// `stateError("No active ContinueNode found...")`) rather than clean text — and over
+/// `localizedDescription`, which for a plain custom `Error` falls back to a generic bridged
+/// `NSError` description rather than anything the error type itself provides.
+func plainErrorMessage(for error: Error) -> String {
+    if let localizedError = error as? LocalizedError, let description = localizedError.errorDescription {
+        return description
+    }
+    if let describable = error as? CustomStringConvertible {
+        return describable.description
+    }
+    return error.localizedDescription
 }

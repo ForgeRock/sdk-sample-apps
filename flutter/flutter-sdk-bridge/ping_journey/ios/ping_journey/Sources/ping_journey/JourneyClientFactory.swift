@@ -28,7 +28,7 @@ final class JourneyHandle: NativeHandle, @unchecked Sendable {
 /// Builds a native `Journey` from a `JourneyConfigMessage` and registers it in the shared
 /// core registry, returning the generated `journeyId`.
 enum JourneyClientFactory {
-    static func create(_ config: JourneyConfigMessage) async -> String {
+    static func create(_ config: JourneyConfigMessage) async throws -> String {
         let journey = JourneyConfigParser.parse(config)
         let handle = JourneyHandle(journey: journey, hasOidc: JourneyConfigParser.hasOidcFields(config))
         return await CoreRuntime.journeyRegistry.register(handle)

@@ -37,7 +37,12 @@ class JourneyViewModel extends ChangeNotifier {
 
   Future<bool> signOff() async {
     try {
-      return await _repository.signOff();
+      final success = await _repository.signOff();
+      if (success) {
+        _node = null;
+        notifyListeners();
+      }
+      return success;
     } on PingException catch (error) {
       _error = error.message;
       notifyListeners();

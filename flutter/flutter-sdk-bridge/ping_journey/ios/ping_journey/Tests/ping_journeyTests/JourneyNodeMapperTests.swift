@@ -60,8 +60,9 @@ final class JourneyNodeMapperTests: XCTestCase {
         XCTAssertTrue(result.cause?.contains("Unknown node type") == true)
     }
 
-    func testMapContinueNodeExposesHeaderDescriptionStageAndCallbacks() {
+    func testMapContinueNodeExposesHeaderDescriptionStageAndCallbacks() async {
         let nameCallback = NameCallback()
+        _ = await nameCallback.initialize(with: ["type": "NameCallback"])
         let node = makeContinueNode(
             input: [
                 "header": "Welcome",
@@ -95,7 +96,9 @@ final class JourneyNodeMapperTests: XCTestCase {
 
     func testMapCallbackMapsNameCallbackPromptAndValue() async {
         let callback = NameCallback()
-        _ = await callback.initialize(with: outputOnly([("prompt", "Enter your name")]))
+        _ = await callback.initialize(
+            with: outputOnly("NameCallback", [("prompt", "Enter your name")])
+        )
         callback.name = "John Doe"
 
         let message = await mapSingleCallback(callback)
@@ -108,7 +111,9 @@ final class JourneyNodeMapperTests: XCTestCase {
 
     func testMapCallbackMapsPasswordCallbackPromptButNeverLeaksPasswordValue() async {
         let callback = PasswordCallback()
-        _ = await callback.initialize(with: outputOnly([("prompt", "Enter your password")]))
+        _ = await callback.initialize(
+            with: outputOnly("PasswordCallback", [("prompt", "Enter your password")])
+        )
         callback.password = "super-secret"
 
         let message = await mapSingleCallback(callback)
@@ -120,6 +125,7 @@ final class JourneyNodeMapperTests: XCTestCase {
 
     func testMapCallbackMapsValidatedUsernameCallbackUsernameAsValue() async {
         let callback = ValidatedUsernameCallback()
+        _ = await callback.initialize(with: ["type": "ValidatedUsernameCallback"])
         callback.username = "jdoe"
 
         let message = await mapSingleCallback(callback)
@@ -132,6 +138,7 @@ final class JourneyNodeMapperTests: XCTestCase {
         let callback = TextOutputCallback()
         _ = await callback.initialize(
             with: [
+                "type": "TextOutputCallback",
                 "output": [
                     ["name": "messageType", "value": "0"],
                     ["name": "message", "value": "Hello!"],
@@ -150,6 +157,7 @@ final class JourneyNodeMapperTests: XCTestCase {
         let callback = ChoiceCallback()
         _ = await callback.initialize(
             with: [
+                "type": "ChoiceCallback",
                 "output": [
                     ["name": "prompt", "value": "Pick one"],
                     ["name": "defaultChoice", "value": 1],
@@ -172,6 +180,7 @@ final class JourneyNodeMapperTests: XCTestCase {
         let callback = KbaCreateCallback()
         _ = await callback.initialize(
             with: [
+                "type": "KbaCreateCallback",
                 "output": [
                     ["name": "prompt", "value": "Security question"],
                     ["name": "predefinedQuestions", "value": ["Pet's name?", "First school?"]],
@@ -196,6 +205,7 @@ final class JourneyNodeMapperTests: XCTestCase {
         let callback = StringAttributeInputCallback()
         _ = await callback.initialize(
             with: [
+                "type": "StringAttributeInputCallback",
                 "output": [
                     ["name": "name", "value": "mail"],
                     ["name": "prompt", "value": "Email address"],
@@ -214,10 +224,13 @@ final class JourneyNodeMapperTests: XCTestCase {
         XCTAssertEqual(message.value as? String, "user@example.com")
     }
 
-    func testMapCallbacksAssignsPerTypeIndicesIndependently() {
+    func testMapCallbacksAssignsPerTypeIndicesIndependently() async {
         let name1 = NameCallback()
+        _ = await name1.initialize(with: ["type": "NameCallback"])
         let name2 = NameCallback()
+        _ = await name2.initialize(with: ["type": "NameCallback"])
         let password = PasswordCallback()
+        _ = await password.initialize(with: ["type": "PasswordCallback"])
         let node = makeContinueNode(input: [:], actions: [name1, password, name2])
 
         let result = JourneyNodeMapper.map(node)
@@ -245,9 +258,10 @@ final class JourneyNodeMapperTests: XCTestCase {
         return JourneyNodeMapper.map(node).callbacks!.first!!
     }
 
-    private func outputOnly(_ entries: [(String, String)]) -> [String: Any] {
+    private func outputOnly(_ type: String, _ entries: [(String, String)]) -> [String: Any] {
         [
-            "output": entries.map { ["name": $0.0, "value": $0.1] }
+            "type": type,
+            "output": entries.map { ["name": $0.0, "value": $0.1] },
         ]
     }
 }

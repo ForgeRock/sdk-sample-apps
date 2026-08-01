@@ -15,6 +15,11 @@ import PingOidc
 /// those arrive with a future module). `realm`/`cookie` are left unset when absent so the native
 /// SDK's own defaults (`realm = "root"`, `cookie = "iPlanetDirectoryPro"`) apply.
 enum JourneyConfigParser {
+    /// Explicit cross-platform default when `JourneyConfigMessage.timeoutMillis` is unset — the
+    /// native SDKs' own defaults diverge (Android 15s, iOS 30s), which otherwise makes the same
+    /// unset config wait a different duration per platform with no indication in code or docs.
+    static let defaultTimeoutMillis: Int64 = 30_000
+
     static func parse(_ message: JourneyConfigMessage) -> Journey {
         Journey.createJourney { journeyConfig in
             applyJourneyFields(message, to: journeyConfig)
@@ -30,9 +35,8 @@ enum JourneyConfigParser {
         journeyConfig.serverUrl = message.serverUrl
         if let realm = message.realm { journeyConfig.realm = realm }
         if let cookie = message.cookie { journeyConfig.cookie = cookie }
-        if let timeoutMillis = message.timeoutMillis {
-            journeyConfig.timeout = TimeInterval(timeoutMillis) / 1000
-        }
+        let timeoutMillis = message.timeoutMillis ?? defaultTimeoutMillis
+        journeyConfig.timeout = TimeInterval(timeoutMillis) / 1000
     }
 
     private static func applyOidcFields(_ message: JourneyConfigMessage, to oidcConfig: OidcClientConfig) {

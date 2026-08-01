@@ -28,9 +28,14 @@ enum JourneyNodeMapper {
         case is SuccessNode:
             return NodeMessage(type: .successNode)
         case let errorNode as ErrorNode:
-            return NodeMessage(type: .errorNode, message: errorNode.message, status: errorNode.status.map { Int64($0) })
+            return NodeMessage(
+                type: .errorNode,
+                message: errorNode.message,
+                status: errorNode.status.map { Int64($0) },
+                input: errorNode.input as? [String?: Any?]
+            )
         case let failureNode as FailureNode:
-            return NodeMessage(type: .failureNode, cause: String(describing: failureNode.cause))
+            return NodeMessage(type: .failureNode, cause: plainErrorMessage(for: failureNode.cause))
         default:
             return NodeMessage(type: .failureNode, cause: "Unknown node type: \(node)")
         }
@@ -39,11 +44,22 @@ enum JourneyNodeMapper {
     private static func mapCallbacks(_ node: ContinueNode) -> [CallbackMessage] {
         var typeCounts: [String: Int64] = [:]
         return node.callbacks.map { callback in
-            let type = String(describing: Swift.type(of: callback))
+            let type = callbackType(callback)
             let index = typeCounts[type, default: 0]
             typeCounts[type] = index + 1
             return mapCallback(callback, type: type, index: index)
         }
+    }
+
+    /// The server-registered `"type"` string from `AbstractCallback.json`, stable across
+    /// release-build symbol stripping — unlike `String(describing: type(of:))`, which reflects the
+    /// Swift runtime type name and isn't a wire-format guarantee.
+    private static func callbackType(_ callback: any Callback) -> String {
+        guard let abstractCallback = callback as? AbstractCallback,
+              let type = abstractCallback.json[JourneyConstants.type] as? String else {
+            fatalError("Callback is missing a \"type\" field: \(callback)")
+        }
+        return type
     }
 
     private static func mapCallback(_ callback: any Callback, type: String, index: Int64) -> CallbackMessage {
@@ -104,7 +120,9 @@ enum JourneyNodeMapper {
         case let stringAttribute as StringAttributeInputCallback:
             message.value = stringAttribute.value
         default:
-            break
+            if let abstractCallback = callback as? AbstractCallback {
+                message.raw = abstractCallback.json as? [String?: Any?]
+            }
         }
 
         return message

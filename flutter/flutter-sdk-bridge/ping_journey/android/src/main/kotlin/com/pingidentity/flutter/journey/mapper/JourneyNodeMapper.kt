@@ -12,6 +12,7 @@ import com.pingidentity.flutter.journey.NodeMessage
 import com.pingidentity.flutter.journey.NodeType
 import com.pingidentity.journey.callback.AbstractValidatedCallback
 import com.pingidentity.journey.callback.AttributeInputCallback
+import com.pingidentity.journey.plugin.AbstractCallback
 import com.pingidentity.journey.callback.BooleanAttributeInputCallback
 import com.pingidentity.journey.callback.ChoiceCallback
 import com.pingidentity.journey.callback.KbaCreateCallback
@@ -34,6 +35,8 @@ import com.pingidentity.orchestrate.ErrorNode
 import com.pingidentity.orchestrate.FailureNode
 import com.pingidentity.orchestrate.Node
 import com.pingidentity.orchestrate.SuccessNode
+import kotlinx.serialization.json.intOrNull
+import kotlinx.serialization.json.jsonPrimitive
 
 /**
  * Maps a native [Node] to the wire-serializable [NodeMessage], including full per-callback field
@@ -53,7 +56,13 @@ internal object JourneyNodeMapper {
                     callbacks = mapCallbacks(node),
                 )
             is SuccessNode -> NodeMessage(type = NodeType.SUCCESS_NODE)
-            is ErrorNode -> NodeMessage(type = NodeType.ERROR_NODE, message = node.message)
+            is ErrorNode ->
+                NodeMessage(
+                    type = NodeType.ERROR_NODE,
+                    message = node.message,
+                    status = node.input["code"]?.jsonPrimitive?.intOrNull?.toLong(),
+                    input = JsonBridgeMapper.encodeJsonElement(node.input) as? Map<String?, Any?>,
+                )
             is FailureNode ->
                 NodeMessage(
                     type = NodeType.FAILURE_NODE,
@@ -65,12 +74,20 @@ internal object JourneyNodeMapper {
     private fun mapCallbacks(node: ContinueNode): List<CallbackMessage> {
         val typeCounts = mutableMapOf<String, Int>()
         return node.callbacks.map { callback ->
-            val type = callback::class.java.simpleName
+            val type = callbackType(callback)
             val index = typeCounts.getOrDefault(type, 0)
             typeCounts[type] = index + 1
             mapCallback(callback, type, index.toLong())
         }
     }
+
+    /**
+     * The server-registered `"type"` string from [AbstractCallback.json], stable across R8/proguard
+     * minification — unlike [Any.javaClass]'s `simpleName`, which is obfuscated in a minified build.
+     */
+    private fun callbackType(callback: Callback): String =
+        (callback as AbstractCallback).json["type"]?.jsonPrimitive?.content
+            ?: throw IllegalStateException("Callback is missing a \"type\" field: $callback")
 
     private fun mapCallback(callback: Callback, type: String, index: Long): CallbackMessage {
         var message = CallbackMessage(type = type, index = index)
@@ -135,7 +152,11 @@ internal object JourneyNodeMapper {
             is BooleanAttributeInputCallback -> message.copy(value = callback.value)
             is NumberAttributeInputCallback -> message.copy(value = callback.value)
             is StringAttributeInputCallback -> message.copy(value = callback.value)
-            else -> message
+            else ->
+                message.copy(
+                    raw = JsonBridgeMapper.encodeJsonElement((callback as AbstractCallback).json)
+                        as? Map<String?, Any?>,
+                )
         }
     }
 }

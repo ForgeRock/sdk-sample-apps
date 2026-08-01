@@ -14,7 +14,7 @@ import 'package:flutter_journey/ui/features/journey/view_models/journey_view_mod
 import 'package:flutter_journey/ui/features/journey/views/journey_view.dart';
 import 'package:flutter_journey/ui/features/success/views/success_view.dart';
 
-/// `/config` -> `/journey-name` -> `/journey` -> `/success`, per DESIGN.md.
+/// `/config` -> `/journey-name` -> `/journey` -> `/success`.
 final GoRouter router = GoRouter(
   initialLocation: '/config',
   routes: [
@@ -26,9 +26,9 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: '/journey-name',
       builder: (context, state) => JourneyNameView(
-        onSubmit: (name) {
-          context.read<JourneyViewModel>().startJourney(name);
-          context.go('/journey');
+        onSubmit: (name) async {
+          await context.read<JourneyViewModel>().startJourney(name);
+          if (context.mounted) context.go('/journey');
         },
       ),
     ),
@@ -45,7 +45,7 @@ final GoRouter router = GoRouter(
         onSignOff: () async {
           final viewModel = context.read<JourneyViewModel>();
           await viewModel.signOff();
-          router.go('/journey-name');
+          if (context.mounted) context.go('/journey-name');
         },
       ),
     ),

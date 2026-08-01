@@ -19,9 +19,11 @@ import com.pingidentity.journey.callback.TermsAndConditionsCallback
 import com.pingidentity.journey.callback.TextInputCallback
 import com.pingidentity.journey.callback.ValidatedPasswordCallback
 import com.pingidentity.journey.callback.ValidatedUsernameCallback
+import com.pingidentity.journey.plugin.AbstractCallback
 import com.pingidentity.journey.plugin.Callback
 import com.pingidentity.journey.plugin.callbacks
 import com.pingidentity.orchestrate.ContinueNode
+import kotlinx.serialization.json.jsonPrimitive
 
 /**
  * Applies Dart-submitted [CallbackValueMessage]s back onto a cached native [ContinueNode]'s live
@@ -32,7 +34,7 @@ import com.pingidentity.orchestrate.ContinueNode
  */
 internal object JourneyCallbackValueApplier {
     fun apply(node: ContinueNode, values: List<CallbackValueMessage>) {
-        val callbacksByType = node.callbacks.groupBy { it::class.java.simpleName }
+        val callbacksByType = node.callbacks.groupBy(::callbackType)
         for (value in values) {
             val callback =
                 callbacksByType[value.type]?.getOrNull(value.index.toInt())
@@ -42,6 +44,14 @@ internal object JourneyCallbackValueApplier {
             applyValue(callback, value)
         }
     }
+
+    /**
+     * The server-registered `"type"` string from [AbstractCallback.json], stable across R8/proguard
+     * minification — unlike [Any.javaClass]'s `simpleName`, which is obfuscated in a minified build.
+     */
+    private fun callbackType(callback: Callback): String =
+        (callback as AbstractCallback).json["type"]?.jsonPrimitive?.content
+            ?: throw IllegalStateException("Callback is missing a \"type\" field: $callback")
 
     private fun applyValue(callback: Callback, value: CallbackValueMessage) {
         when (callback) {
@@ -65,11 +75,17 @@ internal object JourneyCallbackValueApplier {
 
     private fun applyKba(callback: KbaCreateCallback, value: CallbackValueMessage) {
         val map = asMap(value)
-        (map["selectedQuestion"] as? String)?.let { callback.selectedQuestion = it }
-        (map["selectedAnswer"] as? String)?.let { callback.selectedAnswer = it }
-        (map["allowUserDefinedQuestions"] as? Boolean)?.let {
-            callback.allowUserDefinedQuestions = it
-        }
+        callback.selectedQuestion =
+            map["selectedQuestion"] as? String
+                ?: throw IllegalArgumentException("${value.type} expects a String selectedQuestion")
+        callback.selectedAnswer =
+            map["selectedAnswer"] as? String
+                ?: throw IllegalArgumentException("${value.type} expects a String selectedAnswer")
+        callback.allowUserDefinedQuestions =
+            map["allowUserDefinedQuestions"] as? Boolean
+                ?: throw IllegalArgumentException(
+                    "${value.type} expects a Boolean allowUserDefinedQuestions"
+                )
     }
 
     private fun asString(value: CallbackValueMessage): String =

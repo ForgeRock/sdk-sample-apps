@@ -27,6 +27,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 /**
  * Implements the generated [PingJourneyHostApi]: `configureJourney`/`start` build the native
@@ -36,11 +38,11 @@ import kotlinx.coroutines.launch
 class JourneyHostApiImpl : PingJourneyHostApi {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
-    /** Most recent [Node] per journeyId. */
-    private val nodeMap = ConcurrentHashMap<String, Node>()
-
     /** Most recent [ContinueNode] per journeyId, for future callback re-resolution. */
     private val continueNodeMap = ConcurrentHashMap<String, ContinueNode>()
+
+    /** Serializes [next] per journeyId so a double-submit can't race two callback applications. */
+    private val nextMutexes = ConcurrentHashMap<String, Mutex>()
 
     override fun configureJourney(
         config: JourneyConfigMessage,
@@ -78,16 +80,19 @@ class JourneyHostApiImpl : PingJourneyHostApi {
         callback: (Result<NodeMessage>) -> Unit
     ) {
         scope.launch {
-            val result = runCatching {
-                val currentNode =
-                    continueNodeMap[journeyId]
-                        ?: throw IllegalStateException(
-                            "No active ContinueNode found for journeyId=$journeyId"
-                        )
-                JourneyCallbackValueApplier.apply(currentNode, values.filterNotNull())
-                val nextNode = currentNode.next()
-                setNode(journeyId, nextNode)
-                JourneyNodeMapper.map(nextNode)
+            val mutex = nextMutexes.getOrPut(journeyId) { Mutex() }
+            val result = mutex.withLock {
+                runCatching {
+                    val currentNode =
+                        continueNodeMap[journeyId]
+                            ?: throw IllegalStateException(
+                                "No active ContinueNode found for journeyId=$journeyId"
+                            )
+                    JourneyCallbackValueApplier.apply(currentNode, values.filterNotNull())
+                    val nextNode = currentNode.next()
+                    setNode(journeyId, nextNode)
+                    JourneyNodeMapper.map(nextNode)
+                }
             }
             callback(result.classifyError(JourneyErrorCodes.NEXT))
         }
@@ -113,7 +118,13 @@ class JourneyHostApiImpl : PingJourneyHostApi {
                                         @Suppress("UNCHECKED_CAST")
                                         JsonBridgeMapper.encodeJsonElement(uiResult.value) as? Map<String?, Any?>
                                     }
-                                    is PingResult.Failure -> null
+                                    is PingResult.Failure -> {
+                                        Log.w(
+                                            TAG,
+                                            "userinfo() failed for journeyId=$journeyId: ${uiResult.value}",
+                                        )
+                                        null
+                                    }
                                 }
                                 SessionMessage(
                                     accessToken = token.accessToken,
@@ -139,6 +150,7 @@ class JourneyHostApiImpl : PingJourneyHostApi {
         scope.launch {
             val result = runCatching {
                 val handle = resolveHandle(journeyId)
+                handle.journey.signOff().getOrThrow()
                 if (handle.hasOidc) {
                     handle.journey.user()?.logout()
                 }
@@ -162,7 +174,6 @@ class JourneyHostApiImpl : PingJourneyHostApi {
             ?: throw IllegalStateException("Journey instance not found for id=$journeyId")
 
     private fun setNode(journeyId: String, node: Node) {
-        nodeMap[journeyId] = node
         if (node is ContinueNode) {
             continueNodeMap[journeyId] = node
         } else {
@@ -171,16 +182,15 @@ class JourneyHostApiImpl : PingJourneyHostApi {
     }
 
     private fun clearNodeState(journeyId: String) {
-        nodeMap.remove(journeyId)
-        continueNodeMap.remove(journeyId)
-    }
-
-    private fun removeJourney(journeyId: String) {
         continueNodeMap.remove(journeyId)?.let { node ->
             runCatching { node.close() }
                 .onFailure { Log.w(TAG, "Failed to close ContinueNode for journeyId=$journeyId", it) }
         }
-        nodeMap.remove(journeyId)
+    }
+
+    private fun removeJourney(journeyId: String) {
+        clearNodeState(journeyId)
+        nextMutexes.remove(journeyId)
         CoreRuntime.journeyRegistry.remove(journeyId)
     }
 

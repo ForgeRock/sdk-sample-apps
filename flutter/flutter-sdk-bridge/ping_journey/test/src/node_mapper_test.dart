@@ -265,6 +265,37 @@ void main() {
     });
 
     test(
+      'maps the "ValidatedCreateUsernameCallback" wire type (the AM server\'s own callback '
+      'name on self-registration Journeys) to ValidatedUsernameCallback, not the '
+      'TextOutputCallback fallback (regression: this wire name differs from the native SDK\'s '
+      'local ValidatedUsernameCallback class name)',
+      () {
+        final callback = NodeMapper.mapCallback(
+          CallbackMessage(
+            type: 'ValidatedCreateUsernameCallback',
+            index: 0,
+            value: 'jdoe',
+          ),
+        );
+
+        expect(callback, isA<ValidatedUsernameCallback>());
+        expect(callback.toValue()!.type, 'ValidatedCreateUsernameCallback');
+      },
+    );
+
+    test(
+      'maps the "ValidatedCreatePasswordCallback" wire type to ValidatedPasswordCallback, not '
+      'the TextOutputCallback fallback (see ValidatedCreateUsernameCallback test above)',
+      () {
+        final callback = NodeMapper.mapCallback(
+          CallbackMessage(type: 'ValidatedCreatePasswordCallback', index: 0),
+        );
+
+        expect(callback, isA<ValidatedPasswordCallback>());
+      },
+    );
+
+    test(
       'ValidatedPasswordCallback re-inflates to an empty password (native never sends it '
       'back), then submits whatever the UI sets',
       () {
@@ -345,6 +376,59 @@ void main() {
       expect(value.type, 'NumberAttributeInputCallback');
       expect(value.value, 42.0);
     });
+
+    test(
+      'ValidatedPasswordCallback re-inflates failedPolicies decoded off a platform channel '
+      '(regression: CallbackMessage.decode hands back untyped Map<Object?, Object?> entries, '
+      'which must not be force-cast to Map<String?, Object?>)',
+      () {
+        final wireMessage = CallbackMessage.decode(<Object?>[
+          'ValidatedPasswordCallback', // type
+          0, // index
+          null, // prompt
+          null, // message
+          null, // required
+          null, // value
+          null, // choices
+          null, // defaultChoice
+          null, // selectedIndex
+          null, // terms
+          null, // version
+          null, // createDate
+          null, // accepted
+          null, // defaultText
+          null, // predefinedQuestions
+          null, // selectedQuestion
+          null, // selectedAnswer
+          null, // allowUserDefinedQuestions
+          null, // name
+          false, // validateOnly
+          null, // policies
+          <Object?>[
+            <Object?, Object?>{
+              'policyRequirement': 'MIN_LENGTH',
+              'params': <Object?, Object?>{'minLength': 8},
+            },
+          ], // failedPolicies
+          true, // echoOn
+          null, // messageType
+          null, // raw
+        ]);
+
+        final callback =
+            NodeMapper.mapCallback(wireMessage) as ValidatedPasswordCallback;
+
+        expect(callback.failedPolicies, hasLength(1));
+        expect(
+          callback.failedPolicies.single['policyRequirement'],
+          'MIN_LENGTH',
+        );
+        expect(
+          (callback.failedPolicies.single['params'] as Map)['minLength'],
+          8,
+        );
+      },
+    );
 
     test('BooleanAttributeInputCallback submits its boolean value', () {
       final callback =

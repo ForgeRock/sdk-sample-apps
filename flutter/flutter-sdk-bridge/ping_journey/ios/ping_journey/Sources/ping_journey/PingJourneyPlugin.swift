@@ -10,8 +10,18 @@ import UIKit
 
 /// Registers the generated `PingJourneyHostApi` Pigeon channel.
 public class PingJourneyPlugin: NSObject, FlutterPlugin {
+    private var api: JourneyHostApiImpl?
+
     public static func register(with registrar: FlutterPluginRegistrar) {
+        let instance = PingJourneyPlugin()
         let api = JourneyHostApiImpl()
+        instance.api = api
         PingJourneyHostApiSetup.setUp(binaryMessenger: registrar.messenger(), api: api)
+        registrar.publish(instance)
+    }
+
+    public func detachFromEngine(for registrar: FlutterPluginRegistrar) {
+        PingJourneyHostApiSetup.setUp(binaryMessenger: registrar.messenger(), api: nil)
+        api = nil
     }
 }

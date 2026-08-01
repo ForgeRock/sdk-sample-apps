@@ -18,12 +18,19 @@ import com.pingidentity.journey.module.Oidc
  * SDK's own defaults (`realm = "root"`, `cookie = "iPlanetDirectoryPro"`) apply.
  */
 internal object JourneyConfigParser {
+    /**
+     * Explicit cross-platform default when [JourneyConfigMessage.timeoutMillis] is unset — the
+     * native SDKs' own defaults diverge (Android 15s, iOS 30s), which otherwise makes the same
+     * unset config wait a different duration per platform with no indication in code or docs.
+     */
+    const val DEFAULT_TIMEOUT_MILLIS = 30_000L
+
     fun parse(config: JourneyConfigMessage): Journey =
         Journey {
             serverUrl = config.serverUrl
             config.realm?.let { realm = it }
             config.cookie?.let { cookie = it }
-            config.timeoutMillis?.let { timeout = it }
+            timeout = config.timeoutMillis ?: DEFAULT_TIMEOUT_MILLIS
 
             if (hasOidcConfig(config)) {
                 module(Oidc) {

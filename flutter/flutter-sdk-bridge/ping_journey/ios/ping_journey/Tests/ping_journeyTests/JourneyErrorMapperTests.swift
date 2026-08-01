@@ -45,12 +45,14 @@ final class JourneyErrorMapperTests: XCTestCase {
         XCTAssertEqual(result.details as? String, "state")
     }
 
-    func testFromClassifiesUnsupportedAsArgument() {
+    func testFromClassifiesUnsupportedAsUnsupported() {
+        // Matches Kotlin's UnsupportedOperationException -> "unsupported" mapping for the same
+        // logical case (an unmapped callback type reaching value application).
         let error = JourneyHostApiError.unsupported("not supported")
 
         let result = JourneyErrorMapper.from(code, error)
 
-        XCTAssertEqual(result.details as? String, "argument")
+        XCTAssertEqual(result.details as? String, "unsupported")
     }
 
     func testFromClassifiesCallbackApplyAsArgument() {
@@ -59,6 +61,14 @@ final class JourneyErrorMapperTests: XCTestCase {
         let result = JourneyErrorMapper.from(code, error)
 
         XCTAssertEqual(result.details as? String, "argument")
+    }
+
+    func testFromUsesThePlainErrorMessageNotEnumReflection() {
+        let error = JourneyHostApiError.stateError("No active ContinueNode found for journeyId=abc")
+
+        let result = JourneyErrorMapper.from(code, error)
+
+        XCTAssertEqual(result.message, "No active ContinueNode found for journeyId=abc")
     }
 
     func testFromClassifiesUnrecognizedErrorTypesAsUnknown() {

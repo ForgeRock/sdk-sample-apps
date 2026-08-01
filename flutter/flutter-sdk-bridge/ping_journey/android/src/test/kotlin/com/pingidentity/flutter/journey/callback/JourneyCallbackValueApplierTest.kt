@@ -20,9 +20,12 @@ import com.pingidentity.journey.callback.TextInputCallback
 import com.pingidentity.journey.callback.TextOutputCallback
 import com.pingidentity.journey.callback.ValidatedPasswordCallback
 import com.pingidentity.journey.callback.ValidatedUsernameCallback
+import com.pingidentity.journey.plugin.AbstractCallback
 import com.pingidentity.journey.plugin.Callback
 import com.pingidentity.orchestrate.Action
 import com.pingidentity.orchestrate.ContinueNode
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
 import kotlin.test.Test
@@ -134,23 +137,17 @@ class JourneyCallbackValueApplierTest {
     }
 
     @Test
-    fun `KbaCreateCallback partial map only updates provided sub-fields`() {
-        val callback = KbaCreateCallback().apply {
-            selectedQuestion = "existing question"
-            selectedAnswer = "existing answer"
-            allowUserDefinedQuestions = true
+    fun `KbaCreateCallback throws IllegalArgumentException when a sub-field is missing`() {
+        val callback = KbaCreateCallback()
+
+        assertFailsWith<IllegalArgumentException> {
+            apply(callback, "KbaCreateCallback", value = mapOf("selectedAnswer" to "new answer"))
         }
-
-        apply(callback, "KbaCreateCallback", value = mapOf("selectedAnswer" to "new answer"))
-
-        assertEquals("existing question", callback.selectedQuestion)
-        assertEquals("new answer", callback.selectedAnswer)
-        assertEquals(true, callback.allowUserDefinedQuestions)
     }
 
     @Test
     fun `throws for unsupported callback type such as TextOutputCallback`() {
-        val callback = TextOutputCallback()
+        val callback = TextOutputCallback().withType("TextOutputCallback")
         val node = mockNode(listOf(callback))
 
         assertFailsWith<UnsupportedOperationException> {
@@ -163,7 +160,7 @@ class JourneyCallbackValueApplierTest {
 
     @Test
     fun `throws IllegalArgumentException when no callback matches type and index`() {
-        val node = mockNode(listOf(NameCallback()))
+        val node = mockNode(listOf(NameCallback().withType("NameCallback")))
 
         val exception = assertFailsWith<IllegalArgumentException> {
             JourneyCallbackValueApplier.apply(
@@ -179,7 +176,7 @@ class JourneyCallbackValueApplierTest {
 
     @Test
     fun `throws IllegalArgumentException when value type mismatches expected type`() {
-        val callback = NameCallback()
+        val callback = NameCallback().withType("NameCallback")
         val node = mockNode(listOf(callback))
 
         assertFailsWith<IllegalArgumentException> {
@@ -192,8 +189,8 @@ class JourneyCallbackValueApplierTest {
 
     @Test
     fun `applies values addressed by index within same-type group`() {
-        val first = NameCallback()
-        val second = NameCallback()
+        val first = NameCallback().withType("NameCallback")
+        val second = NameCallback().withType("NameCallback")
         val node = mockNode(listOf(first, second))
 
         JourneyCallbackValueApplier.apply(
@@ -213,8 +210,18 @@ class JourneyCallbackValueApplierTest {
         return node
     }
 
+    /**
+     * Initializes [AbstractCallback.json] with the given server-registered `"type"` string, as
+     * [JourneyCallbackValueApplier] now keys lookups off that field rather than the runtime class
+     * name (see the R8/minification fix).
+     */
+    private fun <T : Callback> T.withType(type: String): T {
+        (this as AbstractCallback).init(buildJsonObject { put("type", type) })
+        return this
+    }
+
     private fun apply(callback: Callback, type: String, value: Any?) {
-        val node = mockNode(listOf(callback))
+        val node = mockNode(listOf(callback.withType(type)))
         JourneyCallbackValueApplier.apply(node, listOf(CallbackValueMessage(type = type, index = 0, value = value)))
     }
 }

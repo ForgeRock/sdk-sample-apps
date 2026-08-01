@@ -18,8 +18,7 @@ enum JourneyCallbackValueApplier {
     static func apply(_ node: ContinueNode, values: [CallbackValueMessage]) throws {
         var callbacksByType: [String: [any Callback]] = [:]
         for callback in node.callbacks {
-            let type = String(describing: Swift.type(of: callback))
-            callbacksByType[type, default: []].append(callback)
+            callbacksByType[try callbackType(callback), default: []].append(callback)
         }
 
         for value in values {
@@ -31,6 +30,17 @@ enum JourneyCallbackValueApplier {
             }
             try applyValue(matching[Int(value.index)], value)
         }
+    }
+
+    /// The server-registered `"type"` string from `AbstractCallback.json`, stable across
+    /// release-build symbol stripping — unlike `String(describing: type(of:))`, which reflects the
+    /// Swift runtime type name and isn't a wire-format guarantee.
+    private static func callbackType(_ callback: any Callback) throws -> String {
+        guard let abstractCallback = callback as? AbstractCallback,
+              let type = abstractCallback.json[JourneyConstants.type] as? String else {
+            throw JourneyHostApiError.callbackApply("Callback is missing a \"type\" field: \(callback)")
+        }
+        return type
     }
 
     private static func applyValue(_ callback: any Callback, _ value: CallbackValueMessage) throws {
@@ -66,15 +76,20 @@ enum JourneyCallbackValueApplier {
 
     private static func applyKba(_ callback: KbaCreateCallback, _ value: CallbackValueMessage) throws {
         let map = try asMap(value)
-        if let selectedQuestion = map["selectedQuestion"] as? String {
-            callback.selectedQuestion = selectedQuestion
+        guard let selectedQuestion = map["selectedQuestion"] as? String else {
+            throw JourneyHostApiError.callbackApply("\(value.type) expects a String selectedQuestion")
         }
-        if let selectedAnswer = map["selectedAnswer"] as? String {
-            callback.selectedAnswer = selectedAnswer
+        guard let selectedAnswer = map["selectedAnswer"] as? String else {
+            throw JourneyHostApiError.callbackApply("\(value.type) expects a String selectedAnswer")
         }
-        if let allowUserDefinedQuestions = map["allowUserDefinedQuestions"] as? Bool {
-            callback.allowUserDefinedQuestions = allowUserDefinedQuestions
+        guard let allowUserDefinedQuestions = map["allowUserDefinedQuestions"] as? Bool else {
+            throw JourneyHostApiError.callbackApply(
+                "\(value.type) expects a Bool allowUserDefinedQuestions"
+            )
         }
+        callback.selectedQuestion = selectedQuestion
+        callback.selectedAnswer = selectedAnswer
+        callback.allowUserDefinedQuestions = allowUserDefinedQuestions
     }
 
     private static func asString(_ value: CallbackValueMessage) throws -> String {

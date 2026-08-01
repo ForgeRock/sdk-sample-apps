@@ -368,12 +368,19 @@ class CallbackMessage {
   String? name;
 
   /// Validate-without-advancing flag (ValidatedUsername/ValidatedPassword/
-  /// Attribute*InputCallback).
+  /// Attribute*InputCallback). Read-only: reflects native state at mapping
+  /// time; [CallbackValueMessage] has no field to send an updated value back
+  /// to native (same limitation as the React Native bridge).
   bool? validateOnly;
 
   Map<String?, Object?>? policies;
 
-  List<Map<String?, Object?>?>? failedPolicies;
+  /// Each element is a `Map<String?, Object?>?`. Typed as `List<Object?>?` (rather than
+  /// `List<Map<String?, Object?>?>?`) because Pigeon's generated decoder does an unchecked
+  /// `.cast<Map<String?, Object?>?>()` on nested collection element types, which throws at
+  /// runtime the first time a real (non-empty) map element arrives over the wire — see
+  /// `NodeMapper._castFailedPolicies` for the safe elementwise cast this requires on read.
+  List<Object?>? failedPolicies;
 
   /// Whether to mask input (ValidatedPasswordCallback).
   bool? echoOn;
@@ -440,7 +447,7 @@ class CallbackMessage {
       name: result[18] as String?,
       validateOnly: result[19] as bool?,
       policies: (result[20] as Map<Object?, Object?>?)?.cast<String?, Object?>(),
-      failedPolicies: (result[21] as List<Object?>?)?.cast<Map<String?, Object?>?>(),
+      failedPolicies: result[21] as List<Object?>?,
       echoOn: result[22] as bool?,
       messageType: result[23] as String?,
       raw: (result[24] as Map<Object?, Object?>?)?.cast<String?, Object?>(),

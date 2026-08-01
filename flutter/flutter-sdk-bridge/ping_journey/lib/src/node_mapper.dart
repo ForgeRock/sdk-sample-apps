@@ -42,9 +42,10 @@ class NodeMapper {
       };
 
   /// Maps a [CallbackMessage] to the matching [Callback] subtype, keyed by its native class-name
-  /// [CallbackMessage.type]. Unrecognized types are not representable in the v1 sealed hierarchy
-  /// and are dropped by the caller (see [ContinueNode.callbacks] construction above, via
-  /// `whereType`/`map` — a switch here must still be exhaustive over the *known* wire names).
+  /// [CallbackMessage.type]. Unrecognized types are not representable in the v1 sealed hierarchy,
+  /// so the `_` case below renders them as a generic [TextOutputCallback] with a placeholder
+  /// message instead of dropping them. [CallbackMessage.raw] (the native callback's full JSON) is
+  /// still populated on the wire for these types, for debugging/diagnostic purposes.
   static Callback mapCallback(
     CallbackMessage message,
   ) => switch (message.type) {
@@ -59,7 +60,8 @@ class NodeMapper {
       index: message.index,
       prompt: message.prompt,
     ),
-    CallbackType.validatedUsernameCallback => ValidatedUsernameCallback(
+    CallbackType.validatedUsernameCallback ||
+    CallbackType.validatedCreateUsernameCallback => ValidatedUsernameCallback(
       type: message.type,
       index: message.index,
       prompt: message.prompt,
@@ -68,7 +70,8 @@ class NodeMapper {
       policies: message.policies?.cast<String, Object?>(),
       failedPolicies: _castFailedPolicies(message.failedPolicies),
     ),
-    CallbackType.validatedPasswordCallback => ValidatedPasswordCallback(
+    CallbackType.validatedPasswordCallback ||
+    CallbackType.validatedCreatePasswordCallback => ValidatedPasswordCallback(
       type: message.type,
       index: message.index,
       prompt: message.prompt,
@@ -162,10 +165,10 @@ class NodeMapper {
   };
 
   static List<Map<String, Object?>> _castFailedPolicies(
-    List<Map<String?, Object?>?>? raw,
+    List<Object?>? raw,
   ) =>
       raw
-          ?.whereType<Map<String?, Object?>>()
+          ?.whereType<Map<Object?, Object?>>()
           .map((m) => m.cast<String, Object?>())
           .toList() ??
       const [];

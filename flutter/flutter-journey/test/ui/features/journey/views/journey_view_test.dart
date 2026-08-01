@@ -16,12 +16,22 @@ import 'package:provider/provider.dart';
 /// Stubs the network-bound [JourneyRepository] so [JourneyViewModel.startJourney] resolves to a
 /// fixed [JourneyNode] instead of calling the real plugin.
 class _StubJourneyRepository extends JourneyRepository {
-  _StubJourneyRepository(this.node);
+  _StubJourneyRepository(this.node, {this.nextError});
 
   final JourneyNode node;
 
+  /// When set, [next] throws this instead of returning a node.
+  final PingException? nextError;
+
   @override
   Future<JourneyNode> startJourney(String journeyName) async => node;
+
+  @override
+  Future<JourneyNode> next(ContinueNode node) async {
+    final error = nextError;
+    if (error != null) throw error;
+    return node;
+  }
 }
 
 NameCallback _nameCallback() =>
@@ -35,8 +45,11 @@ Future<JourneyViewModel> _pumpJourneyView(
   JourneyNode node, {
   VoidCallback onRestart = _noop,
   VoidCallback onSuccess = _noop,
+  PingException? nextError,
 }) async {
-  final viewModel = JourneyViewModel(repository: _StubJourneyRepository(node));
+  final viewModel = JourneyViewModel(
+    repository: _StubJourneyRepository(node, nextError: nextError),
+  );
   await viewModel.startJourney('Login');
 
   await tester.pumpWidget(
@@ -67,6 +80,34 @@ void main() {
       expect(find.widgetWithText(TextField, 'User Name'), findsOneWidget);
       expect(find.widgetWithText(TextField, 'Password'), findsOneWidget);
       expect(find.widgetWithText(ElevatedButton, 'Next'), findsOneWidget);
+    },
+  );
+
+  testWidgets(
+    'next() throwing a PingException renders the error above the same ContinueNode form',
+    (tester) async {
+      final node = ContinueNode(
+        journeyId: 'journey-1',
+        callbacks: [_nameCallback(), _passwordCallback()],
+      );
+
+      await _pumpJourneyView(
+        tester,
+        node,
+        nextError: const PingException(
+          'JOURNEY_NEXT_ERROR',
+          'network',
+          'The request timed out.',
+        ),
+      );
+
+      await tester.tap(find.widgetWithText(ElevatedButton, 'Next'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('The request timed out.'), findsOneWidget);
+      // The form itself is still rendered — the user isn't stuck on a blank screen.
+      expect(find.widgetWithText(TextField, 'User Name'), findsOneWidget);
+      expect(find.widgetWithText(TextField, 'Password'), findsOneWidget);
     },
   );
 

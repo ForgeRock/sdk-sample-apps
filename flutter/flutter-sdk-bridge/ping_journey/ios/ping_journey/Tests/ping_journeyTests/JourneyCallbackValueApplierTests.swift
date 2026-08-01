@@ -15,79 +15,79 @@ import PingOrchestrate
 /// value lands on the correct native field, and that lookup/type-mismatch failures are surfaced.
 final class JourneyCallbackValueApplierTests: XCTestCase {
 
-    func testAppliesStringValueOntoNameCallbackName() throws {
+    func testAppliesStringValueOntoNameCallbackName() async throws {
         let callback = NameCallback()
-        try apply(callback, type: "NameCallback", value: "John Doe")
+        try await apply(callback, type: "NameCallback", value: "John Doe")
 
         XCTAssertEqual(callback.name, "John Doe")
     }
 
-    func testAppliesStringValueOntoPasswordCallbackPassword() throws {
+    func testAppliesStringValueOntoPasswordCallbackPassword() async throws {
         let callback = PasswordCallback()
-        try apply(callback, type: "PasswordCallback", value: "s3cr3t")
+        try await apply(callback, type: "PasswordCallback", value: "s3cr3t")
 
         XCTAssertEqual(callback.password, "s3cr3t")
     }
 
-    func testAppliesStringValueOntoValidatedUsernameCallbackUsername() throws {
+    func testAppliesStringValueOntoValidatedUsernameCallbackUsername() async throws {
         let callback = ValidatedUsernameCallback()
-        try apply(callback, type: "ValidatedUsernameCallback", value: "jdoe")
+        try await apply(callback, type: "ValidatedUsernameCallback", value: "jdoe")
 
         XCTAssertEqual(callback.username, "jdoe")
     }
 
-    func testAppliesStringValueOntoValidatedPasswordCallbackPassword() throws {
+    func testAppliesStringValueOntoValidatedPasswordCallbackPassword() async throws {
         let callback = ValidatedPasswordCallback()
-        try apply(callback, type: "ValidatedPasswordCallback", value: "s3cr3t")
+        try await apply(callback, type: "ValidatedPasswordCallback", value: "s3cr3t")
 
         XCTAssertEqual(callback.password, "s3cr3t")
     }
 
-    func testAppliesStringValueOntoTextInputCallbackText() throws {
+    func testAppliesStringValueOntoTextInputCallbackText() async throws {
         let callback = TextInputCallback()
-        try apply(callback, type: "TextInputCallback", value: "some text")
+        try await apply(callback, type: "TextInputCallback", value: "some text")
 
         XCTAssertEqual(callback.text, "some text")
     }
 
-    func testAppliesStringValueOntoStringAttributeInputCallbackValue() throws {
+    func testAppliesStringValueOntoStringAttributeInputCallbackValue() async throws {
         let callback = StringAttributeInputCallback()
-        try apply(callback, type: "StringAttributeInputCallback", value: "user@example.com")
+        try await apply(callback, type: "StringAttributeInputCallback", value: "user@example.com")
 
         XCTAssertEqual(callback.value, "user@example.com")
     }
 
-    func testAppliesNumericValueOntoNumberAttributeInputCallbackValueAsDouble() throws {
+    func testAppliesNumericValueOntoNumberAttributeInputCallbackValueAsDouble() async throws {
         let callback = NumberAttributeInputCallback()
-        try apply(callback, type: "NumberAttributeInputCallback", value: NSNumber(value: 42))
+        try await apply(callback, type: "NumberAttributeInputCallback", value: NSNumber(value: 42))
 
         XCTAssertEqual(callback.value, 42.0)
     }
 
-    func testAppliesBoolValueOntoBooleanAttributeInputCallbackValue() throws {
+    func testAppliesBoolValueOntoBooleanAttributeInputCallbackValue() async throws {
         let callback = BooleanAttributeInputCallback()
-        try apply(callback, type: "BooleanAttributeInputCallback", value: true)
+        try await apply(callback, type: "BooleanAttributeInputCallback", value: true)
 
         XCTAssertEqual(callback.value, true)
     }
 
-    func testAppliesNumericValueOntoChoiceCallbackSelectedIndex() throws {
+    func testAppliesNumericValueOntoChoiceCallbackSelectedIndex() async throws {
         let callback = ChoiceCallback()
-        try apply(callback, type: "ChoiceCallback", value: NSNumber(value: 2))
+        try await apply(callback, type: "ChoiceCallback", value: NSNumber(value: 2))
 
         XCTAssertEqual(callback.selectedIndex, 2)
     }
 
-    func testAppliesBoolValueOntoTermsAndConditionsCallbackAccepted() throws {
+    func testAppliesBoolValueOntoTermsAndConditionsCallbackAccepted() async throws {
         let callback = TermsAndConditionsCallback()
-        try apply(callback, type: "TermsAndConditionsCallback", value: true)
+        try await apply(callback, type: "TermsAndConditionsCallback", value: true)
 
         XCTAssertEqual(callback.accepted, true)
     }
 
-    func testAppliesMapValueOntoKbaCreateCallbackSubFields() throws {
+    func testAppliesMapValueOntoKbaCreateCallbackSubFields() async throws {
         let callback = KbaCreateCallback()
-        try apply(
+        try await apply(
             callback,
             type: "KbaCreateCallback",
             value: [
@@ -102,21 +102,22 @@ final class JourneyCallbackValueApplierTests: XCTestCase {
         XCTAssertEqual(callback.allowUserDefinedQuestions, true)
     }
 
-    func testKbaCreateCallbackPartialMapOnlyUpdatesProvidedSubFields() throws {
+    func testKbaCreateCallbackThrowsCallbackApplyWhenASubFieldIsMissing() async throws {
         let callback = KbaCreateCallback()
-        callback.selectedQuestion = "existing question"
-        callback.selectedAnswer = "existing answer"
-        callback.allowUserDefinedQuestions = true
 
-        try apply(callback, type: "KbaCreateCallback", value: ["selectedAnswer": "new answer"])
-
-        XCTAssertEqual(callback.selectedQuestion, "existing question")
-        XCTAssertEqual(callback.selectedAnswer, "new answer")
-        XCTAssertEqual(callback.allowUserDefinedQuestions, true)
+        do {
+            try await apply(callback, type: "KbaCreateCallback", value: ["selectedAnswer": "new answer"])
+            XCTFail("Expected .callbackApply to be thrown")
+        } catch JourneyHostApiError.callbackApply {
+            // expected
+        } catch {
+            XCTFail("Expected .callbackApply, got \(error)")
+        }
     }
 
-    func testThrowsForUnsupportedCallbackTypeSuchAsTextOutputCallback() throws {
+    func testThrowsForUnsupportedCallbackTypeSuchAsTextOutputCallback() async throws {
         let callback = TextOutputCallback()
+        _ = await callback.initialize(with: ["type": "TextOutputCallback"])
         let node = makeContinueNode(actions: [callback])
 
         XCTAssertThrowsError(
@@ -131,8 +132,10 @@ final class JourneyCallbackValueApplierTests: XCTestCase {
         }
     }
 
-    func testThrowsCallbackApplyWhenNoCallbackMatchesTypeAndIndex() throws {
-        let node = makeContinueNode(actions: [NameCallback()])
+    func testThrowsCallbackApplyWhenNoCallbackMatchesTypeAndIndex() async throws {
+        let callback = NameCallback()
+        _ = await callback.initialize(with: ["type": "NameCallback"])
+        let node = makeContinueNode(actions: [callback])
 
         XCTAssertThrowsError(
             try JourneyCallbackValueApplier.apply(
@@ -147,8 +150,9 @@ final class JourneyCallbackValueApplierTests: XCTestCase {
         }
     }
 
-    func testThrowsCallbackApplyWhenValueTypeMismatchesExpectedType() throws {
+    func testThrowsCallbackApplyWhenValueTypeMismatchesExpectedType() async throws {
         let callback = NameCallback()
+        _ = await callback.initialize(with: ["type": "NameCallback"])
         let node = makeContinueNode(actions: [callback])
 
         XCTAssertThrowsError(
@@ -163,9 +167,11 @@ final class JourneyCallbackValueApplierTests: XCTestCase {
         }
     }
 
-    func testAppliesValuesAddressedByIndexWithinSameTypeGroup() throws {
+    func testAppliesValuesAddressedByIndexWithinSameTypeGroup() async throws {
         let first = NameCallback()
+        _ = await first.initialize(with: ["type": "NameCallback"])
         let second = NameCallback()
+        _ = await second.initialize(with: ["type": "NameCallback"])
         let node = makeContinueNode(actions: [first, second])
 
         try JourneyCallbackValueApplier.apply(
@@ -185,7 +191,10 @@ final class JourneyCallbackValueApplierTests: XCTestCase {
         return ContinueNode(context: context, workflow: workflow, input: [:], actions: actions)
     }
 
-    private func apply(_ callback: any Callback, type: String, value: Any?) throws {
+    private func apply(_ callback: any Callback, type: String, value: Any?) async throws {
+        if let abstractCallback = callback as? AbstractCallback {
+            _ = await abstractCallback.initialize(with: ["type": type])
+        }
         let node = makeContinueNode(actions: [callback])
         try JourneyCallbackValueApplier.apply(
             node,

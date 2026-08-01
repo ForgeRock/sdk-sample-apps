@@ -9,8 +9,7 @@ import Flutter
 import UIKit
 
 /// Trivial `FlutterPlugin` registration so the `ping_core` module loads and links
-/// `CoreRuntime` into the app binary. Carries no Pigeon/method channel of its own —
-/// see DESIGN.md for why the registry lives here instead of in `ping_journey`.
+/// `CoreRuntime` into the app binary. Carries no Pigeon/method channel of its own.
 public class PingCorePlugin: NSObject, FlutterPlugin {
     public static func register(with registrar: FlutterPluginRegistrar) {}
 }

@@ -15,16 +15,31 @@ import 'package:flutter_journey/ui/core/widgets/primary_button.dart';
 
 /// Read-only display of the active [Env] — analog of the native samples' server/realm config
 /// screen (Android's `Env.kt`), shown before starting a Journey.
+///
+/// [serverUrl]/[realm]/[cookie]/[oidcConfig] default to [Env]'s values but are injectable so
+/// tests can exercise a real (non-placeholder) config without depending on — or overriding —
+/// the app-wide [Env] singleton.
 class ConfigView extends StatelessWidget {
-  const ConfigView({super.key, required this.onContinue});
+  const ConfigView({
+    super.key,
+    required this.onContinue,
+    this.serverUrl = Env.serverUrl,
+    this.realm = Env.realm,
+    this.cookie = Env.cookie,
+    this.oidcConfig = Env.oidcConfig,
+  });
 
   final VoidCallback onContinue;
+  final String serverUrl;
+  final String realm;
+  final String cookie;
+  final OidcConfig? oidcConfig;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Active Environment')),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -35,10 +50,10 @@ class ConfigView extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _ConfigRow(label: 'Server URL', value: Env.serverUrl),
-                  _ConfigRow(label: 'Realm', value: Env.realm),
-                  _ConfigRow(label: 'Cookie', value: Env.cookie),
-                  if (Env.oidcConfig case final oidc?) ...[
+                  _ConfigRow(label: 'Server URL', value: serverUrl),
+                  _ConfigRow(label: 'Realm', value: realm),
+                  _ConfigRow(label: 'Cookie', value: cookie),
+                  if (oidcConfig case final oidc?) ...[
                     _ConfigRow(label: 'Client ID', value: oidc.clientId),
                     _ConfigRow(
                       label: 'Discovery Endpoint',
@@ -49,7 +64,7 @@ class ConfigView extends StatelessWidget {
                 ],
               ),
             ),
-            const Spacer(),
+            const SizedBox(height: 24),
             PrimaryButton(label: 'Continue', onPressed: onContinue),
           ],
         ),

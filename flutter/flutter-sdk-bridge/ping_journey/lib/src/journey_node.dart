@@ -54,7 +54,7 @@ final class ErrorNode extends JourneyNode {
   /// The human-readable error message reported by the server.
   final String message;
 
-  /// HTTP status, when the native SDK exposes one (iOS only; Android has no equivalent field).
+  /// HTTP status of the server error response, when present.
   final int? status;
 }
 

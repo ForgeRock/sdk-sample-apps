@@ -102,6 +102,11 @@ class _ContinueNodeView extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          if (viewModel.error != null)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: ErrorBanner(message: viewModel.error!),
+            ),
           if (node.header?.isNotEmpty ?? false)
             Padding(
               padding: const EdgeInsets.only(bottom: 8),
@@ -117,6 +122,7 @@ class _ContinueNodeView extends StatelessWidget {
             ),
           for (final callback in node.callbacks)
             Padding(
+              key: ObjectKey(callback),
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: switch (callback) {
                 NameCallback() => NameCallbackView(

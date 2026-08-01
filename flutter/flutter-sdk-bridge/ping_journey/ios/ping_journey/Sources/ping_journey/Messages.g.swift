@@ -391,10 +391,17 @@ struct CallbackMessage: Hashable, CustomStringConvertible {
   /// Attribute name/label (Attribute*InputCallback), distinct from [value].
   var name: String? = nil
   /// Validate-without-advancing flag (ValidatedUsername/ValidatedPassword/
-  /// Attribute*InputCallback).
+  /// Attribute*InputCallback). Read-only: reflects native state at mapping
+  /// time; [CallbackValueMessage] has no field to send an updated value back
+  /// to native (same limitation as the React Native bridge).
   var validateOnly: Bool? = nil
   var policies: [String?: Any?]? = nil
-  var failedPolicies: [[String?: Any?]?]? = nil
+  /// Each element is a `Map<String?, Object?>?`. Typed as `List<Object?>?` (rather than
+  /// `List<Map<String?, Object?>?>?`) because Pigeon's generated decoder does an unchecked
+  /// `.cast<Map<String?, Object?>?>()` on nested collection element types, which throws at
+  /// runtime the first time a real (non-empty) map element arrives over the wire — see
+  /// `NodeMapper._castFailedPolicies` for the safe elementwise cast this requires on read.
+  var failedPolicies: [Any?]? = nil
   /// Whether to mask input (ValidatedPasswordCallback).
   var echoOn: Bool? = nil
   /// TextOutputCallback message classification: INFORMATION/WARNING/ERROR/SCRIPT/UNKNOWN.
@@ -425,7 +432,7 @@ struct CallbackMessage: Hashable, CustomStringConvertible {
     let name: String? = nilOrValue(pigeonVar_list[18])
     let validateOnly: Bool? = nilOrValue(pigeonVar_list[19])
     let policies: [String?: Any?]? = nilOrValue(pigeonVar_list[20])
-    let failedPolicies: [[String?: Any?]?]? = nilOrValue(pigeonVar_list[21])
+    let failedPolicies: [Any?]? = nilOrValue(pigeonVar_list[21])
     let echoOn: Bool? = nilOrValue(pigeonVar_list[22])
     let messageType: String? = nilOrValue(pigeonVar_list[23])
     let raw: [String?: Any?]? = nilOrValue(pigeonVar_list[24])

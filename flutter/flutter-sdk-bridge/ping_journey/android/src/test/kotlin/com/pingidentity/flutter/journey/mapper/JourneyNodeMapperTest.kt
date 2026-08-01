@@ -15,6 +15,7 @@ import com.pingidentity.journey.callback.PasswordCallback
 import com.pingidentity.journey.callback.StringAttributeInputCallback
 import com.pingidentity.journey.callback.TextOutputCallback
 import com.pingidentity.journey.callback.ValidatedUsernameCallback
+import com.pingidentity.journey.plugin.AbstractCallback
 import com.pingidentity.journey.plugin.Callback
 import com.pingidentity.orchestrate.Action
 import com.pingidentity.orchestrate.ContinueNode
@@ -62,6 +63,24 @@ class JourneyNodeMapperTest {
     }
 
     @Test
+    fun `map ErrorNode extracts status from input code field`() {
+        val flowContext = FlowContext(SharedContext(mutableMapOf()))
+        val node = ErrorNode(
+            context = flowContext,
+            message = "Login failure",
+            input = buildJsonObject {
+                put("code", 401)
+                put("message", "Login failure")
+            },
+        )
+
+        val result = JourneyNodeMapper.map(node)
+
+        assertEquals(401L, result.status)
+        assertEquals("Login failure", result.input?.get("message"))
+    }
+
+    @Test
     fun `map FailureNode returns FAILURE_NODE type with cause message`() {
         val node = FailureNode(cause = IllegalStateException("bad state"))
 
@@ -94,7 +113,7 @@ class JourneyNodeMapperTest {
 
     @Test
     fun `map ContinueNode exposes header, description, stage and callbacks`() {
-        val nameCallback = NameCallback()
+        val nameCallback = NameCallback().withType("NameCallback")
         val node = mockContinueNode(
             input = buildJsonObject {
                 put("header", "Welcome")
@@ -129,7 +148,9 @@ class JourneyNodeMapperTest {
 
     @Test
     fun `mapCallback maps NameCallback prompt and value`() {
-        val callback = NameCallback().apply { init(outputOnly("prompt" to "Enter your name")) }
+        val callback = NameCallback().apply {
+            init(outputOnly("NameCallback", "prompt" to "Enter your name"))
+        }
         callback.name = "John Doe"
 
         val message = mapSingleCallback(callback)
@@ -142,7 +163,9 @@ class JourneyNodeMapperTest {
 
     @Test
     fun `mapCallback maps PasswordCallback prompt but never leaks the password value`() {
-        val callback = PasswordCallback().apply { init(outputOnly("prompt" to "Enter your password")) }
+        val callback = PasswordCallback().apply {
+            init(outputOnly("PasswordCallback", "prompt" to "Enter your password"))
+        }
         callback.password = "super-secret"
 
         val message = mapSingleCallback(callback)
@@ -154,7 +177,7 @@ class JourneyNodeMapperTest {
 
     @Test
     fun `mapCallback maps ValidatedUsernameCallback username as value`() {
-        val callback = ValidatedUsernameCallback()
+        val callback = ValidatedUsernameCallback().withType("ValidatedUsernameCallback")
         callback.username = "jdoe"
 
         val message = mapSingleCallback(callback)
@@ -168,6 +191,7 @@ class JourneyNodeMapperTest {
         val callback = TextOutputCallback().apply {
             init(
                 buildJsonObject {
+                    put("type", "TextOutputCallback")
                     put(
                         "output",
                         buildJsonArray {
@@ -191,6 +215,7 @@ class JourneyNodeMapperTest {
         val callback = ChoiceCallback().apply {
             init(
                 buildJsonObject {
+                    put("type", "ChoiceCallback")
                     put(
                         "output",
                         buildJsonArray {
@@ -229,6 +254,7 @@ class JourneyNodeMapperTest {
         val callback = KbaCreateCallback().apply {
             init(
                 buildJsonObject {
+                    put("type", "KbaCreateCallback")
                     put(
                         "output",
                         buildJsonArray {
@@ -269,6 +295,7 @@ class JourneyNodeMapperTest {
         val callback = StringAttributeInputCallback().apply {
             init(
                 buildJsonObject {
+                    put("type", "StringAttributeInputCallback")
                     put(
                         "output",
                         buildJsonArray {
@@ -293,9 +320,9 @@ class JourneyNodeMapperTest {
 
     @Test
     fun `mapCallbacks assigns per-type indices independently`() {
-        val name1 = NameCallback()
-        val name2 = NameCallback()
-        val password = PasswordCallback()
+        val name1 = NameCallback().withType("NameCallback")
+        val name2 = NameCallback().withType("NameCallback")
+        val password = PasswordCallback().withType("PasswordCallback")
         val node = mockContinueNode(input = buildJsonObject {}, actions = listOf(name1, password, name2))
 
         val result = JourneyNodeMapper.map(node)
@@ -325,8 +352,9 @@ class JourneyNodeMapperTest {
     private fun mapSingleCallback(callback: Callback) =
         JourneyNodeMapper.map(mockContinueNode(buildJsonObject {}, listOf(callback))).callbacks!!.single()!!
 
-    private fun outputOnly(vararg entries: Pair<String, String>) =
+    private fun outputOnly(type: String, vararg entries: Pair<String, String>) =
         buildJsonObject {
+            put("type", type)
             put(
                 "output",
                 buildJsonArray {
@@ -336,4 +364,14 @@ class JourneyNodeMapperTest {
                 },
             )
         }
+
+    /**
+     * Initializes [AbstractCallback.json] with the given server-registered `"type"` string, as
+     * [JourneyNodeMapper] now keys the wire `type` off that field rather than the runtime class
+     * name (see the R8/minification fix).
+     */
+    private fun <T : Callback> T.withType(type: String): T {
+        (this as AbstractCallback).init(buildJsonObject { put("type", type) })
+        return this
+    }
 }

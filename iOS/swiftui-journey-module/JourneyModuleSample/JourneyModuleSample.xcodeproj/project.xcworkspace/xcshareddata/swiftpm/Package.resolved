@@ -87,8 +87,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ForgeRock/ping-ios-sdk",
       "state" : {
-        "revision" : "17b95224da7008ce823fc2b199666cd3e26991d9",
-        "version" : "2.1.0"
+        "revision" : "9b37c20f99eb1ce418e6dc8ab491e32fad86051e",
+        "version" : "2.0.0-alpha-9b37c20"
       }
     },
     {
@@ -96,8 +96,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pingidentity/pingone-signals-sdk-ios.git",
       "state" : {
-        "revision" : "e41f7070fdbb43dd7762274ec610c099256a7c7e",
-        "version" : "5.4.0"
+        "revision" : "bf37bd85fa909428d764630c71cf0d4f3d2d7e05",
+        "version" : "5.3.0"
       }
     },
     {

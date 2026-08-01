@@ -9,7 +9,7 @@
 ///
 /// Public-facing counterpart of the wire `SessionMessage` — kept as a distinct type (rather than
 /// exposing the Pigeon message directly) so callers get plain `Map`/JSON-shaped values, with
-/// manual `fromJson`/`toJson` per DESIGN.md rather than a generated codec.
+/// manual `fromJson`/`toJson`.
 class Session {
   /// Creates a session from its already-parsed fields.
   const Session({

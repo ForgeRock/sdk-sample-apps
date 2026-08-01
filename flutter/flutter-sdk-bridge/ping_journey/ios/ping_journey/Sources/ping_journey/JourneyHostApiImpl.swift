@@ -16,16 +16,20 @@ import ping_core
 final class JourneyHostApiImpl: PingJourneyHostApi, @unchecked Sendable {
     private let lock = NSLock()
 
-    /// Most recent `Node` per journeyId.
-    private var nodeMap: [String: Node] = [:]
-
     /// Most recent `ContinueNode` per journeyId, for future callback re-resolution.
     private var continueNodeMap: [String: ContinueNode] = [:]
 
+    /// Serializes `next()` per journeyId so a double-submit can't race two callback applications.
+    private let nextSerializer = KeyedSerialExecutor()
+
     func configureJourney(config: JourneyConfigMessage, completion: @escaping (Result<String, Error>) -> Void) {
         Task {
-            let journeyId = await JourneyClientFactory.create(config)
-            completion(.success(journeyId))
+            do {
+                let journeyId = try await JourneyClientFactory.create(config)
+                completion(.success(journeyId))
+            } catch {
+                completion(.failure(JourneyErrorMapper.from(JourneyErrorCodes.configure, error)))
+            }
         }
     }
 
@@ -57,20 +61,19 @@ final class JourneyHostApiImpl: PingJourneyHostApi, @unchecked Sendable {
         completion: @escaping (Result<NodeMessage, Error>) -> Void
     ) {
         Task {
-            guard let currentNode = activeContinueNode(journeyId) else {
-                completion(.failure(JourneyErrorMapper.from(
-                    JourneyErrorCodes.next,
-                    JourneyHostApiError.stateError(
-                        "No active ContinueNode found for journeyId=\(journeyId)"
-                    )
-                )))
-                return
-            }
             do {
-                try JourneyCallbackValueApplier.apply(currentNode, values: values.compactMap { $0 })
-                let nextNode = await currentNode.next()
-                setNode(journeyId: journeyId, node: nextNode)
-                completion(.success(JourneyNodeMapper.map(nextNode)))
+                let message = try await nextSerializer.run(key: journeyId) { [self] in
+                    guard let currentNode = self.activeContinueNode(journeyId) else {
+                        throw JourneyHostApiError.stateError(
+                            "No active ContinueNode found for journeyId=\(journeyId)"
+                        )
+                    }
+                    try JourneyCallbackValueApplier.apply(currentNode, values: values.compactMap { $0 })
+                    let nextNode = await currentNode.next()
+                    self.setNode(journeyId: journeyId, node: nextNode)
+                    return JourneyNodeMapper.map(nextNode)
+                }
+                completion(.success(message))
             } catch {
                 completion(.failure(JourneyErrorMapper.from(JourneyErrorCodes.next, error)))
             }
@@ -94,8 +97,11 @@ final class JourneyHostApiImpl: PingJourneyHostApi, @unchecked Sendable {
             case .success(let token):
                 var userInfoMap: [String?: Any?]? = nil
                 let uiResult = await user.userinfo(cache: false)
-                if case .success(let userInfo) = uiResult {
+                switch uiResult {
+                case .success(let userInfo):
                     userInfoMap = userInfo as? [String?: Any?]
+                case .failure(let error):
+                    NSLog("JourneyHostApiImpl: userinfo() failed for journeyId=%@: %@", journeyId, "\(error)")
                 }
                 let session = SessionMessage(
                     accessToken: token.accessToken,
@@ -118,6 +124,11 @@ final class JourneyHostApiImpl: PingJourneyHostApi, @unchecked Sendable {
                 )))
                 return
             }
+            let signOffResult = await handle.journey.signOff()
+            if case .failure(let error) = signOffResult {
+                completion(.failure(JourneyErrorMapper.from(JourneyErrorCodes.signOff, error)))
+                return
+            }
             if handle.hasOidc {
                 let user = await handle.journey.journeyUser()
                 await user?.logout()
@@ -129,7 +140,8 @@ final class JourneyHostApiImpl: PingJourneyHostApi, @unchecked Sendable {
 
     func dispose(journeyId: String, completion: @escaping (Result<Void, Error>) -> Void) {
         Task {
-            closeAndClearNodeState(journeyId: journeyId)
+            clearNodeState(journeyId: journeyId)
+            await nextSerializer.remove(key: journeyId)
             await CoreRuntime.journeyRegistry.remove(journeyId)
             completion(.success(()))
         }
@@ -152,7 +164,6 @@ final class JourneyHostApiImpl: PingJourneyHostApi, @unchecked Sendable {
     private func setNode(journeyId: String, node: Node) {
         lock.lock()
         defer { lock.unlock() }
-        nodeMap[journeyId] = node
         if let continueNode = node as? ContinueNode {
             continueNodeMap[journeyId] = continueNode
         } else {
@@ -160,26 +171,30 @@ final class JourneyHostApiImpl: PingJourneyHostApi, @unchecked Sendable {
         }
     }
 
+    /// Closes the cached `ContinueNode` (mirrors Android's `removeJourney()`) before dropping it,
+    /// so any `Closeable` actions on the last node get a chance to release resources.
     private func clearNodeState(journeyId: String) {
         lock.lock()
         defer { lock.unlock() }
-        nodeMap.removeValue(forKey: journeyId)
-        continueNodeMap.removeValue(forKey: journeyId)
-    }
-
-    /// Closes the cached `ContinueNode` (mirrors Android's `removeJourney()`) before dropping it,
-    /// so any `Closeable` actions on the last node get a chance to release resources.
-    private func closeAndClearNodeState(journeyId: String) {
-        lock.lock()
-        defer { lock.unlock() }
-        nodeMap.removeValue(forKey: journeyId)
         continueNodeMap.removeValue(forKey: journeyId)?.close()
     }
 }
 
-enum JourneyHostApiError: Error {
+enum JourneyHostApiError: Error, CustomStringConvertible {
     case journeyNotFound(String)
     case unsupported(String)
     case stateError(String)
     case callbackApply(String)
+
+    /// Plain message text, matching Kotlin's `IllegalStateException.message`/etc. shape rather
+    /// than Swift's default enum-case reflection (e.g. `stateError("...")`).
+    var description: String {
+        switch self {
+        case .journeyNotFound(let message),
+             .unsupported(let message),
+             .stateError(let message),
+             .callbackApply(let message):
+            return message
+        }
+    }
 }

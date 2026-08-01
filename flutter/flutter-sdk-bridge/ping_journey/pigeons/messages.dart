@@ -97,7 +97,13 @@ class CallbackMessage {
   /// to native (same limitation as the React Native bridge).
   bool? validateOnly;
   Map<String?, Object?>? policies;
-  List<Map<String?, Object?>?>? failedPolicies;
+
+  /// Each element is a `Map<String?, Object?>?`. Typed as `List<Object?>?` (rather than
+  /// `List<Map<String?, Object?>?>?`) because Pigeon's generated decoder does an unchecked
+  /// `.cast<Map<String?, Object?>?>()` on nested collection element types, which throws at
+  /// runtime the first time a real (non-empty) map element arrives over the wire — see
+  /// `NodeMapper._castFailedPolicies` for the safe elementwise cast this requires on read.
+  List<Object?>? failedPolicies;
 
   /// Whether to mask input (ValidatedPasswordCallback).
   bool? echoOn;
