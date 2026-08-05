@@ -57,8 +57,11 @@ fun ManualNumberChallenge(
         OutlinedTextField(
             value = input,
             onValueChange = { value ->
-                // Accept digits only
-                if (value.all { it.isDigit() }) input = value
+                // Accept digits only, capped at 9 characters. 9 digits max value is 999_999_999
+                // which is safely below Int.MAX_VALUE (2_147_483_647), so toIntOrNull() is
+                // guaranteed to succeed for any accepted input. A 10-digit cap would allow
+                // values up to 9_999_999_999 which overflow Int and silently no-op on Confirm.
+                if (value.all { it.isDigit() } && value.length <= 9) input = value
             },
             singleLine = true,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),

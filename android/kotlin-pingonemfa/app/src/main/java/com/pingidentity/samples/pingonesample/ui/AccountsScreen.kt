@@ -107,32 +107,42 @@ fun AccountsScreen(
         viewModel.loadAccounts()
     }
 
-    // Countdown: derive `secsRemaining` from the absolute expiry deadline stored on
-    // uiState.otpExpiresAtElapsedMs, ticking once per second. Deriving from a deadline
-    // (rather than storing a decremented counter) means the countdown is correct across
-    // composable re-entry — leaving and returning to this screen resumes at the true
-    // remaining time, not a reset "30s".
+    // Countdown: derive `secsRemaining` from an absolute expiry deadline, ticking once per
+    // second. Deriving from a fixed deadline (rather than decrementing a counter) means the
+    // value is correct across composable re-entry — leaving and returning resumes at the
+    // true remaining time.
     //
     // The effect is keyed on uiState.otpVersion so it restarts on every generateOtp()
-    // outcome (success and failure). On failure otpExpiresAtElapsedMs is null and the
-    // fallback of DEFAULT_OTP_TTL_SECONDS applies, which effectively spaces retries by
-    // that interval instead of hammering the SDK. A coerceAtLeast(1) floor on the initial
-    // seed also guarantees at least one second between successive generateOtp() calls
-    // when the SDK returns an already-expired OtpCodeInfo (secondsRemaining == 0).
-    fun computeSecsRemaining(): Int {
-        val deadline = uiState.otpExpiresAtElapsedMs ?: return PingOneViewModel.DEFAULT_OTP_TTL_SECONDS
-        val remainingMs = deadline - android.os.SystemClock.elapsedRealtime()
+    // outcome (success and failure). The deadline is captured once at effect-start:
+    //   - Success: otpExpiresAtElapsedMs is the real SDK expiry.
+    //   - Failure: otpExpiresAtElapsedMs is null; a synthetic deadline of now +
+    //     DEFAULT_OTP_TTL_SECONDS is captured once so the countdown actually ticks to
+    //     zero and triggers a retry — returning the constant on every tick would keep
+    //     secsRemaining perpetually > 0 and block generateOtp() forever.
+    fun secsFromDeadline(deadlineMs: Long): Int {
+        val remainingMs = deadlineMs - android.os.SystemClock.elapsedRealtime()
         return (remainingMs / 1_000L).toInt().coerceAtLeast(0)
     }
+    // Seed the visible counter at composition time using the same deadline formula.
     var secsRemaining by remember(uiState.otpVersion) {
-        mutableIntStateOf(computeSecsRemaining().coerceAtLeast(1))
+        val deadline = uiState.otpExpiresAtElapsedMs
+            ?: (android.os.SystemClock.elapsedRealtime() + PingOneViewModel.DEFAULT_OTP_TTL_SECONDS * 1_000L)
+        mutableIntStateOf(secsFromDeadline(deadline))
     }
     LaunchedEffect(uiState.otpVersion) {
-        secsRemaining = computeSecsRemaining().coerceAtLeast(1)
+        // Capture one fixed deadline for the lifetime of this effect invocation.
+        val effectDeadline = uiState.otpExpiresAtElapsedMs
+            ?: (android.os.SystemClock.elapsedRealtime() + PingOneViewModel.DEFAULT_OTP_TTL_SECONDS * 1_000L)
+        secsRemaining = secsFromDeadline(effectDeadline)
         while (isActive && secsRemaining > 0) {
             delay(1_000)
-            secsRemaining = computeSecsRemaining()
+            secsRemaining = secsFromDeadline(effectDeadline)
         }
+        // Wait one extra second after the countdown reaches 0 so the SDK's TOTP time
+        // window has rotated before we request a new code. Without this delay,
+        // generateOtp() fires at the boundary and the SDK may still return the
+        // previous (about-to-expire) code along with a fresh 30s countdown.
+        if (isActive) delay(1_000)
         // Only kick off a refresh if one isn't already in flight and we have an account.
         // generateOtp() itself is idempotent-guarded via uiState.isRefreshingOtp.
         if (isActive && !uiState.isRefreshingOtp) {

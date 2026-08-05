@@ -45,6 +45,7 @@ class PingOneSampleApplication : Application() {
      */
     private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
+    /** Wires up the diagnostic logger and kicks off SDK init + FCM token registration. */
     override fun onCreate() {
         super.onCreate()
 

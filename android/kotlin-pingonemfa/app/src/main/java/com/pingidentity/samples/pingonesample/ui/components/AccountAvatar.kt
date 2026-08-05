@@ -21,7 +21,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import kotlin.math.absoluteValue
 
 /**
  * A circular avatar composable that displays up to two initials derived from [seed].
@@ -75,6 +74,6 @@ fun AccountAvatar(
  * @return A [Color] with saturation `0.6` and lightness `0.5`.
  */
 private fun generateAvatarColor(seed: String): Color {
-    val hue = seed.hashCode().absoluteValue % 360
+    val hue = Math.floorMod(seed.hashCode(), 360)
     return Color.hsl(hue.toFloat(), 0.6f, 0.5f)
 }

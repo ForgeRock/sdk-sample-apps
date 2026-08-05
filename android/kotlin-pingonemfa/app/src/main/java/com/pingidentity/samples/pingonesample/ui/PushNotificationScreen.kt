@@ -38,6 +38,21 @@ import com.pingidentity.samples.pingonesample.ui.components.BackNavigationTopApp
 import com.pingidentity.samples.pingonesample.ui.components.ManualNumberChallenge
 import com.pingidentity.samples.pingonesample.ui.components.NumberChallengeOptions
 
+/**
+ * Full-screen UI for approving or denying a PingOne MFA push authentication request.
+ *
+ * Renders the appropriate challenge control based on [PushNotification.getPushType]:
+ * - [PushType.CHALLENGE] with options from [PushNotification.getNumbersChallenge] → number-button selector
+ * - [PushType.CHALLENGE] with a null challenge list → manual digit-entry field ([ManualNumberChallenge])
+ * - Any other type → simple approve/deny row
+ *
+ * Delegates all SDK calls to [viewModel] so they survive configuration changes. Calls [onFinish]
+ * after the user confirms a result dialog (success or error) or presses the back button.
+ *
+ * @param notification The push notification to approve or deny.
+ * @param viewModel [PushNotificationViewModel] that owns the approve/deny state.
+ * @param onFinish Called when the user has finished interacting with this screen.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PushNotificationScreen(

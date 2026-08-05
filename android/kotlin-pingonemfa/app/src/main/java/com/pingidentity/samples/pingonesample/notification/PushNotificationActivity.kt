@@ -57,6 +57,7 @@ class PushNotificationActivity : ComponentActivity() {
     // Hoisted as Compose state so onNewIntent can swap in a new notification without recreate().
     private var currentNotification by mutableStateOf<PushNotification?>(null)
 
+    /** Initialises the activity, extracts the [PushNotification] from the intent, and sets the Compose content. */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -101,6 +102,10 @@ class PushNotificationActivity : ComponentActivity() {
         }
     }
 
+    /**
+     * Handles a second push notification arriving while this activity is already on top.
+     * Resets ViewModel state and swaps [currentNotification] without recreating the Activity.
+     */
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         // A second push arrived while this Activity is already on top (FLAG_ACTIVITY_SINGLE_TOP).

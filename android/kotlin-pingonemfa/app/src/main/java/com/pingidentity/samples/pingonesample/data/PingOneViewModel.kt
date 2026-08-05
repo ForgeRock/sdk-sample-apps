@@ -20,9 +20,17 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+/**
+ * ViewModel backing the main navigation graph (accounts list and QR scanner).
+ *
+ * Owns account loading, account pairing, and OTP generation. Survives configuration changes
+ * via [viewModelScope] — all SDK calls are started here rather than in composables so they
+ * are not cancelled on rotation.
+ */
 class PingOneViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _uiState = MutableStateFlow(AuthUiState())
+    /** Observable UI state for the accounts and QR scanner screens. */
     val uiState: StateFlow<AuthUiState> = _uiState.asStateFlow()
 
     /**
@@ -110,9 +118,8 @@ class PingOneViewModel(application: Application) : AndroidViewModel(application)
                 // time means the countdown continues correctly across composable
                 // navigation — leaving and returning to the screen computes remaining time
                 // from this deadline, so the counter does not reset to 30s.
-                val secondsFromSdk = otpInfo.secondsRemaining.takeIf { it > 0 } ?: DEFAULT_OTP_TTL_SECONDS
-                val expiresAtElapsedMs = android.os.SystemClock.elapsedRealtime() + secondsFromSdk * 1_000L
-                DiagnosticLogger.i("generateOtp: OTP generated, expires in ${secondsFromSdk}s")
+                val expiresAtElapsedMs = android.os.SystemClock.elapsedRealtime() + otpInfo.secondsRemaining * 1_000L
+                DiagnosticLogger.i("generateOtp: OTP generated, expires in ${otpInfo.secondsRemaining}s")
                 _uiState.update {
                     it.copy(
                         generatedCode = otpInfo,
@@ -125,6 +132,8 @@ class PingOneViewModel(application: Application) : AndroidViewModel(application)
                 DiagnosticLogger.e("generateOtp: failed — ${e.message}", e)
                 _uiState.update {
                     it.copy(
+                        generatedCode = null,
+                        otpExpiresAtElapsedMs = null,
                         isRefreshingOtp = false,
                         error = e.message ?: "Failed to generate OTP",
                         otpVersion = it.otpVersion + 1,
@@ -134,24 +143,28 @@ class PingOneViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
+    /** Sets [AuthUiState.error] to [errorMessage], surfacing it as a snackbar in the UI. */
     fun setError(errorMessage: String) {
         _uiState.update { it.copy(error = errorMessage) }
     }
 
+    /** Clears [AuthUiState.error] after it has been displayed. */
     fun clearError() {
         _uiState.update { it.copy(error = null) }
     }
 
+    /** Sets [AuthUiState.successMessage] to [message], surfacing it as a snackbar in the UI. */
     fun setMessage(message: String) {
         _uiState.update { it.copy(successMessage = message) }
     }
 
+    /** Clears [AuthUiState.successMessage] after it has been displayed. */
     fun clearMessage() {
         _uiState.update { it.copy(successMessage = null) }
     }
 
     companion object {
-        /** Fallback OTP validity when the SDK returns 0 or a missing secondsRemaining. */
+        /** Initial countdown seed shown before the first generateOtp() result arrives. */
         const val DEFAULT_OTP_TTL_SECONDS: Int = 30
     }
 }
@@ -160,7 +173,9 @@ class PingOneViewModel(application: Application) : AndroidViewModel(application)
  * Full UI state for the PingOne MFA sample app.
  */
 data class AuthUiState(
+    /** Paired accounts returned by the PingOne MFA SDK. Empty until [PingOneViewModel.loadAccounts] succeeds. */
     val accounts: List<PingOneMfaAccount> = emptyList(),
+    /** The most recently generated OTP code info, or `null` if no OTP has been fetched yet. */
     val generatedCode: OtpCodeInfo? = null,
     /**
      * Absolute expiry deadline for [generatedCode] expressed as `SystemClock.elapsedRealtime()`
@@ -173,7 +188,9 @@ data class AuthUiState(
      * returning to the accounts screen resumes at the true remaining time, not at 30s.
      */
     val otpExpiresAtElapsedMs: Long? = null,
+    /** True while accounts are being loaded from the SDK. */
     val isLoading: Boolean = false,
+    /** True while a QR-code pairing request is in flight. */
     val isPairing: Boolean = false,
     /** True while [PingOneViewModel.generateOtp] has an SDK call in flight. */
     val isRefreshingOtp: Boolean = false,
@@ -183,6 +200,8 @@ data class AuthUiState(
      * always relaunches even when the SDK returns an identical [OtpCodeInfo] or fails.
      */
     val otpVersion: Int = 0,
+    /** Non-null when an error should be surfaced to the user as a snackbar. Cleared after display. */
     val error: String? = null,
+    /** Non-null when a success message should be surfaced to the user as a snackbar. Cleared after display. */
     val successMessage: String? = null,
 )

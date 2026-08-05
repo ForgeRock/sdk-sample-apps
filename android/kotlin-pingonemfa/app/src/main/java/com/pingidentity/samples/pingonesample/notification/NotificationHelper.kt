@@ -26,7 +26,9 @@ import com.pingidentity.samples.pingonesample.R
 class NotificationHelper(private val context: Context) {
 
     companion object {
+        /** Notification channel ID for PingOne MFA push authentication requests. */
         const val CHANNEL_ID = "com.pingidentity.pingonesample.PUSH_NOTIFICATIONS"
+        /** Notification group key used to bundle multiple push notifications together. */
         const val NOTIFICATION_GROUP = "com.pingidentity.pingonesample.PUSH_NOTIFICATION_GROUP"
     }
     /**

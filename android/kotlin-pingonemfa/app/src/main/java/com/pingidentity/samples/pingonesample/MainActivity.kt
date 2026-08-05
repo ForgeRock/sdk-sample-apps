@@ -19,12 +19,16 @@ import androidx.core.content.ContextCompat
 import com.pingidentity.samples.pingonesample.data.PingOneViewModel
 
 /**
- * The main activity.
+ * Entry-point activity for the PingOne MFA sample app.
+ *
+ * Hosts the root [AuthApp] composable and requests the `POST_NOTIFICATIONS` runtime
+ * permission on Android 13+ so the app can post push authentication banners.
  */
 class MainActivity : ComponentActivity() {
 
     private val mainViewModel: PingOneViewModel by viewModels()
 
+    /** Sets the Compose content and triggers the notification permission check. */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

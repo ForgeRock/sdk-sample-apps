@@ -50,7 +50,7 @@ fun QrGrid(
             .padding(horizontal = 40.dp),
     ) {
         Text(
-            text = stringResource(R.string.qr_scanner_title),
+            text = stringResource(R.string.qr_scanner_hint),
             style = MaterialTheme.typography.titleMedium,
             color = Color.White,
             textAlign = TextAlign.Center,

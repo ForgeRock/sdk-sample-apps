@@ -31,6 +31,7 @@ import kotlinx.coroutines.launch
 class PushNotificationViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _uiState = MutableStateFlow(PushNotificationUiState())
+    /** Observable UI state for the push notification approval screen. */
     val uiState: StateFlow<PushNotificationUiState> = _uiState.asStateFlow()
 
     /**
@@ -146,13 +147,29 @@ class PushNotificationViewModel(application: Application) : AndroidViewModel(app
 
 /** Full UI state for the push notification approval screen. */
 data class PushNotificationUiState(
+    /** True while an approve or deny SDK call is in flight. */
     val isLoading: Boolean = false,
+    /** Current dialog state — [PushDialogState.None] while idle, updated on SDK outcome. */
     val dialogState: PushDialogState = PushDialogState.None,
 )
 
 /** Models the three dialog states the push notification screen can be in. */
 sealed interface PushDialogState {
+    /** No result dialog is showing — the screen is idle or waiting for the user to act. */
     data object None : PushDialogState
+
+    /**
+     * The approve or deny call succeeded. Displayed as a confirmation dialog.
+     *
+     * @param title Dialog title (e.g. "Approved" or "Denied").
+     * @param message Dialog body text.
+     */
     data class Success(val title: String, val message: String) : PushDialogState
+
+    /**
+     * The approve or deny call failed. Displayed as an error dialog.
+     *
+     * @param message Human-readable error description.
+     */
     data class Error(val message: String) : PushDialogState
 }

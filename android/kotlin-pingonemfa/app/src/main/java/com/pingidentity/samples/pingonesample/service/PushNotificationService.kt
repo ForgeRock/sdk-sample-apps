@@ -37,6 +37,7 @@ class PushNotificationService : FirebaseMessagingService() {
     private val diagnosticLogger = DiagnosticLogger
     private lateinit var notificationHelper: NotificationHelper
 
+    /** Initialises the notification helper and creates required notification channels. */
     override fun onCreate() {
         super.onCreate()
         diagnosticLogger.d("PushNotificationService instance created")
@@ -45,6 +46,10 @@ class PushNotificationService : FirebaseMessagingService() {
         notificationHelper.createNotificationChannels()
     }
 
+    /**
+     * Called by FCM when a data message is delivered to this device.
+     * Delegates to [PingOneMFA.processRemoteNotification] and routes the result via [handleNotification].
+     */
     @RequiresPermission(android.Manifest.permission.POST_NOTIFICATIONS)
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
@@ -68,6 +73,10 @@ class PushNotificationService : FirebaseMessagingService() {
         }
     }
 
+    /**
+     * Called by FCM when the registration token is refreshed.
+     * Forwards the new token to [PingOneMFA.setDeviceToken] so push authentication continues to work.
+     */
     override fun onNewToken(token: String) {
         super.onNewToken(token)
         diagnosticLogger.d("Received new FCM token")
@@ -125,9 +134,16 @@ class PushNotificationService : FirebaseMessagingService() {
         }
     }
 
+    /** Logs service destruction. See inline comment for why [scope] is not cancelled here. */
     override fun onDestroy() {
         super.onDestroy()
         diagnosticLogger.d("PushNotificationService instance destroyed")
+        // NOTE: scope.cancel() is intentionally NOT called here.
+        // FirebaseMessagingService.onDestroy() is invoked by FCM immediately after
+        // onMessageReceived() returns — before the coroutine launched there has finished
+        // processing the notification. Cancelling the scope at this point kills
+        // processRemoteNotification mid-execution and silently drops push notifications.
+        // The coroutine outliving the service instance is safe and expected for FCM services.
     }
 
     /**

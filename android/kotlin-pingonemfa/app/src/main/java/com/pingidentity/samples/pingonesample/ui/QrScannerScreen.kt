@@ -55,6 +55,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.pingidentity.samples.pingonesample.R
 import com.pingidentity.samples.pingonesample.data.PingOneViewModel
@@ -64,6 +66,7 @@ import com.pingidentity.samples.pingonesample.ui.components.ManualPairingPanel
 import com.pingidentity.samples.pingonesample.ui.components.QrGrid
 import com.pingidentity.samples.pingonesample.util.QrCodeAnalyzer
 import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
 /**
  * Camera-based QR code scanner that pairs a new account via the PingOne MFA SDK.
@@ -109,6 +112,21 @@ fun QrScannerScreen(
                 !it.shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)
             } ?: false
         }
+    }
+
+    // Re-check the permission on every resume so that a grant made in system settings
+    // (via the "Open Settings" button on the permanently-denied UI path) is reflected
+    // immediately when the user returns to this screen.
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                hasCameraPermission = ContextCompat.checkSelfPermission(
+                    context, Manifest.permission.CAMERA
+                ) == PackageManager.PERMISSION_GRANTED
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
     }
 
     LaunchedEffect(Unit) {
@@ -223,7 +241,7 @@ fun QrScannerScreen(
                                             imageAnalysis
                                         )
                                     } catch (e: Exception) {
-                                        viewModel.setError(cameraErrorTemplate.format(e.message))
+                                        viewModel.setError(cameraErrorTemplate.format(e.message ?: e::class.simpleName))
                                     }
                                 },
                                 ContextCompat.getMainExecutor(ctx)
@@ -301,8 +319,18 @@ fun QrScannerScreen(
 
     DisposableEffect(lifecycleOwner) {
         onDispose {
-            // Shut down the camera thread executor and release the ML Kit barcode client
-            // together, so neither outlives the other once the screen leaves composition.
+            // Unbind all CameraX use cases first so the camera stops delivering frames before
+            // downstream resources are released.
+            // .get(0, MILLISECONDS) is used intentionally — it is non-blocking on the main
+            // (composition) thread. A TimeoutException means the provider future hasn't resolved
+            // yet (e.g. the user pressed back before the camera ever bound), so there is nothing
+            // to unbind; the catch is a safe no-op because CameraX will unbind via the lifecycle
+            // owner's destruction anyway. A plain .get() without a timeout would block the main
+            // thread waiting for the main executor to resolve the same future — deadlock / ANR.
+            runCatching {
+                ProcessCameraProvider.getInstance(context).get(0, TimeUnit.MILLISECONDS).unbindAll()
+            }
+            // Safe to close the ML Kit scanner only after the camera has stopped.
             qrAnalyzer.close()
             cameraExecutor.shutdown()
         }

@@ -45,6 +45,14 @@ class NotificationActionReceiver : BroadcastReceiver() {
 
     private val diagnosticLogger = DiagnosticLogger
 
+    /**
+     * Handles approve and deny action button taps from the system notification banner.
+     *
+     * Extracts the [PushNotification] Parcelable from the intent, then delegates to
+     * [PingOneMFA.approvePushNotificationFromBanner] or [PingOneMFA.denyPushNotificationFromBanner]
+     * for recognised actions. Unknown actions are logged and ignored — the notification is left
+     * intact so the user can still answer it.
+     */
     override fun onReceive(context: Context, intent: Intent) {
         val notification = intent.parcelablePushNotification() ?: run {
             diagnosticLogger.w(
@@ -54,15 +62,10 @@ class NotificationActionReceiver : BroadcastReceiver() {
             )
             return
         }
-        // Also clear our in-process reference (used by the cancel-path in the service) if it
-        // matches. Post-process-death this will be a no-op, which is fine.
-        PushNotificationStore.remove()
-        // Dismiss the banner immediately so the user gets visual feedback
-        NotificationManagerCompat.from(context).cancel(notification.id.hashCode())
-
         when (intent.action) {
             ACTION_APPROVE -> {
                 diagnosticLogger.d("PingOne approve tapped for notification: ${notification.id}")
+                dismissNotification(context, notification.id)
                 try {
                     PingOneMFA.approvePushNotificationFromBanner(notification)
                     diagnosticLogger.i(
@@ -76,6 +79,7 @@ class NotificationActionReceiver : BroadcastReceiver() {
             }
             ACTION_DENY -> {
                 diagnosticLogger.d("PingOne deny tapped for notification: ${notification.id}")
+                dismissNotification(context, notification.id)
                 try {
                     PingOneMFA.denyPushNotificationFromBanner(notification)
                     diagnosticLogger.i(
@@ -96,6 +100,19 @@ class NotificationActionReceiver : BroadcastReceiver() {
         }
     }
 
+    /**
+     * Clears the in-process notification slot and dismisses the system tray banner.
+     * Called only after a recognised approve or deny action so that unrecognised actions
+     * leave the pending request intact and answerable.
+     */
+    private fun dismissNotification(context: Context, notificationId: String) {
+        // Clear the in-process reference used by the cancel-path in PushNotificationService.
+        // Post-process-death this is a no-op, which is fine.
+        PushNotificationStore.remove()
+        // Dismiss the banner immediately so the user gets visual feedback.
+        NotificationManagerCompat.from(context).cancel(notificationId.hashCode())
+    }
+
     @Suppress("DEPRECATION")
     private fun Intent.parcelablePushNotification(): PushNotification? =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -105,7 +122,9 @@ class NotificationActionReceiver : BroadcastReceiver() {
         }
 
     companion object {
+        /** Intent action for the "Approve" tray button. */
         const val ACTION_APPROVE = "com.pingidentity.pingsampleapp.PINGONE_ACTION_APPROVE"
+        /** Intent action for the "Deny" tray button. */
         const val ACTION_DENY = "com.pingidentity.pingsampleapp.PINGONE_ACTION_DENY"
         /** Parcelable [PushNotification] extra carried by the approve/deny PendingIntents. */
         const val EXTRA_PINGONE_NOTIFICATION = "pingone_notification"
