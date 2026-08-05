@@ -33,10 +33,11 @@ class QRCodeScannerViewController: UIViewController {
 
     var isScanningEnabled = true {
         didSet {
-            // Re-arm as soon as the previous code has been handled and any error
-            // acknowledged. Assigned on every update, so it does not rely on
-            // SwiftUI delivering each intermediate state change.
-            if isScanningEnabled { hasScanned = false }
+            // Only re-arm on a false->true transition. `didSet` fires on every
+            // assignment, including redundant `true` re-assignments triggered by
+            // unrelated SwiftUI re-renders, which would otherwise clear the
+            // duplicate-scan guard while a scan is still being processed.
+            if isScanningEnabled, !oldValue { hasScanned = false }
         }
     }
 
