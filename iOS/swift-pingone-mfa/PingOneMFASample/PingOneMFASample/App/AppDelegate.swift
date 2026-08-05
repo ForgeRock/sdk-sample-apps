@@ -68,6 +68,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, @preconcurrency UNUserNotifi
 
         nonisolated(unsafe) let userInfoCopy = userInfo
         Task {
+            defer { completionHandler() }
             if let n = try? await PingOneMFA.processRemoteNotificationAction(
                 identifier: actionIdentifier,
                 authenticationMethod: "user",
@@ -76,7 +77,6 @@ class AppDelegate: NSObject, UIApplicationDelegate, @preconcurrency UNUserNotifi
                 PingOneMFAManager.shared.pendingNotification = n
             }
         }
-        completionHandler()
     }
 
     // MARK: - Private
