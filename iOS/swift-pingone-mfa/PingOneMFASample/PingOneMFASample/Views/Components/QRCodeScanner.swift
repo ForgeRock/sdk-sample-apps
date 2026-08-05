@@ -2,6 +2,7 @@
 import SwiftUI
 @preconcurrency import AVFoundation
 
+@MainActor
 protocol QRCodeScannerDelegate: AnyObject {
     func didScan(code: String)
     func didFailWithError(error: Error)
@@ -9,25 +10,45 @@ protocol QRCodeScannerDelegate: AnyObject {
 
 struct QRCodeScanner: UIViewControllerRepresentable {
     weak var delegate: QRCodeScannerDelegate?
+    /// When this flips back to `true` the scanner re-arms and accepts a new code.
+    /// Keep it `false` while a scanned code is being processed or while its failure
+    /// is still on screen, so the same code is not submitted again immediately.
+    var isScanningEnabled: Bool
 
     func makeUIViewController(context: Context) -> QRCodeScannerViewController {
         let vc = QRCodeScannerViewController()
         vc.delegate = delegate
+        vc.isScanningEnabled = isScanningEnabled
         return vc
     }
 
     func updateUIViewController(_ uiViewController: QRCodeScannerViewController, context: Context) {
         uiViewController.delegate = delegate
+        uiViewController.isScanningEnabled = isScanningEnabled
     }
 }
 
 class QRCodeScannerViewController: UIViewController {
     weak var delegate: QRCodeScannerDelegate?
 
+    var isScanningEnabled = true {
+        didSet {
+            // Re-arm as soon as the previous code has been handled and any error
+            // acknowledged. Assigned on every update, so it does not rely on
+            // SwiftUI delivering each intermediate state change.
+            if isScanningEnabled { hasScanned = false }
+        }
+    }
+
     private var captureSession: AVCaptureSession?
     private var previewLayer: AVCaptureVideoPreviewLayer?
     private let overlayView = UIView()
     private var hasScanned = false
+    private var isVisible = false
+
+    /// Every `startRunning()` / `stopRunning()` call is serialized here so a stop
+    /// submitted during dismissal can never be overtaken by an earlier queued start.
+    private let sessionQueue = DispatchQueue(label: "com.pingidentity.PingOneMFASample.scanner.session")
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,13 +58,15 @@ class QRCodeScannerViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        isVisible = true
         hasScanned = false
-        DispatchQueue.global(qos: .userInitiated).async { self.captureSession?.startRunning() }
+        startSession()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        DispatchQueue.global(qos: .userInitiated).async { self.captureSession?.stopRunning() }
+        isVisible = false
+        stopSession()
     }
 
     override func viewDidLayoutSubviews() {
@@ -53,13 +76,23 @@ class QRCodeScannerViewController: UIViewController {
         updateMask()
     }
 
+    private func startSession() {
+        let session = captureSession
+        sessionQueue.async { session?.startRunning() }
+    }
+
+    private func stopSession() {
+        let session = captureSession
+        sessionQueue.async { session?.stopRunning() }
+    }
+
     private func checkPermissionAndSetup() {
         switch AVCaptureDevice.authorizationStatus(for: .video) {
         case .authorized:
             setupCamera()
         case .notDetermined:
-            AVCaptureDevice.requestAccess(for: .video) { [weak self] granted in
-                DispatchQueue.main.async {
+            AVCaptureDevice.requestAccess(for: .video) { granted in
+                Task { @MainActor [weak self] in
                     if granted { self?.setupCamera() }
                     else { self?.delegate?.didFailWithError(error: ScannerError.permissionDenied) }
                 }
@@ -95,7 +128,10 @@ class QRCodeScannerViewController: UIViewController {
 
         captureSession = session
         previewLayer = preview
-        DispatchQueue.global(qos: .userInitiated).async { session.startRunning() }
+
+        // Permission may be granted after the screen was dismissed; only start if
+        // still on screen, otherwise `viewWillAppear` starts it on the next present.
+        if isVisible { startSession() }
     }
 
     private func setupOverlay() {
@@ -149,7 +185,7 @@ extension QRCodeScannerViewController: AVCaptureMetadataOutputObjectsDelegate {
         guard let obj = metadataObjects.first as? AVMetadataMachineReadableCodeObject,
               let value = obj.stringValue else { return }
         Task { @MainActor [weak self] in
-            guard let self, !self.hasScanned else { return }
+            guard let self, self.isScanningEnabled, !self.hasScanned else { return }
             self.hasScanned = true
             AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
             self.delegate?.didScan(code: value)

@@ -17,6 +17,16 @@ class PingOneMFAManager: ObservableObject {
     func fetchAccounts() async {
         isLoading = true
         errorMessage = nil
+
+        // The screen can request accounts before the app-level launch task finishes,
+        // so make sure the SDK is ready before calling into it.
+        await AppConfiguration.shared.initialize()
+        guard AppConfiguration.shared.isInitialized else {
+            errorMessage = AppError.sdkNotInitialized.errorDescription
+            isLoading = false
+            return
+        }
+
         do {
             let result = try await PingOneMFA.getDeviceInfo()
             accounts = result.accounts

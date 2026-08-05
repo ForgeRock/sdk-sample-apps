@@ -7,11 +7,12 @@ struct ScannerScreen: View {
     @EnvironmentObject private var manager: PingOneMFAManager
     @FocusState private var isTextFieldFocused: Bool
     @State private var manualKey = ""
-    @State private var scannerDelegate: ScannerBridge?
 
     var body: some View {
         ZStack {
-            QRCodeScanner(delegate: scannerDelegate)
+            // The view model is the delegate, so it is attached before the scanner's
+            // `viewDidLoad` runs and setup errors reach the alert below.
+            QRCodeScanner(delegate: viewModel, isScanningEnabled: viewModel.isScanningEnabled)
                 .ignoresSafeArea()
 
             VStack {
@@ -54,11 +55,6 @@ struct ScannerScreen: View {
         }
         .navigationTitle("Add Account")
         .navigationBarTitleDisplayMode(.inline)
-        .onAppear {
-            if scannerDelegate == nil {
-                scannerDelegate = ScannerBridge(viewModel: viewModel)
-            }
-        }
         .onChange(of: viewModel.pairingSuccess) { _, success in
             if success {
                 manualKey = ""
@@ -76,17 +72,5 @@ struct ScannerScreen: View {
         } message: {
             Text(viewModel.errorMessage ?? "")
         }
-    }
-}
-
-@MainActor
-private class ScannerBridge: NSObject, QRCodeScannerDelegate {
-    let viewModel: ScannerViewModel
-    init(viewModel: ScannerViewModel) { self.viewModel = viewModel }
-    nonisolated func didScan(code: String) {
-        Task { @MainActor in await self.viewModel.handleCode(code) }
-    }
-    nonisolated func didFailWithError(error: Error) {
-        Task { @MainActor in self.viewModel.errorMessage = error.localizedDescription }
     }
 }

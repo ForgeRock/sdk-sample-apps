@@ -6,8 +6,6 @@ import PingOneMFA
 @MainActor
 class AppDelegate: NSObject, UIApplicationDelegate, @preconcurrency UNUserNotificationCenterDelegate {
 
-    private var pingOneMFACategoryIdentifiers: Set<String> = []
-
     func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
@@ -17,9 +15,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, @preconcurrency UNUserNotifi
         application.registerForRemoteNotifications()
 
         Task {
-            await AppConfiguration.shared.initialize()
-            let categories = PingOneMFA.getNotificationCategories()
-            pingOneMFACategoryIdentifiers = Set(categories.map { $0.identifier })
+            let categories = await sdkNotificationCategories()
             let existing = await UNUserNotificationCenter.current().notificationCategories()
             UNUserNotificationCenter.current().setNotificationCategories(existing.union(categories))
         }
@@ -52,13 +48,10 @@ class AppDelegate: NSObject, UIApplicationDelegate, @preconcurrency UNUserNotifi
         let userInfo = notification.request.content.userInfo
         let category = notification.request.content.categoryIdentifier
 
-        if pingOneMFACategoryIdentifiers.contains(category) {
-            nonisolated(unsafe) let userInfoCopy = userInfo
-            Task {
-                await AppConfiguration.shared.initialize()
-                if let n = try? await PingOneMFA.processRemoteNotification(userInfo: userInfoCopy) {
-                    PingOneMFAManager.shared.pendingNotification = n
-                }
+        nonisolated(unsafe) let userInfoCopy = userInfo
+        Task {
+            if let n = try? await PingOneMFA.processRemoteNotification(userInfo: userInfoCopy) {
+                PingOneMFAManager.shared.pendingNotification = n
             }
         }
         completionHandler([.banner, .sound, .badge])
@@ -73,19 +66,26 @@ class AppDelegate: NSObject, UIApplicationDelegate, @preconcurrency UNUserNotifi
         let category = response.notification.request.content.categoryIdentifier
         let actionIdentifier = response.actionIdentifier
 
-        if pingOneMFACategoryIdentifiers.contains(category) {
-            nonisolated(unsafe) let userInfoCopy = userInfo
-            Task {
-                await AppConfiguration.shared.initialize()
-                if let n = try? await PingOneMFA.processRemoteNotificationAction(
-                    identifier: actionIdentifier,
-                    authenticationMethod: "user",
-                    userInfo: userInfoCopy
-                ) {
-                    PingOneMFAManager.shared.pendingNotification = n
-                }
+        nonisolated(unsafe) let userInfoCopy = userInfo
+        Task {
+            if let n = try? await PingOneMFA.processRemoteNotificationAction(
+                identifier: actionIdentifier,
+                authenticationMethod: "user",
+                userInfo: userInfoCopy
+            ) {
+                PingOneMFAManager.shared.pendingNotification = n
             }
         }
         completionHandler()
+    }
+
+    // MARK: - Private
+
+    /// Initializes the SDK if needed, then returns its notification categories.
+    /// Returns an empty set when initialization fails.
+    private func sdkNotificationCategories() async -> Set<UNNotificationCategory> {
+        await AppConfiguration.shared.initialize()
+        guard AppConfiguration.shared.isInitialized else { return [] }
+        return PingOneMFA.getNotificationCategories()
     }
 }
