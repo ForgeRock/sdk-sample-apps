@@ -1,0 +1,32 @@
+name: 'Flutter Continuous Integration'
+
+on:
+  pull_request:
+    paths:
+      - 'flutter/**/*'
+
+jobs:
+  analyze-and-test:
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: flutter
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.44.4'
+          channel: 'stable'
+
+      - run: flutter pub get
+
+      - name: Analyze
+        run: flutter analyze
+
+      - name: Dart/Flutter unit + widget tests
+        run: flutter test
+
+      - name: Android unit tests (ping_core, ping_journey)
+        working-directory: flutter/flutter-journey/android
+        run: ./gradlew :ping_core:testDebugUnitTest :ping_journey:testDebugUnitTest
