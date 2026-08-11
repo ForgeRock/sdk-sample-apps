@@ -17,7 +17,7 @@ Flutter bridge for the Ping Journey SDK: drives native Journey orchestration
   s.source_files = 'ping_journey/Sources/ping_journey/**/*'
   s.dependency 'Flutter'
   s.dependency 'ping_core'
-  s.dependency 'PingJourney', '2.0.0'
+  s.dependency 'PingJourney', '2.1.0'
   s.platform = :ios, '16.0'
 
   # Flutter.framework does not contain a i386 slice.

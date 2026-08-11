@@ -5,7 +5,7 @@
  * of the MIT license. See the LICENSE file for details.
  */
 
-package com.pingidentity.flutter.journey.mapper
+package com.pingidentity.flutter.core.mapper
 
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
@@ -19,7 +19,7 @@ import kotlinx.serialization.json.JsonPrimitive
  * Trimmed to the encode direction only (this bridge only ever sends native JSON outward, never
  * decodes it back).
  */
-internal object JsonBridgeMapper {
+object JsonBridgeMapper {
     fun encodeJsonElement(element: JsonElement): Any? =
         when (element) {
             JsonNull -> null

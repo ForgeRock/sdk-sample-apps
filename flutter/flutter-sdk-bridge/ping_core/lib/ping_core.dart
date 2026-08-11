@@ -6,4 +6,6 @@
  */
 
 export 'src/json_codec.dart';
+export 'src/oidc_config.dart';
+export 'src/oidc_open_id_config.dart';
 export 'src/ping_exception.dart';

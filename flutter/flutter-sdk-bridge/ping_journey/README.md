@@ -78,9 +78,9 @@ Both platforms follow the same layering, so a change on one side has an obvious 
 
 ## Build / dependency wiring
 
-- **Android**: `namespace 'com.pingidentity.flutter.journey'`, `minSdk 29`, `compileSdk 36`, Java 17; `implementation project(':ping_core')` + `implementation 'com.pingidentity.sdks:journey:2.0.0'` (pulls in orchestrate/oidc/storage transitively) + `kotlinx-coroutines-android`.
-- **iOS (SPM)**: platform `.iOS(.v16)`; dependencies = local `ping_core` package + `.package(url: "https://github.com/ForgeRock/ping-ios-sdk", exact: "2.0.0")`; the target links the `PingJourney` product, which transitively pulls in `PingOrchestrate`/`PingOidc`. A CocoaPods podspec is kept as an optional fallback for host apps not yet on SPM.
-- Native SDK version is pinned to **2.0.0** on both platforms — see [`../README.md`](../README.md).
+- **Android**: `namespace 'com.pingidentity.flutter.journey'`, `minSdk 29`, `compileSdk 36`, Java 17; `implementation project(':ping_core')` + `implementation 'com.pingidentity.sdks:journey:2.1.0'` (pulls in orchestrate/oidc/storage transitively) + `kotlinx-coroutines-android`.
+- **iOS (SPM)**: platform `.iOS(.v16)`; dependencies = local `ping_core` package + `.package(url: "https://github.com/ForgeRock/ping-ios-sdk", exact: "2.1.0")`; the target links the `PingJourney` product, which transitively pulls in `PingOrchestrate`/`PingOidc`. A CocoaPods podspec is kept as an optional fallback for host apps not yet on SPM.
+- Native SDK version is pinned to **2.1.0** on both platforms — see [`../README.md`](../README.md).
 
 ## License
 

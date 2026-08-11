@@ -75,9 +75,9 @@ uniquely-suffixed user each run.
 
 ## Native SDK version
 
-Both platforms pin the native Ping SDK to **2.0.0** — Android via Maven
+Both platforms pin the native Ping SDK to **2.1.0** — Android via Maven
 (`com.pingidentity.sdks:*`), iOS via Swift Package Manager
-(`github.com/ForgeRock/ping-ios-sdk`, exact `2.0.0`).
+(`github.com/ForgeRock/ping-ios-sdk`, exact `2.1.0`).
 
 ## Additional Resources
 

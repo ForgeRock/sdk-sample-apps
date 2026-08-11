@@ -7,6 +7,7 @@
 
 package com.pingidentity.flutter.journey.mapper
 
+import com.pingidentity.flutter.core.mapper.JsonBridgeMapper
 import com.pingidentity.flutter.journey.CallbackMessage
 import com.pingidentity.flutter.journey.NodeMessage
 import com.pingidentity.flutter.journey.NodeType

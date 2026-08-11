@@ -20,4 +20,10 @@ import com.pingidentity.flutter.core.registry.SimpleRegistry
 object CoreRuntime {
     /** Registry for Journey client instances. */
     val journeyRegistry: Registry = SimpleRegistry()
+
+    /** Registry for OIDC client instances. */
+    val oidcClientRegistry: Registry = SimpleRegistry()
+
+    /** Registry for OIDC web client instances. */
+    val oidcWebClientRegistry: Registry = SimpleRegistry()
 }
