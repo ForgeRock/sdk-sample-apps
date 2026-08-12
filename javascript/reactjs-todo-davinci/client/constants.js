@@ -40,7 +40,7 @@ const rawConfig = (() => {
 export const CONFIG = {
   ...rawConfig,
   oidc: {
-    ...rawConfig.oidc,
     redirectUri: `${window.location.origin}/callback.html`,
+    ...rawConfig.oidc,
   },
 };
