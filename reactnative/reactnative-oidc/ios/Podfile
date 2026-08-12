@@ -1,0 +1,81 @@
+# Copyright (c) 2026 Ping Identity Corporation. All rights reserved.
+#
+# This software may be modified and distributed under the terms
+# of the MIT license. See the LICENSE file for details.
+
+ENV['RCT_NEW_ARCH_ENABLED'] = "1"   # New arch flag in client app
+# Resolve react_native_pods.rb with node to allow for hoisting
+require Pod::Executable.execute_command('node', ['-p',
+  'require.resolve(
+    "react-native/scripts/react_native_pods.rb",
+    {paths: [process.argv[1]]},
+  )', __dir__]).strip
+
+platform :ios, '16.0'
+prepare_react_native_project!
+
+linkage = ENV['USE_FRAMEWORKS']
+if linkage != nil
+  Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
+  use_frameworks! :linkage => linkage.to_sym
+end
+
+target 'PingSampleApp' do
+  config = use_native_modules!
+
+  use_react_native!(
+    :path => config[:reactNativePath],
+    # An absolute path to your application root.
+    :app_path => "#{Pod::Config.instance.installation_root}/.."
+  )
+
+  pod 'RNPingCore', :path => '../node_modules/@ping-identity/rn-core'
+  pod 'RNPingOidc',
+  :path => '../node_modules/@ping-identity/rn-oidc'
+
+  post_install do |installer|
+    # https://github.com/facebook/react-native/blob/main/packages/react-native/scripts/react_native_pods.rb#L197-L202
+    react_native_post_install(
+      installer,
+      config[:reactNativePath],
+      :mac_catalyst_enabled => false,
+      # :ccache_enabled => true
+    )
+
+        # fmt 11 uses consteval for compile-time format string checking (C++20), but
+    # Apple Clang has incomplete consteval support that causes build failures.
+    # GCC_PREPROCESSOR_DEFINITIONS (-D flags) are ineffective here because fmt/base.h
+    # unconditionally #defines FMT_USE_CONSTEVAL without an #ifndef guard, overriding
+    # any -DFMT_USE_CONSTEVAL=0 passed at compile time.
+    # Patch the header directly to force FMT_USE_CONSTEVAL 0 on all Apple Clang builds.
+    fmt_base_header = File.join(installer.sandbox.root.to_s, 'fmt', 'include', 'fmt', 'base.h')
+    if File.exist?(fmt_base_header)
+      contents = File.read(fmt_base_header)
+      patched = contents
+        .gsub(/#elif defined\(__cpp_consteval\)\n#\s*define FMT_USE_CONSTEVAL 1/, "#elif defined(__cpp_consteval)\n#  define FMT_USE_CONSTEVAL 0  // disabled: Apple Clang consteval is unreliable")
+        .gsub(/#elif FMT_GCC_VERSION >= 1002 \|\| FMT_CLANG_VERSION >= 1101\n#\s*define FMT_USE_CONSTEVAL 1/, "#elif FMT_GCC_VERSION >= 1002 || FMT_CLANG_VERSION >= 1101\n#  define FMT_USE_CONSTEVAL 0  // disabled: Apple Clang consteval is unreliable")
+      if patched != contents
+        begin
+          File.chmod(0644, fmt_base_header) unless File.writable?(fmt_base_header)
+          File.write(fmt_base_header, patched)
+          Pod::UI.puts 'Patched fmt/base.h: forced FMT_USE_CONSTEVAL=0 to work around Apple Clang consteval bug'
+        rescue StandardError => e
+          raise "fmt/base.h patch failed (#{e.class}: #{e.message}) – check file permissions and fmt version"
+        end
+      # gsub found nothing to replace. Two cases: file is already patched (safe, skip),
+      # or fmt upgraded and the patterns no longer match (dangerous, raise so it gets fixed).
+      # Distinguishing factor: if FMT_USE_CONSTEVAL 1 is still present, the patch failed silently.
+      elsif contents.include?('FMT_USE_CONSTEVAL 1')
+        raise "fmt/base.h patch pattern not matched but FMT_USE_CONSTEVAL=1 still present – fmt version may have changed; please update the Podfile patch"
+      else
+        Pod::UI.puts 'fmt/base.h already patched, skipping'
+      end
+    end
+
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '16.0'
+      end
+    end
+  end
+end

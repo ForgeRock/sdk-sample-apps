@@ -12,6 +12,7 @@ import Widget, { component, journey } from '@forgerock/login-widget';
 import { useContext, useEffect, useRef } from 'react';
 
 import { AuthContext } from '../context/auth.context';
+import { JOURNEY_LOGIN } from '../constants';
 
 /**
  * @function useLoginWidget - A custom React hook that owns login widget lifecycle and returns a small API
@@ -96,7 +97,9 @@ export function useLoginWidget() {
   function openModal() {
     const authSetters = setAuthRef.current;
     authSetters?.setError?.('');
-    journeyEvents.start();
+    const urlParams = new URLSearchParams(window.location.search);
+    const journeyName = urlParams.get('journey') || JOURNEY_LOGIN;
+    journeyEvents.start({ journey: journeyName });
     componentEvents.open();
   }
 

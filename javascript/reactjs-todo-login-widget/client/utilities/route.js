@@ -59,11 +59,18 @@ function useAuthValidation(auth, setAuth) {
           setAuth(false);
           setValid('invalid');
         }
-      } else {
+      } else if (auth === false) {
         /**
          * If we have no record of their authenticated, no need to call the server
          */
         setValid('invalid');
+      } else {
+        /**
+         * `auth` is not yet known (null/undefined). Intentionally do nothing:
+         * leave `isValid` as 'unknown' so ProtectedRoute keeps showing Loading
+         * rather than redirecting a user away before their auth status has
+         * resolved. The [auth] effect dependency re-runs this once auth is known.
+         */
       }
     }
 

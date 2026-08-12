@@ -1,0 +1,18 @@
+<!--
+  ~ Copyright (c) 2026 Ping Identity Corporation. All rights reserved.
+  ~
+  ~ This software may be modified and distributed under the terms
+  ~ of the MIT license. See the LICENSE file for details.
+  -->
+
+<resources>
+    <string name="app_name">RN Sample App</string>
+    <string name="splash_title">React Native Sample App</string>
+    <string name="ping_logo_description">Ping logo</string>
+
+    <!-- Push notification tray text (overrides SDK defaults) -->
+    <string name="ping_push_notification_title">RN Sample App</string>
+    <string name="ping_push_notification_body">Tap to approve or deny</string>
+    <string name="ping_push_channel_name">Push Authentication</string>
+    <string name="ping_push_channel_description">Ping Identity push authentication requests</string>
+</resources>
