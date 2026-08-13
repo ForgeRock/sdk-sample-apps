@@ -76,7 +76,7 @@ if (!PINGONE_ENV_ID) {
   }
 
   /**
-   * @function Init - Initializes React, State, and Protect
+   * @function Init - Initializes React, State
    * @returns {Object} - React component object
    */
   function Init() {
@@ -91,17 +91,6 @@ if (!PINGONE_ENV_ID) {
      */
     const auth = useInitAuthState(isAuthenticated);
     const theme = initTheme();
-
-    /**
-     * Initialize PingOne Protect as early as possible in the application for data collection.
-     * The PingOne environment ID is required while all other options in the configuration are optional.
-     */
-    if (!PINGONE_ENV_ID) {
-      console.error('Missing PingOne environment ID for Protect initialization');
-    } else {
-      protect.start({ envId: PINGONE_ENV_ID });
-      console.log('PingOne Protect initialized at bootstrap');
-    }
 
     return (
       <ThemeContext.Provider value={theme}>
