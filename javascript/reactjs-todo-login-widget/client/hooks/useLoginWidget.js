@@ -48,59 +48,40 @@ export function useLoginWidget() {
       console.log(event);
     });
 
-    const journeyEventUnsub = journeyEvents.subscribe((event) => {
-      const authSetters = setAuthRef.current;
-
-      if (event?.user?.successful && event?.user?.response) {
-        const loggedInUser = event.user.response;
-        authSetters?.setError?.('');
-        authSetters?.setUser?.(loggedInUser.name);
-        authSetters?.setEmail?.(loggedInUser.email);
-        authSetters?.setAuthentication?.(true);
-      } else if (event?.journey?.completed) {
-        let errorSet = false;
-
-        for (const [scope, payload] of Object.entries(event)) {
-          if (payload?.error) {
-            console.error(`[login-widget] ${scope} error:`, payload.error);
-
-            if (!errorSet) {
-              const message = payload.error?.message || 'Authentication error';
-              authSetters?.setError?.(message);
-              errorSet = true;
-            }
-          }
-        }
-      }
-    });
-
     return () => {
       componentEventUnsub();
-      journeyEventUnsub();
     };
-  }, [componentEvents, journeyEvents]);
+  }, [componentEvents]);
 
   useEffect(() => {
-    // Instantiate the Widget and assign it to a variable
     const widget = new Widget({
-      // Target needs to be an actual DOM element, so ref is needed with inline type
       target: document.getElementById('login-modal'),
-      props: { type: 'modal' }, // Type is modal by default, but declaring here for clarity
+      props: { type: 'modal' },
     });
 
-    // Ensure you return a function that destroys the Widget on unmount
     return () => {
       widget.$destroy();
     };
   }, []);
 
-  function openModal() {
+  async function openModal() {
     const authSetters = setAuthRef.current;
     authSetters?.setError?.('');
     const urlParams = new URLSearchParams(window.location.search);
     const journeyName = urlParams.get('journey') || JOURNEY_LOGIN;
-    journeyEvents.start({ journey: journeyName });
+
     componentEvents.open();
+
+    try {
+      const store = await journeyEvents.start({ journey: journeyName });
+      authSetters?.setAuthentication?.(true);
+      const loggedInUser = store.user.response;
+      authSetters?.setUser?.(loggedInUser.name);
+      authSetters?.setEmail?.(loggedInUser.email);
+    } catch (err) {
+      const message = err?.journey?.error?.message || err?.message || 'Authentication error';
+      authSetters?.setError?.(message);
+    }
   }
 
   return { openModal };

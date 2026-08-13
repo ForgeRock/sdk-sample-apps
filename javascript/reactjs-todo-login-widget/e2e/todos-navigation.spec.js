@@ -11,7 +11,7 @@ import { password, username, displayName } from './utils/demo-user';
  * localStorage). It was intermittent because it only fired once a store had
  * completed at least once. This exercises repeated Home <-> Todos navigation and
  * asserts the session survives (the authenticated account menu stays present and
- * the OAuth tokens remain in localStorage).
+ * the OAuth tokens remain in sessionStorage).
  */
 
 const NAVIGATION_ROUNDS = 4;
@@ -26,16 +26,17 @@ test('React - navigating to Todos repeatedly does not log the user out', async (
 
   await expect(page.getByText(`Welcome back, ${displayName}!`)).toBeVisible();
 
-  // A logout clears the widget's OAuth tokens from localStorage. Capture the key
+  // A logout clears the widget's OAuth tokens from sessionStorage. Capture the key
   // so we can assert the session persists across navigations.
   const tokenKeyCount = async () =>
-    page.evaluate(() =>
-      Object.keys(window.localStorage).filter((key) => key.startsWith('pic-')).length,
+    page.evaluate(
+      () => Object.keys(window.sessionStorage).filter((key) => key.startsWith('pic-')).length,
     );
 
-  expect(await tokenKeyCount(), 'expected OAuth tokens in localStorage after login').toBeGreaterThan(
-    0,
-  );
+  expect(
+    await tokenKeyCount(),
+    'expected OAuth tokens in sessionStorage after login',
+  ).toBeGreaterThan(0);
 
   for (let round = 0; round < NAVIGATION_ROUNDS; round++) {
     // Go to the protected Todos route — this runs ProtectedRoute's access check.
@@ -50,7 +51,7 @@ test('React - navigating to Todos repeatedly does not log the user out', async (
     // The access check must not have logged us out.
     expect(
       await tokenKeyCount(),
-      `session was cleared after navigation round #${round + 1}`,
+      `session was cleared from sessionStorage after navigation round #${round + 1}`,
     ).toBeGreaterThan(0);
   }
 });
