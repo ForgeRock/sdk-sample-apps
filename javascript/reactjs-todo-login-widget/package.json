@@ -38,7 +38,7 @@
     "webpack-dev-server": "^5.1.0"
   },
   "dependencies": {
-    "@forgerock/login-widget": "^2.0.0",
+    "@forgerock/login-widget": "^2.1.0",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",

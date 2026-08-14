@@ -46,11 +46,21 @@ if (!PINGONE_ENV_ID) {
    * Summary: Configure the Login Widget, then get tokens before first render
    * --------------------------------------------------------------------------
    * Settings:
-   * - wellknown: the OpenID Connect discovery URL, supplied once at the top level
-   *   and shared by both the Journey Client and the OIDC client
+   * - serverConfig.wellknown: the OpenID Connect discovery URL, shared by both
+   *   the Journey Client and the OIDC client
+   * - logger: log config forwarded to both clients — logger.level sets verbosity
+   *   ('none'|'error'|'warn'|'info'|'debug'); logger.custom redirects log output
+   * - middleware: request middleware forwarded to both journey and OIDC clients
+   * - storage: top-level token storage config — type ('localStorage'|
+   *   'sessionStorage'|'custom'), required name, and optional prefix
    * - oidcClient.clientId: the OAuth 2.0 client registered in Ping AM
    * - oidcClient.redirectUri: URI this app redirects to after OAuth authorization
    * - oidcClient.scope: the OAuth 2.0 scopes requested from Ping AM
+   * - oidcClient.oauthThreshold: ms before expiry to trigger background renewal
+   * - oidcClient.par: use Pushed Authorization Requests (true | false)
+   * - oidcClient.loginHint: pre-fills the login identifier on the authorize request
+   * - oidcClient.acrValues: space-separated ACR values requesting specific auth strength (e.g. MFA)
+   * - oidcClient.query: arbitrary key/value pairs appended to the authorize request URL
    *
    * `configure()` is async — it resolves only once the OIDC client is
    * constructed. Awaiting it before `user.tokens().get()` guarantees the token
@@ -58,12 +68,27 @@ if (!PINGONE_ENV_ID) {
    * auth state on the very first paint (no sign-in flash on reload).
    ************************************************************************* */
   if (DEBUGGER) debugger;
+
+  const sessionId = crypto.randomUUID();
+  const JOURNEY_ACTIONS = ['JOURNEY_START', 'JOURNEY_NEXT', 'JOURNEY_TERMINATE'];
+
   await configure({
-    wellknown: WELLKNOWN_URL,
+    serverConfig: { wellknown: WELLKNOWN_URL },
+    logger: { level: process.env.LOG_LEVEL || 'error' },
+    middleware: [journeyMiddleware, oidcMiddleware],
+    storage: {
+      type: 'sessionStorage',
+      name: WEB_OAUTH_CLIENT,
+    },
     oidcClient: {
       clientId: WEB_OAUTH_CLIENT,
       redirectUri: `${window.location.origin}/callback.html`,
       scope: SCOPE,
+      oauthThreshold: 60000,
+      par: false,
+      loginHint: 'demo@example.com',
+      acrValues: 'urn:acr:example',
+      query: { ui_locales: 'en-US' },
     },
   });
 
@@ -72,7 +97,27 @@ if (!PINGONE_ENV_ID) {
     const event = await user.tokens().get();
     isAuthenticated = !!event?.response?.accessToken;
   } catch (err) {
-    console.error(`Error: token retrieval for hydration; ${err}`);
+    // No tokens in storage — user is unauthenticated, not an error
+  }
+
+  function journeyMiddleware(req, action, next) {
+    if (JOURNEY_ACTIONS.includes(action.type)) {
+      req.headers.set('X-Session-ID', sessionId);
+      if (process.env.LOG_LEVEL === 'debug') {
+        console.log('[journey-middleware]', action.type, req.url.href);
+      }
+    }
+    next();
+  }
+
+  function oidcMiddleware(req, action, next) {
+    if (!JOURNEY_ACTIONS.includes(action.type)) {
+      req.headers.set('X-Session-ID', sessionId);
+      if (process.env.LOG_LEVEL === 'debug') {
+        console.log('[oidc-middleware]', action.type, req.url.href);
+      }
+    }
+    next();
   }
 
   /**
