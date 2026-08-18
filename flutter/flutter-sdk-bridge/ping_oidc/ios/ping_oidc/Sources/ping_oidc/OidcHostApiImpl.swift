@@ -76,6 +76,9 @@ final class OidcHostApiImpl: PingOidcHostApi, @unchecked Sendable {
     /// removed once the native SDK preserves a distinguishable cancellation signal, tracked in
     /// SDKS-5295 to align it with Android's typed `BrowserCanceledException`.
     private func mapAuthorizeFailure(_ error: OidcError) -> Result<AuthorizeResultMessage, Error> {
+        // Trip-wire: if `ping-ios-sdk` is bumped and cancellations stop being classified as
+        // `.cancel`, check whether this literal string still appears in the SDK's cancellation
+        // message first.
         if plainErrorMessage(for: error).contains("cancelled by the user") {
             return .success(AuthorizeResultMessage(type: .cancel))
         }

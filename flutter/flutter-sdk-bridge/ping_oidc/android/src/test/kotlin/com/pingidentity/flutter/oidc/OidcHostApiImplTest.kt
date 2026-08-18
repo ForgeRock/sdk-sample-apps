@@ -10,9 +10,11 @@ package com.pingidentity.flutter.oidc
 import com.pingidentity.flutter.oidc.error.OidcErrorCodes
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withTimeoutOrNull
 
 /**
  * Unit tests for [OidcHostApiImpl]'s Phase 4 methods.
@@ -102,4 +104,15 @@ class OidcHostApiImplTest {
         assertEquals("state", error.details)
         assertTrue(error.message?.contains("unknown-id") == true)
     }
+
+    @Test
+    fun `shutdown cancels the scope so a call issued after detach never invokes its callback`() =
+        runBlocking {
+            impl.shutdown()
+
+            val deferred = CompletableDeferred<Result<Boolean>>()
+            impl.hasUser("unknown-id") { deferred.complete(it) }
+
+            assertNull(withTimeoutOrNull(200) { deferred.await() })
+        }
 }

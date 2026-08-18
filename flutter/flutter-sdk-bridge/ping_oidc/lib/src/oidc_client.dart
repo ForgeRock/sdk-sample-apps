@@ -5,6 +5,7 @@
  * of the MIT license. See the LICENSE file for details.
  */
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:ping_core/ping_core.dart';
 
@@ -45,7 +46,17 @@ class OidcClient {
     } catch (error) {
       // Roll back the already-registered client handle so a createWebClient failure can't
       // leave it orphaned in CoreRuntime.oidcClientRegistry with no caller-reachable dispose().
-      await _guard(() => api.dispose(handleId));
+      try {
+        await _guard(() => api.dispose(handleId));
+      } catch (rollbackError) {
+        // The rollback itself failed, leaking `handleId` in the native registry — surfacing the
+        // original `error` below is still correct, but log this so a leaked-handle report has
+        // something to point at.
+        debugPrint(
+          'OidcClient.configure: rollback dispose($handleId) failed after a '
+          'createWebClient error: $rollbackError',
+        );
+      }
       rethrow;
     }
     return OidcClient._(handleId, webHandleId, api);
