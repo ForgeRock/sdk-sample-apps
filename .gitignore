@@ -98,6 +98,9 @@ outputs/*
 
 ## Package Files
 *.jar
+!flutter/flutter-sdk-bridge/ping_core/android/gradle/wrapper/gradle-wrapper.jar
+!flutter/flutter-sdk-bridge/ping_journey/android/gradle/wrapper/gradle-wrapper.jar
+!flutter/flutter-sdk-bridge/ping_oidc/android/gradle/wrapper/gradle-wrapper.jar
 *.war
 *.nar
 *.ear
