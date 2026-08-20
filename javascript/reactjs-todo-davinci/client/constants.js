@@ -10,37 +10,59 @@
 
 /** ***************************************************************************
  * SDK INTEGRATION POINT
- * Summary: Configure the DaVinci client
+ * Summary: Configure the DaVinci and OIDC clients
  * ----------------------------------------------------------------------------
- * Details: CONFIG uses the unified SDK configuration schema. Pass it to
- * `makeDavinciConfig(CONFIG)` from `@forgerock/sdk-utilities` before calling
- * the factory — e.g. `davinci({ config: makeDavinciConfig(CONFIG) })`.
+ * Details: There are two ways to initialize the SDK clients. Option 1 is to
+ * provide the configuration values from `.env` directly to the clients.
+ * Option 2 is to use the JSON configuration from `config.json` which is
+ * supported across all platforms. Both options are demonstrated below.
  *
- * Local dev: copy config.example.json → config.json and fill in your values.
- * E2e / CI: set SDK_CONFIG to a JSON string (e.g. from config.test.json).
+ * Using `config.json` is optional. If you prefer, you can continue supplying
+ * the SDK configuration via the `SDK_<NAME>` environment variables. The
+ * app falls back to `config.json` only when these are not set.
  *************************************************************************** */
-import sdkConfigJson from '../config.json';
+import sdkConfig from '../config.json';
+import { makeDavinciConfig, makeOidcConfig } from '@forgerock/sdk-utilities';
+
+// Application-specific variables
 export const API_URL = process.env.API_URL;
-// Yes, the debugger boolean is intentionally reversed
-export const DEBUGGER = process.env.DEBUGGER_OFF === 'false';
+export const DEBUGGER = process.env.DEBUGGER_OFF === 'false'; // Yes, the debugger boolean is intentionally reversed
 export const INIT_PROTECT = process.env.INIT_PROTECT;
 export const PINGONE_ENV_ID = process.env.PINGONE_ENV_ID;
 
-const rawConfig = (() => {
-  if (!process.env.SDK_CONFIG) {
-    return sdkConfigJson;
-  }
-  try {
-    return JSON.parse(process.env.SDK_CONFIG);
-  } catch (error) {
-    throw new Error(`Invalid SDK_CONFIG JSON: ${error.message}`);
-  }
-})();
+const CLIENT_ID = process.env.SDK_CLIENT_ID;
+const DISCOVERY_ENDPOINT = process.env.SDK_DISCOVERY_ENDPOINT;
+const SCOPE = process.env.SDK_SCOPE;
 
-export const CONFIG = {
-  ...rawConfig,
-  oidc: {
-    ...rawConfig.oidc,
-    redirectUri: `${window.location.origin}/callback.html`,
-  },
-};
+/** ***************************************************************************
+ * Option 1: Get the config from SDK_<NAME> variables `.env`
+ *************************************************************************** */
+const envConfig =
+  !CLIENT_ID || !DISCOVERY_ENDPOINT || !SCOPE
+    ? null
+    : {
+        clientId: CLIENT_ID,
+        scope: SCOPE,
+        serverConfig: {
+          wellknown: DISCOVERY_ENDPOINT,
+        },
+        redirectUri: `${window.location.origin}/callback.html`,
+      };
+
+/** ***************************************************************************
+ * Option 2: Use the unified JSON config from `config.json` to create
+ * configuration objects.
+ *************************************************************************** */
+const jsonConfig = sdkConfig
+  ? {
+      ...sdkConfig,
+      oidc: {
+        ...sdkConfig.oidc,
+        redirectUri: sdkConfig.oidc?.redirectUri ?? `${window.location.origin}/callback.html`,
+      },
+    }
+  : null;
+
+// SDK-specific variables
+export const DAVINCI_CONFIG = envConfig ?? makeDavinciConfig(jsonConfig);
+export const OIDC_CONFIG = envConfig ?? makeOidcConfig(jsonConfig);

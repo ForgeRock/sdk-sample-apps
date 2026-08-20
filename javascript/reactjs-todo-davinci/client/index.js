@@ -11,7 +11,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import Router from './router';
-import { CONFIG, INIT_PROTECT, PINGONE_ENV_ID } from './constants';
+import { OIDC_CONFIG, INIT_PROTECT, PINGONE_ENV_ID } from './constants';
 import Loading from './components/utilities/loading';
 import { initTheme, ThemeContext } from './context/theme.context.js';
 import { useInitOidcState, OidcContext } from './context/oidc.context';
@@ -41,7 +41,7 @@ const protectInitMode = INIT_PROTECT || urlParams.get('initProtect');
      * something like Redux might be a better option.
      */
     const theme = initTheme();
-    const oidcState = useInitOidcState(CONFIG);
+    const oidcState = useInitOidcState(OIDC_CONFIG);
     const protectState = useInitProtect({ envId: PINGONE_ENV_ID });
 
     const [{ oidcClient }] = oidcState;

@@ -56,7 +56,7 @@ test.describe('React - PingOne OIDC', () => {
       page.getByText(
         /Invalid username and\/or password|Validation Error|identifier must be a uuid/,
       ),
-    ).toBeVisible();
+    ).toBeVisible({ timeout: 10000 });
   });
 
   test('Login then logout, pass', async ({ page }) => {

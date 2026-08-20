@@ -15,7 +15,7 @@ import Loading from './components/utilities/loading';
 import { OidcContext, useInitOidcState } from './context/oidc.context';
 import { ThemeContext, initTheme } from './context/theme.context';
 import Router from './router';
-import { DEBUGGER } from './constants';
+import { DEBUGGER, OIDC_CONFIG } from './constants';
 
 /**
  * This import will produce a separate CSS file linked in the index.html
@@ -45,7 +45,7 @@ import './styles/index.scss';
      */
     if (DEBUGGER) debugger;
     const theme = initTheme();
-    const oidcState = useInitOidcState();
+    const oidcState = useInitOidcState(OIDC_CONFIG);
     const [{ oidcClient }] = oidcState;
 
     if (!oidcClient) {
