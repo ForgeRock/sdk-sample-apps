@@ -14,7 +14,7 @@ let package = Package(
     dependencies: [
         .package(name: "FlutterFramework", path: "../FlutterFramework"),
         .package(name: "ping_core", path: "../../ping_core/ios/ping_core"),
-        .package(url: "https://github.com/ForgeRock/ping-ios-sdk", exact: "2.0.0")
+        .package(url: "https://github.com/ForgeRock/ping-ios-sdk", exact: "2.1.0")
     ],
     targets: [
         .target(

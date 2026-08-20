@@ -25,8 +25,23 @@ jobs:
         run: flutter analyze
 
       - name: Dart/Flutter unit + widget tests
-        run: flutter test
+        # `flutter test` isn't workspace-aware — it only looks for a `test/` directory in the
+        # working directory it's run from — so each workspace member needs its own invocation.
+        run: |
+          for pkg in flutter-sdk-bridge/ping_core flutter-sdk-bridge/ping_journey flutter-sdk-bridge/ping_oidc flutter-journey; do
+            echo "::group::flutter test ($pkg)"
+            (cd "$pkg" && flutter test)
+            echo "::endgroup::"
+          done
 
       - name: Android unit tests (ping_core, ping_journey)
         working-directory: flutter/flutter-journey/android
         run: ./gradlew :ping_core:testDebugUnitTest :ping_journey:testDebugUnitTest
+
+      - name: Android unit tests (ping_oidc)
+        # No consuming Flutter app wires ping_oidc into a project yet (deferred to the
+        # flutter-oidc sample app in SDKS-5266), so it's built standalone via its own wrapper.
+        # `FLUTTER_ROOT` (set by subosito/flutter-action above) supplies `flutter.jar` since
+        # there's no `local.properties` on CI.
+        working-directory: flutter/flutter-sdk-bridge/ping_oidc/android
+        run: ./gradlew testDebugUnitTest

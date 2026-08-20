@@ -15,4 +15,10 @@ import Foundation
 public enum CoreRuntime {
     /// Registry for Journey client instances.
     public static let journeyRegistry: Registry = SimpleRegistry()
+
+    /// Registry for OIDC client instances.
+    public static let oidcClientRegistry: Registry = SimpleRegistry()
+
+    /// Registry for OIDC web client instances.
+    public static let oidcWebClientRegistry: Registry = SimpleRegistry()
 }

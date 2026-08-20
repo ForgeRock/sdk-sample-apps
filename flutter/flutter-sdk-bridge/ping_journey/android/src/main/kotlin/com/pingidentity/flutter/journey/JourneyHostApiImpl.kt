@@ -8,12 +8,12 @@
 package com.pingidentity.flutter.journey
 
 import com.pingidentity.flutter.core.CoreRuntime
+import com.pingidentity.flutter.core.mapper.JsonBridgeMapper
 import com.pingidentity.flutter.journey.callback.JourneyCallbackValueApplier
 import com.pingidentity.flutter.journey.error.JourneyErrorCodes
 import com.pingidentity.flutter.journey.error.JourneyErrorMapper
 import com.pingidentity.flutter.journey.error.classifyError
 import com.pingidentity.flutter.journey.mapper.JourneyNodeMapper
-import com.pingidentity.flutter.journey.mapper.JsonBridgeMapper
 import com.pingidentity.journey.start
 import com.pingidentity.journey.user
 import com.pingidentity.oidc.Token
