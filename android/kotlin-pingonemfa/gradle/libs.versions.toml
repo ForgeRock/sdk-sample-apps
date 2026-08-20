@@ -1,0 +1,48 @@
+[versions]
+agp = "9.2.1"
+kotlin = "2.4.10"
+compose = "1.11.4"
+compose-material3 = "1.4.0"
+coreKtx = "1.19.0"
+appcompat = "1.7.1"
+material = "1.14.0"
+materialIconsExtended = "1.7.8"
+navVersion = "2.9.8"
+lifecycle = "2.11.0"
+composeBom = "2026.06.01"
+firebaseBom = "34.17.0"
+cameraX = "1.6.1"
+barcodeScanning = "17.3.0"
+
+# Ping SDK version
+ping = "0.0.0"
+
+[libraries]
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version = "1.13.0" }
+androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navVersion" }
+androidx-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
+compose-material3 = { module = "androidx.compose.material3:material3", version.ref = "compose-material3" }
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
+androidx-lifecycle-process = { module = "androidx.lifecycle:lifecycle-process", version.ref = "lifecycle" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging" }
+# CameraX
+androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "cameraX" }
+androidx-camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "cameraX" }
+androidx-camera-view = { module = "androidx.camera:camera-view", version.ref = "cameraX" }
+barcode-scanning = { module = "com.google.mlkit:barcode-scanning", version.ref = "barcodeScanning" }
+
+# Ping Libraries
+pingonemfa = { module = "com.pingidentity.sdks:pingonemfa", version.ref = "ping" }
+ping-logger = { module = "com.pingidentity.sdks:logger", version.ref = "ping" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+google-services = { id = "com.google.gms.google-services", version = "4.5.0" }
