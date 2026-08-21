@@ -9,7 +9,6 @@
  */
 const { defineConfig, devices } = require('@playwright/test');
 const dotenv = require('dotenv');
-const testConfig = require('./config.test.json');
 
 // Load environment variables from .env file
 dotenv.config({ path: '.env' });
@@ -43,7 +42,9 @@ module.exports = defineConfig({
         VITE_JOURNEY_REGISTER: 'Registration',
         VITE_PORT: '8443',
         VITE_PINGONE_ENV_ID: '02fb4743-189a-4bc7-9d6c-a919edfe6447',
-        VITE_SDK_CONFIG: JSON.stringify(testConfig),
+        VITE_SDK_CLIENT_ID: 'WebOAuthClient',
+        VITE_SDK_DISCOVERY_ENDPOINT: 'https://openam-sdks.forgeblocks.com/am/oauth2/alpha/.well-known/openid-configuration',
+        VITE_SDK_SCOPE: 'openid profile email'
       },
       ignoreHTTPSErrors: true,
     },

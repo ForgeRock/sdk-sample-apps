@@ -9,11 +9,10 @@
  */
 
 import { useContext, useEffect, useState, useCallback, useRef } from 'react';
-import { CONFIG, DEBUGGER } from '../../constants.js';
+import { JOURNEY_CONFIG, DEBUGGER } from '../../constants.js';
 import { htmlDecode } from '../../utilities/decode.js';
 import { OidcContext } from '../../context/oidc.context.js';
 import { callbackType, journey } from '@forgerock/journey-client';
-import { makeJourneyConfig } from '@forgerock/sdk-utilities';
 
 /**
  * @function isGenericError - Helper function to determine if a step is a GenericError
@@ -70,7 +69,7 @@ export default function useJourney({ formMetadata, resumeUrl }) {
        ********************************************************************* */
       if (DEBUGGER) debugger;
       try {
-        const client = await journey({ config: makeJourneyConfig(CONFIG) });
+        const client = await journey({ config: JOURNEY_CONFIG });
         setJourneyClient(client);
 
         if (resumeUrl) {
