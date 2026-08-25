@@ -76,6 +76,36 @@ Both platforms pin the native Ping SDKs to **2.1.0** — Android via Maven
 (`com.pingidentity.sdks:*`), iOS via Swift Package Manager
 (`github.com/ForgeRock/ping-ios-sdk`, exact `2.1.0`).
 
+## Testing
+
+Both test tiers live in the bridge modules. The sample apps ship **no tests at all** — they are reference
+code customers read and copy, so the behavioural guarantees belong here instead.
+
+**Unit tests** are pure Dart under `<module>/test/`, mock the Pigeon-generated host API, and run on the host
+VM. `flutter test` only tests the package in the current directory — it does not aggregate across a pub
+workspace — so run it from the workspace root against the module test directories directly.
+
+**Integration tests** are under `<module>/example/integration_test/` and run on a real device or emulator
+against the real native Ping SDK. They drive the module's public Dart API directly with **no UI interaction**
+— no `pumpWidget`, no finders, no taps; `testWidgets` appears only because
+`IntegrationTestWidgetsFlutterBinding` requires it. The `example/` app exists for one reason: the
+`integration_test` package can only run from a Flutter *application*, and a plugin is not one. Its
+`lib/main.dart` is a deliberately empty screen, and it is registered in the workspace root's `workspace:`
+list. It is not a sample app.
+
+Integration tests are **hermetic by default**, scripted against an in-process mock server bound to loopback,
+and switch to a live tenant when `--dart-define` values are supplied. Credentials are read through
+`String.fromEnvironment`, so they live in your shell or a CI secret store and are never written to a file in
+this repository.
+
+```sh
+cd flutter && flutter test flutter-sdk-bridge/*/test              # all unit tests
+cd flutter-sdk-bridge/ping_journey/example && flutter test integration_test/   # hermetic, needs a device
+```
+
+See [`ping_journey/example/README.md`](ping_journey/example/README.md) for the mock server, the full
+`--dart-define` list, which scenarios skip in which mode, and the platform permissions a test host needs.
+
 ## Adding new modules (e.g. `ping_davinci`, `ping_oidc`)
 
 1. Scaffold a new federated plugin (`flutter create --template=plugin ...`) alongside `ping_journey`, named `ping_<module>`.
@@ -84,6 +114,8 @@ Both platforms pin the native Ping SDKs to **2.1.0** — Android via Maven
 4. Author a Pigeon schema under `ping_<module>/pigeons/messages.dart`. Message type names must not use the literal `Pigeon` prefix — Pigeon reserves it for its own generated helpers; this repo's convention is a `*Message` suffix instead (see `ping_journey`'s schema).
 5. Regenerate with `dart run pigeon --input pigeons/messages.dart` from the new package's directory, and check in the generated `.g.*` files.
 6. Add the new package to the workspace root `pubspec.yaml`'s `workspace:` list.
+7. Keep the generated `example/` app and strip it back to an empty screen — it is the integration-test host, not a sample. Give it a `README.md` saying so, add it to the `workspace:` list as well, and copy the debug-only Android `network_security_config.xml` and iOS `NSAllowsLocalNetworking` entries from `ping_journey/example` if the module's tests use a loopback mock server.
+8. Write unit tests under `<module>/test/` and no-UI integration scenarios under `<module>/example/integration_test/`, one scenario per file. See the Testing section above.
 
 ## License
 
