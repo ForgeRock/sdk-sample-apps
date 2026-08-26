@@ -10,7 +10,6 @@
 
 import { useState, createContext, useEffect } from 'react';
 import { oidc } from '@forgerock/oidc-client';
-import { makeOidcConfig } from '@forgerock/sdk-utilities';
 import { DEBUGGER } from '../constants';
 
 const email = window.sessionStorage.getItem('sdk_email');
@@ -20,7 +19,7 @@ const username = window.sessionStorage.getItem('sdk_username');
  * @function useInitOidcState - A custom hook to get initial OIDC state for managing user authentication
  * @returns {Array} - OIDC client, state values and state methods
  */
-export function useInitOidcState(json) {
+export function useInitOidcState(config) {
   /**
    * Create state properties for "global" OIDC state.
    * The destructing of the hook's array results in index 0 having the state values,
@@ -45,7 +44,7 @@ export function useInitOidcState(json) {
        * but it can be done outside of the React component for better performance.
        ************************************************************************* */
       if (DEBUGGER) debugger;
-      let client = await oidc({ config: makeOidcConfig(json) });
+      let client = await oidc({ config });
       if ('error' in client) {
         console.error(`Error initializing OIDC client: ${client.error}`);
         client = null;
@@ -60,7 +59,7 @@ export function useInitOidcState(json) {
     if (!oidcClient) {
       initOidcClient();
     }
-  }, [json, oidcClient]);
+  }, [config, oidcClient]);
 
   /**
    * @function setAuthenticationWrapper - A wrapper for storing authentication state

@@ -14,7 +14,15 @@ This folder contains the React client for `reactjs-todo-oidc`, which demonstrate
 
 ### SDK credentials
 
-Copy `config.example.json` to `config.json` at `javascript/reactjs-todo-oidc/config.json` and fill in your values:
+Set all three variables for direct environment configuration:
+
+```text
+SDK_CLIENT_ID=<your-oauth-client-id>
+SDK_DISCOVERY_ENDPOINT=https://<your-tenant>/.well-known/openid-configuration
+SDK_SCOPE='openid profile email'
+```
+
+If any SDK variable is unset, copy `config.example.json` to `config.json` at `javascript/reactjs-todo-oidc/config.json` and fill in your values:
 
 ```sh
 cp config.example.json config.json

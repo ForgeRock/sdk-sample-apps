@@ -24,7 +24,10 @@ module.exports = () => {
   const DEBUGGER_OFF = process.env.DEBUGGER_OFF || localEnv.DEBUGGER_OFF;
   const DEVELOPMENT = process.env.DEVELOPMENT || localEnv.DEVELOPMENT;
   const SERVER = process.env.SERVER || localEnv.SERVER;
-  const SDK_CONFIG = process.env.SDK_CONFIG || null;
+  const SDK_CLIENT_ID = process.env.SDK_CLIENT_ID || localEnv.SDK_CLIENT_ID;
+  const SDK_DISCOVERY_ENDPOINT =
+    process.env.SDK_DISCOVERY_ENDPOINT || localEnv.SDK_DISCOVERY_ENDPOINT;
+  const SDK_SCOPE = process.env.SDK_SCOPE || localEnv.SDK_SCOPE;
 
   return {
     // Point to the top level source file
@@ -117,7 +120,9 @@ module.exports = () => {
         'process.env.API_URL': JSON.stringify(API_URL),
         'process.env.DEBUGGER_OFF': JSON.stringify(DEBUGGER_OFF),
         'process.env.SERVER': JSON.stringify(SERVER),
-        'process.env.SDK_CONFIG': JSON.stringify(SDK_CONFIG),
+        'process.env.SDK_CLIENT_ID': JSON.stringify(SDK_CLIENT_ID),
+        'process.env.SDK_DISCOVERY_ENDPOINT': JSON.stringify(SDK_DISCOVERY_ENDPOINT),
+        'process.env.SDK_SCOPE': JSON.stringify(SDK_SCOPE),
       }),
     ],
   };

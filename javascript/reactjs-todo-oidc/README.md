@@ -53,26 +53,45 @@ Choose to set up either a PingOne or PingAM/PingAIC instance
 
 ### Configure SDK Credentials
 
-> **Note:** Using `config.json` is optional and backward-compatible. If you prefer, you can continue supplying SDK credentials via the `SDK_CONFIG` environment variable (a JSON string). The app falls back to `config.json` only when `SDK_CONFIG` is not set.
+There are two ways to provide the SDK with your configuration. If you do not provide configuration values in `.env` then the application will fall back to `config.json`, a shared JSON configuration object that can be used across all platforms. Pick one.
 
-Copy `config.example.json` to `config.json` at the app root and fill in your values:
+#### Option 1: Entirely via `.env`
+
+```sh
+cp .env.example .env
+```
+
+Set the following in your `.env` file:
+
+```text
+SDK_CLIENT_ID=<your-oauth-client-id>
+SDK_DISCOVERY_ENDPOINT=https://<your-tenant>/.well-known/openid-configuration
+SDK_SCOPE='openid profile email'
+```
+
+When all three of these are set, the app uses them directly and does not read `config.json`.
+
+#### Option 2: `.env` for app settings, `config.json` for SDK configuration
+
+Leave `SDK_CLIENT_ID`, `SDK_DISCOVERY_ENDPOINT`, and `SDK_SCOPE` unset (or omit them) in `.env`, and provide the SDK credentials via `config.json` instead. Copy `config.example.json` to `config.json` at the app root and fill in your values:
 
 ```sh
 cp config.example.json config.json
 ```
 
-`config.json` (gitignored):
+`config.json`:
 
 ```json
 {
   "oidc": {
     "clientId": "<your-oauth-client-id>",
-    "discoveryEndpoint": "https://<your-domain>/.well-known/openid-configuration",
-    "scopes": ["openid", "profile", "email"],
-    "redirectUri": "https://localhost:8443/callback.html"
+    "discoveryEndpoint": "https://<your-tenant>/.well-known/openid-configuration",
+    "scopes": ["openid", "profile", "email"]
   }
 }
 ```
+
+The remaining app settings covered below (API URL, port, server, etc.) always come from `.env`, regardless of which option you choose here.
 
 ### Configure Your `.env` File
 

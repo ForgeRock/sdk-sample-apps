@@ -1,6 +1,9 @@
 node_modules/
-config.json
 /test-results/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+config.json
+config.*.json
+!config.example.json
