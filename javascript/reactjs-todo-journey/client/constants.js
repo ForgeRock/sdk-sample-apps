@@ -8,7 +8,8 @@
  * of the MIT license. See the LICENSE file for details.
  */
 import sdkConfig from '../config.json';
-import { makeJourneyConfig, makeOidcConfig } from '@forgerock/sdk-utilities';
+import { makeJourneyConfig } from '@forgerock/journey-client';
+import { makeOidcConfig } from '@forgerock/oidc-client';
 
 // Application-specific variables
 export const API_URL = import.meta.env.VITE_API_URL;
