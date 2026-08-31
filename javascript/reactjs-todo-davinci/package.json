@@ -38,9 +38,8 @@
     "webpack-dev-server": "^5.1.0"
   },
   "dependencies": {
-    "@forgerock/davinci-client": "latest",
-    "@forgerock/oidc-client": "latest",
-    "@forgerock/sdk-utilities": "latest",
+    "@forgerock/davinci-client": "https://pkg.pr.new/@forgerock/davinci-client@759",
+    "@forgerock/oidc-client": "https://pkg.pr.new/@forgerock/oidc-client@759",
     "@forgerock/protect": "latest",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",

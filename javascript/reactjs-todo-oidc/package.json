@@ -38,8 +38,7 @@
     "webpack-dev-server": "^5.1.0"
   },
   "dependencies": {
-    "@forgerock/oidc-client": "latest",
-    "@forgerock/sdk-utilities": "latest",
+    "@forgerock/oidc-client": "https://pkg.pr.new/@forgerock/oidc-client@759",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",

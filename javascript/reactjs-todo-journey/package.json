@@ -18,10 +18,9 @@
     "vite": "^5.4.9"
   },
   "dependencies": {
-    "@forgerock/journey-client": "latest",
-    "@forgerock/oidc-client": "latest",
+    "@forgerock/journey-client": "https://pkg.pr.new/@forgerock/journey-client@759",
+    "@forgerock/oidc-client": "https://pkg.pr.new/@forgerock/oidc-client@759",
     "@forgerock/protect": "latest",
-    "@forgerock/sdk-utilities": "latest",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.19.0"
