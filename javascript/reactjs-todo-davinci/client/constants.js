@@ -22,7 +22,8 @@
  * app falls back to `config.json` only when these are not set.
  *************************************************************************** */
 import sdkConfig from '../config.json';
-import { makeDavinciConfig, makeOidcConfig } from '@forgerock/sdk-utilities';
+import { makeDavinciConfig } from '@forgerock/davinci-client';
+import { makeOidcConfig } from '@forgerock/oidc-client';
 
 // Application-specific variables
 export const API_URL = process.env.API_URL;
