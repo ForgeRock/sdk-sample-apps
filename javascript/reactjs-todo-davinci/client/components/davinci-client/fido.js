@@ -13,10 +13,10 @@ import { fido } from '@forgerock/davinci-client';
 
 /**
  * @function describeFidoError - Maps a typed FIDO GenericError to sample-app-friendly copy.
- * @param {Object} fidoError - The typed error returned by the DaVinci FIDO client
- * @param {string} fidoError.type - 'fido_error' for an expected WebAuthn/browser failure,
- * 'unknown_error' for an unexpected internal failure
- * @param {string} [fidoError.code] - Optional WebAuthn error code (e.g. 'NotAllowedError')
+ * @param {Object} fidoError - The typed error returned by the FIDO API
+ * @param {string} fidoError.type - 'fido_error', the type of a FIDO API failure
+ * @param {string} [fidoError.code] - Error code distinguishing a DOM exception
+ * (e.g. 'NotAllowedError') from an internal error ('UnknownError')
  * @param {string} [fidoError.message] - Optional human-readable detail from the SDK
  * @returns {{ message: string, code?: string }} - Display message and error code for the UI
  */
@@ -74,14 +74,15 @@ export default function FidoComponent({ collector, updater, submitForm }) {
     if ('error' in response) {
       /** *********************************************************************
        * SDK INTEGRATION POINT
-       * Summary: Branch on the FIDO client's typed error contract
+       * Summary: Handle the FIDO API's typed error
        * ----------------------------------------------------------------------
-       * Details: `fidoClient.register`/`authenticate` return a typed
-       * `GenericError` on failure. Its `type` field ('fido_error' vs
-       * 'unknown_error') lets the flow distinguish an expected WebAuthn/browser
-       * failure from an unexpected internal one, rather than parsing a message
-       * string. `code` (e.g. `NotAllowedError`) is surfaced as a data attribute
-       * so e2e tests can assert on the specific WebAuthn failure reason.
+       * Details: The FIDO API `register()` and `authenticate()` methods return
+       * a `GenericError` on failure with type `fido_error`. The error code
+       * determines if it was a DOM exception (e.g. `NotAllowedError`) vs
+       * internal error (`UnknownError`). You may choose to handle this error
+       * client side, or send the error to DaVinci to reach an error branch
+       * configured in your flow. To send the error to DaVinci, update the
+       * collector with the error and submit it by calling `davinciClient.next()`.
        ********************************************************************* */
       const fidoError = describeFidoError(response);
       setError(fidoError);
