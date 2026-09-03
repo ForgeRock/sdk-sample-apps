@@ -108,9 +108,11 @@ test.describe.skip('WebAuthn Virtual Authenticator Setup', () => {
     await expect(page.getByLabel('MFA Device Selection -')).toHaveValue('FIDO2');
     await page.getByRole('button', { name: 'Next' }).click();
 
-    // Assert that registration has failed
-    await expect(page.getByRole('alert')).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Try Again' })).toBeVisible();
+    // Assert the DaVinci-routed error node
+    await expect(page.locator('.alert-danger[role="alert"]')).toContainText(
+      'FIDO Registration Error - NotAllowedError',
+    );
+    await expect(page.getByRole('button', { name: 'Try Again' })).toBeHidden();
   });
 
   test('should fail to authenticate with an existing WebAuthn credential', async ({ page }) => {
@@ -151,8 +153,10 @@ test.describe.skip('WebAuthn Virtual Authenticator Setup', () => {
     await deviceSelector.selectOption(lastValue);
     await page.getByRole('button', { name: 'Next' }).click();
 
-    // Assert that authentication has failed
-    await expect(page.getByRole('alert')).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Try Again' })).toBeVisible();
+    // Assert the DaVinci-routed error node
+    await expect(page.locator('.alert-danger[role="alert"]')).toContainText(
+      'FIDO Authentication Error - NotAllowedError',
+    );
+    await expect(page.getByRole('button', { name: 'Try Again' })).toBeHidden();
   });
 });

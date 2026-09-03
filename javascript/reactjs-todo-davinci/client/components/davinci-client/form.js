@@ -24,6 +24,8 @@ import FidoComponent from './fido.js';
 import PollingComponent from './polling.js';
 import BooleanComponent from './boolean.js';
 import QrCode from './qr-code.js';
+import ImageComponent from './image.js';
+import MetadataComponent from './metadata.js';
 import Unknown from './unknown.js';
 import Alert from './alert.js';
 import KeyIcon from '../icons/key-icon';
@@ -249,6 +251,17 @@ export default function Form() {
         return <Protect collector={collector} key={collectorName} />;
       case 'QrCodeCollector':
         return <QrCode collector={collector} key={collectorName} />;
+      case 'ImageCollector':
+        return <ImageComponent collector={collector} key={collectorName} />;
+      case 'MetadataCollector':
+        return (
+          <MetadataComponent
+            collector={collector}
+            updater={updater(collector)}
+            submitForm={setNext}
+            key={collectorName}
+          />
+        );
       case 'SubmitCollector':
         return <SubmitButton collector={collector} isLoading={isLoading} key={collectorName} />;
       case 'FlowCollector':
