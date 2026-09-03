@@ -42,7 +42,7 @@ export default function FidoComponent({ collector, updater, submitForm }) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [hasAttempted, setHasAttempted] = useState(false); // for registration auto-trigger
-  const fidoClient = fido();
+  const fidoApi = fido();
 
   async function updateAndSubmit(result, fallbackErrorMessage) {
     const updateResult = updater(result);
@@ -60,11 +60,9 @@ export default function FidoComponent({ collector, updater, submitForm }) {
 
     let response;
     if (collector.type === 'FidoRegistrationCollector') {
-      response = await fidoClient.register(
-        collector.output.config.publicKeyCredentialCreationOptions,
-      );
+      response = await fidoApi.register(collector.output.config.publicKeyCredentialCreationOptions);
     } else if (collector.type === 'FidoAuthenticationCollector') {
-      response = await fidoClient.authenticate(
+      response = await fidoApi.authenticate(
         collector.output.config.publicKeyCredentialRequestOptions,
       );
     } else {
