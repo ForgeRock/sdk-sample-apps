@@ -40,7 +40,7 @@ export default function WebAuthnComponent({ step, setSubmissionStep }) {
           await WebAuthn.authenticate(step);
         }
         setSubmissionStep(step);
-      // eslint-disable-next-line no-unused-vars
+        // eslint-disable-next-line no-unused-vars
       } catch (_) {
         setSubmissionStep(step);
       }

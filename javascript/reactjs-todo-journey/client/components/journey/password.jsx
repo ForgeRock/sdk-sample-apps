@@ -75,7 +75,7 @@ export default function Password({ callback, errorMessage, inputName }) {
       let failureObj;
       try {
         failureObj = JSON.parse(curr);
-      // eslint-disable-next-line no-unused-vars
+        // eslint-disable-next-line no-unused-vars
       } catch (_) {
         console.log(`Parsing failure for ${passwordLabel}`);
       }

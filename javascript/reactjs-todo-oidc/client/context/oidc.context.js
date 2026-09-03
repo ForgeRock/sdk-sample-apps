@@ -9,8 +9,7 @@
  */
 import { useEffect, useState, createContext } from 'react';
 import { oidc } from '@forgerock/oidc-client';
-import { makeOidcConfig } from '@forgerock/sdk-utilities';
-import { CONFIG, DEBUGGER } from '../constants';
+import { DEBUGGER } from '../constants';
 
 const email = window.sessionStorage.getItem('sdk_email');
 const username = window.sessionStorage.getItem('sdk_username');
@@ -19,7 +18,7 @@ const username = window.sessionStorage.getItem('sdk_username');
  * @function useInitOidcState - Initialize global OIDC state
  * @returns {Array} - OIDC state and state mutator methods
  */
-export function useInitOidcState() {
+export function useInitOidcState(config) {
   const [oidcClient, setOidcClient] = useState(null);
   const [authenticated, setAuthentication] = useState(false);
   const [mail, setEmail] = useState(email || '');
@@ -39,7 +38,7 @@ export function useInitOidcState() {
        * but it can be done outside of the React component for better performance.
        ************************************************************************* */
       if (DEBUGGER) debugger;
-      let client = await oidc({ config: makeOidcConfig(CONFIG) });
+      let client = await oidc({ config });
       if ('error' in client) {
         console.error(`Error initializing OIDC client: ${client.error}`);
         client = null;
@@ -53,7 +52,7 @@ export function useInitOidcState() {
     if (!oidcClient) {
       initOidcClient();
     }
-  }, [oidcClient]);
+  }, [config, oidcClient]);
 
   /**
    * @function setAuthenticationWrapper - Wrapper for authentication state updates

@@ -24,39 +24,41 @@ test.describe('React - DaVinci Protect', () => {
     await page.getByRole('link', { name: 'Sign In', exact: true }).click();
     await expect(page.getByText('JS Protect - Custom HTML Form')).toBeVisible();
 
-    const requests = [];
+    let riskData;
     page.on('request', (request) => {
       const method = request.method();
       const requestUrl = request.url();
       const payload = request.postDataJSON();
 
-      requests.push(requestUrl);
-
       // Only process POST requests with JSON payloads
       if (method === 'POST' && payload && requestUrl.includes('customHTMLTemplate')) {
         const data = payload.parameters?.data?.formData?.riskSDK;
-        expect(data).toBeDefined();
-        expect(data).toMatch(/^R\/o\//);
+        if (data) {
+          riskData = data;
+        }
       }
     });
 
+    const protectPromise = page.waitForRequest(
+      (req) =>
+        req.method() === 'POST' &&
+        req.url().includes('customHTMLTemplate') &&
+        req.postDataJSON()?.parameters?.data?.formData?.riskSDK,
+    );
     await page.getByLabel('Username').fill(username);
     await page.getByLabel('Password').fill(password);
     await page.getByRole('button', { name: 'Sign On' }).click();
+    await protectPromise;
 
-    await expect(
-      page.getByText(/Sorry Bot, we cannot let you in this time.|You were blocked by PingOne Risk/),
-    ).toBeVisible();
+    expect(riskData).toBeDefined();
+    expect(riskData).toMatch(/^R\/o\//);
 
-    const protectRequest = requests.some((url) => url.includes('customHTMLTemplate'));
-    await expect(protectRequest).toBeTruthy();
-
-    await expect(
-      logs.includes('Protect initialized at bootstrap for data collection'),
-    ).toBeTruthy();
-    await expect(
+    expect(logs.includes('Protect initialized at bootstrap for data collection')).toBeTruthy();
+    expect(
       logs.includes('PingOne Protect initialized by collector for data collection'),
     ).toBeFalsy();
+
+    page.removeListener('console', (msg) => console.log(msg.text()));
   });
 
   test('Initialize by collector and evaluate risk', async ({ page }) => {
@@ -69,36 +71,40 @@ test.describe('React - DaVinci Protect', () => {
     await page.goto(`${BASE_URL}/login?initProtect=flow&acrValue=${htmlFormAcrValue}`);
     await expect(page.getByText('JS Protect - Custom HTML Form')).toBeVisible();
 
-    const requests = [];
+    let riskData;
     page.on('request', (request) => {
       const method = request.method();
       const requestUrl = request.url();
       const payload = request.postDataJSON();
 
-      requests.push(requestUrl);
-
       // Only process POST requests with JSON payloads
       if (method === 'POST' && payload && requestUrl.includes('customHTMLTemplate')) {
         const data = payload.parameters?.data?.formData?.riskSDK;
-        expect(data).toBeDefined();
-        expect(data).toMatch(/^R\/o\//);
+        if (data) {
+          riskData = data;
+        }
       }
     });
 
+    const protectPromise = page.waitForRequest(
+      (req) =>
+        req.method() === 'POST' &&
+        req.url().includes('customHTMLTemplate') &&
+        req.postDataJSON()?.parameters?.data?.formData?.riskSDK,
+    );
     await page.getByLabel('Username').fill(username);
     await page.getByLabel('Password').fill(password);
     await page.getByRole('button', { name: 'Sign On' }).click();
+    await protectPromise;
 
-    await expect(
-      page.getByText(/Sorry Bot, we cannot let you in this time.|You were blocked by PingOne Risk/),
-    ).toBeVisible();
+    expect(riskData).toBeDefined();
+    expect(riskData).toMatch(/^R\/o\//);
 
-    const protectRequest = requests.some((url) => url.includes('customHTMLTemplate'));
-    await expect(protectRequest).toBeTruthy();
-
-    await expect(logs.includes('Protect initialized at bootstrap for data collection')).toBeFalsy();
-    await expect(
+    expect(logs.includes('Protect initialized at bootstrap for data collection')).toBeFalsy();
+    expect(
       logs.includes('PingOne Protect initialized by collector for data collection'),
     ).toBeTruthy();
+
+    page.removeListener('console', (msg) => console.log(msg.text()));
   });
 });

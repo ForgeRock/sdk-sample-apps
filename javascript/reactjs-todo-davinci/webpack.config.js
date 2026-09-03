@@ -14,7 +14,10 @@ module.exports = () => {
   const DEBUGGER_OFF = process.env.DEBUGGER_OFF || localEnv.DEBUGGER_OFF;
   const DEVELOPMENT = process.env.DEVELOPMENT || localEnv.DEVELOPMENT;
   const INIT_PROTECT = process.env.INIT_PROTECT || localEnv.INIT_PROTECT;
-  const SDK_CONFIG = process.env.SDK_CONFIG || null;
+  const SDK_CLIENT_ID = process.env.SDK_CLIENT_ID || localEnv.SDK_CLIENT_ID;
+  const SDK_DISCOVERY_ENDPOINT =
+    process.env.SDK_DISCOVERY_ENDPOINT || localEnv.SDK_DISCOVERY_ENDPOINT;
+  const SDK_SCOPE = process.env.SDK_SCOPE || localEnv.SDK_SCOPE;
   const PINGONE_ENV_ID = process.env.PINGONE_ENV_ID || localEnv.PINGONE_ENV_ID;
 
   return {
@@ -111,7 +114,9 @@ module.exports = () => {
         'process.env.DEBUGGER_OFF': JSON.stringify(DEBUGGER_OFF),
         'process.env.INIT_PROTECT': JSON.stringify(INIT_PROTECT),
         'process.env.PINGONE_ENV_ID': JSON.stringify(PINGONE_ENV_ID),
-        'process.env.SDK_CONFIG': JSON.stringify(SDK_CONFIG),
+        'process.env.SDK_CLIENT_ID': JSON.stringify(SDK_CLIENT_ID),
+        'process.env.SDK_DISCOVERY_ENDPOINT': JSON.stringify(SDK_DISCOVERY_ENDPOINT),
+        'process.env.SDK_SCOPE': JSON.stringify(SDK_SCOPE),
       }),
     ],
   };
