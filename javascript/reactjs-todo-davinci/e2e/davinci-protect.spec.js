@@ -9,7 +9,7 @@ import { test, expect } from '@playwright/test';
 import { username, password } from './utils/demo-user';
 
 const BASE_URL = 'http://localhost:8443';
-const htmlFormAcrValue = 'ea02bcbfb2112e051c94ee9b08083d2d';
+const htmlFormAcrValue = '244e9bbec113931ae61fd962f0a1fe6c';
 
 test.describe('React - DaVinci Protect', () => {
   test('Initialize at bootstrap and evaluate risk', async ({ page }) => {
