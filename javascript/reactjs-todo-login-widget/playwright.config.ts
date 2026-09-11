@@ -31,9 +31,9 @@ export default defineConfig({
         PORT: '8443',
         WELLKNOWN_URL:
           'https://openam-sdks.forgeblocks.com/am/oauth2/alpha/.well-known/openid-configuration',
-        SCOPE: 'profile me.read email',
+        SCOPE: 'openid profile me.read email',
         WEB_OAUTH_CLIENT: 'CentralLoginOAuthClient-',
-        PINGONE_ENV_ID: '02fb4743-189a-4bc7-9d6c-a919edfe6447',
+        PINGONE_ENV_ID: '356a254c-cba3-4ade-be1a-860136e8df01',
       },
       ignoreHTTPSErrors: true,
     },

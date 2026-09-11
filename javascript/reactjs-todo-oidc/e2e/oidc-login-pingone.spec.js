@@ -12,18 +12,28 @@ import { test, expect } from '@playwright/test';
 import { p1DisplayName, p1Password, p1Username } from './utils/demo-user';
 
 const BASE_URL = 'https://localhost:8444';
+const CLIENT_ID = '00e62f85-3d49-4046-b860-15aefdebbb0d';
 
 test.describe('React - PingOne OIDC', () => {
   test('Starts centralized login flow, pass', async ({ page }) => {
+    let authorizeUrl;
     await page.goto(BASE_URL);
+
+    page.on('request', (request) => {
+      const method = request.method();
+      const requestUrl = request.url();
+
+      if (method === 'GET' && requestUrl.includes('as/authorize')) {
+        authorizeUrl = new URL(requestUrl);
+      }
+    });
+
     await page.getByRole('link', { name: 'Sign In', exact: true }).click();
-    await expect(page.getByRole('heading', { name: 'Sign On' })).toBeVisible();
     await expect(page.getByRole('textbox', { name: 'Username' })).toBeVisible();
     await expect(page.getByRole('textbox', { name: 'Password' })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Sign On' })).toBeVisible();
 
-    const authorizeUrl = new URL(page.url());
-    expect(authorizeUrl.searchParams.get('client_id')).toBe('724ec718-c41c-4d51-98b0-84a583f450f9');
+    expect(authorizeUrl.searchParams.get('client_id')).toBe(CLIENT_ID);
     expect(authorizeUrl.searchParams.get('redirect_uri')).toContain(`${BASE_URL}/callback.html`);
     expect(authorizeUrl.searchParams.get('state')).toBeTruthy();
     expect(authorizeUrl.searchParams.get('code_challenge')).toBeTruthy();
@@ -33,7 +43,6 @@ test.describe('React - PingOne OIDC', () => {
     await page.goto(BASE_URL);
     await page.getByRole('link', { name: 'Sign In', exact: true }).click();
 
-    await expect(page.getByRole('heading', { name: 'Sign On' })).toBeVisible();
     await page.getByRole('textbox', { name: 'Username' }).fill(p1Username);
     await page.getByRole('textbox', { name: 'Password' }).fill(p1Password);
     await page.getByRole('button', { name: 'Sign On' }).click();
@@ -47,14 +56,13 @@ test.describe('React - PingOne OIDC', () => {
     await page.goto(BASE_URL);
     await page.getByRole('link', { name: 'Sign In', exact: true }).click();
 
-    await expect(page.getByRole('heading', { name: 'Sign On' })).toBeVisible();
     await page.getByRole('textbox', { name: 'Username' }).fill('invalidUsername');
     await page.getByRole('textbox', { name: 'Password' }).fill('invalidPassword');
     await page.getByRole('button', { name: 'Sign On' }).click();
 
     await expect(
       page.getByText(
-        /Invalid username and\/or password|Validation Error|identifier must be a uuid/,
+        /Invalid username and\/or password|Incorrect username or password. Please try again.|Validation Error|identifier must be a uuid/,
       ),
     ).toBeVisible({ timeout: 10000 });
   });
@@ -64,7 +72,6 @@ test.describe('React - PingOne OIDC', () => {
     await page.goto(BASE_URL);
     await page.getByRole('link', { name: 'Sign In', exact: true }).click();
 
-    await expect(page.getByRole('heading', { name: 'Sign On' })).toBeVisible();
     await page.getByRole('textbox', { name: 'Username' }).fill(p1Username);
     await page.getByRole('textbox', { name: 'Password' }).fill(p1Password);
     await page.getByRole('button', { name: 'Sign On' }).click();

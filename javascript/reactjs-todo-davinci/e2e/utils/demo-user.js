@@ -6,5 +6,5 @@
  *
  */
 export const username = 'JsDvSampleAppsE2E@user.com';
-export const password = 'DemoPassword#123';
+export const password = 'FakePassword#123';
 export const displayName = 'JS DaVinci Sample Apps E2E';

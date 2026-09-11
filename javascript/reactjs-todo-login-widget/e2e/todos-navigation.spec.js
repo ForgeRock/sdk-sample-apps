@@ -29,13 +29,14 @@ test('React - navigating to Todos repeatedly does not log the user out', async (
   // A logout clears the widget's OAuth tokens from localStorage. Capture the key
   // so we can assert the session persists across navigations.
   const tokenKeyCount = async () =>
-    page.evaluate(() =>
-      Object.keys(window.localStorage).filter((key) => key.startsWith('pic-')).length,
+    page.evaluate(
+      () => Object.keys(window.localStorage).filter((key) => key.startsWith('pic-')).length,
     );
 
-  expect(await tokenKeyCount(), 'expected OAuth tokens in localStorage after login').toBeGreaterThan(
-    0,
-  );
+  expect(
+    await tokenKeyCount(),
+    'expected OAuth tokens in localStorage after login',
+  ).toBeGreaterThan(0);
 
   for (let round = 0; round < NAVIGATION_ROUNDS; round++) {
     // Go to the protected Todos route — this runs ProtectedRoute's access check.

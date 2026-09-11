@@ -10,6 +10,8 @@ import { test, expect } from '@playwright/test';
 
 const username = 'JSFidoUser@user.com';
 const password = 'FakePassword#123';
+const policyId = '4b6008f10ba174dd3ce3ab60c5b81d7e';
+const baseUrl = 'http://localhost:5829';
 
 test.use({ browserName: 'chromium' });
 
@@ -48,10 +50,8 @@ test.describe.skip('WebAuthn Virtual Authenticator Setup', () => {
   test('should successfully register a new WebAuthn credential and authenticate', async ({
     page,
   }) => {
-    await page.goto('http://localhost:5829/?acrValue=98f2c058aae71ec09eb268db6810ff3c');
-    await expect(page).toHaveURL(
-      'http://localhost:5829/?acrValue=98f2c058aae71ec09eb268db6810ff3c',
-    );
+    await page.goto(`${baseUrl}/?acrValue=${policyId}`);
+    await expect(page).toHaveURL(`${baseUrl}/?acrValue=${policyId}`);
 
     // Sign in to enable FIDO MFA flow
     await page.getByRole('link', { name: 'Sign In', exact: true }).click();
@@ -84,10 +84,8 @@ test.describe.skip('WebAuthn Virtual Authenticator Setup', () => {
   });
 
   test('should fail to register a new WebAuthn credential', async ({ page }) => {
-    await page.goto('http://localhost:5829/?acrValue=98f2c058aae71ec09eb268db6810ff3c');
-    await expect(page).toHaveURL(
-      'http://localhost:5829/?acrValue=98f2c058aae71ec09eb268db6810ff3c',
-    );
+    await page.goto(`${baseUrl}/?acrValue=${policyId}`);
+    await expect(page).toHaveURL(`${baseUrl}/?acrValue=${policyId}`);
 
     // Set isUserVerified to false to simulate registration failure
     await cdpClient.send('WebAuthn.setUserVerified', {
@@ -114,10 +112,8 @@ test.describe.skip('WebAuthn Virtual Authenticator Setup', () => {
   });
 
   test('should fail to authenticate with an existing WebAuthn credential', async ({ page }) => {
-    await page.goto('http://localhost:5829/?acrValue=98f2c058aae71ec09eb268db6810ff3c');
-    await expect(page).toHaveURL(
-      'http://localhost:5829/?acrValue=98f2c058aae71ec09eb268db6810ff3c',
-    );
+    await page.goto(`${baseUrl}/?acrValue=${policyId}`);
+    await expect(page).toHaveURL(`${baseUrl}/?acrValue=${policyId}`);
 
     // Sign in to enable FIDO MFA flow
     await page.getByRole('link', { name: 'Sign In', exact: true }).click();

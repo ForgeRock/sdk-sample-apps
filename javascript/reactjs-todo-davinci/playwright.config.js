@@ -1,5 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 const url = process.env.PLAYWRIGHT_TEST_BASE_URL || 'http://localhost:8443';
+const CLIENT_ID = '3ddfa67a-066a-42ac-afd3-f6822b0789a2';
+const ENVIRONMENT_ID = '356a254c-cba3-4ade-be1a-860136e8df01';
 
 export default defineConfig({
   testDir: 'e2e',
@@ -26,10 +28,10 @@ export default defineConfig({
         DEBUGGER_OFF: 'true',
         DEVELOPMENT: 'false',
         PORT: '8443',
-        PINGONE_ENV_ID: '02fb4743-189a-4bc7-9d6c-a919edfe6447',
-        SDK_CLIENT_ID: '724ec718-c41c-4d51-98b0-84a583f450f9',
-        SDK_DISCOVERY_ENDPOINT: 'https://auth.pingone.ca/02fb4743-189a-4bc7-9d6c-a919edfe6447/as/.well-known/openid-configuration',
-        SDK_SCOPE: 'openid profile email phone name revoke',
+        PINGONE_ENV_ID: ENVIRONMENT_ID,
+        SDK_CLIENT_ID: CLIENT_ID,
+        SDK_DISCOVERY_ENDPOINT: `https://auth.pingone.ca/${ENVIRONMENT_ID}/as/.well-known/openid-configuration`,
+        SDK_SCOPE: 'openid profile email phone revoke',
       },
       ignoreHTTPSErrors: true,
     },
@@ -42,8 +44,8 @@ export default defineConfig({
       env: {
         PORT: '9443',
         SERVER_TYPE: 'PINGONE',
-        SERVER_URL: 'https://auth.pingone.ca/02fb4743-189a-4bc7-9d6c-a919edfe6447',
-        REST_OAUTH_CLIENT: '724ec718-c41c-4d51-98b0-84a583f450f9',
+        SERVER_URL: `https://auth.pingone.ca/${ENVIRONMENT_ID}`,
+        REST_OAUTH_CLIENT: CLIENT_ID,
       },
       ignoreHTTPSErrors: true,
     },
@@ -59,9 +61,9 @@ export default defineConfig({
     //     DEBUGGER_OFF: 'true',
     //     DEVELOPMENT: 'false',
     //     PORT: '5829',
-    //     SDK_CLIENT_ID: '20dd0ed0-bb9b-4c8f-9a60-9ebeb4b348e0',
-    //     SDK_DISCOVERY_ENDPOINT: 'https://auth.pingone.ca/02fb4743-189a-4bc7-9d6c-a919edfe6447/as/.well-known/openid-configuration',
-    //     SDK_SCOPE: 'openid profile email phone name revoke',
+    //     SDK_CLIENT_ID: CLIENT_ID,
+    //     SDK_DISCOVERY_ENDPOINT: `https://auth.pingone.ca/${ENVIRONMENT_ID}/as/.well-known/openid-configuration`,
+    //     SDK_SCOPE: 'openid profile email phone revoke',
     //   },
     //   ignoreHTTPSErrors: true,
     // },
