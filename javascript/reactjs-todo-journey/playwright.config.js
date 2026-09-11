@@ -41,7 +41,7 @@ module.exports = defineConfig({
         VITE_JOURNEY_LOGIN: 'Login',
         VITE_JOURNEY_REGISTER: 'Registration',
         VITE_PORT: '8443',
-        VITE_PINGONE_ENV_ID: '02fb4743-189a-4bc7-9d6c-a919edfe6447',
+        VITE_PINGONE_ENV_ID: '356a254c-cba3-4ade-be1a-860136e8df01',
         VITE_SDK_CLIENT_ID: 'WebOAuthClient',
         VITE_SDK_DISCOVERY_ENDPOINT: 'https://openam-sdks.forgeblocks.com/am/oauth2/alpha/.well-known/openid-configuration',
         VITE_SDK_SCOPE: 'openid profile email'
