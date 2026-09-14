@@ -7,7 +7,7 @@ This sample code is provided "as is" and is not a supported product of Ping. It'
 ## Requirements
 
 1. An instance of Ping's Access Manager (AM), either within a Ping's Advanced Identity Cloud tenant, your own private installation or locally installed on your computer
-2. Node >= 24.2.0 (recommended: install via [official package installer](https://nodejs.org/en/))
+2. Node >= 18.19.1 (recommended: install via [official package installer](https://nodejs.org/en/))
 3. Knowledge of using the Terminal/Command Line
 4. Ability to generate security certs (recommended: mkcert ([installation instructions here](https://github.com/FiloSottile/mkcert#installation))
 5. This project "cloned" to your computer
