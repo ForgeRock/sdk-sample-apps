@@ -7,6 +7,7 @@
 
 import Foundation
 import PingJourney
+import PingOidc
 import PingOrchestrate
 import ping_core
 
@@ -106,6 +107,9 @@ final class JourneyHostApiImpl: PingJourneyHostApi, @unchecked Sendable {
                 let session = SessionMessage(
                     accessToken: token.accessToken,
                     refreshToken: token.refreshToken,
+                    idToken: token.idToken,
+                    tokenType: token.tokenType,
+                    scope: token.scope,
                     expiresIn: token.expiresIn,
                     userInfo: userInfoMap
                 )
@@ -114,6 +118,106 @@ final class JourneyHostApiImpl: PingJourneyHostApi, @unchecked Sendable {
                 completion(.failure(JourneyErrorMapper.from(JourneyErrorCodes.getSession, error)))
             }
         }
+    }
+
+    func refreshToken(journeyId: String, completion: @escaping (Result<SessionMessage, Error>) -> Void) {
+        Task {
+            switch await requireOidcUser(journeyId, operation: "refreshToken", code: JourneyErrorCodes.refreshToken) {
+            case .failure(let error):
+                completion(.failure(error))
+                return
+            case .success(let user):
+                let refreshResult = await user.refresh()
+                switch refreshResult {
+                case .success(let token):
+                    // userInfo is deliberately nil here — claims are fetched separately
+                    // via getUserInfo, so callers keep whatever they already loaded.
+                    let session = SessionMessage(
+                        accessToken: token.accessToken,
+                        refreshToken: token.refreshToken,
+                        idToken: token.idToken,
+                        tokenType: token.tokenType,
+                        scope: token.scope,
+                        expiresIn: token.expiresIn
+                    )
+                    completion(.success(session))
+                case .failure(let error):
+                    completion(.failure(JourneyErrorMapper.from(
+                        JourneyErrorCodes.refreshToken, error
+                    )))
+                }
+            }
+        }
+    }
+
+    func revokeToken(journeyId: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        Task {
+            switch await requireOidcUser(journeyId, operation: "revokeToken", code: JourneyErrorCodes.revokeToken) {
+            case .failure(let error):
+                completion(.failure(error))
+                return
+            case .success(let user):
+                // Native swallows server-side revocation errors, matching ping_oidc's revoke.
+                await user.revoke()
+                completion(.success(()))
+            }
+        }
+    }
+
+    func getUserInfo(journeyId: String, cache: Bool, completion: @escaping (Result<[String?: Any?], Error>) -> Void) {
+        Task {
+            switch await requireOidcUser(journeyId, operation: "getUserInfo", code: JourneyErrorCodes.getUserInfo) {
+            case .failure(let error):
+                completion(.failure(error))
+                return
+            case .success(let user):
+                // cache is always passed explicitly — the native SDKs' own defaults differ
+                // (Android false, iOS true).
+                let uiResult = await user.userinfo(cache: cache)
+                switch uiResult {
+                case .success(let userInfo):
+                    completion(.success(userInfo as? [String?: Any?] ?? [:]))
+                case .failure(let error):
+                    completion(.failure(JourneyErrorMapper.from(
+                        JourneyErrorCodes.getUserInfo, error
+                    )))
+                }
+            }
+        }
+    }
+
+    /// Resolves the OIDC user for the token-command methods, returning a typed
+    /// failure when the Journey has no OIDC configuration or no user session —
+    /// unlike `getSession`, which is a query and returns nil instead (nil =
+    /// "nothing to show"; a command must fail loudly). The caller completes
+    /// with the returned error, if any.
+    private func requireOidcUser(
+        _ journeyId: String,
+        operation: String,
+        code: String
+    ) async -> Result<any User, Error> {
+        guard let handle = await resolveHandle(journeyId) else {
+            return .failure(JourneyErrorMapper.from(
+                code, JourneyHostApiError.journeyNotFound(journeyId)
+            ))
+        }
+        if !handle.hasOidc {
+            return .failure(JourneyErrorMapper.from(
+                code,
+                JourneyHostApiError.stateError(
+                    "\(operation) requires OIDC configuration; this Journey has none (journeyId=\(journeyId))"
+                )
+            ))
+        }
+        guard let user = await handle.journey.journeyUser() else {
+            return .failure(JourneyErrorMapper.from(
+                code,
+                JourneyHostApiError.stateError(
+                    "No user session for journeyId=\(journeyId) — complete the Journey first"
+                )
+            ))
+        }
+        return .success(user)
     }
 
     func signOff(journeyId: String, completion: @escaping (Result<Bool, Error>) -> Void) {
@@ -185,6 +289,7 @@ enum JourneyHostApiError: Error, CustomStringConvertible {
     case unsupported(String)
     case stateError(String)
     case callbackApply(String)
+    case argument(String)
 
     /// Plain message text, matching Kotlin's `IllegalStateException.message`/etc. shape rather
     /// than Swift's default enum-case reflection (e.g. `stateError("...")`).
@@ -193,7 +298,8 @@ enum JourneyHostApiError: Error, CustomStringConvertible {
         case .journeyNotFound(let message),
              .unsupported(let message),
              .stateError(let message),
-             .callbackApply(let message):
+             .callbackApply(let message),
+             .argument(let message):
             return message
         }
     }

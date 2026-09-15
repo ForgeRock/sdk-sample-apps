@@ -44,11 +44,14 @@ void main() {
     if (harness.isHermetic) {
       expect(first.header, 'Sign In');
       expect(first.description, 'Enter your credentials');
+      expect(first.callbacks.map((callback) => callback.type), <String>[
+        CallbackType.nameCallback,
+        CallbackType.passwordCallback,
+      ]);
       expect(
-        first.callbacks.map((callback) => callback.type),
-        <String>[CallbackType.nameCallback, CallbackType.passwordCallback],
+        first.callbacks.whereType<NameCallback>().single.prompt,
+        'User Name',
       );
-      expect(first.callbacks.whereType<NameCallback>().single.prompt, 'User Name');
       expect(
         first.callbacks.whereType<PasswordCallback>().single.prompt,
         'Password',
@@ -62,7 +65,10 @@ void main() {
       expect(startRequest.query['authIndexType'], 'service');
       expect(startRequest.query['authIndexValue'], harness.journeyName);
       expect(startRequest.query['ForceAuth'], 'true');
-      expect(startRequest.headers['accept-api-version'], contains('resource=2.1'));
+      expect(
+        startRequest.headers['accept-api-version'],
+        contains('resource=2.1'),
+      );
     }
 
     // Advance until the flow terminates. Hermetically this loops exactly once; against a live tenant

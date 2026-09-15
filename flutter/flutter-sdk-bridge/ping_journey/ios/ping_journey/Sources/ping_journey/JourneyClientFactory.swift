@@ -29,7 +29,7 @@ final class JourneyHandle: NativeHandle, @unchecked Sendable {
 /// core registry, returning the generated `journeyId`.
 enum JourneyClientFactory {
     static func create(_ config: JourneyConfigMessage) async throws -> String {
-        let journey = JourneyConfigParser.parse(config)
+        let journey = try await JourneyConfigParser.parse(config)
         let handle = JourneyHandle(journey: journey, hasOidc: JourneyConfigParser.hasOidcFields(config))
         return await CoreRuntime.journeyRegistry.register(handle)
     }

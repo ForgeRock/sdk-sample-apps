@@ -62,7 +62,10 @@ void main() {
     final validatedUsername = node.callbacks
         .whereType<ValidatedUsernameCallback>()
         .single;
-    expect(validatedUsername.type, CallbackType.validatedCreateUsernameCallback);
+    expect(
+      validatedUsername.type,
+      CallbackType.validatedCreateUsernameCallback,
+    );
     expect(validatedUsername.prompt, 'Username');
     expect(validatedUsername.validateOnly, isFalse);
     expect(validatedUsername.policies?['name'], 'userName');
@@ -71,7 +74,10 @@ void main() {
     final validatedPassword = node.callbacks
         .whereType<ValidatedPasswordCallback>()
         .single;
-    expect(validatedPassword.type, CallbackType.validatedCreatePasswordCallback);
+    expect(
+      validatedPassword.type,
+      CallbackType.validatedCreatePasswordCallback,
+    );
     expect(validatedPassword.echoOn, isFalse);
     // AM sends failedPolicies as an array of JSON-encoded strings; the native SDKs parse each into
     // {policyRequirement, params}. A non-empty list here is the whole point — an empty one would

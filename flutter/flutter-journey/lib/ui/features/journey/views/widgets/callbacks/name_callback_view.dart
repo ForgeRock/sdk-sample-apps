@@ -35,9 +35,7 @@ class _NameCallbackViewState extends State<NameCallbackView>
   Widget build(BuildContext context) {
     return TextField(
       controller: _controller,
-      decoration: InputDecoration(
-        labelText: widget.callback.prompt ?? 'Name',
-      ),
+      decoration: InputDecoration(labelText: widget.callback.prompt ?? 'Name'),
       onChanged: (value) {
         widget.callback.name = value;
         widget.onChanged();

@@ -89,7 +89,8 @@ class MockAmServer {
   String get authenticateUrl => '$baseUrl/json/realms/$_realm/authenticate';
 
   /// Every request received, oldest first.
-  List<RecordedRequest> get requests => List<RecordedRequest>.unmodifiable(_requests);
+  List<RecordedRequest> get requests =>
+      List<RecordedRequest>.unmodifiable(_requests);
 
   /// Only the requests that hit the `/authenticate` endpoint, oldest first — index 0 is `start()`,
   /// index 1 the first `next()`, and so on.
@@ -101,7 +102,8 @@ class MockAmServer {
   List<String> get unmatchedPaths => List<String>.unmodifiable(_unmatchedPaths);
 
   /// Number of scripted `/authenticate` responses not yet consumed.
-  int get remainingAuthenticateResponses => _authenticate.length - _authenticateIndex;
+  int get remainingAuthenticateResponses =>
+      _authenticate.length - _authenticateIndex;
 
   /// Throws a [StateError] describing every request received if any of them went unhandled.
   ///
@@ -118,9 +120,8 @@ class MockAmServer {
   }
 
   /// A human-readable dump of every recorded request, for failure messages.
-  String get requestLog => _requests
-      .map((request) => '  ${request.summary}')
-      .join('\n');
+  String get requestLog =>
+      _requests.map((request) => '  ${request.summary}').join('\n');
 
   /// Shuts the server down. Safe to pass straight to `addTearDown`.
   Future<void> stop() => _server.close(force: true);
@@ -200,7 +201,9 @@ class MockAmServer {
         // as a request header and expects a 302 whose Location carries the authorization code. It
         // never opens a browser, which is exactly why these tests can run without UI.
         final state = request.query['state'];
-        final redirect = StringBuffer('${oidc.redirectUri}?code=${oidc.authCode}');
+        final redirect = StringBuffer(
+          '${oidc.redirectUri}?code=${oidc.authCode}',
+        );
         if (state != null && state.isNotEmpty) redirect.write('&state=$state');
         return MockResponse.raw(
           '',
@@ -232,7 +235,9 @@ class MockAmServer {
 
   static Map<String, String> _collectHeaders(HttpHeaders headers) {
     final collected = <String, String>{};
-    headers.forEach((name, values) => collected[name.toLowerCase()] = values.join(', '));
+    headers.forEach(
+      (name, values) => collected[name.toLowerCase()] = values.join(', '),
+    );
     return collected;
   }
 }

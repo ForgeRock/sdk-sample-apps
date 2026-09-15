@@ -44,7 +44,8 @@ class JourneyViewModel extends ChangeNotifier {
       }
       return success;
     } on PingException catch (error) {
-      _error = error.message;
+      // toString() (not error.message) so the on-screen banner also shows code/type.
+      _error = error.toString();
       notifyListeners();
       return false;
     }
@@ -62,7 +63,8 @@ class JourneyViewModel extends ChangeNotifier {
     try {
       _node = await action();
     } on PingException catch (error) {
-      _error = error.message;
+      // toString() (not error.message) so the on-screen banner also shows code/type.
+      _error = error.toString();
     } finally {
       _loading = false;
       notifyListeners();

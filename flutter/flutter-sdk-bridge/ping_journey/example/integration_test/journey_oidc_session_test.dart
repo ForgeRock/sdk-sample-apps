@@ -82,7 +82,10 @@ void main() {
       expect(authorize.query['code_challenge'], isNotEmpty);
       expect(authorize.query['code_challenge_method'], 'S256');
       expect(authorize.query['client_id'], 'mock-client-id');
-      expect(authorize.query['redirect_uri'], JourneyHarness.hermeticRedirectUri);
+      expect(
+        authorize.query['redirect_uri'],
+        JourneyHarness.hermeticRedirectUri,
+      );
 
       // The code from the 302 is redeemed with the matching verifier.
       final token = harness.mock.requests

@@ -142,7 +142,8 @@ class JourneyHarness {
       _expect<SuccessNode>(node, 'SuccessNode');
 
   /// Asserts [node] is an [ErrorNode] and returns it, attaching the request log on failure.
-  ErrorNode expectError(JourneyNode node) => _expect<ErrorNode>(node, 'ErrorNode');
+  ErrorNode expectError(JourneyNode node) =>
+      _expect<ErrorNode>(node, 'ErrorNode');
 
   /// Asserts [node] is a [FailureNode] and returns it, attaching the request log on failure.
   FailureNode expectFailure(JourneyNode node) =>

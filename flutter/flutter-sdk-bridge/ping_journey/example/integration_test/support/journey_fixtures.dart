@@ -120,10 +120,7 @@ abstract final class JourneyFixtures {
           ],
           'allowUserDefinedQuestions': false,
         },
-        input: <String, Object?>{
-          'IDToken6question': '',
-          'IDToken6answer': '',
-        },
+        input: <String, Object?>{'IDToken6question': '', 'IDToken6answer': ''},
       ),
       callback(
         'TermsAndConditionsCallback',

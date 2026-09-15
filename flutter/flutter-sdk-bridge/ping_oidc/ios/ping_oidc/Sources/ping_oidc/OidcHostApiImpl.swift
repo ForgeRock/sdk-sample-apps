@@ -10,9 +10,7 @@ import PingBrowser
 import PingOidc
 import ping_core
 
-/// Implements the generated `PingOidcHostApi`. `configureOidc`/`dispose` (Phase 2),
-/// `createWebClient`/`authorize`/`hasUser` (Phase 3), and `token`/`refresh`/`userInfo`/`revoke`/
-/// `signOff` (Phase 4) all have real bodies now.
+/// Implements the generated `PingOidcHostApi`.
 final class OidcHostApiImpl: PingOidcHostApi, @unchecked Sendable {
     func configureOidc(config: OidcConfigMessage, completion: @escaping (Result<String, Error>) -> Void) {
         Task {
@@ -183,9 +181,9 @@ final class OidcHostApiImpl: PingOidcHostApi, @unchecked Sendable {
         }
     }
 
-    // Known SDK gap (see IMPLEMENTATION_PLAN_OIDC.md Phase 4): the only reachable sign-off path
-    // from a web-client id is `User.logout()`, which returns `Void` and discards the underlying
-    // `signOff()` result — the boolean-returning `OidcClient.endSession()` is not reachable here.
+    // TODO: Known SDK gap: the only reachable sign-off path from a web-client id is 
+    // `User.logout()`, which returns `Void` and discards the underlying `signOff()`
+    // result — the boolean-returning `OidcClient.endSession()` is not reachable here.
     // `true` below means "logout completed without a bridge-level exception," not "a session
     // existed and was terminated."
     func signOff(webClientId: String, completion: @escaping (Result<Bool, Error>) -> Void) {

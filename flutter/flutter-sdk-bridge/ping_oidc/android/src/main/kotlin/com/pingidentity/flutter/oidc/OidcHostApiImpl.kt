@@ -24,9 +24,7 @@ import kotlinx.coroutines.launch
 import com.pingidentity.utils.Result as OidcResult
 
 /**
- * Implements the generated [PingOidcHostApi]. `configureOidc`/`dispose` (Phase 2),
- * `createWebClient`/`authorize`/`hasUser` (Phase 3), and `token`/`refresh`/`userInfo`/`revoke`/
- * `signOff` (Phase 4) all have real bodies now.
+ * Implements the generated [PingOidcHostApi].
  */
 class OidcHostApiImpl : PingOidcHostApi {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
@@ -98,8 +96,7 @@ class OidcHostApiImpl : PingOidcHostApi {
 
     override fun refresh(webClientId: String, callback: (Result<TokenMessage>) -> Unit) {
         // Go through `User.refresh()` on both platforms, not `OidcClient.refresh()` — iOS has no
-        // equivalent, so this keeps one code shape (see IMPLEMENTATION_PLAN_OIDC.md § Platform
-        // asymmetries).
+        // equivalent, so this keeps one code shape
         scope.launch {
             callback(fetchToken(webClientId, OidcErrorCodes.REFRESH) { it.refresh() })
         }
@@ -165,7 +162,7 @@ class OidcHostApiImpl : PingOidcHostApi {
     }
 
     override fun signOff(webClientId: String, callback: (Result<Boolean>) -> Unit) {
-        // Known SDK gap (see IMPLEMENTATION_PLAN_OIDC.md Phase 4): the only reachable sign-off
+        // TODO: Known SDK gap: the only reachable sign-off
         // path from a web-client id is `User.logout()`, which returns `Unit` and discards the
         // underlying `Workflow.signOff()` result — the boolean-returning `OidcClient.endSession()`
         // is not reachable here. `true` below means "logout completed without a bridge-level

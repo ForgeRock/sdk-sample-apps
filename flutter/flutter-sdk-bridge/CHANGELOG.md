@@ -1,3 +1,14 @@
+## 0.0.2
+
+#### Added
+- Added `ping_oidc`, a Pigeon-generated bridge over the native Ping OIDC SDK for standalone,  browser-based centralized login [SDKS-5265]
+- Added `ping_core`'s OIDC seam — so a module can consume a `ping_oidc`-configured client with no compile-time dependency on `ping_oidc`
+- Added `flutter-oidc`, a sample app demonstrating the full standalone OIDC flow browser authorize, token/userinfo display, refresh, revoke, sign off [SDKS-5266]
+- Added `ping_journey`'s optional `JourneyConfigMessage.oidcClientId`, letting a Journey delegate its OIDC configuration to a client shared via `ping_core`'s registry instead of repeating the same fields inline
+
+#### Changed
+- Bumped both platforms' native Ping SDK pin `2.0.0` → `2.1.0` (Android Maven, iOS SPM)
+
 ## 0.0.1
 
 #### Added

@@ -24,11 +24,13 @@ abstract final class CallbackType {
   /// SDKs' `AbstractCallback.json["type"]` is the AM server's own callback class name
   /// (`ValidatedCreateUsernameCallback`), not the SDK's local `ValidatedUsernameCallback` class
   /// name, even though both re-inflate to the same native `ValidatedUsernameCallback` type.
-  static const validatedCreateUsernameCallback = 'ValidatedCreateUsernameCallback';
+  static const validatedCreateUsernameCallback =
+      'ValidatedCreateUsernameCallback';
 
   /// Wire type for the registration-flow variant of [validatedPasswordCallback] — see
   /// [validatedCreateUsernameCallback].
-  static const validatedCreatePasswordCallback = 'ValidatedCreatePasswordCallback';
+  static const validatedCreatePasswordCallback =
+      'ValidatedCreatePasswordCallback';
 
   /// Wire type for `ChoiceCallback`.
   static const choiceCallback = 'ChoiceCallback';

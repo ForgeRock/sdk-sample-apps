@@ -64,27 +64,28 @@ void main() {
       expect(items[1], {'id': 2});
     });
 
-    test('recursively normalizes maps nested inside lists nested inside maps', () {
-      final result = JsonCodec.decodeObject(<Object?, Object?>{
-        'groups': <Object?>[
-          <Object?, Object?>{
-            'members': <Object?>[
-              <Object?, Object?>{'name': 'Bob'},
-            ],
-          },
-        ],
-      });
-      final groups = result['groups'] as List<Object?>;
-      final firstGroup = groups[0] as Map<String, Object?>;
-      final members = firstGroup['members'] as List<Object?>;
-      expect(members[0], isA<Map<String, Object?>>());
-      expect(members[0], {'name': 'Bob'});
-    });
+    test(
+      'recursively normalizes maps nested inside lists nested inside maps',
+      () {
+        final result = JsonCodec.decodeObject(<Object?, Object?>{
+          'groups': <Object?>[
+            <Object?, Object?>{
+              'members': <Object?>[
+                <Object?, Object?>{'name': 'Bob'},
+              ],
+            },
+          ],
+        });
+        final groups = result['groups'] as List<Object?>;
+        final firstGroup = groups[0] as Map<String, Object?>;
+        final members = firstGroup['members'] as List<Object?>;
+        expect(members[0], isA<Map<String, Object?>>());
+        expect(members[0], {'name': 'Bob'});
+      },
+    );
 
     test('preserves null values', () {
-      final result = JsonCodec.decodeObject(<Object?, Object?>{
-        'value': null,
-      });
+      final result = JsonCodec.decodeObject(<Object?, Object?>{'value': null});
       expect(result['value'], isNull);
       expect(result.containsKey('value'), isTrue);
     });

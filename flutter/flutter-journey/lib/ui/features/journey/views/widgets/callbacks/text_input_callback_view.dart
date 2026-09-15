@@ -35,9 +35,7 @@ class _TextInputCallbackViewState extends State<TextInputCallbackView>
   Widget build(BuildContext context) {
     return TextField(
       controller: _controller,
-      decoration: InputDecoration(
-        labelText: widget.callback.prompt ?? 'Text',
-      ),
+      decoration: InputDecoration(labelText: widget.callback.prompt ?? 'Text'),
       onChanged: (value) {
         widget.callback.text = value;
         widget.onChanged();
