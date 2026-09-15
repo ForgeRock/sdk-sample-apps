@@ -150,11 +150,37 @@ export default function Form({ action, bottomMessage, followUp, topMessage, jour
         return <Confirmation callback={cb} inputName={name} key={name} />;
       case 'SelectIdPCallback':
         return <IdentityProvider callback={cb} inputName={name} key={name} />;
+      case 'MetadataCallback':
+      case 'HiddenValueCallback':
+        // No component to render
+        return;
       default:
         // If current callback is not supported, render a warning message
         return <Unknown callback={cb} key={`unknown-${idx}`} />;
     }
   }
+
+  const callbacksForm = <form
+          className="cstm_form"
+          onSubmit={(event) => {
+            event.preventDefault();
+            // Indicate form processing
+            setSubmittingForm(true);
+            // set currently rendered step as step to be submitted
+            setSubmissionStep(renderStep);
+          }}
+        >
+          {formFailureMessage ? <Alert message={formFailureMessage} type="error" /> : null}
+          {
+            /**
+             * Map over the callbacks in renderStep and render the appropriate
+             * component for each one.
+             */
+            renderStep?.callbacks.map(mapCallbacksToComponents)
+          }
+          <Button buttonText={formMetadata.buttonText} submittingForm={submittingForm} />
+        </form>
+
   /**
    * Render conditions for presenting appropriate views to user.
    * First, we need to handle no "step", which means we are waiting for
@@ -186,7 +212,7 @@ export default function Form({ action, bottomMessage, followUp, topMessage, jour
         <div className="cstm_form-icon align-self-center mb-3">
           <FingerPrintIcon size="72px" />
         </div>
-        <WebAuthnComponent step={renderStep} setSubmissionStep={setSubmissionStep} />
+        <WebAuthnComponent step={renderStep} setSubmissionStep={setSubmissionStep} callbacksForm={callbacksForm} />
       </>
     );
   } else if (
@@ -213,26 +239,7 @@ export default function Form({ action, bottomMessage, followUp, topMessage, jour
         </div>
         <h1 className={`text-center fs-2 mb-3 ${theme.textClass}`}>{formMetadata.titleText}</h1>
         {topMessage}
-        <form
-          className="cstm_form"
-          onSubmit={(event) => {
-            event.preventDefault();
-            // Indicate form processing
-            setSubmittingForm(true);
-            // set currently rendered step as step to be submitted
-            setSubmissionStep(renderStep);
-          }}
-        >
-          {formFailureMessage ? <Alert message={formFailureMessage} type="error" /> : null}
-          {
-            /**
-             * Map over the callbacks in renderStep and render the appropriate
-             * component for each one.
-             */
-            renderStep.callbacks.map(mapCallbacksToComponents)
-          }
-          <Button buttonText={formMetadata.buttonText} submittingForm={submittingForm} />
-        </form>
+        {callbacksForm}
         {bottomMessage}
       </Fragment>
     );
