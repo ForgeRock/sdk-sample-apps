@@ -1,6 +1,6 @@
 //
 //  DropdownView.swift
-//  PingExample
+//  Davinci
 //
 //  Copyright (c) 2025 - 2026 Ping Identity Corporation. All rights reserved.
 //
@@ -12,6 +12,20 @@
 import SwiftUI
 import PingDavinci
 
+/// A SwiftUI view that presents a dropdown menu with single-selection capabilities.
+///
+/// The DropdownView provides a compact menu interface for selecting a single option
+/// from a list. It manages selection state and validation, presenting error messages
+/// when validation fails.
+///
+/// Properties:
+/// - field: The SingleSelectCollector containing options, label, and selection state
+/// - onNodeUpdated: A callback function that notifies the parent when the field value changes
+/// - expanded: State variable that tracks whether the dropdown is expanded
+/// - selectedOption: State variable that tracks the currently selected option
+/// - isValid: State variable that tracks the validation state of the field
+///
+/// The view updates the selection and performs validation when an option is selected.
 struct DropdownView: View {
     var field: SingleSelectCollector
     var onNodeUpdated: () -> Void

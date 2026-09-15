@@ -1,6 +1,6 @@
 // 
 //  SubmitButtonView.swift
-//  PingExample
+//  Davinci
 //
 //  Copyright (c) 2025 - 2026 Ping Identity Corporation. All rights reserved.
 //
@@ -12,6 +12,17 @@
 import SwiftUI
 import PingDavinci
 
+/// A SwiftUI view that creates a form submission button.
+///
+/// The SubmitButtonView creates a styled button for submitting form data.
+/// When pressed, it sets the field's value to "submit" and triggers navigation
+/// to the next step in the flow.
+///
+/// Properties:
+/// - field: The SubmitCollector that manages the button state
+/// - onNext: A callback function that navigates to the next step when the button is pressed
+///
+/// The view uses the Ping Identity theme styling for the button appearance.
 struct SubmitButtonView: View {
     var field: SubmitCollector
     let onNext: (Bool) -> Void

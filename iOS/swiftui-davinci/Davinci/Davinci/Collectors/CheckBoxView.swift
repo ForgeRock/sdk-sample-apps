@@ -1,6 +1,6 @@
 //
 //  CheckBoxView.swift
-//  PingExample
+//  Davinci
 //
 //  Copyright (c) 2025 - 2026 Ping Identity Corporation. All rights reserved.
 //
@@ -12,6 +12,20 @@
 import SwiftUI
 import PingDavinci
 
+/// A SwiftUI view that renders a group of checkbox options for multi-selection.
+///
+/// The CheckBoxView presents multiple options as checkboxes, allowing users to select
+/// multiple values from a list. It provides validation feedback using the ValidationViewModel
+/// and reports changes back to the parent through the onNodeUpdated callback.
+///
+/// Properties:
+/// - field: The MultiSelectCollector that contains the options, label, and manages selection state
+/// - onNodeUpdated: A callback function that notifies the parent when the field value changes
+/// - selectedOptions: State variable that tracks the currently selected options
+/// - isValid: State variable that tracks the validation state of the field
+///
+/// The view updates validation state when the ValidationViewModel triggers validation
+/// and when selections change.
 struct CheckBoxView: View {
     var field: MultiSelectCollector
     var onNodeUpdated: () -> Void

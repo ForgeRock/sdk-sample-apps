@@ -18,6 +18,13 @@ import PingProtect
 /// The PingProtectView is responsible for collecting device signals and behavioral data
 /// for fraud detection and risk assessment. This collector operates transparently,
 /// gathering information in the background without requiring user interaction.
+///
+/// Properties:
+/// - field: The PingProtectEvaluationCollector that manages signal collection
+/// - onNodeUpdated: A callback function that notifies the parent when collection is complete
+///
+/// The view automatically initiates signal collection when it appears and updates
+/// the parent node when collection completes.
 struct PingProtectView: View {
     let field: ProtectCollector
     let onNodeUpdated: () -> Void

@@ -1,6 +1,6 @@
 //
 //  PasswordRequirementsView.swift
-//  PingExample
+//  Davinci
 //
 //  Copyright (c) 2025 - 2026 Ping Identity Corporation. All rights reserved.
 //

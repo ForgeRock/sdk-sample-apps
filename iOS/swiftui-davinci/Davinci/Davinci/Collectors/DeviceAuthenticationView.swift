@@ -1,6 +1,6 @@
 // 
 //  DeviceAuthenticationView.swift
-//  PingExample
+//  Davinci
 //
 //  Copyright (c) 2025 - 2026 Ping Identity Corporation Corporation. All rights reserved.
 //

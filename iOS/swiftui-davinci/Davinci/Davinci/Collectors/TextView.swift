@@ -1,6 +1,6 @@
 //
 //  TextView.swift
-//  PingExample
+//  Davinci
 //
 //  Copyright (c) 2025 - 2026 Ping Identity Corporation. All rights reserved.
 //
@@ -12,6 +12,20 @@
 import SwiftUI
 import PingDavinci
 
+/// A SwiftUI view that creates a text input field.
+///
+/// The TextView creates a standard text input field with validation capabilities.
+/// It manages the text value and validation state, displaying error messages when
+/// validation fails.
+///
+/// Properties:
+/// - field: The TextCollector that manages the text state and validation
+/// - onNodeUpdated: A callback function that notifies the parent when the field value changes
+/// - text: State variable for the text value
+/// - isValid: State variable that tracks the validation state of the field
+///
+/// The view updates validation state when ValidationViewModel triggers validation
+/// and when the text value changes.
 struct TextView: View {
     let field: TextCollector
     let onNodeUpdated: () -> Void

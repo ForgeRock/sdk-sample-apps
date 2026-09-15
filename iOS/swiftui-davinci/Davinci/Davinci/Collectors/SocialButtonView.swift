@@ -14,8 +14,19 @@ import PingDavinci
 import PingBrowser
 import PingExternalIdP
 
-/// A view for social login buttons (Google, Facebook, Apple).
-/// - Initiates the authentication flow when tapped and handles success/failure results.
+/// A SwiftUI view that creates buttons for social identity provider authentication.
+///
+/// The SocialButtonView creates buttons for authenticating with social identity providers
+/// like Apple, Google, or Facebook. It uses the SocialButtonViewModel to manage the
+/// authentication process and styling.
+///
+/// Properties:
+/// - socialButtonViewModel: ObservableObject that manages the authentication process and styling
+/// - onNext: A callback function that navigates to the next step after successful authentication
+/// - onStart: A callback function that returns to the start of the flow if authentication fails
+///
+/// The view initiates the authentication flow when the button is tapped and handles
+/// success/failure results.
 public struct SocialButtonView: View {
 
     @StateObject public var socialButtonViewModel: SocialButtonViewModel
@@ -56,6 +67,17 @@ public struct SocialButtonView: View {
 
 /// A view model class that manages social authentication button behavior and styling.
 /// - Initiates the authentication process for the provider behind the button.
+///
+/// The SocialButtonViewModel handles the authentication process for social identity
+/// providers and creates appropriate button styling based on the provider type.
+///
+/// Properties:
+/// - isComplete: Published property that tracks authentication completion
+/// - idpCollector: The IdpCollector that manages the authentication process with the provider
+///
+/// Methods:
+/// - startSocialAuthentication(): Initiates the authentication process with the provider
+/// - socialButtonText(): Creates a styled button view based on the provider type
 @MainActor
 public class SocialButtonViewModel: ObservableObject {
     @Published public var isComplete: Bool = false
