@@ -1,5 +1,5 @@
 {
-  "originHash" : "92fc3ec9500767cb61d13a91cfe6c784c81896777e4b14643d5c26d8c23cb97a",
+  "originHash" : "eaf890bbc3592f25ed3ebcdfbcc93905a353aed4fea8fb4b192ea53e615e2108",
   "pins" : [
     {
       "identity" : "app-check",
@@ -83,12 +83,21 @@
       }
     },
     {
+      "identity" : "ping-ios-design-system",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ForgeRock/ping-ios-design-system",
+      "state" : {
+        "branch" : "main",
+        "revision" : "a6893843e679ab54a29ddd000ad0d30743b89a58"
+      }
+    },
+    {
       "identity" : "ping-ios-sdk",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ForgeRock/ping-ios-sdk",
       "state" : {
-        "revision" : "9b37c20f99eb1ce418e6dc8ab491e32fad86051e",
-        "version" : "2.0.0-alpha-9b37c20"
+        "revision" : "7eb152048c4addcb5ba7b4bb57fafcb210a7a845",
+        "version" : "2.1.1"
       }
     },
     {
@@ -96,8 +105,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pingidentity/pingone-signals-sdk-ios.git",
       "state" : {
-        "revision" : "bf37bd85fa909428d764630c71cf0d4f3d2d7e05",
-        "version" : "5.3.0"
+        "revision" : "e41f7070fdbb43dd7762274ec610c099256a7c7e",
+        "version" : "5.4.0"
       }
     },
     {
@@ -114,8 +123,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/GoogleCloudPlatform/recaptcha-enterprise-mobile-sdk.git",
       "state" : {
-        "revision" : "fb634e89a36fd91725ad654d5576d800c061b37d",
-        "version" : "18.8.2"
+        "revision" : "85588690041e63784be7bcb4b631c32565127ba2",
+        "version" : "18.9.1"
       }
     },
     {

@@ -10,7 +10,6 @@
 
 import SwiftUI
 import PingBinding
-import Combine
 
 /**
  * A SwiftUI view for handling device signing verification during authentication flows.
@@ -33,11 +32,10 @@ struct DeviceSigningVerifierCallbackView: View {
     var body: some View {
         VStack {
             Text("Device Signing")
-                .font(.title)
+                .pingScreenTitle()
             Text("Please wait while we sign the challenge.")
-                .font(.body)
-                .padding()
-            ProgressView()
+                .pingBodySecondary()
+            PingLoadingSpinner()
         }
         .onAppear(perform: handleDeviceSigning)
     }
