@@ -1,8 +1,8 @@
 //
 //  ErrorView.swift
-//  Davinci
+//  PingExample
 //
-//  Copyright (c) 2025 Ping Identity Corporation. All rights reserved.
+//  Copyright (c) 2025 - 2026 Ping Identity Corporation. All rights reserved.
 //
 //  This software may be modified and distributed under the terms
 //  of the MIT license. See the LICENSE file for details.
@@ -13,46 +13,31 @@ import SwiftUI
 import PingDavinci
 import PingOrchestrate
 
-/// A view for displaying error messages.
-/// - Provides a consistent UI for error presentation across the application.
+/// A reusable error card view with a title and message in the semantic error color.
 struct ErrorView: View {
-    /// The error message to display to the user.
+    let title: String
     let message: String
-    
+
     var body: some View {
-        HStack {
-            /// Warning triangle icon to visually indicate an error
-            Image(systemName: "exclamationmark.triangle.fill")
-                .foregroundStyle(Color.red)
-                .padding(.trailing, 8)
-            /// The error message text
+        VStack(alignment: .leading, spacing: PingTheme.Spacing.small) {
+            Text(title)
+                .font(PingTheme.Typography.body.weight(.semibold))
+                .foregroundStyle(PingTheme.Color.statusError)
             Text(message)
-                .font(.headline)
-                .multilineTextAlignment(.leading)
-                .foregroundStyle(Color.red)
-            Spacer()
+                .font(PingTheme.Typography.supporting)
+                .foregroundStyle(PingTheme.Color.statusError)
         }
-        .padding()
-        .background(
-            /// Rounded background with subtle shadow for visual emphasis
-            RoundedRectangle(cornerRadius: 8)
-                .fill(Color(.systemBackground))
-                .shadow(color: .gray, radius: 1, x: 0, y: 1)
-        )
-        .padding(.horizontal, 16)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .pingStatusCardStyle(tint: PingTheme.Color.statusError)
+        .padding(.horizontal, PingTheme.Spacing.screen)
     }
 }
 
-/// A view for displaying detailed error information from an ErrorNode.
-/// - Provides both a summary view and detailed information via an alert.
+
 struct ErrorNodeView: View {
-    /// The error node containing detailed error information.
     let node: ErrorNode
-    /// State to control whether detailed error information is shown.
     @State private var showDetails: Bool = false
     
-    /// Formats the error details for display in the alert.
-    /// - Extracts error messages and inner error details from the node.
     private var errorText: String {
         var error = ""
         
@@ -75,10 +60,8 @@ struct ErrorNodeView: View {
     }
     
     var body: some View {
-        /// Uses the standard ErrorView for consistent UI presentation
-        ErrorView(message: node.message)
+        ErrorView(title: "Error", message: node.message)
             .onTapGesture {
-                /// Shows detailed error information when tapped
                 showDetails = true
             }
             .alert("Error Details", isPresented: $showDetails) {

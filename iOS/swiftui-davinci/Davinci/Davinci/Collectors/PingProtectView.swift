@@ -2,13 +2,14 @@
 //  PingProtectView.swift
 //  Davinci
 //
-//  Copyright (c) 2025 Ping Identity Corporation. All rights reserved.
+//  Copyright (c) 2025 - 2026 Ping Identity Corporation. All rights reserved.
 //
 //  This software may be modified and distributed under the terms
 //  of the MIT license. See the LICENSE file for details.
 //
 
 import SwiftUI
+import PingOrchestrate
 import PingDavinci
 import PingProtect
 
@@ -17,13 +18,6 @@ import PingProtect
 /// The PingProtectView is responsible for collecting device signals and behavioral data
 /// for fraud detection and risk assessment. This collector operates transparently,
 /// gathering information in the background without requiring user interaction.
-///
-/// Properties:
-/// - field: The PingProtectEvaluationCollector that manages signal collection
-/// - onNodeUpdated: A callback function that notifies the parent when collection is complete
-///
-/// The view automatically initiates signal collection when it appears and updates
-/// the parent node when collection completes.
 struct PingProtectView: View {
     let field: ProtectCollector
     let onNodeUpdated: () -> Void
@@ -36,16 +30,13 @@ struct PingProtectView: View {
             VStack {
                 Spacer()
 
-                VStack(spacing: 16) {
-                    ProgressView()
-                        .progressViewStyle(CircularProgressViewStyle())
-                        .scaleEffect(1.5)
-                        .tint(.themeButtonBackground)
+                VStack(spacing: PingTheme.Spacing.medium) {
+                    PingLoadingSpinner()
 
                     Text("Collecting Protect Data...")
-                        .font(.body)
+                        .pingBodySecondary()
                 }
-                .padding(16)
+                .padding(PingTheme.Spacing.medium)
 
                 Spacer()
             }

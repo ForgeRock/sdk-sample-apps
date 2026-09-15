@@ -11,10 +11,11 @@
 		3A5441332BCDF10900385131 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A5441322BCDF10900385131 /* ContentView.swift */; };
 		3A5441352BCDF10B00385131 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3A5441342BCDF10B00385131 /* Assets.xcassets */; };
 		3A5441382BCDF10B00385131 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3A5441372BCDF10B00385131 /* Preview Assets.xcassets */; };
-		3A8092F42BE99F0F00AD667F /* CustomViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A8092F32BE99F0F00AD667F /* CustomViews.swift */; };
 		3A8092F62BE9BB6B00AD667F /* AccessTokenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A8092F52BE9BB6B00AD667F /* AccessTokenViewModel.swift */; };
 		3A8532332BE2D5D800F8619D /* DavinciView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A8532322BE2D5D800F8619D /* DavinciView.swift */; };
 		3ACD90E12BE586BC00DABCE6 /* DavinciViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ACD90E02BE586BC00DABCE6 /* DavinciViewModel.swift */; };
+		74BF20F876FFC474C0251908 /* PasswordRequirementsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793CF4220C917B8538608865 /* PasswordRequirementsView.swift */; };
+		8B0E7153BF7C3706D85C524E /* RichTextBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8104FBA08F6D3682DA2BD8 /* RichTextBuilder.swift */; };
 		A51313CD2D9C6C640086F846 /* PingBrowser in Frameworks */ = {isa = PBXBuildFile; productRef = A51313CC2D9C6C640086F846 /* PingBrowser */; };
 		A51313CF2D9C6C640086F846 /* PingDavinci in Frameworks */ = {isa = PBXBuildFile; productRef = A51313CE2D9C6C640086F846 /* PingDavinci */; };
 		A51313D32D9C6C640086F846 /* PingLogger in Frameworks */ = {isa = PBXBuildFile; productRef = A51313D22D9C6C640086F846 /* PingLogger */; };
@@ -40,7 +41,6 @@
 		A57584842D9DD9EC00AFD754 /* PingOrchestrate in Frameworks */ = {isa = PBXBuildFile; productRef = A57584832D9DD9EC00AFD754 /* PingOrchestrate */; };
 		A57584862D9DD9EC00AFD754 /* PingStorage in Frameworks */ = {isa = PBXBuildFile; productRef = A57584852D9DD9EC00AFD754 /* PingStorage */; };
 		A5A5F8582D5CE16A0053BF24 /* RadioButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5F8552D5CE16A0053BF24 /* RadioButtonView.swift */; };
-		A5A5F8592D5CE16A0053BF24 /* ErrorMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5F8512D5CE16A0053BF24 /* ErrorMessageView.swift */; };
 		A5A5F85A2D5CE16A0053BF24 /* PasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5F8542D5CE16A0053BF24 /* PasswordView.swift */; };
 		A5A5F85B2D5CE16A0053BF24 /* ComboBoxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5F84F2D5CE16A0053BF24 /* ComboBoxView.swift */; };
 		A5A5F85C2D5CE16A0053BF24 /* DropdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A5F8502D5CE16A0053BF24 /* DropdownView.swift */; };
@@ -55,6 +55,8 @@
 		A5EED25C2CF7B5480064B168 /* UserInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5EED25B2CF7B5480064B168 /* UserInfoView.swift */; };
 		A5EED25E2CF7B8F80064B168 /* UserInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5EED25D2CF7B8F80064B168 /* UserInfoViewModel.swift */; };
 		A5EED2602CF7B9380064B168 /* LogOutViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5EED25F2CF7B9380064B168 /* LogOutViewModel.swift */; };
+		D5B300000000000000000003 /* PingDesignSystemImport.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B300000000000000000004 /* PingDesignSystemImport.swift */; };
+		D5B300000000000000000005 /* PingDesignSystem in Frameworks */ = {isa = PBXBuildFile; productRef = D5B300000000000000000002 /* PingDesignSystem */; };
 		EC83DE312E5F2BD600D2B5B4 /* DeviceRegistrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC83DE2F2E5F2BD600D2B5B4 /* DeviceRegistrationView.swift */; };
 		EC83DE322E5F2BD600D2B5B4 /* DeviceAuthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC83DE2E2E5F2BD600D2B5B4 /* DeviceAuthenticationView.swift */; };
 		EC83DE332E5F2BD600D2B5B4 /* PhoneNumberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC83DE302E5F2BD600D2B5B4 /* PhoneNumberView.swift */; };
@@ -84,22 +86,22 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2F8104FBA08F6D3682DA2BD8 /* RichTextBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RichTextBuilder.swift; sourceTree = "<group>"; };
 		3A3709952BEB038200AA7B51 /* AccessTokenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessTokenView.swift; sourceTree = "<group>"; };
 		3A54412D2BCDF10900385131 /* Davinci.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Davinci.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A5441322BCDF10900385131 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		3A5441342BCDF10B00385131 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3A5441372BCDF10B00385131 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		3A8092F32BE99F0F00AD667F /* CustomViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomViews.swift; sourceTree = "<group>"; };
 		3A8092F52BE9BB6B00AD667F /* AccessTokenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessTokenViewModel.swift; sourceTree = "<group>"; };
 		3A8532322BE2D5D800F8619D /* DavinciView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DavinciView.swift; sourceTree = "<group>"; };
 		3ACD90E02BE586BC00DABCE6 /* DavinciViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DavinciViewModel.swift; sourceTree = "<group>"; };
+		793CF4220C917B8538608865 /* PasswordRequirementsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordRequirementsView.swift; sourceTree = "<group>"; };
 		A51E622A2D9C4F9D005164D9 /* SocialButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialButtonView.swift; sourceTree = "<group>"; };
 		A528778C2D9D858F00B4885D /* Davinci.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Davinci.entitlements; sourceTree = "<group>"; };
 		A528778D2D9D893800B4885D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		A5A5F84E2D5CE16A0053BF24 /* CheckBoxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckBoxView.swift; sourceTree = "<group>"; };
 		A5A5F84F2D5CE16A0053BF24 /* ComboBoxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComboBoxView.swift; sourceTree = "<group>"; };
 		A5A5F8502D5CE16A0053BF24 /* DropdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropdownView.swift; sourceTree = "<group>"; };
-		A5A5F8512D5CE16A0053BF24 /* ErrorMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorMessageView.swift; sourceTree = "<group>"; };
 		A5A5F8522D5CE16A0053BF24 /* FlowButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowButtonView.swift; sourceTree = "<group>"; };
 		A5A5F8532D5CE16A0053BF24 /* LabelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelView.swift; sourceTree = "<group>"; };
 		A5A5F8542D5CE16A0053BF24 /* PasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordView.swift; sourceTree = "<group>"; };
@@ -112,6 +114,7 @@
 		A5EED25B2CF7B5480064B168 /* UserInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoView.swift; sourceTree = "<group>"; };
 		A5EED25D2CF7B8F80064B168 /* UserInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoViewModel.swift; sourceTree = "<group>"; };
 		A5EED25F2CF7B9380064B168 /* LogOutViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogOutViewModel.swift; sourceTree = "<group>"; };
+		D5B300000000000000000004 /* PingDesignSystemImport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PingDesignSystemImport.swift; sourceTree = "<group>"; };
 		EC83DE2E2E5F2BD600D2B5B4 /* DeviceAuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceAuthenticationView.swift; sourceTree = "<group>"; };
 		EC83DE2F2E5F2BD600D2B5B4 /* DeviceRegistrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceRegistrationView.swift; sourceTree = "<group>"; };
 		EC83DE302E5F2BD600D2B5B4 /* PhoneNumberView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneNumberView.swift; sourceTree = "<group>"; };
@@ -125,6 +128,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D5B300000000000000000005 /* PingDesignSystem in Frameworks */,
 				A51C18EA2CF5247200A78241 /* PingLogger in Frameworks */,
 				A51313D52D9C6C640086F846 /* PingOidc in Frameworks */,
 				A51313D92D9C6C640086F846 /* PingStorage in Frameworks */,
@@ -188,8 +192,8 @@
 				3A3709952BEB038200AA7B51 /* AccessTokenView.swift */,
 				3A8092F52BE9BB6B00AD667F /* AccessTokenViewModel.swift */,
 				3A5441322BCDF10900385131 /* ContentView.swift */,
+				D5B300000000000000000004 /* PingDesignSystemImport.swift */,
 				A5A5F8622D5CE29D0053BF24 /* ContinueNodeView.swift */,
-				3A8092F32BE99F0F00AD667F /* CustomViews.swift */,
 				3A8532322BE2D5D800F8619D /* DavinciView.swift */,
 				3ACD90E02BE586BC00DABCE6 /* DavinciViewModel.swift */,
 				A5A5F8642D5CE4A60053BF24 /* ErrorView.swift */,
@@ -227,7 +231,8 @@
 				EC83DE3C2E5F2CEB00D2B5B4 /* DeviceCardView.swift */,
 				EC83DE2F2E5F2BD600D2B5B4 /* DeviceRegistrationView.swift */,
 				A5A5F8502D5CE16A0053BF24 /* DropdownView.swift */,
-				A5A5F8512D5CE16A0053BF24 /* ErrorMessageView.swift */,
+				2F8104FBA08F6D3682DA2BD8 /* RichTextBuilder.swift */,
+				793CF4220C917B8538608865 /* PasswordRequirementsView.swift */,
 				A5A5F8522D5CE16A0053BF24 /* FlowButtonView.swift */,
 				A5A5F8532D5CE16A0053BF24 /* LabelView.swift */,
 				A5A5F8542D5CE16A0053BF24 /* PasswordView.swift */,
@@ -258,6 +263,9 @@
 			dependencies = (
 			);
 			name = Davinci;
+			packageProductDependencies = (
+				D5B300000000000000000002 /* PingDesignSystem */,
+			);
 			productName = PingExample;
 			productReference = 3A54412D2BCDF10900385131 /* Davinci.app */;
 			productType = "com.apple.product-type.application";
@@ -289,6 +297,7 @@
 			packageReferences = (
 				A57584782D9DD9EC00AFD754 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */,
 				EC83DE582E5F2D1D00D2B5B4 /* XCRemoteSwiftPackageReference "SVGKit" */,
+				D5B300000000000000000001 /* XCRemoteSwiftPackageReference "ping-ios-design-system" */,
 			);
 			productRefGroup = 3A54412E2BCDF10900385131 /* Products */;
 			projectDirPath = "";
@@ -317,6 +326,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A5EED25A2CF7B10E0064B168 /* LogOutView.swift in Sources */,
+				D5B300000000000000000003 /* PingDesignSystemImport.swift in Sources */,
 				3A8092F62BE9BB6B00AD667F /* AccessTokenViewModel.swift in Sources */,
 				A5EED25E2CF7B8F80064B168 /* UserInfoViewModel.swift in Sources */,
 				3ACD90E12BE586BC00DABCE6 /* DavinciViewModel.swift in Sources */,
@@ -328,10 +338,10 @@
 				EC83DE322E5F2BD600D2B5B4 /* DeviceAuthenticationView.swift in Sources */,
 				EC83DE332E5F2BD600D2B5B4 /* PhoneNumberView.swift in Sources */,
 				3A5441332BCDF10900385131 /* ContentView.swift in Sources */,
-				3A8092F42BE99F0F00AD667F /* CustomViews.swift in Sources */,
 				A5A5F8582D5CE16A0053BF24 /* RadioButtonView.swift in Sources */,
 				A51E622B2D9C4F9F005164D9 /* SocialButtonView.swift in Sources */,
-				A5A5F8592D5CE16A0053BF24 /* ErrorMessageView.swift in Sources */,
+				74BF20F876FFC474C0251908 /* PasswordRequirementsView.swift in Sources */,
+				8B0E7153BF7C3706D85C524E /* RichTextBuilder.swift in Sources */,
 				A5A5F85A2D5CE16A0053BF24 /* PasswordView.swift in Sources */,
 				ECC5A5452EE71AC60034504A /* PingProtectView.swift in Sources */,
 				A5A5F85B2D5CE16A0053BF24 /* ComboBoxView.swift in Sources */,
@@ -497,7 +507,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = "0.9.0-beta2";
-				PRODUCT_BUNDLE_IDENTIFIER = com.pingidentity.PingExample;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pingidentity.DavinciModuleSample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 6.0;
@@ -530,7 +540,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = "0.9.0-beta2";
-				PRODUCT_BUNDLE_IDENTIFIER = com.pingidentity.PingExample;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pingidentity.DavinciModuleSample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 6.0;
@@ -592,6 +602,14 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 2.0.0;
+			};
+		};
+		D5B300000000000000000001 /* XCRemoteSwiftPackageReference "ping-ios-design-system" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ForgeRock/ping-ios-design-system";
+			requirement = {
+				branch = main;
+				kind = branch;
 			};
 		};
 		EC83DE582E5F2D1D00D2B5B4 /* XCRemoteSwiftPackageReference "SVGKit" */ = {
@@ -719,6 +737,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = A57584782D9DD9EC00AFD754 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;
 			productName = PingStorage;
+		};
+		D5B300000000000000000002 /* PingDesignSystem */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D5B300000000000000000001 /* XCRemoteSwiftPackageReference "ping-ios-design-system" */;
+			productName = PingDesignSystem;
 		};
 		EC83DE342E5F2C7C00D2B5B4 /* PingExternalIdP */ = {
 			isa = XCSwiftPackageProductDependency;

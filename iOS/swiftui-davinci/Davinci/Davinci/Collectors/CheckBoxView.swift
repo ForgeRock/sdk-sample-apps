@@ -1,8 +1,8 @@
 //
 //  CheckBoxView.swift
-//  Davinci
+//  PingExample
 //
-//  Copyright (c) 2025 Ping Identity Corporation. All rights reserved.
+//  Copyright (c) 2025 - 2026 Ping Identity Corporation. All rights reserved.
 //
 //  This software may be modified and distributed under the terms
 //  of the MIT license. See the LICENSE file for details.
@@ -12,20 +12,6 @@
 import SwiftUI
 import PingDavinci
 
-/// A SwiftUI view that renders a group of checkbox options for multi-selection.
-///
-/// The CheckBoxView presents multiple options as checkboxes, allowing users to select
-/// multiple values from a list. It provides validation feedback using the ValidationViewModel
-/// and reports changes back to the parent through the onNodeUpdated callback.
-///
-/// Properties:
-/// - field: The MultiSelectCollector that contains the options, label, and manages selection state
-/// - onNodeUpdated: A callback function that notifies the parent when the field value changes
-/// - selectedOptions: State variable that tracks the currently selected options
-/// - isValid: State variable that tracks the validation state of the field
-///
-/// The view updates validation state when the ValidationViewModel triggers validation
-/// and when selections change.
 struct CheckBoxView: View {
     var field: MultiSelectCollector
     var onNodeUpdated: () -> Void
@@ -35,14 +21,13 @@ struct CheckBoxView: View {
     @State private var isValid: Bool = true
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: PingTheme.Spacing.small) {
             Text(field.required ? "\(field.label)*" : field.label)
-                .font(.headline)
-                .padding(.bottom, 4)
-            VStack(alignment: .leading, spacing: 8) {
+                .pingSectionHeader()
+            VStack(alignment: .leading, spacing: PingTheme.Spacing.small) {
                 ForEach(field.options, id: \.value) { option in
                     let isSelected = selectedOptions.contains(option.value)
-                    
+
                     Button(action: {
                         if isSelected {
                             selectedOptions.removeAll { $0 == option.value }
@@ -56,7 +41,7 @@ struct CheckBoxView: View {
                     }) {
                         HStack {
                             Image(systemName: isSelected ? "checkmark.square.fill" : "square")
-                                .foregroundStyle(isSelected ? Color.themeButtonBackground : Color.gray)
+                                .foregroundStyle(isSelected ? PingTheme.Color.actionPrimary : PingTheme.Color.contentSecondary)
                             Text(option.label)
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -64,16 +49,14 @@ struct CheckBoxView: View {
                     .buttonStyle(PlainButtonStyle())
                 }
             }
-            .padding()
-            .background(
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(isValid ? Color.gray : Color.red, lineWidth: 1)
-            )
+            .padding(.horizontal, PingTheme.Control.fieldPadding)
+            .padding(.vertical, PingTheme.Spacing.compact)
+            .pingOutlinedContainerStyle(showsError: !isValid)
             if !isValid {
-                ErrorMessageView(errors: field.validate().map { $0.errorMessage }.sorted())
+                PingFieldMessages(errorMessages: field.validate().map { $0.errorMessage }.sorted())
             }
         }
-        .padding(.horizontal, 16)
+        .padding(.vertical, PingTheme.Spacing.small)
         .onAppear {
             selectedOptions = field.value.sorted()
         }
