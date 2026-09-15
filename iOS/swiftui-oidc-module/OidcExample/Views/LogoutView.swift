@@ -2,7 +2,7 @@
 //  LogoutView.swift
 //  OidcExample
 //
-//  Copyright (c) 2025 Ping Identity Corporation. All rights reserved.
+//  Copyright (c) 2025 - 2026 Ping Identity Corporation. All rights reserved.
 //
 //  This software may be modified and distributed under the terms
 //  of the MIT license. See the LICENSE file for details.
@@ -18,36 +18,30 @@ struct LogoutView: View {
     @StateObject private var logoutViewModel = LogoutViewModel()
 
     var body: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: PingTheme.Spacing.large) {
             Spacer()
 
-            if !logoutViewModel.logoutStatus.isEmpty {
-                Text(logoutViewModel.logoutStatus)
-                    .font(.headline)
-                    .foregroundColor(.green)
-                    .padding()
-            }
+            Text("Proceed to sign out of the current session. You will be returned to the login screen.")
+                .pingSupportingText()
+                .multilineTextAlignment(.center)
 
-            Button(action: {
+            Button {
                 Task {
                     await logoutViewModel.logout()
                     // Navigate back to the login screen
                     path.removeAll()
                     path.append("OidcLogin")
                 }
-            }) {
-                Text("Proceed to Logout")
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .padding()
-                    .frame(width: 300, height: 50)
-                    .background(Color.red)
-                    .cornerRadius(15.0)
-                    .shadow(radius: 10.0, x: 20, y: 10)
+            } label: {
+                Label("Proceed to Logout", systemImage: "rectangle.portrait.and.arrow.right")
             }
+            .buttonStyle(.pingDestructive)
 
             Spacer()
         }
+        .padding(.horizontal, PingTheme.Spacing.screen)
+        .pingScreenBackground()
         .navigationTitle("Logout")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
