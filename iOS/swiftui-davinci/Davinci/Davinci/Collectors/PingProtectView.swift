@@ -2,13 +2,14 @@
 //  PingProtectView.swift
 //  Davinci
 //
-//  Copyright (c) 2025 Ping Identity Corporation. All rights reserved.
+//  Copyright (c) 2025 - 2026 Ping Identity Corporation. All rights reserved.
 //
 //  This software may be modified and distributed under the terms
 //  of the MIT license. See the LICENSE file for details.
 //
 
 import SwiftUI
+import PingOrchestrate
 import PingDavinci
 import PingProtect
 
@@ -36,16 +37,13 @@ struct PingProtectView: View {
             VStack {
                 Spacer()
 
-                VStack(spacing: 16) {
-                    ProgressView()
-                        .progressViewStyle(CircularProgressViewStyle())
-                        .scaleEffect(1.5)
-                        .tint(.themeButtonBackground)
+                VStack(spacing: PingTheme.Spacing.medium) {
+                    PingLoadingSpinner()
 
                     Text("Collecting Protect Data...")
-                        .font(.body)
+                        .pingBodySecondary()
                 }
-                .padding(16)
+                .padding(PingTheme.Spacing.medium)
 
                 Spacer()
             }
