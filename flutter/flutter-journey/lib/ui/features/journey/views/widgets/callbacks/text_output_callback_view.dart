@@ -20,8 +20,7 @@ class TextOutputCallbackView extends StatelessWidget {
       TextOutputMessageType.information => (Icons.info, scheme.primary),
       TextOutputMessageType.warning => (Icons.warning, Colors.orange),
       TextOutputMessageType.error => (Icons.error, scheme.error),
-      TextOutputMessageType.script ||
-      TextOutputMessageType.unknown => (
+      TextOutputMessageType.script || TextOutputMessageType.unknown => (
         Icons.settings,
         scheme.onSurfaceVariant,
       ),

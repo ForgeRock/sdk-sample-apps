@@ -7,9 +7,11 @@
 
 package com.pingidentity.flutter.oidc
 
+import com.pingidentity.flutter.core.CoreRuntime
 import com.pingidentity.flutter.oidc.error.OidcErrorCodes
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlinx.coroutines.CompletableDeferred
@@ -17,13 +19,13 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeoutOrNull
 
 /**
- * Unit tests for [OidcHostApiImpl]'s Phase 4 methods.
+ * Unit tests for [OidcHostApiImpl]'s methods.
  *
- * `OidcWebClient` is a concrete native class (not an interface), so there's no seam here to inject
+ * `OidcWebClient` is a concrete native class, so there's no seam here to inject
  * a fake `User` in place of a real one — these tests cover only the "no session" failure path,
  * which is reachable via the real (empty) registry with no native scaffolding required. Full
  * method-body coverage against a real signed-in session is exercised at the runtime verification
- * gate instead (see IMPLEMENTATION_PLAN_OIDC.md Phase 4).
+ * gate instead.
  */
 class OidcHostApiImplTest {
     private val impl = OidcHostApiImpl()
@@ -59,6 +61,18 @@ class OidcHostApiImplTest {
     private suspend fun awaitSignOff(webClientId: String): Result<Boolean> {
         val deferred = CompletableDeferred<Result<Boolean>>()
         impl.signOff(webClientId) { deferred.complete(it) }
+        return deferred.await()
+    }
+
+    private suspend fun awaitConfigure(config: OidcConfigMessage): Result<String> {
+        val deferred = CompletableDeferred<Result<String>>()
+        impl.configureOidc(config) { deferred.complete(it) }
+        return deferred.await()
+    }
+
+    private suspend fun awaitDispose(handleId: String): Result<Unit> {
+        val deferred = CompletableDeferred<Result<Unit>>()
+        impl.dispose(handleId) { deferred.complete(it) }
         return deferred.await()
     }
 
@@ -115,4 +129,24 @@ class OidcHostApiImplTest {
 
             assertNull(withTimeoutOrNull(200) { deferred.await() })
         }
+
+    @Test
+    fun `repeated configure, dispose leaves no entries in the client registry`() = runBlocking {
+        repeat(3) {
+            val config =
+                OidcConfigMessage(
+                    clientId = "client-1",
+                    redirectUri = "https://example.com/callback",
+                    discoveryEndpoint = "https://example.com/.well-known/openid-configuration",
+                    par = false,
+                )
+            val clientId = awaitConfigure(config).getOrThrow()
+
+            assertNotNull(CoreRuntime.oidcClientRegistry.resolve(clientId))
+
+            awaitDispose(clientId).getOrThrow()
+
+            assertNull(CoreRuntime.oidcClientRegistry.resolve(clientId))
+        }
+    }
 }

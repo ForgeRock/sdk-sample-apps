@@ -16,8 +16,7 @@ import com.pingidentity.oidc.OidcClient
 /**
  * Wraps a live native [OidcClient] plus the flat [OidcConfigMessage] it was built from, so it can
  * be stored in [CoreRuntime.oidcClientRegistry] and read back through [OidcConfigHandle] by
- * consumers with no compile-time dependency on `ping_oidc` (e.g. `ping_journey`'s Phase 6
- * delegation).
+ * consumers with no compile-time dependency on `ping_oidc`.
  */
 internal class OidcClientHandle(
     val payload: OidcConfigMessage,

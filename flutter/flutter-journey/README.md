@@ -55,23 +55,22 @@ To try out the Journey Flutter sample, perform these steps:
 
 ## Testing
 
-Unit and widget tests run with `flutter test` from this directory (or `flutter/` root). The
-integration tests under `integration_test/` drive real Journeys against the configured tenant —
-run each file standalone against a booted simulator/emulator or device (not combined in one
-`flutter test` invocation — the native SDK persists the AM session cookie on-device across
-`Journey` instances within one app install, so running both back-to-back in one process changes
-each Journey's first-node response):
+**This sample ships no tests, by design.** Sample apps in this repository are reference
+implementations meant to be read and run, not test fixtures — the same convention the Kotlin,
+Swift, and React Native samples follow.
 
-```
-flutter test integration_test/journey_login_test.dart \
-  --dart-define=E2E_USERNAME=<username> --dart-define=E2E_PASSWORD=<password>
-flutter test integration_test/journey_registration_test.dart
-```
+Test coverage for the behaviour this app demonstrates lives in the bridge package instead:
 
-`journey_login_test.dart`'s credentialed assertions (login, Success screen, sign-off) only run
-when `E2E_USERNAME`/`E2E_PASSWORD` are supplied, since no test credentials are committed to this
-public sample repo. `journey_registration_test.dart` needs no credentials — it signs up a fresh,
-uniquely-suffixed user each run.
+- **Unit tests** — `../flutter-sdk-bridge/ping_journey/test/` (node/callback mapping, session
+  parsing, client error translation). Run with `flutter test` from the `flutter/` workspace root.
+- **Integration tests** — `../flutter-sdk-bridge/ping_journey/example/integration_test/`, which
+  drive the real `JourneyClient` API against either a hermetic mock server or a live tenant with
+  no UI in the loop. See
+  [that package's README](../flutter-sdk-bridge/ping_journey/example/README.md) for how to run
+  them.
+
+If you want to verify this app against your own tenant, run it (`flutter run`) and walk the flow
+by hand.
 
 ## Native SDK version
 

@@ -1,0 +1,33 @@
+name: ping_journey_example
+description: "Integration-test host for the ping_journey bridge package. Not a sample app."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.12.2
+
+resolution: workspace
+
+# This package exists to host `ping_journey`'s integration tests. Flutter's `integration_test`
+# package can only run from an application package, so a plugin needs a host app to exercise its
+# platform channels against real native code. It deliberately has no UI worth speaking of — the
+# tests drive `JourneyClient` directly and never touch the widget tree.
+#
+# It is NOT a sample app. The samples live at `flutter/flutter-journey`, `flutter/flutter-oidc`,
+# and so on; those demonstrate usage and ship no tests.
+dependencies:
+  flutter:
+    sdk: flutter
+
+  ping_journey:
+    path: ../
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true

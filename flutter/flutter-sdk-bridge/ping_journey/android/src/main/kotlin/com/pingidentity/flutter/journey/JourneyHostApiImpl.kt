@@ -129,6 +129,9 @@ class JourneyHostApiImpl : PingJourneyHostApi {
                                 SessionMessage(
                                     accessToken = token.accessToken,
                                     refreshToken = token.refreshToken,
+                                    idToken = token.idToken,
+                                    tokenType = token.tokenType,
+                                    scope = token.scope,
                                     expiresIn = token.expiresIn,
                                     userInfo = userInfo,
                                 )
@@ -145,6 +148,95 @@ class JourneyHostApiImpl : PingJourneyHostApi {
             callback(result.classifyError(JourneyErrorCodes.GET_SESSION))
         }
     }
+
+    override fun refreshToken(journeyId: String, callback: (Result<SessionMessage>) -> Unit) {
+        scope.launch {
+            val result = runCatching {
+                val user = requireOidcUser(journeyId, operation = "refreshToken")
+                when (val refreshResult = user.refresh()) {
+                    is PingResult.Success -> {
+                        val token = refreshResult.value as? Token
+                            ?: throw IllegalStateException("Invalid token payload type")
+                        // userInfo is deliberately null here — claims are fetched separately
+                        // via getUserInfo, so callers keep whatever they already loaded.
+                        SessionMessage(
+                            accessToken = token.accessToken,
+                            refreshToken = token.refreshToken,
+                            idToken = token.idToken,
+                            tokenType = token.tokenType,
+                            scope = token.scope,
+                            expiresIn = token.expiresIn,
+                        )
+                    }
+                    is PingResult.Failure ->
+                        throw JourneyErrorMapper.fromOidcError(
+                            JourneyErrorCodes.REFRESH,
+                            refreshResult.value
+                        )
+                }
+            }
+            callback(result.classifyError(JourneyErrorCodes.REFRESH))
+        }
+    }
+
+    override fun revokeToken(journeyId: String, callback: (Result<Unit>) -> Unit) {
+        scope.launch {
+            val result = runCatching {
+                val user = requireOidcUser(journeyId, operation = "revokeToken")
+                // Native swallows server-side revocation errors, matching ping_oidc's revoke.
+                user.revoke()
+            }
+            callback(result.classifyError(JourneyErrorCodes.REVOKE))
+        }
+    }
+
+    override fun getUserInfo(
+        journeyId: String,
+        cache: Boolean,
+        callback: (Result<Map<String?, Any?>>) -> Unit
+    ) {
+        scope.launch {
+            val result = runCatching {
+                val user = requireOidcUser(journeyId, operation = "getUserInfo")
+                // cache is always passed explicitly — the native SDKs' own defaults differ
+                // (Android false, iOS true).
+                when (val uiResult = user.userinfo(cache)) {
+                    is PingResult.Success ->
+                        @Suppress("UNCHECKED_CAST")
+                        (JsonBridgeMapper.encodeJsonElement(uiResult.value)
+                            as? Map<String?, Any?>) ?: emptyMap<String?, Any?>()
+                    is PingResult.Failure ->
+                        throw JourneyErrorMapper.fromOidcError(
+                            JourneyErrorCodes.USERINFO,
+                            uiResult.value
+                        )
+                }
+            }
+            callback(result.classifyError(JourneyErrorCodes.USERINFO))
+        }
+    }
+
+    /**
+     * Resolves the OIDC user for the token-command methods, throwing a typed
+     * state error when the Journey has no OIDC configuration or no user
+     * session — unlike [getSession], which is a query and returns null instead
+     * (null = "nothing to show"; a command must fail loudly).
+     */
+    private suspend fun requireOidcUser(journeyId: String, operation: String) =
+        run {
+            val handle = resolveHandle(journeyId)
+            if (!handle.hasOidc) {
+                throw IllegalStateException(
+                    "$operation requires OIDC configuration; this Journey has none (journeyId=$journeyId)"
+                )
+            }
+            handle
+        }.let { handle ->
+            handle.journey.user()
+                ?: throw IllegalStateException(
+                    "No user session for journeyId=$journeyId — complete the Journey first"
+                )
+        }
 
     override fun signOff(journeyId: String, callback: (Result<Boolean>) -> Unit) {
         scope.launch {

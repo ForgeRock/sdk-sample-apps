@@ -51,6 +51,11 @@ class JourneyConfigMessage {
   String? display;
   String? prompt;
   Map<String?, String?>? additionalParameters;
+
+  /// Id of a native OIDC client already registered in `ping_core`'s shared
+  /// `CoreRuntime.oidcClientRegistry` (e.g. via `ping_oidc`'s `OidcClient.configure`).
+  /// Mutually exclusive with the flat OIDC fields above — set this OR them, never both.
+  String? oidcClientId;
 }
 
 class StartOptionsMessage {
@@ -138,6 +143,11 @@ class NodeMessage {
   String? stage;
   List<CallbackMessage?>? callbacks;
   Map<String?, Object?>? input;
+
+  /// The AM session token (`tokenId`) carried on `SuccessNode.session.value`,
+  /// present even when the Journey has no OIDC configuration. Empty native
+  /// sessions (`EmptySession`) are mapped to null.
+  String? sessionToken;
 }
 
 class SessionMessage {
@@ -145,6 +155,17 @@ class SessionMessage {
 
   String accessToken;
   String? refreshToken;
+
+  /// The OIDC ID token, when the server returned one (not present in every
+  /// token response).
+  String? idToken;
+
+  /// The OAuth token type (e.g. `Bearer`), when the server returned one.
+  String? tokenType;
+
+  /// The granted scope string, when the server returned one.
+  String? scope;
+
   int expiresIn;
   Map<String?, Object?>? userInfo;
 }
@@ -162,6 +183,25 @@ abstract class PingJourneyHostApi {
 
   @async
   SessionMessage? getSession(String journeyId);
+
+  /// Refreshes the OIDC token for a completed Journey, returning the new token
+  /// set (userInfo is null on this message — fetch claims via getUserInfo).
+  /// Throws a typed error when the Journey has no OIDC configuration or no
+  /// user session.
+  @async
+  SessionMessage refreshToken(String journeyId);
+
+  /// Revokes the OIDC token for a completed Journey. Native swallows server-side
+  /// revocation errors (matching the native SDKs), so completion is not proof
+  /// of invalidation. Throws a typed error when no OIDC/user session exists.
+  @async
+  void revokeToken(String journeyId);
+
+  /// Fetches the OIDC userinfo claims for a completed Journey. [cache] is
+  /// always passed explicitly — the native SDKs' own defaults differ.
+  /// Throws a typed error when no OIDC/user session exists.
+  @async
+  Map<String?, Object?> getUserInfo(String journeyId, bool cache);
 
   @async
   bool signOff(String journeyId);

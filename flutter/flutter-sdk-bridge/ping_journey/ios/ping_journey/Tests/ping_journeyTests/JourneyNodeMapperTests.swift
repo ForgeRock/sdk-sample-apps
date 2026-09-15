@@ -23,6 +23,19 @@ final class JourneyNodeMapperTests: XCTestCase {
         let result = JourneyNodeMapper.map(node)
 
         XCTAssertEqual(result.type, .successNode)
+        XCTAssertNil(result.sessionToken)
+    }
+
+    func testMapSuccessNodeCarriesSessionTokenFromSessionValue() {
+        let node = SuccessNode(session: SSOTokenImpl(
+            value: "test-token",
+            successUrl: "/am",
+            realm: "root"
+        ))
+
+        let result = JourneyNodeMapper.map(node)
+
+        XCTAssertEqual("test-token", result.sessionToken)
     }
 
     func testMapErrorNodeReturnsErrorNodeTypeWithMessage() {

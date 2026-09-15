@@ -22,9 +22,7 @@ class ChoiceCallbackView extends StatelessWidget {
   Widget build(BuildContext context) {
     return DropdownButtonFormField<int>(
       initialValue: callback.selectedIndex,
-      decoration: InputDecoration(
-        labelText: callback.prompt ?? 'Choice',
-      ),
+      decoration: InputDecoration(labelText: callback.prompt ?? 'Choice'),
       items: [
         for (final (index, choice) in callback.choices.indexed)
           DropdownMenuItem(value: index, child: Text(choice)),
