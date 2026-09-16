@@ -35,6 +35,12 @@ export default function Text({ callback, inputName }) {
   const policies = callback.getPolicies && callback.getPolicies();
   const textInputLabel = callback.getPrompt();
   const stringAttributeName = callback.getName && callback.getName();
+  const isNameCb =
+    callback.getType() === 'NameCallback' ||
+    callback.getType() === 'ValidatedCreateUsernameCallback';
+  const autocomplete = isNameCb
+    ? callback.getOutputByName('autocompleteValues')?.join(' ')
+    : undefined;
 
   let isRequired;
   let Validation = null;
@@ -91,6 +97,7 @@ export default function Text({ callback, inputName }) {
         placeholder={textInputLabel}
         required={isRequired ? 'required' : ''}
         type={stringAttributeName === 'mail' ? 'email' : 'text'}
+        autoComplete={autocomplete}
       />
       <label htmlFor={inputName}>{textInputLabel}</label>
       {Validation}
