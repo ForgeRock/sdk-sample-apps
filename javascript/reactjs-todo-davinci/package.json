@@ -40,7 +40,6 @@
   "dependencies": {
     "@forgerock/davinci-client": "latest",
     "@forgerock/oidc-client": "latest",
-    "@forgerock/sdk-utilities": "latest",
     "@forgerock/protect": "latest",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
