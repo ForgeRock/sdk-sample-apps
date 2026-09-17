@@ -1,8 +1,8 @@
 // 
 //  PhoneNumberView.swift
-//  PingExample
+//  Davinci
 //
-//  Copyright (c) 2025 Ping Identity Corporation. All rights reserved.
+//  Copyright (c) 2025 - 2026 Ping Identity Corporation. All rights reserved.
 //
 //  This software may be modified and distributed under the terms
 //  of the MIT license. See the LICENSE file for details.
@@ -69,12 +69,17 @@ struct PhoneNumberView: View {
     
     @EnvironmentObject var validationViewModel: ValidationViewModel
     @State var text: String = ""
+    @State private var extensionText: String = ""
     @State private var isValid: Bool = true
     @State private var expanded: Bool = false
     @State private var selectedCountry: Country?
-    
+
+    private let countryCodeColumnWidth: CGFloat = 100
+    private let extensionColumnWidth: CGFloat = 80
+
     var body: some View {
-        HStack {
+        VStack(alignment: .leading) {
+            HStack {
             Menu {
                 ForEach(listOfCountries) { country in
                     Button(action: {
@@ -110,40 +115,50 @@ struct PhoneNumberView: View {
                         }
                         return (codeNumber == nil) ? "Select an option" : "+" + codeNumber!
                     }())
-                        .foregroundColor((selectedCountry?.countryCodeNumber ?? "").isEmpty ? .gray : .primary)
-                    Spacer()
+                        .foregroundStyle((selectedCountry?.countryCodeNumber ?? "").isEmpty ? PingTheme.Color.contentSecondary : PingTheme.Color.contentPrimary)
+                        .lineLimit(1)
                     Image(systemName: "chevron.down")
                         .rotationEffect(Angle(degrees: expanded ? 180 : 0))
-                        .foregroundStyle(Color.themeButtonBackground)
+                        .foregroundStyle(PingTheme.Color.actionPrimary)
                 }
-                .padding()
-                .frame(maxWidth: .infinity)
-                .background(
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(isValid ? Color.gray : Color.red, lineWidth: 1)
-                )
+                .frame(width: countryCodeColumnWidth)
+                .pingTextFieldStyle(showsError: !isValid)
             }
             TextField(
                 field.required ? "\(field.label)*" : field.label,
                 text: $text
             )
+            .keyboardType(.phonePad)
             .autocorrectionDisabled()
             .textInputAutocapitalization(.never)
-            .padding()
-            .background(
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(isValid ? Color.gray : Color.red, lineWidth: 1)
-            )
+            .pingTextFieldStyle(showsError: !isValid)
             .onAppear(perform: {
                 text = field.phoneNumber
+                extensionText = field.extension
             })
             .onChange(of: text) { newValue in
                 field.phoneNumber = newValue
                 isValid = field.validate().isEmpty
                 onNodeUpdated()
             }
+            if field.showExtension {
+                TextField(
+                    field.extensionLabel.isEmpty ? "Ext." : field.extensionLabel,
+                    text: $extensionText
+                )
+                .keyboardType(.phonePad)
+                .autocorrectionDisabled()
+                .textInputAutocapitalization(.never)
+                .frame(width: extensionColumnWidth)
+                .pingTextFieldStyle(showsError: false)
+                .onChange(of: extensionText) { newValue in
+                    field.extension = newValue
+                    onNodeUpdated()
+                }
+            }
+        }
             if !isValid {
-                ErrorMessageView(errors: field.validate().map { $0.errorMessage }.sorted())
+                PingFieldMessages(errorMessages: field.validate().map { $0.errorMessage }.sorted())
             }
         }
         .onChange(of: validationViewModel.shouldValidate) { newValue in
@@ -151,7 +166,7 @@ struct PhoneNumberView: View {
                 isValid = field.validate().isEmpty
             }
         }
-        .padding()
+        .padding(.vertical, PingTheme.Spacing.small)
     }
 }
 
