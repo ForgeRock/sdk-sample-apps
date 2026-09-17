@@ -2,7 +2,7 @@
 //  ConsentMappingCallbackView.swift
 //  JourneyModuleSample
 //
-//  Copyright (c) 2026 Ping Identity Corporation. All rights reserved.
+//  Copyright (c) 2025 - 2026 Ping Identity Corporation. All rights reserved.
 //
 //  This software may be modified and distributed under the terms
 //  of the MIT license. See the LICENSE file for details.
@@ -32,52 +32,45 @@ struct ConsentMappingCallbackView: View {
     @State var accepted: Bool = false
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: PingTheme.Spacing.small) {
             // Name
             if !callback.name.isEmpty {
                 Text("Name: \(callback.name)")
-                    .font(.headline)
-                    .foregroundColor(.primary)
+                    .pingSectionHeader()
             }
 
             // Display Name
             if !callback.displayName.isEmpty {
                 Text("DisplayName: \(callback.displayName)")
-                    .font(.headline)
-                    .foregroundColor(.primary)
+                    .pingSectionHeader()
             }
 
             // Icon
             if !callback.icon.isEmpty {
                 Text("Icon: \(callback.icon)")
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .pingSupportingText()
             }
 
             // Access Level
             if !callback.accessLevel.isEmpty {
                 Text("AccessLevel: \(callback.accessLevel)")
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .pingSupportingText()
             }
 
             // Is Required
             Text("IsRequired: \(callback.isRequired.description)")
-                .font(.subheadline)
-                .foregroundColor(.secondary)
+                .pingSupportingText()
 
             // fields
             ForEach(callback.fields, id: \.self) { fieldItem in
                 Text("callback: \(fieldItem)")
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .pingSupportingText()
             }
 
             // Message
             if !callback.message.isEmpty {
                 Text("Message: \(callback.message)")
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .pingSupportingText()
             }
 
             // Acceptance Toggle
@@ -87,7 +80,6 @@ struct ConsentMappingCallbackView: View {
                     callback.accepted = newValue
                 }
         }
-        .padding()
         .onAppear {
             accepted = callback.accepted
         }

@@ -2,7 +2,7 @@
 //  SelectIdpCallbackView.swift
 //  JourneyModuleSample
 //
-//  Copyright (c) 2026 Ping Identity Corporation. All rights reserved.
+//  Copyright (c) 2025 - 2026 Ping Identity Corporation. All rights reserved.
 //
 //  This software may be modified and distributed under the terms
 //  of the MIT license. See the LICENSE file for details.
@@ -10,7 +10,6 @@
 
 import SwiftUI
 import PingExternalIdP
-import Combine
 
 /**
  * A SwiftUI view for selecting an external identity provider during authentication flows.
@@ -31,14 +30,14 @@ struct SelectIdpCallbackView: View {
     
     var body: some View {
         ScrollView {
-            
-            LazyVStack(alignment: .center, spacing: 12) {
-                
+
+            LazyVStack(alignment: .center, spacing: PingTheme.Spacing.compact) {
+
                 // Add a title for better context
                 Text("Select a provider")
-                    .font(.headline)
-                    .padding(.bottom, 8)
-                
+                    .pingSectionHeader()
+                    .padding(.bottom, PingTheme.Spacing.small)
+
                 ForEach(callback.providers) { provider in
                     Button(action: {
                         callback.value = provider.provider
@@ -49,10 +48,10 @@ struct SelectIdpCallbackView: View {
                             .fontWeight(.semibold)
                             .frame(maxWidth: .infinity)
                     }
-                    .buttonStyle(.borderedProminent)
+                    .buttonStyle(.pingPrimary)
                 }
             }
         }
-        .padding()
+        .padding(.vertical, PingTheme.Spacing.small)
     }
 }

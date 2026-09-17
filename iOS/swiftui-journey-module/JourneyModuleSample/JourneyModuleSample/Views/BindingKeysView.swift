@@ -2,7 +2,7 @@
 //  BindingKeysView.swift
 //  JourneyModuleSample
 //
-//  Copyright (c) 2026 Ping Identity Corporation. All rights reserved.
+//  Copyright (c) 2025 - 2026 Ping Identity Corporation. All rights reserved.
 //
 //  This software may be modified and distributed under the terms
 //  of the MIT license. See the LICENSE file for details.
@@ -17,31 +17,35 @@ struct BindingKeysView: View {
     var body: some View {
         VStack {
             if viewModel.userKeys.isEmpty {
-                Text("No Binding Keys Found")
-                    .font(.headline)
-                    .foregroundColor(.gray)
+                EmptyStateView(
+                    icon: "key.slash",
+                    title: "No Binding Keys Found"
+                )
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
                 List {
                     ForEach(viewModel.userKeys) { key in
-                        VStack(alignment: .leading, spacing: 8) {
+                        VStack(alignment: .leading, spacing: PingTheme.Spacing.small) {
                             Text("User ID: \(key.userId)")
-                                .font(.headline)
+                                .pingSectionHeader()
                             Text("Key Tag: \(key.keyTag)")
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
+                                .pingSupportingText()
                             Text("Auth Type: \(key.authType.rawValue)")
-                                .font(.caption)
-                                .padding(4)
-                                .background(Color.blue.opacity(0.2))
-                                .cornerRadius(4)
+                                .font(PingTheme.Typography.caption)
+                                .padding(PingTheme.Spacing.xSmall)
+                                .background(PingTheme.Color.actionPrimary.opacity(0.2))
+                                .clipShape(RoundedRectangle(cornerRadius: PingTheme.Shape.fieldRadius))
                         }
                         .padding(.vertical, 4)
                     }
                     .onDelete(perform: delete)
                 }
+                .scrollContentBackground(.hidden)
             }
         }
+        .pingScreenBackground()
         .navigationTitle("Binding Keys")
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button("Delete All", role: .destructive) {
