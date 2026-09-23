@@ -38,6 +38,7 @@ struct BooleanAttributeInputCallbackView: View {
 
             Toggle("", isOn: $value)
                 .toggleStyle(SwitchToggleStyle())
+                .accessibilityLabel(callback.prompt)
                 .onChange(of: value) { newValue in
                     callback.value = newValue
                 }

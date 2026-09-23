@@ -8,8 +8,6 @@
 //  of the MIT license. See the LICENSE file for details.
 //
 
-import PingDesignSystem
-
 /// Re-exports the shared design system for every JourneyModuleSample source
 /// file, so call sites keep compiling without a per-file
 /// `import PingDesignSystem`.

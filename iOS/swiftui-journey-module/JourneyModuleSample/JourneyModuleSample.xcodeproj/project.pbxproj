@@ -449,8 +449,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ForgeRock/ping-ios-design-system";
 			requirement = {
-				branch = main;
-				kind = branch;
+				kind = exactVersion;
+				version = 0.1.1;
 			};
 		};
 		EC80242E2F0BDD1C0046C961 /* XCRemoteSwiftPackageReference "ping-ios-sdk" */ = {

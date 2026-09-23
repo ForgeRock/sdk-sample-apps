@@ -154,7 +154,8 @@ struct DeviceManagementView: View {
             // visible even when the action that produced it emptied the list.
             if let success = viewModel.successMessage {
                 successBanner(success)
-                    .pingScrollContentPadding(bottom: 0)
+                    .padding(.horizontal, PingTheme.Spacing.screen)
+                    .padding(.top, PingTheme.Spacing.screen)
             }
 
             // Device list based on selected type

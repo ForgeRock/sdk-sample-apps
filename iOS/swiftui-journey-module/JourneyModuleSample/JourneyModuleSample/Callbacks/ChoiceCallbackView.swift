@@ -32,6 +32,9 @@ struct ChoiceCallbackView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: PingTheme.Spacing.small) {
+            Text(callback.prompt)
+                .pingSectionHeader()
+
             Picker(callback.prompt, selection: $selectedIndex) {
                 ForEach(callback.choices.indices, id: \.self) { index in
                     Text(callback.choices[index]).tag(index)

@@ -147,11 +147,6 @@ struct CallbackView: View {
                     .multilineTextAlignment(.center)
                     .padding(.top, PingTheme.Spacing.small)
             }
-
-            if !node.stage.isEmpty {
-                Text("Stage: \(node.stage)")
-                    .pingCaptionText()
-            }
         }
         .pingReadableContentWidth()
         .padding(PingTheme.Spacing.screen)

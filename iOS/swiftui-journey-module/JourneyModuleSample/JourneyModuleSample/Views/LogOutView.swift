@@ -37,11 +37,6 @@ struct LogOutView: View {
             }
             .buttonStyle(.pingDestructive)
 
-            if !logoutViewModel.logout.isEmpty {
-                Text(logoutViewModel.logout)
-                    .pingSupportingText()
-            }
-
             Spacer()
         }
         .padding(.horizontal, PingTheme.Spacing.screen)

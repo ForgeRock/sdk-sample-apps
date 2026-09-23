@@ -87,8 +87,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ForgeRock/ping-ios-design-system",
       "state" : {
-        "branch" : "main",
-        "revision" : "a6893843e679ab54a29ddd000ad0d30743b89a58"
+        "revision" : "c87bb7da4b3b2ec9a54924beb7c9afb15bc019ea",
+        "version" : "0.1.1"
       }
     },
     {
