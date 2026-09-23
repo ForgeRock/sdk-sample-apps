@@ -2,7 +2,7 @@
 //  TextOutputCallbackView.swift
 //  JourneyModuleSample
 //
-//  Copyright (c) 2026 Ping Identity Corporation. All rights reserved.
+//  Copyright (c) 2025 - 2026 Ping Identity Corporation. All rights reserved.
 //
 //  This software may be modified and distributed under the terms
 //  of the MIT license. See the LICENSE file for details.
@@ -29,7 +29,7 @@ struct TextOutputCallbackView: View {
     let callback: TextOutputCallback
 
     var body: some View {
-        HStack(spacing: 8) {
+        HStack(spacing: PingTheme.Spacing.small) {
             // Icon based on message type
             Image(systemName: iconName)
                 .foregroundColor(iconColor)
@@ -37,12 +37,10 @@ struct TextOutputCallbackView: View {
 
             // Message text
             Text(callback.message)
-                .font(.headline)
-                .foregroundColor(.primary)
+                .pingSectionHeader()
                 .multilineTextAlignment(.leading)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .padding()
     }
 
     private var iconName: String {
@@ -61,13 +59,13 @@ struct TextOutputCallbackView: View {
     private var iconColor: Color {
         switch callback.messageType {
         case .information:
-            return .blue
+            return PingTheme.Color.statusInfo
         case .warning:
-            return .orange
+            return PingTheme.Color.statusWarning
         case .error:
-            return .red
+            return PingTheme.Color.statusError
         default:
-            return .gray
+            return PingTheme.Color.contentSecondary
         }
     }
 }

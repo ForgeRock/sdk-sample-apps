@@ -12,7 +12,6 @@ import Foundation
 import UIKit
 import SwiftUI
 import PingBinding
-import Combine
 
 /**
  * A custom implementation of the PinCollector protocol for device binding and signing operations.
@@ -46,7 +45,12 @@ nonisolated class CustomPinCollector: PinCollector {
     
     func collectPin(prompt: Prompt, completion: @escaping @Sendable (String?) -> Void) {
         DispatchQueue.main.async {
-            let keyWindow = UIApplication.shared.windows.filter { $0.isKeyWindow }.first
+            // Find the key window via connectedScenes -> UIWindowScene.windows (iOS 15+ friendly)
+            let keyWindow = UIApplication.shared.connectedScenes
+                .compactMap { $0 as? UIWindowScene }
+                .flatMap { $0.windows }
+                .first { $0.isKeyWindow }
+            
             var topVC = keyWindow?.rootViewController
             while let presentedViewController = topVC?.presentedViewController {
                 topVC = presentedViewController

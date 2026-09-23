@@ -2,16 +2,16 @@
 //  ReCaptchaEnterpriseCallbackView.swift
 //  JourneyModuleSample
 //
-//  Copyright (c) 2026 Ping Identity Corporation. All rights reserved.
+//  Copyright (c) 2025 - 2026 Ping Identity Corporation. All rights reserved.
 //
 //  This software may be modified and distributed under the terms
 //  of the MIT license. See the LICENSE file for details.
 //
 
 import SwiftUI
+import Combine
 import PingJourney
 import PingReCaptchaEnterprise
-import Combine
 
 /**
  * A SwiftUI view for handling reCAPTCHA Enterprise verification during authentication flows.
@@ -40,40 +40,36 @@ struct ReCaptchaEnterpriseCallbackView: View {
     }
     
     var body: some View {
-        VStack(alignment: .center, spacing: 16) {
+        VStack(alignment: .center, spacing: PingTheme.Spacing.medium) {
             if viewModel.isLoading {
-                ProgressView()
-                    .progressViewStyle(CircularProgressViewStyle())
+                PingLoadingSpinner()
                     .scaleEffect(1.2)
-                
+
                 Text("Verifying security...")
                     .multilineTextAlignment(.center)
-                    .padding(.horizontal)
             } else if let error = viewModel.errorMessage {
-                VStack(spacing: 16) {
+                VStack(spacing: PingTheme.Spacing.medium) {
                     Image(systemName: "exclamationmark.triangle.fill")
-                        .font(.system(size: 48))
-                        .foregroundColor(.orange)
-                    
+                        .font(.system(size: PingTheme.Control.Glyph.hero))
+                        .foregroundStyle(PingTheme.Color.statusWarning)
+
                     Text("Verification Failed")
-                        .font(.headline)
-                    
+                        .pingSectionHeader()
+
                     Text(error)
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
+                        .pingSupportingText()
                         .multilineTextAlignment(.center)
-                        .padding(.horizontal)
-                    
+
                     Button("Retry") {
                         viewModel.retry()
                     }
-                    .buttonStyle(.borderedProminent)
-                    .padding(.top, 8)
+                    .buttonStyle(.pingSecondary)
+                    .padding(.top, PingTheme.Spacing.small)
                 }
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .padding(16)
+        // Edge spacing comes from CallbackView's screen padding; no own inset.
         .onAppear {
             viewModel.startVerification()
         }

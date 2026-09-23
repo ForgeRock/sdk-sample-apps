@@ -2,15 +2,15 @@
 //  PingOneProtectEvaluationCallbackView.swift
 //  JourneyModuleSample
 //
-//  Copyright (c) 2026 Ping Identity Corporation. All rights reserved.
+//  Copyright (c) 2025 - 2026 Ping Identity Corporation. All rights reserved.
 //
 //  This software may be modified and distributed under the terms
 //  of the MIT license. See the LICENSE file for details.
 //
 
 import SwiftUI
-import PingProtect
 import Combine
+import PingProtect
 
 /**
  * A SwiftUI view for collecting PingOne Protect device profile data during authentication flows.
@@ -33,16 +33,14 @@ struct PingOneProtectEvaluationCallbackView: View {
     }
 
     var body: some View {
-        VStack(spacing: 16) {
-            ProgressView()
-                .progressViewStyle(CircularProgressViewStyle())
-                .scaleEffect(1.5)
+        VStack(spacing: PingTheme.Spacing.medium) {
+            PingLoadingSpinner()
 
             Text("Collecting device profile ...")
-                .foregroundColor(.secondary)
+                .pingSupportingText()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .padding()
+        // Edge spacing comes from CallbackView's screen padding; no own inset.
         .onAppear {
             viewModel.startEvaluationIfNeeded()
         }

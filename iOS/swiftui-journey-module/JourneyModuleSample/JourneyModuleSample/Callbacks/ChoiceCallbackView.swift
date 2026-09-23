@@ -2,7 +2,7 @@
 //  ChoiceCallbackView.swift
 //  JourneyModuleSample
 //
-//  Copyright (c) 2026 Ping Identity Corporation. All rights reserved.
+//  Copyright (c) 2025 - 2026 Ping Identity Corporation. All rights reserved.
 //
 //  This software may be modified and distributed under the terms
 //  of the MIT license. See the LICENSE file for details.
@@ -31,32 +31,24 @@ struct ChoiceCallbackView: View {
     @State var selectedIndex: Int = 0
 
     var body: some View {
-        HStack {
-            Spacer()
-            Text("\(callback.prompt):")
-                .font(.headline)
-                .foregroundColor(.primary)
-            Spacer()
-            VStack(alignment: .leading, spacing: 8) {
-                Picker(callback.prompt, selection: $selectedIndex) {
-                    ForEach(callback.choices.indices, id: \.self) { index in
-                        Text(callback.choices[index]).tag(index)
-                    }
-                }
-                .pickerStyle(.menu)
-                .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.gray, lineWidth: 1)
-                )
-                .onChange(of: selectedIndex) { newValue in
-                    callback.selectedIndex = newValue
+        VStack(alignment: .leading, spacing: PingTheme.Spacing.small) {
+            Text(callback.prompt)
+                .pingSectionHeader()
+
+            Picker(callback.prompt, selection: $selectedIndex) {
+                ForEach(callback.choices.indices, id: \.self) { index in
+                    Text(callback.choices[index]).tag(index)
                 }
             }
-            .padding()
-            .onAppear {
-                selectedIndex = callback.selectedIndex
+            .pickerStyle(.menu)
+            .pingTextFieldStyle()
+            .onChange(of: selectedIndex) { newValue in
+                callback.selectedIndex = newValue
             }
+        }
+        .padding(.vertical, PingTheme.Spacing.small)
+        .onAppear {
+            selectedIndex = callback.selectedIndex
         }
     }
 }
