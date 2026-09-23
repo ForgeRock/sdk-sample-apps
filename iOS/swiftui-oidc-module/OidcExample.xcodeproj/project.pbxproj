@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A58CEA4D3058E67700646689 /* PingDesignSystem in Frameworks */ = {isa = PBXBuildFile; productRef = D5B100000000000000000002 /* PingDesignSystem */; };
 		ECC5A5B92EE842E90034504A /* PingBrowser in Frameworks */ = {isa = PBXBuildFile; productRef = ECC5A5B82EE842E90034504A /* PingBrowser */; };
 		ECC5A5BB2EE842E90034504A /* PingDavinci in Frameworks */ = {isa = PBXBuildFile; productRef = ECC5A5BA2EE842E90034504A /* PingDavinci */; };
 		ECC5A5BD2EE842E90034504A /* PingLogger in Frameworks */ = {isa = PBXBuildFile; productRef = ECC5A5BC2EE842E90034504A /* PingLogger */; };
@@ -52,6 +53,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A58CEA4D3058E67700646689 /* PingDesignSystem in Frameworks */,
 				ECC5A5C12EE842E90034504A /* PingOrchestrate in Frameworks */,
 				ECC5A5C52EE842E90034504A /* PingStorage in Frameworks */,
 				ECC5A5BD2EE842E90034504A /* PingLogger in Frameworks */,
@@ -124,6 +126,7 @@
 				ECC5A5C02EE842E90034504A /* PingOrchestrate */,
 				ECC5A5C22EE842E90034504A /* PingProtect */,
 				ECC5A5C42EE842E90034504A /* PingStorage */,
+				D5B100000000000000000002 /* PingDesignSystem */,
 			);
 			productName = OidcExample;
 			productReference = ECC5A56A2EE841DF0034504A /* OidcExample.app */;
@@ -177,7 +180,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 2610;
-				LastUpgradeCheck = 2610;
+				LastUpgradeCheck = 2660;
 				TargetAttributes = {
 					ECC5A5692EE841DF0034504A = {
 						CreatedOnToolsVersion = 26.1.1;
@@ -203,6 +206,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				ECC5A5B72EE842E90034504A /* XCRemoteSwiftPackageReference "ping-ios-sdk" */,
+				D5B100000000000000000001 /* XCRemoteSwiftPackageReference "ping-ios-design-system" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = ECC5A56B2EE841DF0034504A /* Products */;
@@ -337,6 +341,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -394,6 +399,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -414,6 +420,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -446,6 +453,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -589,6 +597,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		D5B100000000000000000001 /* XCRemoteSwiftPackageReference "ping-ios-design-system" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ForgeRock/ping-ios-design-system";
+			requirement = {
+				kind = exactVersion;
+				version = 0.1.1;
+			};
+		};
 		ECC5A5B72EE842E90034504A /* XCRemoteSwiftPackageReference "ping-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ForgeRock/ping-ios-sdk";
@@ -600,6 +616,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		D5B100000000000000000002 /* PingDesignSystem */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D5B100000000000000000001 /* XCRemoteSwiftPackageReference "ping-ios-design-system" */;
+			productName = PingDesignSystem;
+		};
 		ECC5A5B82EE842E90034504A /* PingBrowser */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = ECC5A5B72EE842E90034504A /* XCRemoteSwiftPackageReference "ping-ios-sdk" */;

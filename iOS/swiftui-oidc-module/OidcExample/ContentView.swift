@@ -2,7 +2,7 @@
 //  ContentView.swift
 //  OidcExample
 //
-//  Copyright (c) 2025 Ping Identity Corporation. All rights reserved.
+//  Copyright (c) 2025 - 2026 Ping Identity Corporation. All rights reserved.
 //
 //  This software may be modified and distributed under the terms
 //  of the MIT license. See the LICENSE file for details.
@@ -19,52 +19,33 @@ struct ContentView: View {
 
     var body: some View {
         NavigationStack(path: $path) {
-            List {
-                Section(header: Text("Authentication")) {
-                    /// Navigation option to launch the OIDC login feature.
-                    /// - Takes the user to the OIDC authentication flow.
-                    NavigationLink(value: "OidcLogin") {
-                        HStack {
-                            Image(systemName: "person.badge.key.fill")
-                                .foregroundColor(.blue)
-                            Text("Launch OIDC Login")
-                        }
-                    }
-                }
+            ScrollView {
+                VStack(spacing: PingTheme.Spacing.large) {
+                    headerSection
 
-                Section(header: Text("User Data")) {
-                    /// Navigation option to access the token-related view.
-                    /// - Shows the user's current access token.
-                    NavigationLink(value: "Token") {
-                        HStack {
-                            Image(systemName: "key.fill")
-                                .foregroundColor(.green)
-                            Text("Access Token")
-                        }
-                    }
-                    /// Navigation option to access user information.
-                    /// - Displays details about the authenticated user.
-                    NavigationLink(value: "User") {
-                        HStack {
-                            Image(systemName: "person.circle.fill")
-                                .foregroundColor(.orange)
-                            Text("User Info")
-                        }
-                    }
-                }
+                    VStack(spacing: PingTheme.Spacing.large) {
+                        sectionCard("Authentication", items: [
+                            MenuItem(icon: "person.badge.key.fill", title: "Launch OIDC Login",
+                                     subtitle: "Start the OIDC authorization code flow", destination: "OidcLogin"),
+                        ])
 
-                Section(header: Text("Session Management")) {
-                    /// Navigation option to logout.
-                    /// - Allows the user to sign out of their current session.
-                    NavigationLink(value: "Logout") {
-                        HStack {
-                            Image(systemName: "rectangle.portrait.and.arrow.right")
-                                .foregroundColor(.red)
-                            Text("Logout")
-                        }
+                        sectionCard("User Data", items: [
+                            MenuItem(icon: "key.fill", title: "Access Token",
+                                     subtitle: "Inspect the current access token", destination: "Token"),
+                            MenuItem(icon: "person.circle.fill", title: "User Info",
+                                     subtitle: "Details about the authenticated user", destination: "User"),
+                        ])
+
+                        sectionCard("Session Management", items: [
+                            MenuItem(icon: "rectangle.portrait.and.arrow.right", title: "Logout",
+                                     subtitle: "Sign out of the current session", destination: "Logout"),
+                        ])
                     }
+                    .padding(.horizontal, PingTheme.Spacing.screen)
                 }
+                .padding(.bottom, PingTheme.Spacing.scrollBottomInset)
             }
+            .pingScreenBackground()
             .navigationDestination(for: String.self) { item in
                 /// Routes to different views based on the selected navigation option
                 switch item {
@@ -80,22 +61,102 @@ struct ContentView: View {
                     EmptyView()
                 }
             }
-            .navigationBarTitle("OIDC Example")
+            .navigationBarTitleDisplayMode(.inline)
+        }
+    }
 
-            Spacer()
+    // MARK: - Header Section
 
-            /// Application logo displayed at the bottom of the screen
-            VStack {
+    /// Full-bleed branded hero banner: the gradient shape is repartnered with
+    /// the dynamic action colors so the foreground contrast holds in dark mode.
+    private var headerSection: some View {
+        ZStack(alignment: .topTrailing) {
+            LinearGradient(
+                colors: [PingTheme.Color.actionPrimary, PingTheme.Color.actionPrimaryPressed],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+
+            VStack(spacing: PingTheme.Spacing.medium) {
                 Image("Logo")
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 100, height: 100)
+                    .frame(width: 80, height: 80)
 
-                Text("Ping SDKs OIDC Module")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
+                Text("Orchestration SDK")
+                    .font(PingTheme.Typography.display)
+                    .foregroundColor(PingTheme.Color.actionPrimaryForeground)
+
+                Text("OIDC Module Sample")
+                    .font(PingTheme.Typography.supporting.weight(.medium))
+                    .foregroundColor(PingTheme.Color.actionPrimaryForeground.opacity(0.9))
             }
-            .padding(.vertical, 32)
+            .padding(.vertical, PingTheme.Spacing.large)
+            .frame(maxWidth: .infinity)
         }
     }
+
+    // MARK: - Section Card
+
+    private func sectionCard(_ title: String, items: [MenuItem]) -> some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Text(title)
+                .font(PingTheme.Typography.supporting.weight(.semibold))
+                .foregroundStyle(PingTheme.Color.contentSecondary)
+                .textCase(.uppercase)
+                .padding(.horizontal, PingTheme.Spacing.medium)
+                .padding(.bottom, PingTheme.Spacing.small)
+
+            VStack(spacing: 0) {
+                ForEach(Array(items.enumerated()), id: \.element.destination) { index, item in
+                    menuItemButton(item)
+
+                    if index < items.count - 1 {
+                        Divider()
+                            .padding(.leading, PingTheme.Control.infoRowDividerInset - PingTheme.Control.fieldPadding)
+                    }
+                }
+            }
+            .pingCardStyle(size: .rowList)
+        }
+    }
+
+    // MARK: - Menu Item Button
+
+    private func menuItemButton(_ item: MenuItem) -> some View {
+        NavigationLink(value: item.destination) {
+            HStack(spacing: PingTheme.Spacing.medium) {
+                PingIconTile(systemName: item.icon, diameter: 40, iconSize: 20)
+
+                VStack(alignment: .leading, spacing: PingTheme.Spacing.xxSmall) {
+                    Text(item.title)
+                        .font(PingTheme.Typography.body.weight(.medium))
+                        .foregroundStyle(PingTheme.Color.contentPrimary)
+
+                    Text(item.subtitle)
+                        .pingSupportingText()
+                }
+
+                Spacer()
+
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundColor(PingTheme.Color.contentSecondary)
+            }
+            .padding(.vertical, PingTheme.Spacing.small)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+    }
+}
+
+/// A single main-menu row: icon tile, title, subtitle, and a navigation
+/// destination identifier.
+private struct MenuItem: Identifiable {
+    let icon: String
+    let title: String
+    let subtitle: String
+    let destination: String
+
+    var id: String { destination }
 }
