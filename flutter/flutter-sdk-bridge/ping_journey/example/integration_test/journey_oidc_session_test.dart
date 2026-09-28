@@ -30,7 +30,7 @@ void main() {
   testWidgets('a successful Journey with OIDC configured yields a session', (
     tester,
   ) async {
-    final skipReason = _oidcSkipReason;
+    final skipReason = E2eConfig.oidcSkipReason;
     if (skipReason != null) {
       markTestSkipped(skipReason);
       return;
@@ -132,16 +132,4 @@ void main() {
           'than an empty Session.',
     );
   });
-}
-
-/// Live mode needs a real OAuth 2.0 client on top of credentials, so this scenario has a second way
-/// to be unrunnable that the shared reason does not cover.
-String? get _oidcSkipReason {
-  final credentials = E2eConfig.liveCredentialsSkipReason;
-  if (credentials != null) return credentials;
-  if (E2eConfig.isLive && !E2eConfig.hasOidc) {
-    return 'Live mode is on but no OAuth 2.0 client was supplied. Set E2E_CLIENT_ID, '
-        'E2E_DISCOVERY_ENDPOINT, and E2E_REDIRECT_URI, or drop E2E_SERVER_URL to run hermetically.';
-  }
-  return null;
 }

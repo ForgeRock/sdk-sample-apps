@@ -22,6 +22,12 @@ import 'package:pigeon/pigeon.dart';
 /// (`ContinueNode`/`SuccessNode`/`ErrorNode`/`FailureNode`).
 enum NodeType { continueNode, successNode, errorNode, failureNode }
 
+/// SDK HTTP/diagnostic logging verbosity. Defaults to [none] (matching the native Android SDK's
+/// own default) if [JourneyConfigMessage.logLevel] is unset — [standard] is a development aid
+/// that routes every SDK request/response through platform logs and should not ship as a
+/// production default, since it can surface session cookie/auth material there.
+enum JourneyLogLevel { none, standard }
+
 /// Flat, wire-serializable Journey configuration. OIDC fields are hoisted to
 /// the top level rather than nested, since Pigeon classes can't express an
 /// "OIDC configured only if any OIDC field is present" union cleanly.
@@ -34,6 +40,10 @@ class JourneyConfigMessage {
 
   /// Milliseconds.
   int? timeoutMillis;
+
+  /// Defaults to [JourneyLogLevel.none] when unset. See [JourneyLogLevel] for what [standard]
+  /// exposes and why it isn't the default.
+  JourneyLogLevel? logLevel;
 
   String? clientId;
   String? discoveryEndpoint;

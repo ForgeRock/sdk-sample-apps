@@ -214,6 +214,23 @@ enum class NodeType(val raw: Int) {
 }
 
 /**
+ * SDK HTTP/diagnostic logging verbosity. Defaults to [none] (matching the native Android SDK's
+ * own default) if [JourneyConfigMessage.logLevel] is unset — [standard] is a development aid
+ * that routes every SDK request/response through platform logs and should not ship as a
+ * production default, since it can surface session cookie/auth material there.
+ */
+enum class JourneyLogLevel(val raw: Int) {
+  NONE(0),
+  STANDARD(1);
+
+  companion object {
+    fun ofRaw(raw: Int): JourneyLogLevel? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/**
  * Flat, wire-serializable Journey configuration. OIDC fields are hoisted to
  * the top level rather than nested, since Pigeon classes can't express an
  * "OIDC configured only if any OIDC field is present" union cleanly.
@@ -226,6 +243,11 @@ data class JourneyConfigMessage (
   val cookie: String? = null,
   /** Milliseconds. */
   val timeoutMillis: Long? = null,
+  /**
+   * Defaults to [JourneyLogLevel.none] when unset. See [JourneyLogLevel] for what [standard]
+   * exposes and why it isn't the default.
+   */
+  val logLevel: JourneyLogLevel? = null,
   val clientId: String? = null,
   val discoveryEndpoint: String? = null,
   val redirectUri: String? = null,
@@ -255,22 +277,23 @@ data class JourneyConfigMessage (
       val realm = pigeonVar_list[1] as String?
       val cookie = pigeonVar_list[2] as String?
       val timeoutMillis = pigeonVar_list[3] as Long?
-      val clientId = pigeonVar_list[4] as String?
-      val discoveryEndpoint = pigeonVar_list[5] as String?
-      val redirectUri = pigeonVar_list[6] as String?
-      val scopes = pigeonVar_list[7] as List<String?>?
-      val acrValues = pigeonVar_list[8] as String?
-      val signOutRedirectUri = pigeonVar_list[9] as String?
-      val state = pigeonVar_list[10] as String?
-      val nonce = pigeonVar_list[11] as String?
-      val uiLocales = pigeonVar_list[12] as String?
-      val refreshThreshold = pigeonVar_list[13] as Long?
-      val loginHint = pigeonVar_list[14] as String?
-      val display = pigeonVar_list[15] as String?
-      val prompt = pigeonVar_list[16] as String?
-      val additionalParameters = pigeonVar_list[17] as Map<String?, String?>?
-      val oidcClientId = pigeonVar_list[18] as String?
-      return JourneyConfigMessage(serverUrl, realm, cookie, timeoutMillis, clientId, discoveryEndpoint, redirectUri, scopes, acrValues, signOutRedirectUri, state, nonce, uiLocales, refreshThreshold, loginHint, display, prompt, additionalParameters, oidcClientId)
+      val logLevel = pigeonVar_list[4] as JourneyLogLevel?
+      val clientId = pigeonVar_list[5] as String?
+      val discoveryEndpoint = pigeonVar_list[6] as String?
+      val redirectUri = pigeonVar_list[7] as String?
+      val scopes = pigeonVar_list[8] as List<String?>?
+      val acrValues = pigeonVar_list[9] as String?
+      val signOutRedirectUri = pigeonVar_list[10] as String?
+      val state = pigeonVar_list[11] as String?
+      val nonce = pigeonVar_list[12] as String?
+      val uiLocales = pigeonVar_list[13] as String?
+      val refreshThreshold = pigeonVar_list[14] as Long?
+      val loginHint = pigeonVar_list[15] as String?
+      val display = pigeonVar_list[16] as String?
+      val prompt = pigeonVar_list[17] as String?
+      val additionalParameters = pigeonVar_list[18] as Map<String?, String?>?
+      val oidcClientId = pigeonVar_list[19] as String?
+      return JourneyConfigMessage(serverUrl, realm, cookie, timeoutMillis, logLevel, clientId, discoveryEndpoint, redirectUri, scopes, acrValues, signOutRedirectUri, state, nonce, uiLocales, refreshThreshold, loginHint, display, prompt, additionalParameters, oidcClientId)
     }
   }
   fun toList(): List<Any?> {
@@ -279,6 +302,7 @@ data class JourneyConfigMessage (
       realm,
       cookie,
       timeoutMillis,
+      logLevel,
       clientId,
       discoveryEndpoint,
       redirectUri,
@@ -304,7 +328,7 @@ data class JourneyConfigMessage (
       return true
     }
     val other = other as JourneyConfigMessage
-    return MessagesPigeonUtils.deepEquals(this.serverUrl, other.serverUrl) && MessagesPigeonUtils.deepEquals(this.realm, other.realm) && MessagesPigeonUtils.deepEquals(this.cookie, other.cookie) && MessagesPigeonUtils.deepEquals(this.timeoutMillis, other.timeoutMillis) && MessagesPigeonUtils.deepEquals(this.clientId, other.clientId) && MessagesPigeonUtils.deepEquals(this.discoveryEndpoint, other.discoveryEndpoint) && MessagesPigeonUtils.deepEquals(this.redirectUri, other.redirectUri) && MessagesPigeonUtils.deepEquals(this.scopes, other.scopes) && MessagesPigeonUtils.deepEquals(this.acrValues, other.acrValues) && MessagesPigeonUtils.deepEquals(this.signOutRedirectUri, other.signOutRedirectUri) && MessagesPigeonUtils.deepEquals(this.state, other.state) && MessagesPigeonUtils.deepEquals(this.nonce, other.nonce) && MessagesPigeonUtils.deepEquals(this.uiLocales, other.uiLocales) && MessagesPigeonUtils.deepEquals(this.refreshThreshold, other.refreshThreshold) && MessagesPigeonUtils.deepEquals(this.loginHint, other.loginHint) && MessagesPigeonUtils.deepEquals(this.display, other.display) && MessagesPigeonUtils.deepEquals(this.prompt, other.prompt) && MessagesPigeonUtils.deepEquals(this.additionalParameters, other.additionalParameters) && MessagesPigeonUtils.deepEquals(this.oidcClientId, other.oidcClientId)
+    return MessagesPigeonUtils.deepEquals(this.serverUrl, other.serverUrl) && MessagesPigeonUtils.deepEquals(this.realm, other.realm) && MessagesPigeonUtils.deepEquals(this.cookie, other.cookie) && MessagesPigeonUtils.deepEquals(this.timeoutMillis, other.timeoutMillis) && MessagesPigeonUtils.deepEquals(this.logLevel, other.logLevel) && MessagesPigeonUtils.deepEquals(this.clientId, other.clientId) && MessagesPigeonUtils.deepEquals(this.discoveryEndpoint, other.discoveryEndpoint) && MessagesPigeonUtils.deepEquals(this.redirectUri, other.redirectUri) && MessagesPigeonUtils.deepEquals(this.scopes, other.scopes) && MessagesPigeonUtils.deepEquals(this.acrValues, other.acrValues) && MessagesPigeonUtils.deepEquals(this.signOutRedirectUri, other.signOutRedirectUri) && MessagesPigeonUtils.deepEquals(this.state, other.state) && MessagesPigeonUtils.deepEquals(this.nonce, other.nonce) && MessagesPigeonUtils.deepEquals(this.uiLocales, other.uiLocales) && MessagesPigeonUtils.deepEquals(this.refreshThreshold, other.refreshThreshold) && MessagesPigeonUtils.deepEquals(this.loginHint, other.loginHint) && MessagesPigeonUtils.deepEquals(this.display, other.display) && MessagesPigeonUtils.deepEquals(this.prompt, other.prompt) && MessagesPigeonUtils.deepEquals(this.additionalParameters, other.additionalParameters) && MessagesPigeonUtils.deepEquals(this.oidcClientId, other.oidcClientId)
   }
 
   override fun hashCode(): Int {
@@ -313,6 +337,7 @@ data class JourneyConfigMessage (
     result = 31 * result + MessagesPigeonUtils.deepHash(this.realm)
     result = 31 * result + MessagesPigeonUtils.deepHash(this.cookie)
     result = 31 * result + MessagesPigeonUtils.deepHash(this.timeoutMillis)
+    result = 31 * result + MessagesPigeonUtils.deepHash(this.logLevel)
     result = 31 * result + MessagesPigeonUtils.deepHash(this.clientId)
     result = 31 * result + MessagesPigeonUtils.deepHash(this.discoveryEndpoint)
     result = 31 * result + MessagesPigeonUtils.deepHash(this.redirectUri)
@@ -331,7 +356,7 @@ data class JourneyConfigMessage (
     return result
   }
   override fun toString(): String {
-    return "JourneyConfigMessage(serverUrl=$serverUrl, realm=$realm, cookie=$cookie, timeoutMillis=$timeoutMillis, clientId=$clientId, discoveryEndpoint=$discoveryEndpoint, redirectUri=$redirectUri, scopes=$scopes, acrValues=$acrValues, signOutRedirectUri=$signOutRedirectUri, state=$state, nonce=$nonce, uiLocales=$uiLocales, refreshThreshold=$refreshThreshold, loginHint=$loginHint, display=$display, prompt=$prompt, additionalParameters=$additionalParameters, oidcClientId=$oidcClientId)"
+    return "JourneyConfigMessage(serverUrl=$serverUrl, realm=$realm, cookie=$cookie, timeoutMillis=$timeoutMillis, logLevel=$logLevel, clientId=$clientId, discoveryEndpoint=$discoveryEndpoint, redirectUri=$redirectUri, scopes=$scopes, acrValues=$acrValues, signOutRedirectUri=$signOutRedirectUri, state=$state, nonce=$nonce, uiLocales=$uiLocales, refreshThreshold=$refreshThreshold, loginHint=$loginHint, display=$display, prompt=$prompt, additionalParameters=$additionalParameters, oidcClientId=$oidcClientId)"
   }
 }
 
@@ -739,31 +764,36 @@ private open class MessagesPigeonCodec : StandardMessageCodec() {
         }
       }
       130.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          JourneyConfigMessage.fromList(it)
+        return (readValue(buffer) as Long?)?.let {
+          JourneyLogLevel.ofRaw(it.toInt())
         }
       }
       131.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          StartOptionsMessage.fromList(it)
+          JourneyConfigMessage.fromList(it)
         }
       }
       132.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CallbackMessage.fromList(it)
+          StartOptionsMessage.fromList(it)
         }
       }
       133.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CallbackValueMessage.fromList(it)
+          CallbackMessage.fromList(it)
         }
       }
       134.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          NodeMessage.fromList(it)
+          CallbackValueMessage.fromList(it)
         }
       }
       135.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          NodeMessage.fromList(it)
+        }
+      }
+      136.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           SessionMessage.fromList(it)
         }
@@ -777,28 +807,32 @@ private open class MessagesPigeonCodec : StandardMessageCodec() {
         stream.write(129)
         writeValue(stream, value.raw.toLong())
       }
-      is JourneyConfigMessage -> {
+      is JourneyLogLevel -> {
         stream.write(130)
-        writeValue(stream, value.toList())
+        writeValue(stream, value.raw.toLong())
       }
-      is StartOptionsMessage -> {
+      is JourneyConfigMessage -> {
         stream.write(131)
         writeValue(stream, value.toList())
       }
-      is CallbackMessage -> {
+      is StartOptionsMessage -> {
         stream.write(132)
         writeValue(stream, value.toList())
       }
-      is CallbackValueMessage -> {
+      is CallbackMessage -> {
         stream.write(133)
         writeValue(stream, value.toList())
       }
-      is NodeMessage -> {
+      is CallbackValueMessage -> {
         stream.write(134)
         writeValue(stream, value.toList())
       }
-      is SessionMessage -> {
+      is NodeMessage -> {
         stream.write(135)
+        writeValue(stream, value.toList())
+      }
+      is SessionMessage -> {
+        stream.write(136)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)

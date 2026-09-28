@@ -56,7 +56,9 @@ class OidcViewModel extends ChangeNotifier {
           return false;
       }
     } on PingException catch (error) {
-      _error = error.message;
+      // toString() (not error.message) so the on-screen banner also shows code/type — the
+      // developer-facing detail a sample app should surface, not just the bare message.
+      _error = error.toString();
       return false;
     } finally {
       _loading = false;
@@ -72,7 +74,7 @@ class OidcViewModel extends ChangeNotifier {
     try {
       _token = await _repository.refresh();
     } on PingException catch (error) {
-      _error = error.message;
+      _error = error.toString();
     } finally {
       _loading = false;
       notifyListeners();
@@ -87,7 +89,7 @@ class OidcViewModel extends ChangeNotifier {
     try {
       _userInfo = await _repository.userInfo();
     } on PingException catch (error) {
-      _error = error.message;
+      _error = error.toString();
     } finally {
       _loading = false;
       notifyListeners();
@@ -103,7 +105,7 @@ class OidcViewModel extends ChangeNotifier {
     try {
       await _repository.revoke();
     } on PingException catch (error) {
-      _error = error.message;
+      _error = error.toString();
     } finally {
       _loading = false;
       notifyListeners();
@@ -124,7 +126,7 @@ class OidcViewModel extends ChangeNotifier {
       }
       return success;
     } on PingException catch (error) {
-      _error = error.message;
+      _error = error.toString();
       return false;
     } finally {
       _loading = false;

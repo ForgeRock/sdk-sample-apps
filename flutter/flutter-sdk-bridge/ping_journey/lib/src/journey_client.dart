@@ -32,18 +32,34 @@ class JourneyClient {
     return JourneyClient._(journeyId, api);
   }
 
-  /// Throws [ArgumentError] if [config] sets both `oidcClientId` and any inline OIDC field
+  /// Throws a [PingException] (type `argument`) if [config] sets both `oidcClientId` and any
+  /// inline OIDC field. Both native parsers take the `applyHandle` branch exclusively when
+  /// `oidcClientId` is set, silently ignoring every inline field otherwise — this guard turns
+  /// that silent drop into an explicit error, so it must cover every inline field, not just the
+  /// ones exercised by the sample apps.
   static void _validateOidcConfig(JourneyConfigMessage config) {
     if (config.oidcClientId == null) return;
     final hasInlineFields =
         config.clientId != null ||
         config.discoveryEndpoint != null ||
         config.redirectUri != null ||
-        config.scopes != null;
+        config.scopes != null ||
+        config.acrValues != null ||
+        config.signOutRedirectUri != null ||
+        config.state != null ||
+        config.nonce != null ||
+        config.uiLocales != null ||
+        config.refreshThreshold != null ||
+        config.loginHint != null ||
+        config.display != null ||
+        config.prompt != null ||
+        config.additionalParameters != null;
     if (hasInlineFields) {
-      throw ArgumentError(
-        'JourneyConfigMessage.oidcClientId cannot be combined with inline OIDC fields '
-        '(clientId/discoveryEndpoint/redirectUri/scopes) — configure OIDC through exactly one path.',
+      throw const PingException(
+        'JOURNEY_CONFIGURE_ERROR',
+        'argument',
+        'JourneyConfigMessage.oidcClientId cannot be combined with any inline OIDC field — '
+            'configure OIDC through exactly one path.',
       );
     }
   }

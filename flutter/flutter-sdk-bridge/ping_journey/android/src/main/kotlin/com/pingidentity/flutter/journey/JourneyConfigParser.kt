@@ -12,6 +12,7 @@ import com.pingidentity.flutter.core.oidc.OidcConfigHandle
 import com.pingidentity.journey.Journey
 import com.pingidentity.journey.module.Oidc
 import com.pingidentity.logger.Logger
+import com.pingidentity.logger.NONE
 import com.pingidentity.logger.STANDARD
 import com.pingidentity.oidc.OidcClientConfig
 import com.pingidentity.oidc.OpenIdConfiguration
@@ -37,12 +38,18 @@ internal object JourneyConfigParser {
             config.realm?.let { realm = it }
             config.cookie?.let { cookie = it }
             timeout = config.timeoutMillis ?: DEFAULT_TIMEOUT_MILLIS
-            // The SDK's global default is Logger.NONE (a no-op), which also suppresses Ktor's
-            // HTTP Logging plugin — every SDK request/response, including the headless OIDC
-            // authorize exchange, then produces no logcat output at all. STANDARD routes through
-            // android.util.Log under the "Ping SDK <version>" tag. Diagnostic aid, not a
-            // production setting: flip to Logger.NONE once the flow is verified.
-            logger = Logger.STANDARD
+            // Defaults to Logger.NONE (a no-op, matching the native SDK's own default), which
+            // also suppresses Ktor's HTTP Logging plugin — every SDK request/response, including
+            // the headless OIDC authorize exchange, then produces no logcat output at all.
+            // STANDARD routes through android.util.Log under the "Ping SDK <version>" tag and is
+            // opt-in via JourneyConfigMessage.logLevel: a development aid, not something this
+            // bridge should ship enabled by default, since it can surface session cookie/auth
+            // material in logcat and user bug reports.
+            logger =
+                when (config.logLevel) {
+                    JourneyLogLevel.STANDARD -> Logger.STANDARD
+                    else -> Logger.NONE
+                }
 
             val oidcClientId = config.oidcClientId
             if (oidcClientId != null) {

@@ -147,6 +147,9 @@ class _TokenSection extends StatelessWidget {
                   ),
                 ),
                 InkWell(
+                  // Clipboard contents persist system-wide (other apps on Android can read
+                  // them) — fine for a sample demonstrating token shapes, but avoid copying
+                  // this pattern for production token displays without considering that.
                   onTap: () => Clipboard.setData(ClipboardData(text: value)),
                   borderRadius: BorderRadius.circular(4),
                   child: Padding(

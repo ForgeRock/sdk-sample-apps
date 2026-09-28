@@ -167,7 +167,7 @@ void main() {
     });
 
     test(
-      'throws ArgumentError when both oidcClientId and an inline field are set',
+      'throws a PingException when both oidcClientId and an inline field are set',
       () async {
         final config = JourneyConfigMessage(serverUrl: 'https://example.com')
           ..oidcClientId = 'oidc-client-1'
@@ -175,7 +175,11 @@ void main() {
 
         await expectLater(
           () => JourneyClient.configure(config, hostApi: hostApi),
-          throwsA(isA<ArgumentError>()),
+          throwsA(
+            isA<PingException>()
+                .having((e) => e.code, 'code', 'JOURNEY_CONFIGURE_ERROR')
+                .having((e) => e.type, 'type', 'argument'),
+          ),
         );
         expect(hostApi.lastConfig, isNull);
       },
@@ -191,7 +195,27 @@ void main() {
 
         await expectLater(
           () => JourneyClient.configure(config, hostApi: hostApi),
-          throwsA(isA<ArgumentError>()),
+          throwsA(isA<PingException>()),
+        );
+        expect(hostApi.lastConfig, isNull);
+      },
+    );
+
+    test(
+      'does not call configureJourney when oidcClientId conflicts with a field '
+      'outside the original 4-field check (e.g. loginHint)',
+      () async {
+        final config = JourneyConfigMessage(serverUrl: 'https://example.com')
+          ..oidcClientId = 'oidc-client-1'
+          ..loginHint = 'user@example.com';
+
+        await expectLater(
+          () => JourneyClient.configure(config, hostApi: hostApi),
+          throwsA(
+            isA<PingException>()
+                .having((e) => e.code, 'code', 'JOURNEY_CONFIGURE_ERROR')
+                .having((e) => e.type, 'type', 'argument'),
+          ),
         );
         expect(hostApi.lastConfig, isNull);
       },

@@ -55,22 +55,38 @@ To try out the Journey Flutter sample, perform these steps:
 
 ## Testing
 
-**This sample ships no tests, by design.** Sample apps in this repository are reference
-implementations meant to be read and run, not test fixtures — the same convention the Kotlin,
-Swift, and React Native samples follow.
+This sample carries two layers of test coverage, rather than choosing one over the other:
 
-Test coverage for the behaviour this app demonstrates lives in the bridge package instead:
+- **This app's own widget/unit tests** — `flutter test` from this directory (or `flutter/` root)
+  covers callback-view rendering (`test/ui/features/journey/views/widgets/callbacks/`),
+  journey/success/config view behavior, and error-banner rendering. These exercise UI this app
+  owns, which a bridge-level test host has no widget tree to render.
+- **This app's own integration tests** — `integration_test/` drives real Journeys against the
+  configured tenant end-to-end, including the full self-registration flow
+  (`journey_registration_test.dart`). Run each file standalone against a booted
+  simulator/emulator or device (not combined in one `flutter test` invocation — the native SDK
+  persists the AM session cookie on-device across `Journey` instances within one app install, so
+  running both back-to-back in one process changes each Journey's first-node response):
 
-- **Unit tests** — `../flutter-sdk-bridge/ping_journey/test/` (node/callback mapping, session
-  parsing, client error translation). Run with `flutter test` from the `flutter/` workspace root.
-- **Integration tests** — `../flutter-sdk-bridge/ping_journey/example/integration_test/`, which
-  drive the real `JourneyClient` API against either a hermetic mock server or a live tenant with
-  no UI in the loop. See
-  [that package's README](../flutter-sdk-bridge/ping_journey/example/README.md) for how to run
+  ```
+  flutter test integration_test/journey_login_test.dart \
+    --dart-define=E2E_USERNAME=<username> --dart-define=E2E_PASSWORD=<password>
+  flutter test integration_test/journey_registration_test.dart
+  ```
+
+  `journey_login_test.dart`'s credentialed assertions (login, Success screen, sign-off) only run
+  when `E2E_USERNAME`/`E2E_PASSWORD` are supplied, since no test credentials are committed to this
+  public sample repo. `journey_registration_test.dart` needs no credentials — it signs up a fresh,
+  uniquely-suffixed user each run.
+
+- **Bridge-level coverage**, additionally, lives in the bridge package: **unit tests** in
+  `../flutter-sdk-bridge/ping_journey/test/` (node/callback mapping, session parsing, client error
+  translation), and **integration tests** in
+  `../flutter-sdk-bridge/ping_journey/example/integration_test/`, which drive the real
+  `JourneyClient` API against either a hermetic mock server or a live tenant with no UI in the
+  loop — including OIDC session/token operations this app's own tests don't cover in isolation.
+  See [that package's README](../flutter-sdk-bridge/ping_journey/example/README.md) for how to run
   them.
-
-If you want to verify this app against your own tenant, run it (`flutter run`) and walk the flow
-by hand.
 
 ## Native SDK version
 

@@ -20,9 +20,9 @@ class Env {
   static const String clientId = '<client-id>';
 
   // TODO: replace with the redirect URI registered for this client. The scheme
-  // (`com.pingidentity.flutter.oidc` below) must match the one registered in both the Android
-  // and iOS host apps — see the README for the exact manifest/Info.plist configuration this
-  // requires, and update both places together if you change it.
+  // (`com.pingidentity.flutter.oidc` below) must match the one registered in the Android host
+  // app's manifest — see the README. No `Info.plist` change is required on iOS;
+  // `ASWebAuthenticationSession`'s callback scheme is set programmatically from this value.
   static const String redirectUri = 'com.pingidentity.flutter.oidc://oauthredirect';
 
   // TODO: replace if your tenant expects a non-default sign-out redirect.

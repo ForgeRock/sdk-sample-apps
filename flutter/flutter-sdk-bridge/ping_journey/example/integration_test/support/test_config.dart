@@ -115,6 +115,19 @@ abstract final class E2eConfig {
       'Hermetic-only: this scenario needs a scripted server response that a real tenant will not '
       'produce on demand. Drop E2E_SERVER_URL to run it.';
 
+  /// A reason to skip a scenario that requires an OAuth 2.0 client, or `null` if it can run.
+  ///
+  /// See [liveCredentialsSkipReason] for how to use this with `testWidgets`.
+  static String? get oidcSkipReason {
+    final credentials = liveCredentialsSkipReason;
+    if (credentials != null) return credentials;
+    if (isLive && !hasOidc) {
+      return 'Live mode is on but no OAuth 2.0 client was supplied. Set E2E_CLIENT_ID, '
+          'E2E_DISCOVERY_ENDPOINT, and E2E_REDIRECT_URI, or drop E2E_SERVER_URL to run hermetically.';
+    }
+    return null;
+  }
+
   /// A one-line description of the active mode, for test names and failure output.
   static String get describe => isLive
       ? 'live mode against $serverUrl (realm $realm, journey $journeyName)'

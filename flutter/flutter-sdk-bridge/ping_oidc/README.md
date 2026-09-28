@@ -59,7 +59,14 @@ Both platforms follow the same layering, so a change on one side has an obvious 
 
 Every native completion path routes through the error mapper — no bare `catch` that swallows or rethrows unmapped. `authorize()` intercepts browser cancellation *before* the mapper runs on both platforms, so a user dismissing the browser resolves `AuthorizeResultMessage(cancel)` rather than throwing.
 
-For the full set of verified Android/iOS behavioral differences this module bridges around (force-refresh going through `User.refresh()` on both platforms, the `userinfo(cache:)` default divergence, the `hasUser()`/no-session divergence, etc.), see [`../../IMPLEMENTATION_PLAN_OIDC.md`](../../IMPLEMENTATION_PLAN_OIDC.md) § Platform asymmetries — kept in one place rather than duplicated here so the two copies can't drift.
+Other verified Android/iOS behavioral differences this module bridges around, beyond the ones already called out above:
+
+| Concern | Android | iOS | Bridge decision |
+|---|---|---|---|
+| Force refresh | `OidcClient.refresh()` | No `OidcClient.refresh()` — only `OidcUser.refresh()` | Bridge `refresh` through the `User` abstraction on **both** platforms; never call the client-level method on Android and the user-level one on iOS. |
+| No browser agent configured | `DefaultAgent` auto-installed; `authorize` throws `AuthorizeException` | `DefaultAgent` **not** auto-installed; `token()` fails with `authorizeError("Agent not configured")` | Always go through `OidcWebClient` — never construct a bare `OidcClient` and call `token()` expecting a browser flow. |
+| `userinfo(cache:)` default | `User.userinfo(cache = false)` | `OidcUser.userinfo(cache: true)` | Always pass `cache` explicitly from the bridge; never rely on the platform default. |
+| Token expiry stamp | `internal val expireAt` | `public let expiresAt` | Not bridged — diverge in name and visibility. Bridge `expiresIn` (present and public on both) instead. |
 
 ## Security constraint
 

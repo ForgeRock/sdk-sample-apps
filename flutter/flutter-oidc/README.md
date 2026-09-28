@@ -80,9 +80,10 @@ config level and must never appear literally in `env.dart`.
 
 2. That placeholder alone is **not sufficient** on the native SDK's current published release
    (`browser:2.1.0` ships `CustomTabActivity`'s manifest entry with its scheme already resolved to
-   a literal placeholder value, not the unresolved token — see AGENT_NOTES.md for the full
-   investigation and the filed SDK ticket). The mechanism that actually works is an app-level
-   manifest re-declaration with `tools:node="merge"`, already present in
+   a literal placeholder value, not the unresolved token — filed as
+   [SDKS-5296](https://pingidentity.atlassian.net/browse/SDKS-5296) against `ping-android-sdk`). The
+   mechanism that actually works is an app-level manifest re-declaration with
+   `tools:node="merge"`, already present in
    [`android/app/src/main/AndroidManifest.xml`](android/app/src/main/AndroidManifest.xml):
 
    ```xml

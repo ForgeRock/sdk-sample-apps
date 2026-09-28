@@ -93,7 +93,7 @@ void main() {
   testWidgets('refresh() returns a new token set for an OIDC Journey', (
     tester,
   ) async {
-    final skipReason = _oidcSkipReason;
+    final skipReason = E2eConfig.oidcSkipReason;
     if (skipReason != null) {
       markTestSkipped(skipReason);
       return;
@@ -146,7 +146,7 @@ void main() {
   });
 
   testWidgets('revoke() completes for an OIDC Journey', (tester) async {
-    final skipReason = _oidcSkipReason;
+    final skipReason = E2eConfig.oidcSkipReason;
     if (skipReason != null) {
       markTestSkipped(skipReason);
       return;
@@ -185,7 +185,7 @@ void main() {
   testWidgets('userInfo() returns the claims for an OIDC Journey', (
     tester,
   ) async {
-    final skipReason = _oidcSkipReason;
+    final skipReason = E2eConfig.oidcSkipReason;
     if (skipReason != null) {
       markTestSkipped(skipReason);
       return;
@@ -268,14 +268,4 @@ void main() {
       );
     },
   );
-}
-
-String? get _oidcSkipReason {
-  final credentials = E2eConfig.liveCredentialsSkipReason;
-  if (credentials != null) return credentials;
-  if (E2eConfig.isLive && !E2eConfig.hasOidc) {
-    return 'Live mode is on but no OAuth 2.0 client was supplied. Set E2E_CLIENT_ID, '
-        'E2E_DISCOVERY_ENDPOINT, and E2E_REDIRECT_URI, or drop E2E_SERVER_URL to run hermetically.';
-  }
-  return null;
 }

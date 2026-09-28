@@ -197,6 +197,15 @@ enum NodeType: Int, CaseIterable {
   case failureNode = 3
 }
 
+/// SDK HTTP/diagnostic logging verbosity. Defaults to [none] (matching the native Android SDK's
+/// own default) if [JourneyConfigMessage.logLevel] is unset — [standard] is a development aid
+/// that routes every SDK request/response through platform logs and should not ship as a
+/// production default, since it can surface session cookie/auth material there.
+enum JourneyLogLevel: Int, CaseIterable {
+  case none = 0
+  case standard = 1
+}
+
 /// Flat, wire-serializable Journey configuration. OIDC fields are hoisted to
 /// the top level rather than nested, since Pigeon classes can't express an
 /// "OIDC configured only if any OIDC field is present" union cleanly.
@@ -208,6 +217,9 @@ struct JourneyConfigMessage: Hashable, CustomStringConvertible {
   var cookie: String? = nil
   /// Milliseconds.
   var timeoutMillis: Int64? = nil
+  /// Defaults to [JourneyLogLevel.none] when unset. See [JourneyLogLevel] for what [standard]
+  /// exposes and why it isn't the default.
+  var logLevel: JourneyLogLevel? = nil
   var clientId: String? = nil
   var discoveryEndpoint: String? = nil
   var redirectUri: String? = nil
@@ -235,27 +247,29 @@ struct JourneyConfigMessage: Hashable, CustomStringConvertible {
     let realm: String? = nilOrValue(pigeonVar_list[1])
     let cookie: String? = nilOrValue(pigeonVar_list[2])
     let timeoutMillis: Int64? = nilOrValue(pigeonVar_list[3])
-    let clientId: String? = nilOrValue(pigeonVar_list[4])
-    let discoveryEndpoint: String? = nilOrValue(pigeonVar_list[5])
-    let redirectUri: String? = nilOrValue(pigeonVar_list[6])
-    let scopes: [String?]? = nilOrValue(pigeonVar_list[7])
-    let acrValues: String? = nilOrValue(pigeonVar_list[8])
-    let signOutRedirectUri: String? = nilOrValue(pigeonVar_list[9])
-    let state: String? = nilOrValue(pigeonVar_list[10])
-    let nonce: String? = nilOrValue(pigeonVar_list[11])
-    let uiLocales: String? = nilOrValue(pigeonVar_list[12])
-    let refreshThreshold: Int64? = nilOrValue(pigeonVar_list[13])
-    let loginHint: String? = nilOrValue(pigeonVar_list[14])
-    let display: String? = nilOrValue(pigeonVar_list[15])
-    let prompt: String? = nilOrValue(pigeonVar_list[16])
-    let additionalParameters: [String?: String?]? = nilOrValue(pigeonVar_list[17])
-    let oidcClientId: String? = nilOrValue(pigeonVar_list[18])
+    let logLevel: JourneyLogLevel? = nilOrValue(pigeonVar_list[4])
+    let clientId: String? = nilOrValue(pigeonVar_list[5])
+    let discoveryEndpoint: String? = nilOrValue(pigeonVar_list[6])
+    let redirectUri: String? = nilOrValue(pigeonVar_list[7])
+    let scopes: [String?]? = nilOrValue(pigeonVar_list[8])
+    let acrValues: String? = nilOrValue(pigeonVar_list[9])
+    let signOutRedirectUri: String? = nilOrValue(pigeonVar_list[10])
+    let state: String? = nilOrValue(pigeonVar_list[11])
+    let nonce: String? = nilOrValue(pigeonVar_list[12])
+    let uiLocales: String? = nilOrValue(pigeonVar_list[13])
+    let refreshThreshold: Int64? = nilOrValue(pigeonVar_list[14])
+    let loginHint: String? = nilOrValue(pigeonVar_list[15])
+    let display: String? = nilOrValue(pigeonVar_list[16])
+    let prompt: String? = nilOrValue(pigeonVar_list[17])
+    let additionalParameters: [String?: String?]? = nilOrValue(pigeonVar_list[18])
+    let oidcClientId: String? = nilOrValue(pigeonVar_list[19])
 
     return JourneyConfigMessage(
       serverUrl: serverUrl,
       realm: realm,
       cookie: cookie,
       timeoutMillis: timeoutMillis,
+      logLevel: logLevel,
       clientId: clientId,
       discoveryEndpoint: discoveryEndpoint,
       redirectUri: redirectUri,
@@ -279,6 +293,7 @@ struct JourneyConfigMessage: Hashable, CustomStringConvertible {
       realm,
       cookie,
       timeoutMillis,
+      logLevel,
       clientId,
       discoveryEndpoint,
       redirectUri,
@@ -300,7 +315,7 @@ struct JourneyConfigMessage: Hashable, CustomStringConvertible {
     if Swift.type(of: lhs) != Swift.type(of: rhs) {
       return false
     }
-    return MessagesPigeonInternal.deepEquals(lhs.serverUrl, rhs.serverUrl) && MessagesPigeonInternal.deepEquals(lhs.realm, rhs.realm) && MessagesPigeonInternal.deepEquals(lhs.cookie, rhs.cookie) && MessagesPigeonInternal.deepEquals(lhs.timeoutMillis, rhs.timeoutMillis) && MessagesPigeonInternal.deepEquals(lhs.clientId, rhs.clientId) && MessagesPigeonInternal.deepEquals(lhs.discoveryEndpoint, rhs.discoveryEndpoint) && MessagesPigeonInternal.deepEquals(lhs.redirectUri, rhs.redirectUri) && MessagesPigeonInternal.deepEquals(lhs.scopes, rhs.scopes) && MessagesPigeonInternal.deepEquals(lhs.acrValues, rhs.acrValues) && MessagesPigeonInternal.deepEquals(lhs.signOutRedirectUri, rhs.signOutRedirectUri) && MessagesPigeonInternal.deepEquals(lhs.state, rhs.state) && MessagesPigeonInternal.deepEquals(lhs.nonce, rhs.nonce) && MessagesPigeonInternal.deepEquals(lhs.uiLocales, rhs.uiLocales) && MessagesPigeonInternal.deepEquals(lhs.refreshThreshold, rhs.refreshThreshold) && MessagesPigeonInternal.deepEquals(lhs.loginHint, rhs.loginHint) && MessagesPigeonInternal.deepEquals(lhs.display, rhs.display) && MessagesPigeonInternal.deepEquals(lhs.prompt, rhs.prompt) && MessagesPigeonInternal.deepEquals(lhs.additionalParameters, rhs.additionalParameters) && MessagesPigeonInternal.deepEquals(lhs.oidcClientId, rhs.oidcClientId)
+    return MessagesPigeonInternal.deepEquals(lhs.serverUrl, rhs.serverUrl) && MessagesPigeonInternal.deepEquals(lhs.realm, rhs.realm) && MessagesPigeonInternal.deepEquals(lhs.cookie, rhs.cookie) && MessagesPigeonInternal.deepEquals(lhs.timeoutMillis, rhs.timeoutMillis) && MessagesPigeonInternal.deepEquals(lhs.logLevel, rhs.logLevel) && MessagesPigeonInternal.deepEquals(lhs.clientId, rhs.clientId) && MessagesPigeonInternal.deepEquals(lhs.discoveryEndpoint, rhs.discoveryEndpoint) && MessagesPigeonInternal.deepEquals(lhs.redirectUri, rhs.redirectUri) && MessagesPigeonInternal.deepEquals(lhs.scopes, rhs.scopes) && MessagesPigeonInternal.deepEquals(lhs.acrValues, rhs.acrValues) && MessagesPigeonInternal.deepEquals(lhs.signOutRedirectUri, rhs.signOutRedirectUri) && MessagesPigeonInternal.deepEquals(lhs.state, rhs.state) && MessagesPigeonInternal.deepEquals(lhs.nonce, rhs.nonce) && MessagesPigeonInternal.deepEquals(lhs.uiLocales, rhs.uiLocales) && MessagesPigeonInternal.deepEquals(lhs.refreshThreshold, rhs.refreshThreshold) && MessagesPigeonInternal.deepEquals(lhs.loginHint, rhs.loginHint) && MessagesPigeonInternal.deepEquals(lhs.display, rhs.display) && MessagesPigeonInternal.deepEquals(lhs.prompt, rhs.prompt) && MessagesPigeonInternal.deepEquals(lhs.additionalParameters, rhs.additionalParameters) && MessagesPigeonInternal.deepEquals(lhs.oidcClientId, rhs.oidcClientId)
   }
 
   func hash(into hasher: inout Hasher) {
@@ -309,6 +324,7 @@ struct JourneyConfigMessage: Hashable, CustomStringConvertible {
     MessagesPigeonInternal.deepHash(value: realm, hasher: &hasher)
     MessagesPigeonInternal.deepHash(value: cookie, hasher: &hasher)
     MessagesPigeonInternal.deepHash(value: timeoutMillis, hasher: &hasher)
+    MessagesPigeonInternal.deepHash(value: logLevel, hasher: &hasher)
     MessagesPigeonInternal.deepHash(value: clientId, hasher: &hasher)
     MessagesPigeonInternal.deepHash(value: discoveryEndpoint, hasher: &hasher)
     MessagesPigeonInternal.deepHash(value: redirectUri, hasher: &hasher)
@@ -327,7 +343,7 @@ struct JourneyConfigMessage: Hashable, CustomStringConvertible {
   }
 
   public var description: String {
-    return "JourneyConfigMessage(serverUrl: \(String(describing: serverUrl)), realm: \(String(describing: realm)), cookie: \(String(describing: cookie)), timeoutMillis: \(String(describing: timeoutMillis)), clientId: \(String(describing: clientId)), discoveryEndpoint: \(String(describing: discoveryEndpoint)), redirectUri: \(String(describing: redirectUri)), scopes: \(String(describing: scopes)), acrValues: \(String(describing: acrValues)), signOutRedirectUri: \(String(describing: signOutRedirectUri)), state: \(String(describing: state)), nonce: \(String(describing: nonce)), uiLocales: \(String(describing: uiLocales)), refreshThreshold: \(String(describing: refreshThreshold)), loginHint: \(String(describing: loginHint)), display: \(String(describing: display)), prompt: \(String(describing: prompt)), additionalParameters: \(String(describing: additionalParameters)), oidcClientId: \(String(describing: oidcClientId)))"
+    return "JourneyConfigMessage(serverUrl: \(String(describing: serverUrl)), realm: \(String(describing: realm)), cookie: \(String(describing: cookie)), timeoutMillis: \(String(describing: timeoutMillis)), logLevel: \(String(describing: logLevel)), clientId: \(String(describing: clientId)), discoveryEndpoint: \(String(describing: discoveryEndpoint)), redirectUri: \(String(describing: redirectUri)), scopes: \(String(describing: scopes)), acrValues: \(String(describing: acrValues)), signOutRedirectUri: \(String(describing: signOutRedirectUri)), state: \(String(describing: state)), nonce: \(String(describing: nonce)), uiLocales: \(String(describing: uiLocales)), refreshThreshold: \(String(describing: refreshThreshold)), loginHint: \(String(describing: loginHint)), display: \(String(describing: display)), prompt: \(String(describing: prompt)), additionalParameters: \(String(describing: additionalParameters)), oidcClientId: \(String(describing: oidcClientId)))"
   }
 }
 
@@ -755,16 +771,22 @@ private class MessagesPigeonCodecReader: FlutterStandardReader {
       }
       return nil
     case 130:
-      return JourneyConfigMessage.fromList(self.readValue() as! [Any?])
+      let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
+      if let enumResultAsInt = enumResultAsInt {
+        return JourneyLogLevel(rawValue: enumResultAsInt)
+      }
+      return nil
     case 131:
-      return StartOptionsMessage.fromList(self.readValue() as! [Any?])
+      return JourneyConfigMessage.fromList(self.readValue() as! [Any?])
     case 132:
-      return CallbackMessage.fromList(self.readValue() as! [Any?])
+      return StartOptionsMessage.fromList(self.readValue() as! [Any?])
     case 133:
-      return CallbackValueMessage.fromList(self.readValue() as! [Any?])
+      return CallbackMessage.fromList(self.readValue() as! [Any?])
     case 134:
-      return NodeMessage.fromList(self.readValue() as! [Any?])
+      return CallbackValueMessage.fromList(self.readValue() as! [Any?])
     case 135:
+      return NodeMessage.fromList(self.readValue() as! [Any?])
+    case 136:
       return SessionMessage.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -777,23 +799,26 @@ private class MessagesPigeonCodecWriter: FlutterStandardWriter {
     if let value = value as? NodeType {
       super.writeByte(129)
       super.writeValue(value.rawValue)
-    } else if let value = value as? JourneyConfigMessage {
+    } else if let value = value as? JourneyLogLevel {
       super.writeByte(130)
-      super.writeValue(value.toList())
-    } else if let value = value as? StartOptionsMessage {
+      super.writeValue(value.rawValue)
+    } else if let value = value as? JourneyConfigMessage {
       super.writeByte(131)
       super.writeValue(value.toList())
-    } else if let value = value as? CallbackMessage {
+    } else if let value = value as? StartOptionsMessage {
       super.writeByte(132)
       super.writeValue(value.toList())
-    } else if let value = value as? CallbackValueMessage {
+    } else if let value = value as? CallbackMessage {
       super.writeByte(133)
       super.writeValue(value.toList())
-    } else if let value = value as? NodeMessage {
+    } else if let value = value as? CallbackValueMessage {
       super.writeByte(134)
       super.writeValue(value.toList())
-    } else if let value = value as? SessionMessage {
+    } else if let value = value as? NodeMessage {
       super.writeByte(135)
+      super.writeValue(value.toList())
+    } else if let value = value as? SessionMessage {
+      super.writeByte(136)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
