@@ -15,7 +15,7 @@ import PingOidc
 import PingJourney
 
 /// A view model responsible for managing the logout functionality.
-/// - Handles the logout process for the user and updates the state for UI display.
+/// - Handles the logout process for the user.
 @MainActor
 class LogOutViewModel: ObservableObject {
     /// Performs the user logout process using the DaVinci SDK.
