@@ -19,7 +19,8 @@ class OidcConfig {
   final String discoveryEndpoint;
   final List<String> scopes;
 
-  /// Must match the native URL scheme registered in both the Android and iOS host apps.
+  /// Its scheme must match the one registered in the Android host app's manifest. iOS needs no
+  /// `Info.plist` registration.
   final String redirectUri;
 }
 

@@ -7,6 +7,7 @@
 
 import Foundation
 import PingJourney
+import PingLogger
 import PingOidc
 import ping_core
 
@@ -100,12 +101,27 @@ enum JourneyConfigParser {
         oidcConfig.par = handle.par
     }
 
+    /// Maps `JourneyConfigMessage.logLevel` onto a native `Logger`, mirroring the Android parser's
+    /// `when`. Defaults to `LogManager.none` (a no-op, the native SDK's own default): `standard`
+    /// is opt-in because it routes every SDK request/response through the system log, which can
+    /// surface session cookie/auth material. Not `private`, for the same direct-testability
+    /// reason as `resolveOidcHandle`.
+    static func logger(for level: JourneyLogLevel?) -> Logger {
+        switch level {
+        case .standard: return LogManager.standard
+        default: return LogManager.none
+        }
+    }
+
     private static func applyJourneyFields(_ message: JourneyConfigMessage, to journeyConfig: JourneyConfig) {
         journeyConfig.serverUrl = message.serverUrl
         if let realm = message.realm { journeyConfig.realm = realm }
         if let cookie = message.cookie { journeyConfig.cookie = cookie }
         let timeoutMillis = message.timeoutMillis ?? defaultTimeoutMillis
         journeyConfig.timeout = TimeInterval(timeoutMillis) / 1000
+        // The native iOS logger is process-global (`WorkflowConfig.logger`'s setter also assigns
+        // `LogManager.logger`), so the most recent `configure` call's level wins across Journeys.
+        journeyConfig.logger = logger(for: message.logLevel)
     }
 
     private static func applyOidcFields(_ message: JourneyConfigMessage, to oidcConfig: OidcClientConfig) {

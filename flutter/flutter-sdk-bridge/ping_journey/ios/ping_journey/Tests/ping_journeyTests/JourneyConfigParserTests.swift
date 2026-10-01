@@ -6,6 +6,7 @@
  */
 
 import XCTest
+import PingLogger
 import PingOidc
 import ping_core
 @testable import ping_journey
@@ -181,5 +182,17 @@ final class JourneyConfigParserTests: XCTestCase {
         let message = JourneyConfigMessage(serverUrl: "https://example.com/am")
 
         XCTAssertFalse(JourneyConfigParser.hasOidcFields(message))
+    }
+
+    func testLoggerDefaultsToNoneWhenLogLevelIsUnset() {
+        XCTAssertTrue(JourneyConfigParser.logger(for: nil) is NoneLogger)
+    }
+
+    func testLoggerIsNoneForExplicitNoneLogLevel() {
+        XCTAssertTrue(JourneyConfigParser.logger(for: JourneyLogLevel.none) is NoneLogger)
+    }
+
+    func testLoggerIsStandardForStandardLogLevel() {
+        XCTAssertTrue(JourneyConfigParser.logger(for: .standard) is StandardLogger)
     }
 }

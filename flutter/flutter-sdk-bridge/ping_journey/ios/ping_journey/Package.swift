@@ -23,7 +23,8 @@ let package = Package(
                 .product(name: "FlutterFramework", package: "FlutterFramework"),
                 .product(name: "ping-core", package: "ping_core"),
                 .product(name: "PingJourney", package: "ping-ios-sdk"),
-                .product(name: "PingOidc", package: "ping-ios-sdk")
+                .product(name: "PingOidc", package: "ping-ios-sdk"),
+                .product(name: "PingLogger", package: "ping-ios-sdk")
             ],
             resources: [
                 .process("PrivacyInfo.xcprivacy")

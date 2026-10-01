@@ -47,9 +47,10 @@ To try out the Journey Flutter sample, perform these steps:
    - `serverUrl`, `realm`, `cookie` — your tenant's Journey server configuration.
    - `oidcConfig` — your OAuth 2.0 client's `clientId`/`discoveryEndpoint`/`scopes`/`redirectUri`,
      or leave `null` to skip the post-login token exchange (Journey-only, session login).
-5. If you set `oidcConfig`, register `redirectUri`'s custom scheme with both native hosts:
+5. If you set `oidcConfig`, register `redirectUri`'s custom scheme with the Android host:
    - Android: add an `intent-filter` for the scheme in `android/app/src/main/AndroidManifest.xml`.
-   - iOS (SPM): add a `CFBundleURLTypes` entry for the scheme in `ios/Runner/Info.plist`.
+   - iOS: no `Info.plist` change is required — `ASWebAuthenticationSession`'s callback scheme is
+     set programmatically from `redirectUri`, so there is no `CFBundleURLTypes` entry to add.
 6. Run the app: `flutter run` from this directory (`flutter-journey/`), or open
    `ios/Runner.xcworkspace` in Xcode / the Android project in Android Studio.
 
