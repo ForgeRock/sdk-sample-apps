@@ -86,9 +86,7 @@ class _KbaCreateCallbackViewState extends State<KbaCreateCallbackView>
           const SizedBox(height: 8),
           TextField(
             controller: _customQuestionController,
-            decoration: const InputDecoration(
-              labelText: 'Your Question',
-            ),
+            decoration: const InputDecoration(labelText: 'Your Question'),
             onChanged: (value) {
               callback.selectedQuestion = value;
               widget.onChanged();
@@ -98,9 +96,7 @@ class _KbaCreateCallbackViewState extends State<KbaCreateCallbackView>
         const SizedBox(height: 8),
         TextField(
           controller: _answerController,
-          decoration: const InputDecoration(
-            labelText: 'Answer',
-          ),
+          decoration: const InputDecoration(labelText: 'Answer'),
           onChanged: (value) {
             callback.selectedAnswer = value;
             widget.onChanged();

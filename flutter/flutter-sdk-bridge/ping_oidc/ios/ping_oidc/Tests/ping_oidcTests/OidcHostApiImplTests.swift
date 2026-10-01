@@ -6,15 +6,16 @@
  */
 
 import XCTest
+@testable import ping_core
 @testable import ping_oidc
 
-/// Unit tests for `OidcHostApiImpl`'s Phase 4 methods.
+/// Unit tests for `OidcHostApiImpl`'s methods.
 ///
-/// `OidcWebClient` is a concrete native class (not a protocol), so there's no seam here to inject
+/// `OidcWebClient` is a concrete native class, so there's no seam here to inject
 /// a fake `User` in place of a real one — these tests cover only the "no session" failure path,
 /// which is reachable via the real (empty) registry with no native scaffolding required. Full
 /// method-body coverage against a real signed-in session is exercised at the runtime verification
-/// gate instead (see IMPLEMENTATION_PLAN_OIDC.md Phase 4).
+/// gate instead.
 final class OidcHostApiImplTests: XCTestCase {
     private let impl = OidcHostApiImpl()
 
@@ -47,6 +48,18 @@ final class OidcHostApiImplTests: XCTestCase {
     private func awaitSignOff(_ webClientId: String) async -> Result<Bool, Error> {
         await withCheckedContinuation { continuation in
             impl.signOff(webClientId: webClientId) { continuation.resume(returning: $0) }
+        }
+    }
+
+    private func awaitConfigure(_ config: OidcConfigMessage) async -> Result<String, Error> {
+        await withCheckedContinuation { continuation in
+            impl.configureOidc(config: config) { continuation.resume(returning: $0) }
+        }
+    }
+
+    private func awaitDispose(_ handleId: String) async -> Result<Void, Error> {
+        await withCheckedContinuation { continuation in
+            impl.dispose(handleId: handleId) { continuation.resume(returning: $0) }
         }
     }
 
@@ -97,5 +110,29 @@ final class OidcHostApiImplTests: XCTestCase {
         }
         XCTAssertEqual(error.details as? String, "state")
         XCTAssertTrue((error.message ?? "").contains("unknown-id"))
+    }
+
+    func testRepeatedConfigureDisposeLeavesNoEntriesInTheClientRegistry() async {
+        for _ in 0..<3 {
+            var config = OidcConfigMessage(
+                clientId: "client-1",
+                redirectUri: "https://example.com/callback",
+                par: false
+            )
+            config.discoveryEndpoint = "https://example.com/.well-known/openid-configuration"
+
+            guard case .success(let clientId) = await awaitConfigure(config) else {
+                XCTFail("Expected configureOidc to succeed")
+                return
+            }
+
+            let clientHandle = await CoreRuntime.oidcClientRegistry.resolve(clientId)
+            XCTAssertNotNil(clientHandle)
+
+            _ = await awaitDispose(clientId)
+
+            let clientHandleAfterDispose = await CoreRuntime.oidcClientRegistry.resolve(clientId)
+            XCTAssertNil(clientHandleAfterDispose)
+        }
     }
 }

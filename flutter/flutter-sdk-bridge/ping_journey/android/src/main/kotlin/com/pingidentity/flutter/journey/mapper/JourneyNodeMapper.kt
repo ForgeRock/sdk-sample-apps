@@ -56,7 +56,11 @@ internal object JourneyNodeMapper {
                     stage = node.stage,
                     callbacks = mapCallbacks(node),
                 )
-            is SuccessNode -> NodeMessage(type = NodeType.SUCCESS_NODE)
+            is SuccessNode ->
+                NodeMessage(
+                    type = NodeType.SUCCESS_NODE,
+                    sessionToken = node.session.value.takeIf { it.isNotEmpty() },
+                )
             is ErrorNode ->
                 NodeMessage(
                     type = NodeType.ERROR_NODE,

@@ -16,7 +16,7 @@ Explore the many use cases the Ping Orchestration SDKs have to offer by referrin
 
 - [Android](./android/)
 
-- [Flutter](./flutter/)
+- [Flutter](./flutter/) — Journey authentication and OIDC (centralized) login samples
 
 ## Documentation
 

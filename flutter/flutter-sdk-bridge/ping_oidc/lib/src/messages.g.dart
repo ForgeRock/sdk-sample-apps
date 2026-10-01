@@ -14,9 +14,9 @@ import 'package:flutter/services.dart';
 import 'package:meta/meta.dart' show immutable, protected, visibleForTesting;
 
 Object? _extractReplyValueOrThrow(
-    List<Object?>? replyList,
-    String channelName, {
-    required bool isNullValid,
+  List<Object?>? replyList,
+  String channelName, {
+  required bool isNullValid,
 }) {
   if (replyList == null) {
     throw PlatformException(
@@ -50,8 +50,9 @@ bool _deepEquals(Object? a, Object? b) {
   }
   if (a is List && b is List) {
     return a.length == b.length &&
-        a.indexed
-            .every(((int, dynamic) item) => _deepEquals(item.$2, b[item.$1]));
+        a.indexed.every(
+          ((int, dynamic) item) => _deepEquals(item.$2, b[item.$1]),
+        );
   }
   if (a is Map && b is Map) {
     if (a.length != b.length) {
@@ -100,10 +101,10 @@ int _deepHash(Object? value) {
   return value.hashCode;
 }
 
-
 enum AuthorizeResultType {
   /// The user completed the browser login flow successfully.
   success,
+
   /// The user dismissed the browser without completing login. Not an error.
   cancel,
 }
@@ -150,7 +151,8 @@ class OidcOpenIdConfigMessage {
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static OidcOpenIdConfigMessage decode(Object result) {
     result as List<Object?>;
@@ -173,7 +175,15 @@ class OidcOpenIdConfigMessage {
     if (identical(this, other)) {
       return true;
     }
-    return _deepEquals(authorizationEndpoint, other.authorizationEndpoint) && _deepEquals(tokenEndpoint, other.tokenEndpoint) && _deepEquals(userinfoEndpoint, other.userinfoEndpoint) && _deepEquals(endSessionEndpoint, other.endSessionEndpoint) && _deepEquals(pingEndIdpSessionEndpoint, other.pingEndIdpSessionEndpoint) && _deepEquals(revocationEndpoint, other.revocationEndpoint);
+    return _deepEquals(authorizationEndpoint, other.authorizationEndpoint) &&
+        _deepEquals(tokenEndpoint, other.tokenEndpoint) &&
+        _deepEquals(userinfoEndpoint, other.userinfoEndpoint) &&
+        _deepEquals(endSessionEndpoint, other.endSessionEndpoint) &&
+        _deepEquals(
+          pingEndIdpSessionEndpoint,
+          other.pingEndIdpSessionEndpoint,
+        ) &&
+        _deepEquals(revocationEndpoint, other.revocationEndpoint);
   }
 
   @override
@@ -283,7 +293,8 @@ class OidcConfigMessage {
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static OidcConfigMessage decode(Object result) {
     result as List<Object?>;
@@ -302,7 +313,8 @@ class OidcConfigMessage {
       loginHint: result[11] as String?,
       display: result[12] as String?,
       prompt: result[13] as String?,
-      additionalParameters: (result[14] as Map<Object?, Object?>?)?.cast<String?, String?>(),
+      additionalParameters: (result[14] as Map<Object?, Object?>?)
+          ?.cast<String?, String?>(),
       par: result[15]! as bool,
     );
   }
@@ -316,7 +328,22 @@ class OidcConfigMessage {
     if (identical(this, other)) {
       return true;
     }
-    return _deepEquals(clientId, other.clientId) && _deepEquals(redirectUri, other.redirectUri) && _deepEquals(discoveryEndpoint, other.discoveryEndpoint) && _deepEquals(openId, other.openId) && _deepEquals(scopes, other.scopes) && _deepEquals(acrValues, other.acrValues) && _deepEquals(signOutRedirectUri, other.signOutRedirectUri) && _deepEquals(state, other.state) && _deepEquals(nonce, other.nonce) && _deepEquals(uiLocales, other.uiLocales) && _deepEquals(refreshThresholdSeconds, other.refreshThresholdSeconds) && _deepEquals(loginHint, other.loginHint) && _deepEquals(display, other.display) && _deepEquals(prompt, other.prompt) && _deepEquals(additionalParameters, other.additionalParameters) && _deepEquals(par, other.par);
+    return _deepEquals(clientId, other.clientId) &&
+        _deepEquals(redirectUri, other.redirectUri) &&
+        _deepEquals(discoveryEndpoint, other.discoveryEndpoint) &&
+        _deepEquals(openId, other.openId) &&
+        _deepEquals(scopes, other.scopes) &&
+        _deepEquals(acrValues, other.acrValues) &&
+        _deepEquals(signOutRedirectUri, other.signOutRedirectUri) &&
+        _deepEquals(state, other.state) &&
+        _deepEquals(nonce, other.nonce) &&
+        _deepEquals(uiLocales, other.uiLocales) &&
+        _deepEquals(refreshThresholdSeconds, other.refreshThresholdSeconds) &&
+        _deepEquals(loginHint, other.loginHint) &&
+        _deepEquals(display, other.display) &&
+        _deepEquals(prompt, other.prompt) &&
+        _deepEquals(additionalParameters, other.additionalParameters) &&
+        _deepEquals(par, other.par);
   }
 
   @override
@@ -332,10 +359,7 @@ class OidcConfigMessage {
 /// iOS-only browser presentation knobs. Android ignores every field here —
 /// it only has Chrome Custom Tabs, no `BrowserType`/`BrowserMode` equivalent.
 class BrowserOptionsMessage {
-  BrowserOptionsMessage({
-    this.browserType,
-    this.browserMode,
-  });
+  BrowserOptionsMessage({this.browserType, this.browserMode});
 
   /// One of `authSession` / `ephemeralAuthSession` (both implemented on iOS
   /// at 2.1.0). `nativeBrowserApp` / `sfViewController` are declared but not
@@ -347,14 +371,12 @@ class BrowserOptionsMessage {
   String? browserMode;
 
   List<Object?> _toList() {
-    return <Object?>[
-      browserType,
-      browserMode,
-    ];
+    return <Object?>[browserType, browserMode];
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static BrowserOptionsMessage decode(Object result) {
     result as List<Object?>;
@@ -373,7 +395,8 @@ class BrowserOptionsMessage {
     if (identical(this, other)) {
       return true;
     }
-    return _deepEquals(browserType, other.browserType) && _deepEquals(browserMode, other.browserMode);
+    return _deepEquals(browserType, other.browserType) &&
+        _deepEquals(browserMode, other.browserMode);
   }
 
   @override
@@ -430,7 +453,8 @@ class TokenMessage {
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static TokenMessage decode(Object result) {
     result as List<Object?>;
@@ -453,7 +477,12 @@ class TokenMessage {
     if (identical(this, other)) {
       return true;
     }
-    return _deepEquals(accessToken, other.accessToken) && _deepEquals(tokenType, other.tokenType) && _deepEquals(scope, other.scope) && _deepEquals(expiresIn, other.expiresIn) && _deepEquals(refreshToken, other.refreshToken) && _deepEquals(idToken, other.idToken);
+    return _deepEquals(accessToken, other.accessToken) &&
+        _deepEquals(tokenType, other.tokenType) &&
+        _deepEquals(scope, other.scope) &&
+        _deepEquals(expiresIn, other.expiresIn) &&
+        _deepEquals(refreshToken, other.refreshToken) &&
+        _deepEquals(idToken, other.idToken);
   }
 
   @override
@@ -470,27 +499,22 @@ class TokenMessage {
 /// bridge — the native SDK captures the redirect and exchanges the code
 /// internally on both platforms.
 class AuthorizeResultMessage {
-  AuthorizeResultMessage({
-    required this.type,
-  });
+  AuthorizeResultMessage({required this.type});
 
   /// Whether the browser flow completed successfully or was cancelled by the user.
   AuthorizeResultType type;
 
   List<Object?> _toList() {
-    return <Object?>[
-      type,
-    ];
+    return <Object?>[type];
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static AuthorizeResultMessage decode(Object result) {
     result as List<Object?>;
-    return AuthorizeResultMessage(
-      type: result[0]! as AuthorizeResultType,
-    );
+    return AuthorizeResultMessage(type: result[0]! as AuthorizeResultType);
   }
 
   @override
@@ -515,7 +539,6 @@ class AuthorizeResultMessage {
   }
 }
 
-
 class _PigeonCodec extends StandardMessageCodec {
   const _PigeonCodec();
   @override
@@ -523,22 +546,22 @@ class _PigeonCodec extends StandardMessageCodec {
     if (value is int) {
       buffer.putUint8(4);
       buffer.putInt64(value);
-    }    else if (value is AuthorizeResultType) {
+    } else if (value is AuthorizeResultType) {
       buffer.putUint8(129);
       writeValue(buffer, value.index);
-    }    else if (value is OidcOpenIdConfigMessage) {
+    } else if (value is OidcOpenIdConfigMessage) {
       buffer.putUint8(130);
       writeValue(buffer, value.encode());
-    }    else if (value is OidcConfigMessage) {
+    } else if (value is OidcConfigMessage) {
       buffer.putUint8(131);
       writeValue(buffer, value.encode());
-    }    else if (value is BrowserOptionsMessage) {
+    } else if (value is BrowserOptionsMessage) {
       buffer.putUint8(132);
       writeValue(buffer, value.encode());
-    }    else if (value is TokenMessage) {
+    } else if (value is TokenMessage) {
       buffer.putUint8(133);
       writeValue(buffer, value.encode());
-    }    else if (value is AuthorizeResultMessage) {
+    } else if (value is AuthorizeResultMessage) {
       buffer.putUint8(134);
       writeValue(buffer, value.encode());
     } else {
@@ -572,9 +595,13 @@ class PingOidcHostApi {
   /// Constructor for [PingOidcHostApi]. The [binaryMessenger] named argument is
   /// available for dependency injection. If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  PingOidcHostApi({BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
-      : pigeonVar_binaryMessenger = binaryMessenger,
-        pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+  PingOidcHostApi({
+    BinaryMessenger? binaryMessenger,
+    String messageChannelSuffix = '',
+  }) : pigeonVar_binaryMessenger = binaryMessenger,
+       pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty
+           ? '.$messageChannelSuffix'
+           : '';
   final BinaryMessenger? pigeonVar_binaryMessenger;
 
   static const MessageCodec<Object?> pigeonChannelCodec = _PigeonCodec();
@@ -583,200 +610,224 @@ class PingOidcHostApi {
 
   /// Builds a native `OidcClient` for [config] and returns its handle id.
   Future<String> configureOidc(OidcConfigMessage config) async {
-    final pigeonVar_channelName = 'dev.flutter.pigeon.ping_oidc.PingOidcHostApi.configureOidc$pigeonVar_messageChannelSuffix';
+    final pigeonVar_channelName =
+        'dev.flutter.pigeon.ping_oidc.PingOidcHostApi.configureOidc$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[config]);
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[config],
+    );
     final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
 
     final Object? pigeonVar_replyValue = _extractReplyValueOrThrow(
-        pigeonVar_replyList,
-        pigeonVar_channelName,
-        isNullValid: false,
-    )
-    ;
+      pigeonVar_replyList,
+      pigeonVar_channelName,
+      isNullValid: false,
+    );
     return pigeonVar_replyValue! as String;
   }
 
   /// Builds a browser-capable `OidcWebClient` from the client identified by [clientId] and
   /// returns its handle id.
-  Future<String> createWebClient(String clientId, BrowserOptionsMessage? options) async {
-    final pigeonVar_channelName = 'dev.flutter.pigeon.ping_oidc.PingOidcHostApi.createWebClient$pigeonVar_messageChannelSuffix';
+  Future<String> createWebClient(
+    String clientId,
+    BrowserOptionsMessage? options,
+  ) async {
+    final pigeonVar_channelName =
+        'dev.flutter.pigeon.ping_oidc.PingOidcHostApi.createWebClient$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[clientId, options]);
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[clientId, options],
+    );
     final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
 
     final Object? pigeonVar_replyValue = _extractReplyValueOrThrow(
-        pigeonVar_replyList,
-        pigeonVar_channelName,
-        isNullValid: false,
-    )
-    ;
+      pigeonVar_replyList,
+      pigeonVar_channelName,
+      isNullValid: false,
+    );
     return pigeonVar_replyValue! as String;
   }
 
   /// Opens the system browser for the user to authenticate.
   Future<AuthorizeResultMessage> authorize(String webClientId) async {
-    final pigeonVar_channelName = 'dev.flutter.pigeon.ping_oidc.PingOidcHostApi.authorize$pigeonVar_messageChannelSuffix';
+    final pigeonVar_channelName =
+        'dev.flutter.pigeon.ping_oidc.PingOidcHostApi.authorize$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[webClientId]);
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[webClientId],
+    );
     final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
 
     final Object? pigeonVar_replyValue = _extractReplyValueOrThrow(
-        pigeonVar_replyList,
-        pigeonVar_channelName,
-        isNullValid: false,
-    )
-    ;
+      pigeonVar_replyList,
+      pigeonVar_channelName,
+      isNullValid: false,
+    );
     return pigeonVar_replyValue! as AuthorizeResultMessage;
   }
 
   /// Whether a signed-in user session already exists for this web client.
   Future<bool> hasUser(String webClientId) async {
-    final pigeonVar_channelName = 'dev.flutter.pigeon.ping_oidc.PingOidcHostApi.hasUser$pigeonVar_messageChannelSuffix';
+    final pigeonVar_channelName =
+        'dev.flutter.pigeon.ping_oidc.PingOidcHostApi.hasUser$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[webClientId]);
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[webClientId],
+    );
     final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
 
     final Object? pigeonVar_replyValue = _extractReplyValueOrThrow(
-        pigeonVar_replyList,
-        pigeonVar_channelName,
-        isNullValid: false,
-    )
-    ;
+      pigeonVar_replyList,
+      pigeonVar_channelName,
+      isNullValid: false,
+    );
     return pigeonVar_replyValue! as bool;
   }
 
   /// The token most recently issued for this web client.
   Future<TokenMessage> token(String webClientId) async {
-    final pigeonVar_channelName = 'dev.flutter.pigeon.ping_oidc.PingOidcHostApi.token$pigeonVar_messageChannelSuffix';
+    final pigeonVar_channelName =
+        'dev.flutter.pigeon.ping_oidc.PingOidcHostApi.token$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[webClientId]);
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[webClientId],
+    );
     final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
 
     final Object? pigeonVar_replyValue = _extractReplyValueOrThrow(
-        pigeonVar_replyList,
-        pigeonVar_channelName,
-        isNullValid: false,
-    )
-    ;
+      pigeonVar_replyList,
+      pigeonVar_channelName,
+      isNullValid: false,
+    );
     return pigeonVar_replyValue! as TokenMessage;
   }
 
   /// Forces a token refresh via the stored refresh token.
   Future<TokenMessage> refresh(String webClientId) async {
-    final pigeonVar_channelName = 'dev.flutter.pigeon.ping_oidc.PingOidcHostApi.refresh$pigeonVar_messageChannelSuffix';
+    final pigeonVar_channelName =
+        'dev.flutter.pigeon.ping_oidc.PingOidcHostApi.refresh$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[webClientId]);
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[webClientId],
+    );
     final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
 
     final Object? pigeonVar_replyValue = _extractReplyValueOrThrow(
-        pigeonVar_replyList,
-        pigeonVar_channelName,
-        isNullValid: false,
-    )
-    ;
+      pigeonVar_replyList,
+      pigeonVar_channelName,
+      isNullValid: false,
+    );
     return pigeonVar_replyValue! as TokenMessage;
   }
 
   /// Fetches the userinfo claims for the signed-in user.
   Future<Map<String?, Object?>> userInfo(String webClientId, bool cache) async {
-    final pigeonVar_channelName = 'dev.flutter.pigeon.ping_oidc.PingOidcHostApi.userInfo$pigeonVar_messageChannelSuffix';
+    final pigeonVar_channelName =
+        'dev.flutter.pigeon.ping_oidc.PingOidcHostApi.userInfo$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[webClientId, cache]);
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[webClientId, cache],
+    );
     final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
 
     final Object? pigeonVar_replyValue = _extractReplyValueOrThrow(
-        pigeonVar_replyList,
-        pigeonVar_channelName,
-        isNullValid: false,
-    )
-    ;
-    return (pigeonVar_replyValue! as Map<Object?, Object?>).cast<String?, Object?>();
+      pigeonVar_replyList,
+      pigeonVar_channelName,
+      isNullValid: false,
+    );
+    return (pigeonVar_replyValue! as Map<Object?, Object?>)
+        .cast<String?, Object?>();
   }
 
   /// Revokes the current token.
   Future<void> revoke(String webClientId) async {
-    final pigeonVar_channelName = 'dev.flutter.pigeon.ping_oidc.PingOidcHostApi.revoke$pigeonVar_messageChannelSuffix';
+    final pigeonVar_channelName =
+        'dev.flutter.pigeon.ping_oidc.PingOidcHostApi.revoke$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[webClientId]);
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[webClientId],
+    );
     final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
 
     _extractReplyValueOrThrow(
-        pigeonVar_replyList,
-        pigeonVar_channelName,
-        isNullValid: true,
-    )
-    ;
+      pigeonVar_replyList,
+      pigeonVar_channelName,
+      isNullValid: true,
+    );
   }
 
   /// Signs the user out.
   Future<bool> signOff(String webClientId) async {
-    final pigeonVar_channelName = 'dev.flutter.pigeon.ping_oidc.PingOidcHostApi.signOff$pigeonVar_messageChannelSuffix';
+    final pigeonVar_channelName =
+        'dev.flutter.pigeon.ping_oidc.PingOidcHostApi.signOff$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[webClientId]);
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[webClientId],
+    );
     final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
 
     final Object? pigeonVar_replyValue = _extractReplyValueOrThrow(
-        pigeonVar_replyList,
-        pigeonVar_channelName,
-        isNullValid: false,
-    )
-    ;
+      pigeonVar_replyList,
+      pigeonVar_channelName,
+      isNullValid: false,
+    );
     return pigeonVar_replyValue! as bool;
   }
 
   /// Releases the native resources backing [handleId] (either a client or web-client handle).
   Future<void> dispose(String handleId) async {
-    final pigeonVar_channelName = 'dev.flutter.pigeon.ping_oidc.PingOidcHostApi.dispose$pigeonVar_messageChannelSuffix';
+    final pigeonVar_channelName =
+        'dev.flutter.pigeon.ping_oidc.PingOidcHostApi.dispose$pigeonVar_messageChannelSuffix';
     final pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[handleId]);
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[handleId],
+    );
     final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
 
     _extractReplyValueOrThrow(
-        pigeonVar_replyList,
-        pigeonVar_channelName,
-        isNullValid: true,
-    )
-    ;
+      pigeonVar_replyList,
+      pigeonVar_channelName,
+      isNullValid: true,
+    );
   }
 }

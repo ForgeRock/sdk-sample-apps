@@ -110,6 +110,15 @@ enum NodeType {
   failureNode,
 }
 
+/// SDK HTTP/diagnostic logging verbosity. Defaults to [none] (matching the native Android SDK's
+/// own default) if [JourneyConfigMessage.logLevel] is unset — [standard] is a development aid
+/// that routes every SDK request/response through platform logs and should not ship as a
+/// production default, since it can surface session cookie/auth material there.
+enum JourneyLogLevel {
+  none,
+  standard,
+}
+
 /// Flat, wire-serializable Journey configuration. OIDC fields are hoisted to
 /// the top level rather than nested, since Pigeon classes can't express an
 /// "OIDC configured only if any OIDC field is present" union cleanly.
@@ -119,6 +128,7 @@ class JourneyConfigMessage {
     this.realm,
     this.cookie,
     this.timeoutMillis,
+    this.logLevel,
     this.clientId,
     this.discoveryEndpoint,
     this.redirectUri,
@@ -133,6 +143,7 @@ class JourneyConfigMessage {
     this.display,
     this.prompt,
     this.additionalParameters,
+    this.oidcClientId,
   });
 
   String serverUrl;
@@ -143,6 +154,10 @@ class JourneyConfigMessage {
 
   /// Milliseconds.
   int? timeoutMillis;
+
+  /// Defaults to [JourneyLogLevel.none] when unset. See [JourneyLogLevel] for what [standard]
+  /// exposes and why it isn't the default.
+  JourneyLogLevel? logLevel;
 
   String? clientId;
 
@@ -173,12 +188,18 @@ class JourneyConfigMessage {
 
   Map<String?, String?>? additionalParameters;
 
+  /// Id of a native OIDC client already registered in `ping_core`'s shared
+  /// `CoreRuntime.oidcClientRegistry` (e.g. via `ping_oidc`'s `OidcClient.configure`).
+  /// Mutually exclusive with the flat OIDC fields above — set this OR them, never both.
+  String? oidcClientId;
+
   List<Object?> _toList() {
     return <Object?>[
       serverUrl,
       realm,
       cookie,
       timeoutMillis,
+      logLevel,
       clientId,
       discoveryEndpoint,
       redirectUri,
@@ -193,6 +214,7 @@ class JourneyConfigMessage {
       display,
       prompt,
       additionalParameters,
+      oidcClientId,
     ];
   }
 
@@ -206,20 +228,22 @@ class JourneyConfigMessage {
       realm: result[1] as String?,
       cookie: result[2] as String?,
       timeoutMillis: result[3] as int?,
-      clientId: result[4] as String?,
-      discoveryEndpoint: result[5] as String?,
-      redirectUri: result[6] as String?,
-      scopes: (result[7] as List<Object?>?)?.cast<String?>(),
-      acrValues: result[8] as String?,
-      signOutRedirectUri: result[9] as String?,
-      state: result[10] as String?,
-      nonce: result[11] as String?,
-      uiLocales: result[12] as String?,
-      refreshThreshold: result[13] as int?,
-      loginHint: result[14] as String?,
-      display: result[15] as String?,
-      prompt: result[16] as String?,
-      additionalParameters: (result[17] as Map<Object?, Object?>?)?.cast<String?, String?>(),
+      logLevel: result[4] as JourneyLogLevel?,
+      clientId: result[5] as String?,
+      discoveryEndpoint: result[6] as String?,
+      redirectUri: result[7] as String?,
+      scopes: (result[8] as List<Object?>?)?.cast<String?>(),
+      acrValues: result[9] as String?,
+      signOutRedirectUri: result[10] as String?,
+      state: result[11] as String?,
+      nonce: result[12] as String?,
+      uiLocales: result[13] as String?,
+      refreshThreshold: result[14] as int?,
+      loginHint: result[15] as String?,
+      display: result[16] as String?,
+      prompt: result[17] as String?,
+      additionalParameters: (result[18] as Map<Object?, Object?>?)?.cast<String?, String?>(),
+      oidcClientId: result[19] as String?,
     );
   }
 
@@ -232,7 +256,7 @@ class JourneyConfigMessage {
     if (identical(this, other)) {
       return true;
     }
-    return _deepEquals(serverUrl, other.serverUrl) && _deepEquals(realm, other.realm) && _deepEquals(cookie, other.cookie) && _deepEquals(timeoutMillis, other.timeoutMillis) && _deepEquals(clientId, other.clientId) && _deepEquals(discoveryEndpoint, other.discoveryEndpoint) && _deepEquals(redirectUri, other.redirectUri) && _deepEquals(scopes, other.scopes) && _deepEquals(acrValues, other.acrValues) && _deepEquals(signOutRedirectUri, other.signOutRedirectUri) && _deepEquals(state, other.state) && _deepEquals(nonce, other.nonce) && _deepEquals(uiLocales, other.uiLocales) && _deepEquals(refreshThreshold, other.refreshThreshold) && _deepEquals(loginHint, other.loginHint) && _deepEquals(display, other.display) && _deepEquals(prompt, other.prompt) && _deepEquals(additionalParameters, other.additionalParameters);
+    return _deepEquals(serverUrl, other.serverUrl) && _deepEquals(realm, other.realm) && _deepEquals(cookie, other.cookie) && _deepEquals(timeoutMillis, other.timeoutMillis) && _deepEquals(logLevel, other.logLevel) && _deepEquals(clientId, other.clientId) && _deepEquals(discoveryEndpoint, other.discoveryEndpoint) && _deepEquals(redirectUri, other.redirectUri) && _deepEquals(scopes, other.scopes) && _deepEquals(acrValues, other.acrValues) && _deepEquals(signOutRedirectUri, other.signOutRedirectUri) && _deepEquals(state, other.state) && _deepEquals(nonce, other.nonce) && _deepEquals(uiLocales, other.uiLocales) && _deepEquals(refreshThreshold, other.refreshThreshold) && _deepEquals(loginHint, other.loginHint) && _deepEquals(display, other.display) && _deepEquals(prompt, other.prompt) && _deepEquals(additionalParameters, other.additionalParameters) && _deepEquals(oidcClientId, other.oidcClientId);
   }
 
   @override
@@ -241,7 +265,7 @@ class JourneyConfigMessage {
 
   @override
   String toString() {
-    return 'JourneyConfigMessage(serverUrl: $serverUrl, realm: $realm, cookie: $cookie, timeoutMillis: $timeoutMillis, clientId: $clientId, discoveryEndpoint: $discoveryEndpoint, redirectUri: $redirectUri, scopes: $scopes, acrValues: $acrValues, signOutRedirectUri: $signOutRedirectUri, state: $state, nonce: $nonce, uiLocales: $uiLocales, refreshThreshold: $refreshThreshold, loginHint: $loginHint, display: $display, prompt: $prompt, additionalParameters: $additionalParameters)';
+    return 'JourneyConfigMessage(serverUrl: $serverUrl, realm: $realm, cookie: $cookie, timeoutMillis: $timeoutMillis, logLevel: $logLevel, clientId: $clientId, discoveryEndpoint: $discoveryEndpoint, redirectUri: $redirectUri, scopes: $scopes, acrValues: $acrValues, signOutRedirectUri: $signOutRedirectUri, state: $state, nonce: $nonce, uiLocales: $uiLocales, refreshThreshold: $refreshThreshold, loginHint: $loginHint, display: $display, prompt: $prompt, additionalParameters: $additionalParameters, oidcClientId: $oidcClientId)';
   }
 }
 
@@ -544,6 +568,7 @@ class NodeMessage {
     this.stage,
     this.callbacks,
     this.input,
+    this.sessionToken,
   });
 
   NodeType type;
@@ -566,6 +591,11 @@ class NodeMessage {
 
   Map<String?, Object?>? input;
 
+  /// The AM session token (`tokenId`) carried on `SuccessNode.session.value`,
+  /// present even when the Journey has no OIDC configuration. Empty native
+  /// sessions (`EmptySession`) are mapped to null.
+  String? sessionToken;
+
   List<Object?> _toList() {
     return <Object?>[
       type,
@@ -577,6 +607,7 @@ class NodeMessage {
       stage,
       callbacks,
       input,
+      sessionToken,
     ];
   }
 
@@ -595,6 +626,7 @@ class NodeMessage {
       stage: result[6] as String?,
       callbacks: (result[7] as List<Object?>?)?.cast<CallbackMessage?>(),
       input: (result[8] as Map<Object?, Object?>?)?.cast<String?, Object?>(),
+      sessionToken: result[9] as String?,
     );
   }
 
@@ -607,7 +639,7 @@ class NodeMessage {
     if (identical(this, other)) {
       return true;
     }
-    return _deepEquals(type, other.type) && _deepEquals(message, other.message) && _deepEquals(cause, other.cause) && _deepEquals(status, other.status) && _deepEquals(header, other.header) && _deepEquals(pageDescription, other.pageDescription) && _deepEquals(stage, other.stage) && _deepEquals(callbacks, other.callbacks) && _deepEquals(input, other.input);
+    return _deepEquals(type, other.type) && _deepEquals(message, other.message) && _deepEquals(cause, other.cause) && _deepEquals(status, other.status) && _deepEquals(header, other.header) && _deepEquals(pageDescription, other.pageDescription) && _deepEquals(stage, other.stage) && _deepEquals(callbacks, other.callbacks) && _deepEquals(input, other.input) && _deepEquals(sessionToken, other.sessionToken);
   }
 
   @override
@@ -616,7 +648,7 @@ class NodeMessage {
 
   @override
   String toString() {
-    return 'NodeMessage(type: $type, message: $message, cause: $cause, status: $status, header: $header, pageDescription: $pageDescription, stage: $stage, callbacks: $callbacks, input: $input)';
+    return 'NodeMessage(type: $type, message: $message, cause: $cause, status: $status, header: $header, pageDescription: $pageDescription, stage: $stage, callbacks: $callbacks, input: $input, sessionToken: $sessionToken)';
   }
 }
 
@@ -624,6 +656,9 @@ class SessionMessage {
   SessionMessage({
     required this.accessToken,
     this.refreshToken,
+    this.idToken,
+    this.tokenType,
+    this.scope,
     required this.expiresIn,
     this.userInfo,
   });
@@ -631,6 +666,16 @@ class SessionMessage {
   String accessToken;
 
   String? refreshToken;
+
+  /// The OIDC ID token, when the server returned one (not present in every
+  /// token response).
+  String? idToken;
+
+  /// The OAuth token type (e.g. `Bearer`), when the server returned one.
+  String? tokenType;
+
+  /// The granted scope string, when the server returned one.
+  String? scope;
 
   int expiresIn;
 
@@ -640,6 +685,9 @@ class SessionMessage {
     return <Object?>[
       accessToken,
       refreshToken,
+      idToken,
+      tokenType,
+      scope,
       expiresIn,
       userInfo,
     ];
@@ -653,8 +701,11 @@ class SessionMessage {
     return SessionMessage(
       accessToken: result[0]! as String,
       refreshToken: result[1] as String?,
-      expiresIn: result[2]! as int,
-      userInfo: (result[3] as Map<Object?, Object?>?)?.cast<String?, Object?>(),
+      idToken: result[2] as String?,
+      tokenType: result[3] as String?,
+      scope: result[4] as String?,
+      expiresIn: result[5]! as int,
+      userInfo: (result[6] as Map<Object?, Object?>?)?.cast<String?, Object?>(),
     );
   }
 
@@ -667,7 +718,7 @@ class SessionMessage {
     if (identical(this, other)) {
       return true;
     }
-    return _deepEquals(accessToken, other.accessToken) && _deepEquals(refreshToken, other.refreshToken) && _deepEquals(expiresIn, other.expiresIn) && _deepEquals(userInfo, other.userInfo);
+    return _deepEquals(accessToken, other.accessToken) && _deepEquals(refreshToken, other.refreshToken) && _deepEquals(idToken, other.idToken) && _deepEquals(tokenType, other.tokenType) && _deepEquals(scope, other.scope) && _deepEquals(expiresIn, other.expiresIn) && _deepEquals(userInfo, other.userInfo);
   }
 
   @override
@@ -676,7 +727,7 @@ class SessionMessage {
 
   @override
   String toString() {
-    return 'SessionMessage(accessToken: $accessToken, refreshToken: $refreshToken, expiresIn: $expiresIn, userInfo: $userInfo)';
+    return 'SessionMessage(accessToken: $accessToken, refreshToken: $refreshToken, idToken: $idToken, tokenType: $tokenType, scope: $scope, expiresIn: $expiresIn, userInfo: $userInfo)';
   }
 }
 
@@ -691,23 +742,26 @@ class _PigeonCodec extends StandardMessageCodec {
     }    else if (value is NodeType) {
       buffer.putUint8(129);
       writeValue(buffer, value.index);
-    }    else if (value is JourneyConfigMessage) {
+    }    else if (value is JourneyLogLevel) {
       buffer.putUint8(130);
-      writeValue(buffer, value.encode());
-    }    else if (value is StartOptionsMessage) {
+      writeValue(buffer, value.index);
+    }    else if (value is JourneyConfigMessage) {
       buffer.putUint8(131);
       writeValue(buffer, value.encode());
-    }    else if (value is CallbackMessage) {
+    }    else if (value is StartOptionsMessage) {
       buffer.putUint8(132);
       writeValue(buffer, value.encode());
-    }    else if (value is CallbackValueMessage) {
+    }    else if (value is CallbackMessage) {
       buffer.putUint8(133);
       writeValue(buffer, value.encode());
-    }    else if (value is NodeMessage) {
+    }    else if (value is CallbackValueMessage) {
       buffer.putUint8(134);
       writeValue(buffer, value.encode());
-    }    else if (value is SessionMessage) {
+    }    else if (value is NodeMessage) {
       buffer.putUint8(135);
+      writeValue(buffer, value.encode());
+    }    else if (value is SessionMessage) {
+      buffer.putUint8(136);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -721,16 +775,19 @@ class _PigeonCodec extends StandardMessageCodec {
         final value = readValue(buffer) as int?;
         return value == null ? null : NodeType.values[value];
       case 130:
-        return JourneyConfigMessage.decode(readValue(buffer)!);
+        final value = readValue(buffer) as int?;
+        return value == null ? null : JourneyLogLevel.values[value];
       case 131:
-        return StartOptionsMessage.decode(readValue(buffer)!);
+        return JourneyConfigMessage.decode(readValue(buffer)!);
       case 132:
-        return CallbackMessage.decode(readValue(buffer)!);
+        return StartOptionsMessage.decode(readValue(buffer)!);
       case 133:
-        return CallbackValueMessage.decode(readValue(buffer)!);
+        return CallbackMessage.decode(readValue(buffer)!);
       case 134:
-        return NodeMessage.decode(readValue(buffer)!);
+        return CallbackValueMessage.decode(readValue(buffer)!);
       case 135:
+        return NodeMessage.decode(readValue(buffer)!);
+      case 136:
         return SessionMessage.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -825,6 +882,72 @@ class PingJourneyHostApi {
     )
     ;
     return pigeonVar_replyValue as SessionMessage?;
+  }
+
+  /// Refreshes the OIDC token for a completed Journey, returning the new token
+  /// set (userInfo is null on this message — fetch claims via getUserInfo).
+  /// Throws a typed error when the Journey has no OIDC configuration or no
+  /// user session.
+  Future<SessionMessage> refreshToken(String journeyId) async {
+    final pigeonVar_channelName = 'dev.flutter.pigeon.ping_journey.PingJourneyHostApi.refreshToken$pigeonVar_messageChannelSuffix';
+    final pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[journeyId]);
+    final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
+
+    final Object? pigeonVar_replyValue = _extractReplyValueOrThrow(
+        pigeonVar_replyList,
+        pigeonVar_channelName,
+        isNullValid: false,
+    )
+    ;
+    return pigeonVar_replyValue! as SessionMessage;
+  }
+
+  /// Revokes the OIDC token for a completed Journey. Native swallows server-side
+  /// revocation errors (matching the native SDKs), so completion is not proof
+  /// of invalidation. Throws a typed error when no OIDC/user session exists.
+  Future<void> revokeToken(String journeyId) async {
+    final pigeonVar_channelName = 'dev.flutter.pigeon.ping_journey.PingJourneyHostApi.revokeToken$pigeonVar_messageChannelSuffix';
+    final pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[journeyId]);
+    final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
+
+    _extractReplyValueOrThrow(
+        pigeonVar_replyList,
+        pigeonVar_channelName,
+        isNullValid: true,
+    )
+    ;
+  }
+
+  /// Fetches the OIDC userinfo claims for a completed Journey. [cache] is
+  /// always passed explicitly — the native SDKs' own defaults differ.
+  /// Throws a typed error when no OIDC/user session exists.
+  Future<Map<String?, Object?>> getUserInfo(String journeyId, bool cache) async {
+    final pigeonVar_channelName = 'dev.flutter.pigeon.ping_journey.PingJourneyHostApi.getUserInfo$pigeonVar_messageChannelSuffix';
+    final pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[journeyId, cache]);
+    final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
+
+    final Object? pigeonVar_replyValue = _extractReplyValueOrThrow(
+        pigeonVar_replyList,
+        pigeonVar_channelName,
+        isNullValid: false,
+    )
+    ;
+    return (pigeonVar_replyValue! as Map<Object?, Object?>).cast<String?, Object?>();
   }
 
   Future<bool> signOff(String journeyId) async {

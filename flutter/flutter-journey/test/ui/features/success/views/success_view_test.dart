@@ -94,7 +94,14 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('Unable to load session'), findsOneWidget);
+    // The banner shows PingException.toString() (code/type/message), not the bare message —
+    // see SuccessViewModel's rationale comment for why.
+    expect(
+      find.text(
+        'PingException(code: JOURNEY_USER_ERROR, type: state, message: Unable to load session)',
+      ),
+      findsOneWidget,
+    );
     expect(find.widgetWithText(ElevatedButton, 'Sign Off'), findsOneWidget);
 
     await tester.tap(find.widgetWithText(ElevatedButton, 'Sign Off'));

@@ -7,5 +7,8 @@ environment:
 workspace:
   - flutter-sdk-bridge/ping_core
   - flutter-sdk-bridge/ping_journey
+  - flutter-sdk-bridge/ping_journey/example
   - flutter-sdk-bridge/ping_oidc
+  - flutter-sdk-bridge/ping_oidc/example
   - flutter-journey
+  - flutter-oidc

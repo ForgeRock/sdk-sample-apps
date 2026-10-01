@@ -47,31 +47,47 @@ To try out the Journey Flutter sample, perform these steps:
    - `serverUrl`, `realm`, `cookie` — your tenant's Journey server configuration.
    - `oidcConfig` — your OAuth 2.0 client's `clientId`/`discoveryEndpoint`/`scopes`/`redirectUri`,
      or leave `null` to skip the post-login token exchange (Journey-only, session login).
-5. If you set `oidcConfig`, register `redirectUri`'s custom scheme with both native hosts:
+5. If you set `oidcConfig`, register `redirectUri`'s custom scheme with the Android host:
    - Android: add an `intent-filter` for the scheme in `android/app/src/main/AndroidManifest.xml`.
-   - iOS (SPM): add a `CFBundleURLTypes` entry for the scheme in `ios/Runner/Info.plist`.
+   - iOS: no `Info.plist` change is required — `ASWebAuthenticationSession`'s callback scheme is
+     set programmatically from `redirectUri`, so there is no `CFBundleURLTypes` entry to add.
 6. Run the app: `flutter run` from this directory (`flutter-journey/`), or open
    `ios/Runner.xcworkspace` in Xcode / the Android project in Android Studio.
 
 ## Testing
 
-Unit and widget tests run with `flutter test` from this directory (or `flutter/` root). The
-integration tests under `integration_test/` drive real Journeys against the configured tenant —
-run each file standalone against a booted simulator/emulator or device (not combined in one
-`flutter test` invocation — the native SDK persists the AM session cookie on-device across
-`Journey` instances within one app install, so running both back-to-back in one process changes
-each Journey's first-node response):
+This sample carries two layers of test coverage, rather than choosing one over the other:
 
-```
-flutter test integration_test/journey_login_test.dart \
-  --dart-define=E2E_USERNAME=<username> --dart-define=E2E_PASSWORD=<password>
-flutter test integration_test/journey_registration_test.dart
-```
+- **This app's own widget/unit tests** — `flutter test` from this directory (or `flutter/` root)
+  covers callback-view rendering (`test/ui/features/journey/views/widgets/callbacks/`),
+  journey/success/config view behavior, and error-banner rendering. These exercise UI this app
+  owns, which a bridge-level test host has no widget tree to render.
+- **This app's own integration tests** — `integration_test/` drives real Journeys against the
+  configured tenant end-to-end, including the full self-registration flow
+  (`journey_registration_test.dart`). Run each file standalone against a booted
+  simulator/emulator or device (not combined in one `flutter test` invocation — the native SDK
+  persists the AM session cookie on-device across `Journey` instances within one app install, so
+  running both back-to-back in one process changes each Journey's first-node response):
 
-`journey_login_test.dart`'s credentialed assertions (login, Success screen, sign-off) only run
-when `E2E_USERNAME`/`E2E_PASSWORD` are supplied, since no test credentials are committed to this
-public sample repo. `journey_registration_test.dart` needs no credentials — it signs up a fresh,
-uniquely-suffixed user each run.
+  ```
+  flutter test integration_test/journey_login_test.dart \
+    --dart-define=E2E_USERNAME=<username> --dart-define=E2E_PASSWORD=<password>
+  flutter test integration_test/journey_registration_test.dart
+  ```
+
+  `journey_login_test.dart`'s credentialed assertions (login, Success screen, sign-off) only run
+  when `E2E_USERNAME`/`E2E_PASSWORD` are supplied, since no test credentials are committed to this
+  public sample repo. `journey_registration_test.dart` needs no credentials — it signs up a fresh,
+  uniquely-suffixed user each run.
+
+- **Bridge-level coverage**, additionally, lives in the bridge package: **unit tests** in
+  `../flutter-sdk-bridge/ping_journey/test/` (node/callback mapping, session parsing, client error
+  translation), and **integration tests** in
+  `../flutter-sdk-bridge/ping_journey/example/integration_test/`, which drive the real
+  `JourneyClient` API against either a hermetic mock server or a live tenant with no UI in the
+  loop — including OIDC session/token operations this app's own tests don't cover in isolation.
+  See [that package's README](../flutter-sdk-bridge/ping_journey/example/README.md) for how to run
+  them.
 
 ## Native SDK version
 

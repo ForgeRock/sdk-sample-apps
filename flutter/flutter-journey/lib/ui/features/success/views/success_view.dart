@@ -15,8 +15,10 @@ import 'package:flutter_journey/ui/core/widgets/error_banner.dart';
 import 'package:flutter_journey/ui/core/widgets/primary_button.dart';
 import 'package:flutter_journey/ui/features/success/view_models/success_view_model.dart';
 
-/// Displays the access/refresh tokens and userinfo after a successful Journey, and provides a
-/// Sign-off button. Port of the native samples' success/token screens.
+/// Displays the AM session token after a successful Journey (even without OIDC),
+/// the full OIDC token metadata and userinfo when configured, and — when OIDC
+/// is configured — the same Refresh / Userinfo / Revoke / Sign Off button set
+/// as the `flutter-oidc` sample. Port of the native samples' success/token screens.
 class SuccessView extends StatefulWidget {
   const SuccessView({super.key, required this.onSignOff});
 
@@ -43,7 +45,7 @@ class _SuccessViewState extends State<SuccessView> {
         listenable: context.read<SuccessViewModel>(),
         builder: (context, _) {
           final vm = context.read<SuccessViewModel>();
-          if (vm.loading) {
+          if (vm.loading && vm.session == null && vm.sessionToken == null) {
             return Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -60,23 +62,8 @@ class _SuccessViewState extends State<SuccessView> {
               ),
             );
           }
-          if (vm.error != null) {
-            return Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  ErrorBanner(message: vm.error!),
-                  const SizedBox(height: 16),
-                  PrimaryButton(
-                    label: 'Sign Off',
-                    onPressed: widget.onSignOff,
-                  ),
-                ],
-              ),
-            );
-          }
           final session = vm.session;
+          final userInfo = vm.userInfo ?? session?.userInfo ?? const {};
           return SingleChildScrollView(
             padding: const EdgeInsets.all(16),
             child: Column(
@@ -87,39 +74,76 @@ class _SuccessViewState extends State<SuccessView> {
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 const SizedBox(height: 16),
+                // Inline error banner (not a full-body swap) so a failed
+                // Refresh/Userinfo doesn't blank the data already on screen.
+                if (vm.error != null) ...[
+                  ErrorBanner(message: vm.error!),
+                  const SizedBox(height: 16),
+                ],
+                if (vm.sessionToken != null)
+                  _TokenSection(
+                    label: 'Session Token',
+                    value: vm.sessionToken!,
+                  ),
                 if (session != null) ...[
                   _TokenSection(
                     label: 'Access Token',
                     value: session.accessToken,
                   ),
+                  if (session.idToken != null)
+                    _TokenSection(label: 'ID Token', value: session.idToken!),
                   if (session.refreshToken != null)
                     _TokenSection(
                       label: 'Refresh Token',
                       value: session.refreshToken!,
                     ),
                   _TokenSection(
+                    label: 'Token Type',
+                    value: session.tokenType ?? '(none)',
+                  ),
+                  _TokenSection(
+                    label: 'Scope',
+                    value: session.scope ?? '(none)',
+                  ),
+                  _TokenSection(
                     label: 'Expires In',
                     value: '${session.expiresIn}s',
                   ),
-                  if (session.userInfo.isNotEmpty) ...[
+                  if (userInfo.isNotEmpty) ...[
                     const SizedBox(height: 8),
-                    Text(
-                      'User Info',
-                      style: AppTheme.sectionHeader(context),
-                    ),
+                    Text('User Info', style: AppTheme.sectionHeader(context)),
                     const SizedBox(height: 8),
                     AppCard(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          for (final entry in session.userInfo.entries)
+                          for (final entry in userInfo.entries)
                             _InfoRow(key_: entry.key, value: entry.value),
                         ],
                       ),
                     ),
                   ],
+                  const SizedBox(height: 24),
+                  // The OIDC token buttons, same set as flutter-oidc's success screen.
+                  PrimaryButton(
+                    label: 'Refresh',
+                    onPressed: vm.refresh,
+                    loading: vm.loading,
+                  ),
+                  const SizedBox(height: 12),
+                  PrimaryButton(
+                    label: 'Userinfo',
+                    onPressed: vm.loadUserInfo,
+                    loading: vm.loading,
+                  ),
+                  const SizedBox(height: 12),
+                  PrimaryButton(
+                    label: 'Revoke',
+                    onPressed: vm.revoke,
+                    loading: vm.loading,
+                  ),
                 ],
-                const SizedBox(height: 24),
+                const SizedBox(height: 12),
                 PrimaryButton(label: 'Sign Off', onPressed: widget.onSignOff),
               ],
             ),

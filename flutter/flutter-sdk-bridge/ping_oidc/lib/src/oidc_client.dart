@@ -27,6 +27,13 @@ class OidcClient {
   final String _webHandleId;
   final PingOidcHostApi _hostApi;
 
+  /// The id of this client's entry in `ping_core`'s shared `CoreRuntime.oidcClientRegistry`.
+  ///
+  /// Lets other Ping Flutter modules (e.g. `ping_journey`'s `JourneyConfigMessage.oidcClientId`)
+  /// reference this client by id with no compile-time dependency on `ping_oidc`. Most apps should
+  /// use the higher-level methods on this class instead of reading this directly.
+  String get handleId => _handleId;
+
   /// Builds the native `OidcClient` for [config], a browser-capable web client from it, and
   /// returns an [OidcClient] bound to both.
   static Future<OidcClient> configure(
@@ -35,9 +42,7 @@ class OidcClient {
     PingOidcHostApi? hostApi,
   }) async {
     final api = hostApi ?? PingOidcHostApi();
-    final handleId = await _guard(
-      () => api.configureOidc(_toMessage(config)),
-    );
+    final handleId = await _guard(() => api.configureOidc(_toMessage(config)));
     final String webHandleId;
     try {
       webHandleId = await _guard(
@@ -77,10 +82,10 @@ class OidcClient {
       );
     }
     return OidcConfigMessage(
-      clientId: config.clientId,
-      redirectUri: redirectUri,
-      par: config.par,
-    )
+        clientId: config.clientId,
+        redirectUri: redirectUri,
+        par: config.par,
+      )
       ..discoveryEndpoint = config.discoveryEndpoint
       ..openId = _toOpenIdMessage(config.openId)
       ..scopes = config.scopes
@@ -101,10 +106,10 @@ class OidcClient {
   static OidcOpenIdConfigMessage? _toOpenIdMessage(OidcOpenIdConfig? openId) {
     if (openId == null) return null;
     return OidcOpenIdConfigMessage(
-      authorizationEndpoint: openId.authorizationEndpoint,
-      tokenEndpoint: openId.tokenEndpoint,
-      userinfoEndpoint: openId.userinfoEndpoint,
-    )
+        authorizationEndpoint: openId.authorizationEndpoint,
+        tokenEndpoint: openId.tokenEndpoint,
+        userinfoEndpoint: openId.userinfoEndpoint,
+      )
       ..endSessionEndpoint = openId.endSessionEndpoint
       ..pingEndIdpSessionEndpoint = openId.pingEndIdpSessionEndpoint
       ..revocationEndpoint = openId.revocationEndpoint;
@@ -142,9 +147,8 @@ class OidcClient {
   /// Fetches the userinfo claims for the signed-in user.
   ///
   /// [cache] defaults to `false`: this matches Android's own native default, and a forced fresh
-  /// fetch is a safer default failure mode than silently serving a stale cached claim set. Per
-  /// the platform-asymmetry note in `IMPLEMENTATION_PLAN_OIDC.md`, the bridge always passes
-  /// [cache] to native explicitly regardless of this Dart-level default.
+  /// fetch is a safer default failure mode than silently serving a stale cached claim set. The 
+  /// bridge always passes [cache] to native explicitly regardless of this Dart-level default.
   Future<OidcUserInfo> userInfo({bool cache = false}) async {
     final result = await _guard(() => _hostApi.userInfo(_webHandleId, cache));
     return result.cast<String, Object?>();
@@ -155,9 +159,7 @@ class OidcClient {
   Future<void> revoke() => _guard(() => _hostApi.revoke(_webHandleId));
 
   /// Signs the user out. Returns `true` unless resolving the session itself failed — this is
-  /// **not** proof a session existed before the call. See the Phase 4 "Known SDK gap" note in
-  /// `IMPLEMENTATION_PLAN_OIDC.md` for why `signOff`'s boolean isn't sourced from the native
-  /// SDKs' own `endSession()` semantics.
+  /// **not** proof a session existed before the call.
   Future<bool> signOff() => _guard(() => _hostApi.signOff(_webHandleId));
 
   /// Releases the native `OidcClient` and `OidcWebClient` resources backing this client.
@@ -165,10 +167,12 @@ class OidcClient {
   /// Both native `dispose` calls always run, even if one throws — otherwise a failure disposing
   /// [_handleId] would skip disposing [_webHandleId] and leak it in the native registry.
   Future<void> dispose() async {
-    final results = await Future.wait<Object?>([
-      _guard(() => _hostApi.dispose(_handleId)).then<Object?>((_) => null),
-      _guard(() => _hostApi.dispose(_webHandleId)).then<Object?>((_) => null),
-    ].map((future) => future.catchError((Object error) => error)));
+    final results = await Future.wait<Object?>(
+      [
+        _guard(() => _hostApi.dispose(_handleId)).then<Object?>((_) => null),
+        _guard(() => _hostApi.dispose(_webHandleId)).then<Object?>((_) => null),
+      ].map((future) => future.catchError((Object error) => error)),
+    );
 
     final error = results.firstWhere(
       (result) => result != null,

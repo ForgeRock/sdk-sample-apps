@@ -42,8 +42,12 @@ final class ContinueNode extends JourneyNode {
 
 /// The Journey completed successfully; call `JourneyClient.user()` for tokens/userinfo.
 final class SuccessNode extends JourneyNode {
-  /// Creates a success node.
-  const SuccessNode();
+  /// Creates a success node from its wire-message fields.
+  const SuccessNode({this.sessionToken});
+
+  /// The AM session token (`tokenId`) established by the Journey, when one
+  /// was — present even when the Journey has no OIDC configuration.
+  final String? sessionToken;
 }
 
 /// A recoverable error was reported by the server (e.g. invalid credentials).

@@ -20,7 +20,9 @@ Depends on `ping_core` (for the shared `CoreRuntime` registry) at both the Dart 
 
 The Pigeon schema is the source of truth for everything crossing the channel — it's a flat, serializable, `@async` HostApi (Pigeon binds one channel at plugin registration).
 
-- `JourneyConfigMessage` — server URL, realm, cookie name, timeout, OIDC fields (client id, discovery endpoint, redirect URI, scopes).
+- `JourneyConfigMessage` — server URL, realm, cookie name, timeout, and OIDC configuration via one of two mutually exclusive paths:
+  - **Inline fields** — client id, discovery endpoint, redirect URI, scopes, etc., repeated directly on the message. Works standalone, with no dependency on `ping_oidc`.
+  - **`oidcClientId`** — the id of an OIDC client already configured via `ping_oidc`'s `OidcClient.configure` (read via `OidcClient.handleId`), registered in `ping_core`'s shared `CoreRuntime.oidcClientRegistry`. Use this when an app already configures OIDC once via `ping_oidc` and wants Journey to reuse the same client rather than repeating every field. Setting both this and any inline field throws `ArgumentError` before the native call.
 - `StartOptionsMessage` — `forceAuth`, `noSession`.
 - `CallbackMessage` — a flat union of every v1 callback's fields (`type`, `index`, `prompt`, `value`, `choices`, `terms`, ...) plus a `raw` escape hatch for anything not modeled explicitly.
 - `CallbackValueMessage` — the Dart→native direction: `{ type, index, value }`, addressing the specific callback a value belongs to.

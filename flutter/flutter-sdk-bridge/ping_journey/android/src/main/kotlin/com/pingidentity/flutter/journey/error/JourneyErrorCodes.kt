@@ -13,6 +13,9 @@ internal object JourneyErrorCodes {
     const val START = "JOURNEY_START_ERROR"
     const val NEXT = "JOURNEY_NEXT_ERROR"
     const val GET_SESSION = "JOURNEY_GET_SESSION_ERROR"
+    const val REFRESH = "JOURNEY_REFRESH_ERROR"
+    const val REVOKE = "JOURNEY_REVOKE_ERROR"
+    const val USERINFO = "JOURNEY_USERINFO_ERROR"
     const val SIGN_OFF = "JOURNEY_SIGN_OFF_ERROR"
     const val DISPOSE = "JOURNEY_DISPOSE_ERROR"
 }

@@ -105,10 +105,7 @@ class _FakeHostApi extends PingOidcHostApi {
   }
 
   @override
-  Future<Map<String?, Object?>> userInfo(
-    String webClientId,
-    bool cache,
-  ) async {
+  Future<Map<String?, Object?>> userInfo(String webClientId, bool cache) async {
     if (userInfoErrorToThrow != null) throw userInfoErrorToThrow!;
     lastUserInfoWebClientId = webClientId;
     lastUserInfoCache = cache;
@@ -153,18 +150,29 @@ void main() {
   );
 
   group('OidcClient.configure', () {
-    test('forwards the config and builds a web client from the returned handleId', () async {
+    test(
+      'forwards the config and builds a web client from the returned handleId',
+      () async {
+        hostApi.configureOidcHandleId = 'oidc-client-42';
+
+        await OidcClient.configure(config(), hostApi: hostApi);
+
+        expect(hostApi.lastConfig?.clientId, 'client-1');
+        expect(hostApi.lastConfig?.redirectUri, 'https://example.com/callback');
+        expect(
+          hostApi.lastConfig?.discoveryEndpoint,
+          'https://example.com/.well-known/openid-configuration',
+        );
+        expect(hostApi.lastCreateWebClientClientId, 'oidc-client-42');
+      },
+    );
+
+    test('handleId returns the id configureOidc resolved to', () async {
       hostApi.configureOidcHandleId = 'oidc-client-42';
 
-      await OidcClient.configure(config(), hostApi: hostApi);
+      final client = await OidcClient.configure(config(), hostApi: hostApi);
 
-      expect(hostApi.lastConfig?.clientId, 'client-1');
-      expect(hostApi.lastConfig?.redirectUri, 'https://example.com/callback');
-      expect(
-        hostApi.lastConfig?.discoveryEndpoint,
-        'https://example.com/.well-known/openid-configuration',
-      );
-      expect(hostApi.lastCreateWebClientClientId, 'oidc-client-42');
+      expect(client.handleId, 'oidc-client-42');
     });
 
     test('forwards browserOptions to createWebClient', () async {
@@ -182,7 +190,8 @@ void main() {
     test('throws ArgumentError when redirectUri is null', () async {
       const noRedirectUri = OidcConfig(
         clientId: 'client-1',
-        discoveryEndpoint: 'https://example.com/.well-known/openid-configuration',
+        discoveryEndpoint:
+            'https://example.com/.well-known/openid-configuration',
       );
 
       expect(
@@ -249,16 +258,19 @@ void main() {
       expect(hostApi.lastAuthorizeWebClientId, 'oidc-web-client-1');
     });
 
-    test('resolves AuthorizeCancel for a cancel result, not an error', () async {
-      hostApi.authorizeResult = AuthorizeResultMessage(
-        type: AuthorizeResultType.cancel,
-      );
-      final client = await OidcClient.configure(config(), hostApi: hostApi);
+    test(
+      'resolves AuthorizeCancel for a cancel result, not an error',
+      () async {
+        hostApi.authorizeResult = AuthorizeResultMessage(
+          type: AuthorizeResultType.cancel,
+        );
+        final client = await OidcClient.configure(config(), hostApi: hostApi);
 
-      final result = await client.authorize();
+        final result = await client.authorize();
 
-      expect(result, isA<AuthorizeCancel>());
-    });
+        expect(result, isA<AuthorizeCancel>());
+      },
+    );
 
     test('wraps a PlatformException into a PingException', () async {
       hostApi.authorizeErrorToThrow = PlatformException(
@@ -273,41 +285,47 @@ void main() {
   });
 
   group('OidcClient.hasUser', () {
-    test('forwards the bound web handleId and returns the native result', () async {
-      hostApi.createWebClientHandleId = 'oidc-web-client-7';
-      hostApi.hasUserResult = true;
-      final client = await OidcClient.configure(config(), hostApi: hostApi);
+    test(
+      'forwards the bound web handleId and returns the native result',
+      () async {
+        hostApi.createWebClientHandleId = 'oidc-web-client-7';
+        hostApi.hasUserResult = true;
+        final client = await OidcClient.configure(config(), hostApi: hostApi);
 
-      final result = await client.hasUser();
+        final result = await client.hasUser();
 
-      expect(result, isTrue);
-      expect(hostApi.lastHasUserWebClientId, 'oidc-web-client-7');
-    });
+        expect(result, isTrue);
+        expect(hostApi.lastHasUserWebClientId, 'oidc-web-client-7');
+      },
+    );
   });
 
   group('OidcClient.token', () {
-    test('forwards the bound web handleId and maps TokenMessage to OidcToken', () async {
-      hostApi.createWebClientHandleId = 'oidc-web-client-1';
-      hostApi.tokenResult = TokenMessage(
-        accessToken: 'access-1',
-        tokenType: 'Bearer',
-        scope: 'openid',
-        expiresIn: 60,
-        refreshToken: 'refresh-1',
-        idToken: 'id-1',
-      );
-      final client = await OidcClient.configure(config(), hostApi: hostApi);
+    test(
+      'forwards the bound web handleId and maps TokenMessage to OidcToken',
+      () async {
+        hostApi.createWebClientHandleId = 'oidc-web-client-1';
+        hostApi.tokenResult = TokenMessage(
+          accessToken: 'access-1',
+          tokenType: 'Bearer',
+          scope: 'openid',
+          expiresIn: 60,
+          refreshToken: 'refresh-1',
+          idToken: 'id-1',
+        );
+        final client = await OidcClient.configure(config(), hostApi: hostApi);
 
-      final token = await client.token();
+        final token = await client.token();
 
-      expect(hostApi.lastTokenWebClientId, 'oidc-web-client-1');
-      expect(token.accessToken, 'access-1');
-      expect(token.tokenType, 'Bearer');
-      expect(token.scope, 'openid');
-      expect(token.expiresIn, 60);
-      expect(token.refreshToken, 'refresh-1');
-      expect(token.idToken, 'id-1');
-    });
+        expect(hostApi.lastTokenWebClientId, 'oidc-web-client-1');
+        expect(token.accessToken, 'access-1');
+        expect(token.tokenType, 'Bearer');
+        expect(token.scope, 'openid');
+        expect(token.expiresIn, 60);
+        expect(token.refreshToken, 'refresh-1');
+        expect(token.idToken, 'id-1');
+      },
+    );
 
     test('wraps a PlatformException into a PingException', () async {
       hostApi.tokenErrorToThrow = PlatformException(
@@ -329,20 +347,23 @@ void main() {
   });
 
   group('OidcClient.refresh', () {
-    test('forwards the bound web handleId and maps TokenMessage to OidcToken', () async {
-      hostApi.createWebClientHandleId = 'oidc-web-client-2';
-      hostApi.refreshResult = TokenMessage(
-        accessToken: 'access-2',
-        expiresIn: 120,
-      );
-      final client = await OidcClient.configure(config(), hostApi: hostApi);
+    test(
+      'forwards the bound web handleId and maps TokenMessage to OidcToken',
+      () async {
+        hostApi.createWebClientHandleId = 'oidc-web-client-2';
+        hostApi.refreshResult = TokenMessage(
+          accessToken: 'access-2',
+          expiresIn: 120,
+        );
+        final client = await OidcClient.configure(config(), hostApi: hostApi);
 
-      final token = await client.refresh();
+        final token = await client.refresh();
 
-      expect(hostApi.lastRefreshWebClientId, 'oidc-web-client-2');
-      expect(token.accessToken, 'access-2');
-      expect(token.expiresIn, 120);
-    });
+        expect(hostApi.lastRefreshWebClientId, 'oidc-web-client-2');
+        expect(token.accessToken, 'access-2');
+        expect(token.expiresIn, 120);
+      },
+    );
 
     test('wraps a PlatformException into a PingException', () async {
       hostApi.refreshErrorToThrow = PlatformException(
@@ -435,16 +456,19 @@ void main() {
   });
 
   group('OidcClient.signOff', () {
-    test('forwards the bound web handleId and returns the native result', () async {
-      hostApi.createWebClientHandleId = 'oidc-web-client-5';
-      hostApi.signOffResult = true;
-      final client = await OidcClient.configure(config(), hostApi: hostApi);
+    test(
+      'forwards the bound web handleId and returns the native result',
+      () async {
+        hostApi.createWebClientHandleId = 'oidc-web-client-5';
+        hostApi.signOffResult = true;
+        final client = await OidcClient.configure(config(), hostApi: hostApi);
 
-      final result = await client.signOff();
+        final result = await client.signOff();
 
-      expect(result, isTrue);
-      expect(hostApi.lastSignOffWebClientId, 'oidc-web-client-5');
-    });
+        expect(result, isTrue);
+        expect(hostApi.lastSignOffWebClientId, 'oidc-web-client-5');
+      },
+    );
 
     test('wraps a PlatformException into a PingException', () async {
       hostApi.signOffErrorToThrow = PlatformException(
@@ -509,36 +533,44 @@ void main() {
   });
 
   group('OidcClient._guard error mapping', () {
-    test('falls back to "unknown" type when error.details is not a String', () async {
-      hostApi.configureErrorToThrow = PlatformException(
-        code: 'OIDC_CONFIGURE_ERROR',
-        message: 'bad config',
-        details: {'not': 'a string'},
-      );
+    test(
+      'falls back to "unknown" type when error.details is not a String',
+      () async {
+        hostApi.configureErrorToThrow = PlatformException(
+          code: 'OIDC_CONFIGURE_ERROR',
+          message: 'bad config',
+          details: {'not': 'a string'},
+        );
 
-      expect(
-        () => OidcClient.configure(config(), hostApi: hostApi),
-        throwsA(isA<PingException>().having((e) => e.type, 'type', 'unknown')),
-      );
-    });
-
-    test('falls back to a default message when error.message is null', () async {
-      hostApi.configureErrorToThrow = PlatformException(
-        code: 'OIDC_CONFIGURE_ERROR',
-        details: 'argument',
-      );
-
-      expect(
-        () => OidcClient.configure(config(), hostApi: hostApi),
-        throwsA(
-          isA<PingException>().having(
-            (e) => e.message,
-            'message',
-            'Unknown OIDC error',
+        expect(
+          () => OidcClient.configure(config(), hostApi: hostApi),
+          throwsA(
+            isA<PingException>().having((e) => e.type, 'type', 'unknown'),
           ),
-        ),
-      );
-    });
+        );
+      },
+    );
+
+    test(
+      'falls back to a default message when error.message is null',
+      () async {
+        hostApi.configureErrorToThrow = PlatformException(
+          code: 'OIDC_CONFIGURE_ERROR',
+          details: 'argument',
+        );
+
+        expect(
+          () => OidcClient.configure(config(), hostApi: hostApi),
+          throwsA(
+            isA<PingException>().having(
+              (e) => e.message,
+              'message',
+              'Unknown OIDC error',
+            ),
+          ),
+        );
+      },
+    );
 
     test('propagates non-PlatformException errors unchanged', () async {
       hostApi.configureErrorToThrow = StateError('boom');
@@ -627,15 +659,18 @@ void main() {
       );
     });
 
-    test('throws FormatException when refreshToken is present but not a string', () {
-      expect(
-        () => OidcToken.fromJson({
-          'accessToken': 'at',
-          'expiresIn': 60,
-          'refreshToken': 42,
-        }),
-        throwsA(isA<FormatException>()),
-      );
-    });
+    test(
+      'throws FormatException when refreshToken is present but not a string',
+      () {
+        expect(
+          () => OidcToken.fromJson({
+            'accessToken': 'at',
+            'expiresIn': 60,
+            'refreshToken': 42,
+          }),
+          throwsA(isA<FormatException>()),
+        );
+      },
+    );
   });
 }

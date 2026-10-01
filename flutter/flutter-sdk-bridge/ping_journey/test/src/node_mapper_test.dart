@@ -48,6 +48,16 @@ void main() {
         'journey-1',
       );
       expect(node, isA<SuccessNode>());
+      expect((node as SuccessNode).sessionToken, isNull);
+    });
+
+    test('maps NodeType.successNode carrying the AM session token', () {
+      final node = NodeMapper.map(
+        NodeMessage(type: NodeType.successNode, sessionToken: 'tok-123'),
+        'journey-1',
+      );
+      final successNode = node as SuccessNode;
+      expect(successNode.sessionToken, 'tok-123');
     });
 
     test(
