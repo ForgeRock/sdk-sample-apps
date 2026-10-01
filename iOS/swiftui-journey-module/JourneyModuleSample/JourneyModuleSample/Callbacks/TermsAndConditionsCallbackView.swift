@@ -2,7 +2,7 @@
 //  TermsAndConditionsCallbackView.swift
 //  JourneyModuleSample
 //
-//  Copyright (c) 2026 Ping Identity Corporation. All rights reserved.
+//  Copyright (c) 2025 - 2026 Ping Identity Corporation. All rights reserved.
 //
 //  This software may be modified and distributed under the terms
 //  of the MIT license. See the LICENSE file for details.
@@ -10,7 +10,6 @@
 
 import SwiftUI
 import PingJourney
-import Combine
 
 /**
  * A SwiftUI view for presenting and accepting terms and conditions during authentication flows.
@@ -32,26 +31,23 @@ struct TermsAndConditionsCallbackView: View {
     @State var accepted: Bool = false
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        VStack(alignment: .leading, spacing: PingTheme.Spacing.medium) {
             // Version
             if !callback.version.isEmpty {
                 Text(callback.version)
-                    .font(.headline)
-                    .foregroundColor(.primary)
+                    .pingSectionHeader()
             }
 
             // Create Date
             if !callback.createDate.isEmpty {
                 Text(callback.createDate)
-                    .font(.headline)
-                    .foregroundColor(.primary)
+                    .pingSectionHeader()
             }
 
             // Terms Text
             if !callback.terms.isEmpty {
                 Text(callback.terms)
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .pingSupportingText()
                     .multilineTextAlignment(.leading)
             }
 
@@ -62,7 +58,6 @@ struct TermsAndConditionsCallbackView: View {
                     callback.accepted = newValue
                 }
         }
-        .padding()
         .onAppear {
             accepted = callback.accepted
         }

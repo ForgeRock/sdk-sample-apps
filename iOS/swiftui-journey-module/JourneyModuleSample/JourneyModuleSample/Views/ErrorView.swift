@@ -2,82 +2,59 @@
 //  ErrorView.swift
 //  JourneyModuleSample
 //
-//  Copyright (c) 2026 Ping Identity Corporation. All rights reserved.
+//  Copyright (c) 2025 - 2026 Ping Identity Corporation. All rights reserved.
 //
 //  This software may be modified and distributed under the terms
 //  of the MIT license. See the LICENSE file for details.
 //
 
-
 import SwiftUI
 import PingOrchestrate
 import Combine
 
-/// A view for displaying error messages.
+/// A reusable error card view with a title and message in the semantic error color.
 struct ErrorView: View {
+    let title: String
     let message: String
+
     var body: some View {
-        HStack {
-            Image(systemName: "exclamationmark.triangle.fill")
-                .foregroundStyle(Color.red)
-                .padding(.trailing, 8)
+        VStack(alignment: .leading, spacing: PingTheme.Spacing.small) {
+            Text(title)
+                .font(PingTheme.Typography.body.weight(.semibold))
+                .foregroundStyle(PingTheme.Color.statusError)
             Text(message)
-                .font(.headline)
-                .multilineTextAlignment(.leading)
-                .foregroundStyle(Color.red)
-            Spacer()
+                .font(PingTheme.Typography.supporting)
+                .foregroundStyle(PingTheme.Color.statusError)
         }
-        .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 8)
-                .fill(Color(.systemBackground))
-                .shadow(color: .gray, radius: 1, x: 0, y: 1)
-        )
-        .padding(.horizontal, 16)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .pingStatusCardStyle(tint: PingTheme.Color.statusError)
+        .padding(.horizontal, PingTheme.Spacing.screen)
     }
 }
 
-
+/// Renders an orchestration `ErrorNode` as the shared error card, with the
+/// node's message exposed in an alert on tap.
 struct ErrorNodeView: View {
     let node: ErrorNode
-    @State private var showDetails: Bool = false
-    
-    private var errorText: String {
-        let error = ""
-        return error
-    }
-    
+
     var body: some View {
-        ErrorView(message: node.message)
+        ErrorView(title: "Error", message: node.message)
             .onTapGesture {
-                showDetails = true
+                errorMessage = node.message
             }
-            .alert("Error Details", isPresented: $showDetails) {
-                Button("OK") {
-                    showDetails = false
-                }
-            } message: {
-                Text(errorText)
-            }
+            .pingErrorAlert(errorMessage: $errorMessage)
     }
+
+    /// Non-nil surfaces the shared error alert with the node's message.
+    @State private var errorMessage: String? = nil
 }
 
+/// Validation messages rendered in the semantic error color; empty entries
+/// are dropped. Replaces the legacy per-view `ErrorMessageView`.
 struct ErrorMessageView: View {
     var errors: [String]
-    
+
     var body: some View {
-        if errors.isEmpty {
-            EmptyView()
-        } else {
-            VStack(alignment: .leading, spacing: 8) {
-                ForEach(errors, id: \.self) { error in
-                    Text(error)
-                        .font(.footnote)
-                        .foregroundColor(.red)
-                        .padding(.vertical, 4)
-                }
-            }
-            .padding(2)
-        }
+        PingFieldMessages(errorMessages: errors)
     }
 }

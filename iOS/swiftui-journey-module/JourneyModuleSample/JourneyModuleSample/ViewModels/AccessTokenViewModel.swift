@@ -49,7 +49,11 @@ class AccessTokenViewModel: ObservableObject {
             }
             LogManager.standard.e("", error: error)
         case .none:
-            break
+            // No authenticated user (not logged in) — surface it instead of
+            // leaving the screen empty.
+            await MainActor.run {
+                self.token = "No active session. Please start the Journey flow to authenticate."
+            }
         }
     }
 }

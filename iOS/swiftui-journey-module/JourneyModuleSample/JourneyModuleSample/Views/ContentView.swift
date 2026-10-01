@@ -23,9 +23,9 @@ enum MenuSection: CaseIterable, Identifiable {
     case authentication
     case userManagement
     case developerTools
-    
+
     var id: String { title }
-    
+
     var title: String {
         switch self {
         case .authentication: return "Authentication"
@@ -33,7 +33,7 @@ enum MenuSection: CaseIterable, Identifiable {
         case .developerTools: return "Developer Tools"
         }
     }
-    
+
     var items: [MenuItem] {
         switch self {
         case .authentication:
@@ -41,7 +41,7 @@ enum MenuSection: CaseIterable, Identifiable {
         case .userManagement:
             return [.token, .user, .deviceManagement, .logout]
         case .developerTools:
-            return [.deviceInfo, .logger, .storage, .bindingKeys]
+            return [.deviceInfo, .bindingKeys]
         }
     }
 }
@@ -54,12 +54,10 @@ enum MenuItem: String, CaseIterable, Identifiable {
     case logout = "Logout"
     case deviceManagement = "Device Management"
     case deviceInfo = "DeviceInfo"
-    case logger = "Logger"
-    case storage = "Storage"
     case bindingKeys = "Binding Keys"
-    
+
     var id: String { rawValue }
-    
+
     var icon: String {
         switch self {
         case .journey: return "map.fill"
@@ -68,12 +66,10 @@ enum MenuItem: String, CaseIterable, Identifiable {
         case .logout: return "rectangle.portrait.and.arrow.right"
         case .deviceManagement: return "iphone.and.arrow.forward"
         case .deviceInfo: return "iphone"
-        case .logger: return "doc.text.magnifyingglass"
-        case .storage: return "externaldrive.fill"
         case .bindingKeys: return "key.icloud.fill"
         }
     }
-    
+
     var title: String {
         switch self {
         case .journey: return "Journey Flow"
@@ -82,12 +78,10 @@ enum MenuItem: String, CaseIterable, Identifiable {
         case .logout: return "Logout"
         case .deviceManagement: return "Device Management"
         case .deviceInfo: return "Device Info"
-        case .logger: return "Logger"
-        case .storage: return "Storage"
         case .bindingKeys: return "Binding Keys"
         }
     }
-    
+
     var subtitle: String {
         switch self {
         case .journey: return "Test Journey authentication"
@@ -96,44 +90,39 @@ enum MenuItem: String, CaseIterable, Identifiable {
         case .logout: return "End session"
         case .deviceManagement: return "Manage registered devices"
         case .deviceInfo: return "Collect device data"
-        case .logger: return "Test logging"
-        case .storage: return "Test storage"
         case .bindingKeys: return "Manage stored binding keys"
         }
     }
 }
 
-/// The main view of the application with redesigned UI
+/// The main view of the application.
 struct ContentView: View {
     @State private var deviceID: String = ""
     @State private var path: [MenuItem] = []
     @State private var deviceStatus: String = "Checking..."
-    
+
     var body: some View {
         NavigationStack(path: $path) {
             ScrollView {
                 VStack(spacing: 0) {
-                    // Header Section
                     headerSection
-                    
-                    // Content Section
-                    VStack(spacing: 20) {
-                        // Loop through all sections
+
+                    VStack(spacing: PingTheme.Spacing.large) {
                         ForEach(MenuSection.allCases) { section in
                             sectionCard(
                                 title: section.title,
                                 items: section.items
                             )
                         }
-                        
+
                         deviceStatusCard
                     }
-                    .padding(.horizontal, 20)
-                    .padding(.top, 20)
-                    .padding(.bottom, 30)
+                    .padding(.horizontal, PingTheme.Spacing.screen)
+                    .padding(.top, PingTheme.Spacing.large)
+                    .padding(.bottom, PingTheme.Spacing.scrollBottomInset)
                 }
             }
-            .background(Color(.systemGroupedBackground))
+            .pingScreenBackground()
             .navigationDestination(for: MenuItem.self) { item in
                 switch item {
                 case .journey:
@@ -146,168 +135,154 @@ struct ContentView: View {
                     DeviceManagementView(menuItem: item)
                 case .logout:
                     LogOutView(path: $path)
-                case .logger:
-                    LoggerView(menuItem: item)
-                case .storage:
-                    StorageView(menuItem: item)
                 case .bindingKeys:
                     BindingKeysView()
                 case .deviceInfo:
                     DeviceInfoView(menuItem: item)
                 }
             }
+            .navigationBarTitleDisplayMode(.inline)
             .task {
                 let id = try? await DefaultDeviceIdentifier().id
                 deviceID = id ?? "Unknown"
-                
+
                 let tamperDetector = TamperDetector()
                 let score = tamperDetector.analyze()
-                
+
                 if score > 0 {
-                    deviceStatus = "⚠️ Jailbroken (Score: \(score))"
+                    deviceStatus = "Jailbroken (Score: \(score))"
                 } else {
-                    deviceStatus = "✓ Secure"
+                    deviceStatus = "Secure"
                 }
             }
         }
     }
-    
+
     // MARK: - Header Section
+
+    /// Full-bleed branded hero banner: the gradient shape is repartnered with
+    /// the dynamic action colors so the foreground contrast holds in dark mode.
     private var headerSection: some View {
         ZStack {
             LinearGradient(
-                colors: [.themeButtonBackground, Color(red: 0.6, green: 0.1, blue: 0.1)],
+                colors: [PingTheme.Color.actionPrimary, PingTheme.Color.actionPrimaryPressed],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
-            
-            VStack(spacing: 12) {
+
+            VStack(spacing: PingTheme.Spacing.medium) {
                 Image("Logo")
                     .resizable()
                     .scaledToFit()
                     .frame(width: 80, height: 80)
-                
+
                 Text("Orchestration SDK")
-                    .font(.system(size: 28, weight: .bold))
-                    .foregroundColor(.white)
-                
+                    .font(PingTheme.Typography.display)
+                    .foregroundColor(PingTheme.Color.actionPrimaryForeground)
+
                 Text("Journey Module Sample")
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(.white.opacity(0.9))
+                    .font(PingTheme.Typography.supporting.weight(.medium))
+                    .foregroundColor(PingTheme.Color.actionPrimaryForeground.opacity(0.9))
             }
-            .padding(.vertical, 10)
+            .padding(.vertical, PingTheme.Spacing.large)
         }
     }
-    
+
     // MARK: - Section Card
+
     private func sectionCard(title: String, items: [MenuItem]) -> some View {
         VStack(alignment: .leading, spacing: 0) {
             Text(title)
-                .font(.system(size: 13, weight: .semibold))
-                .foregroundColor(.secondary)
+                .font(PingTheme.Typography.supporting.weight(.semibold))
+                .foregroundStyle(PingTheme.Color.contentSecondary)
                 .textCase(.uppercase)
-                .padding(.horizontal, 16)
-                .padding(.bottom, 8)
-            
+                .padding(.horizontal, PingTheme.Spacing.medium)
+                .padding(.bottom, PingTheme.Spacing.small)
+
             VStack(spacing: 0) {
                 ForEach(Array(items.enumerated()), id: \.element.id) { index, item in
                     menuItemButton(item)
-                    
+
                     if index < items.count - 1 {
                         Divider()
-                            .padding(.leading, 60)
+                            .padding(.leading, PingTheme.Control.infoRowDividerInset - PingTheme.Control.fieldPadding)
                     }
                 }
             }
-            .background(Color(.secondarySystemGroupedBackground))
-            .clipShape(RoundedRectangle(cornerRadius: 12))
-            .shadow(color: .black.opacity(0.05), radius: 4, x: 0, y: 2)
+            .pingCardStyle(size: .rowList)
         }
     }
-    
+
     // MARK: - Menu Item Button
+
     private func menuItemButton(_ item: MenuItem) -> some View {
         Button {
             path.append(item)
         } label: {
-            HStack(spacing: 16) {
-                Image(systemName: item.icon)
-                    .font(.system(size: 20))
-                    .foregroundColor(.white)
-                    .frame(width: 40, height: 40)
-                    .background(
-                        LinearGradient(
-                            colors: [.themeButtonBackground, Color(red: 0.6, green: 0.1, blue: 0.1)],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
-                
-                VStack(alignment: .leading, spacing: 2) {
+            HStack(spacing: PingTheme.Spacing.medium) {
+                PingIconTile(systemName: item.icon, diameter: 40, iconSize: 20)
+
+                VStack(alignment: .leading, spacing: PingTheme.Spacing.xxSmall) {
                     Text(item.title)
-                        .font(.system(size: 16, weight: .medium))
-                        .foregroundColor(.primary)
-                    
+                        .font(PingTheme.Typography.body.weight(.medium))
+                        .foregroundStyle(PingTheme.Color.contentPrimary)
+
                     Text(item.subtitle)
-                        .font(.system(size: 13))
-                        .foregroundColor(.secondary)
+                        .pingSupportingText()
                 }
-                
+
                 Spacer()
-                
+
                 Image(systemName: "chevron.right")
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundColor(.secondary)
+                    .font(.system(size: PingTheme.Control.Glyph.small, weight: .semibold))
+                    .foregroundStyle(PingTheme.Color.contentSecondary)
             }
-            .padding(16)
+            .padding(.vertical, PingTheme.Spacing.small)
             .contentShape(Rectangle())
         }
-        .buttonStyle(PlainButtonStyle())
+        .buttonStyle(.plain)
     }
-    
+
     // MARK: - Device Status Card
+
     private var deviceStatusCard: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: PingTheme.Spacing.medium) {
             HStack {
                 Image(systemName: "iphone.gen3")
-                    .font(.system(size: 16, weight: .semibold))
-                    .foregroundColor(.themeButtonBackground)
-                
+                    .font(.system(size: PingTheme.Control.Glyph.small, weight: .semibold))
+                    .foregroundStyle(PingTheme.Color.actionPrimary)
+
                 Text("Device Information")
-                    .font(.system(size: 16, weight: .semibold))
-                    .foregroundColor(.primary)
-                
+                    .pingSectionHeader()
+
                 Spacer()
-                
-                Text(deviceStatus)
-                    .font(.system(size: 12, weight: .medium))
-                    .foregroundColor(deviceStatus.contains("Secure") ? .green : .orange)
+
+                let isSecure = deviceStatus.contains("Secure")
+                HStack(spacing: PingTheme.Spacing.xSmall) {
+                    Image(systemName: isSecure ? "checkmark.circle.fill" : "exclamationmark.triangle.fill")
+                        .font(.system(size: PingTheme.Control.Glyph.small, weight: .medium))
+                        .foregroundStyle(isSecure ? PingTheme.Color.statusSuccess : PingTheme.Color.statusWarning)
+
+                    Text(deviceStatus)
+                        .font(PingTheme.Typography.caption.weight(.medium))
+                        .foregroundStyle(isSecure ? PingTheme.Color.statusSuccess : PingTheme.Color.statusWarning)
+                }
             }
-            
+
             Divider()
-            
-            VStack(alignment: .leading, spacing: 8) {
+
+            VStack(alignment: .leading, spacing: PingTheme.Spacing.xSmall) {
                 Text("Device ID")
-                    .font(.system(size: 12, weight: .medium))
-                    .foregroundColor(.secondary)
-                
+                    .pingCaptionText()
+
                 Text(deviceID.isEmpty ? "Loading..." : deviceID)
-                    .font(.system(size: 11, design: .monospaced))
-                    .foregroundColor(.primary)
+                    .font(PingTheme.Typography.monospacedCaption)
+                    .foregroundStyle(PingTheme.Color.contentPrimary)
                     .lineLimit(2)
                     .minimumScaleFactor(0.8)
+                    .textSelection(.enabled)
             }
         }
-        .padding(16)
-        .background(Color(.secondarySystemGroupedBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 12))
-        .shadow(color: .black.opacity(0.05), radius: 4, x: 0, y: 2)
-    }
-    
-    // Add computed properties:
-    private var sdkVersion: String {
-        Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown"
+        .pingCardStyle()
     }
 }
-

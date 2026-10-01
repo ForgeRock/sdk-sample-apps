@@ -2,7 +2,7 @@
 //  StringAttributeInputCallbackView.swift
 //  JourneyModuleSample
 //
-//  Copyright (c) 2026 Ping Identity Corporation. All rights reserved.
+//  Copyright (c) 2025 - 2026 Ping Identity Corporation. All rights reserved.
 //
 //  This software may be modified and distributed under the terms
 //  of the MIT license. See the LICENSE file for details.
@@ -36,33 +36,22 @@ struct StringAttributeInputCallbackView: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            TextField(
-                callback.prompt,
-                text: $text
-            )
-            .autocorrectionDisabled()
-            .textInputAutocapitalization(.never)
-            .padding()
-            .background(
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(hasErrors ? Color.red : Color.gray, lineWidth: 1)
-            )
-            .onAppear(perform: {
-                text = callback.value
-            })
-            .onChange(of: text) { newValue in
-                callback.value = newValue
-            }
-            .onSubmit {
-                onNodeUpdated()
-            }
+        let errorMessages = callback.failedPolicies.map { $0.failedDescription(for: callback.prompt) }
 
-            // Error message display
-            if hasErrors {
-                ErrorMessageView(errors: callback.failedPolicies.map({ $0.failedDescription(for: callback.prompt)}))
-            }
+        VStack(alignment: .leading, spacing: PingTheme.Spacing.small) {
+            Text(callback.prompt)
+                .pingSectionHeader()
+
+            TextField(callback.prompt, text: $text)
+                .pingTextFieldStyle(showsError: hasErrors)
+                .autocorrectionDisabled()
+                .textInputAutocapitalization(.never)
+                .onSubmit(onNodeUpdated)
+
+            PingFieldMessages(errorMessages: errorMessages)
         }
-        .padding()
+        .onAppear { text = callback.value }
+        .onChange(of: text) { callback.value = $0 }
+        .padding(.vertical, PingTheme.Spacing.small)
     }
 }

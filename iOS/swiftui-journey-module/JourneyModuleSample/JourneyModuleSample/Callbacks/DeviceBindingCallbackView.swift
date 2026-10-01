@@ -32,11 +32,10 @@ struct DeviceBindingCallbackView: View {
     var body: some View {
         VStack {
             Text("Device Binding")
-                .font(.title)
+                .pingScreenTitle()
             Text("Please wait while we bind your device.")
-                .font(.body)
-                .padding()
-            ProgressView()
+                .pingBodySecondary()
+            PingLoadingSpinner()
         }
         .onAppear(perform: handleDeviceBinding)
     }

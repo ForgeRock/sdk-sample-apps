@@ -2,7 +2,7 @@
 //  IdpCallbackView.swift
 //  JourneyModuleSample
 //
-//  Copyright (c) 2026 Ping Identity Corporation. All rights reserved.
+//  Copyright (c) 2025 - 2026 Ping Identity Corporation. All rights reserved.
 //
 //  This software may be modified and distributed under the terms
 //  of the MIT license. See the LICENSE file for details.
@@ -10,8 +10,8 @@
 
 import Foundation
 import SwiftUI
-import PingExternalIdP
 import Combine
+import PingExternalIdP
 
 /**
  * A SwiftUI view for handling external identity provider (IdP) authentication during authentication flows.
@@ -35,52 +35,53 @@ struct IdpCallbackView: View {
     let onNext: () -> Void
     
     var body: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: PingTheme.Spacing.medium) {
             switch viewModel.authState {
             case .authenticating:
                 Image(systemName: "person.circle.fill")
                     .font(.largeTitle)
-                    .foregroundColor(.white)
+                    .foregroundStyle(PingTheme.Color.contentInverse)
                 Text(viewModel.callback.provider)
-                    .font(.body)
-                    .foregroundColor(.secondary)
-                    NextButton(title: "Continue") {
-                        Task { @MainActor in
-                            if viewModel.hasStartedAuthorization == false {
-                                // Call the performAuthorization method to start the process.
-                                await viewModel.performAuthorization()
-                            }
+                    .pingBodySecondary()
+                Button("Continue") {
+                    Task {
+                        if viewModel.hasStartedAuthorization == false {
+                            // Call the performAuthorization method to start the process.
+                            await viewModel.performAuthorization()
                         }
                     }
+                }
+                .buttonStyle(.pingPrimary)
             case .failure(let error):
                 Image(systemName: "xmark.octagon.fill")
                     .font(.largeTitle)
-                    .foregroundColor(.red)
+                    .foregroundStyle(PingTheme.Color.statusError)
                 Text("Authorization failed: \(error.localizedDescription)")
-                    .font(.body)
+                    .pingBodySecondary()
                     .multilineTextAlignment(.center)
-                NextButton(title: "Continue") {
+                Button("Continue") {
                     Task {
-                        self.onNext()
+                        onNext()
                     }
                 }
-                .buttonStyle(.bordered)
-                
+                .buttonStyle(.pingSecondary)
+
             case .completed:
                 Image(systemName: "checkmark.circle.fill")
                     .font(.largeTitle)
-                    .foregroundColor(.green)
+                    .foregroundStyle(PingTheme.Color.statusSuccess)
                 Text("Authorization Successful")
-                    .font(.body)
+                    .pingBodySecondary()
                     .multilineTextAlignment(.center)
-                NextButton(title: "Continue") {
+                Button("Continue") {
                     Task {
-                        self.onNext()
+                        onNext()
                     }
                 }
+                .buttonStyle(.pingPrimary)
             }
         }
-        .padding()
+        // Edge spacing comes from CallbackView's screen padding; no own inset.
     }
 }
 
@@ -118,6 +119,7 @@ class IdpCallbackViewModel: ObservableObject {
             case .failure(let error):
                 self.authState = .failure(error)
             }
+
         }
     }
 }

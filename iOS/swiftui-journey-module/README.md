@@ -17,7 +17,7 @@ Ping provides these iOS samples to help demonstrate SDK functionality/implementa
 
 - Xcode: Latest version recommended
 - PingAM/AIC server with configured authentication journeys
-- iOS 16.6 or higher
+- iOS 16.0 or higher
 
 ## Getting Started
 

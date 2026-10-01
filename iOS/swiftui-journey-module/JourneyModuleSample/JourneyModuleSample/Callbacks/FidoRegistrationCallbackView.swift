@@ -2,7 +2,7 @@
 //  FidoRegistrationCallbackView.swift
 //  JourneyModuleSample
 //
-//  Copyright (c) 2026 Ping Identity Corporation. All rights reserved.
+//  Copyright (c) 2025 - 2026 Ping Identity Corporation. All rights reserved.
 //
 //  This software may be modified and distributed under the terms
 //  of the MIT license. See the LICENSE file for details.
@@ -36,10 +36,10 @@ struct FidoRegistrationCallbackView: View {
     var body: some View {
         VStack {
             Text("FIDO Registration")
-                .font(.title)
+                .pingScreenTitle()
             TextField("Device Name (Optional)", text: $deviceName)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding()
+                .pingTextFieldStyle()
+                .padding(.vertical, PingTheme.Spacing.small)
             
             // 1. Button action still creates a Task
             Button(action: {
@@ -74,6 +74,7 @@ struct FidoRegistrationCallbackView: View {
             }) {
                 Text("Register with FIDO")
             }
+            .buttonStyle(.pingPrimary)
         }
     }
 }

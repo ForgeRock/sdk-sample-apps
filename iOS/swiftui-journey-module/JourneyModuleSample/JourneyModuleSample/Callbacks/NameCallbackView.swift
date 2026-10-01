@@ -2,7 +2,7 @@
 //  NameCallbackView.swift
 //  JourneyModuleSample
 //
-//  Copyright (c) 2026 Ping Identity Corporation. All rights reserved.
+//  Copyright (c) 2025 - 2026 Ping Identity Corporation. All rights reserved.
 //
 //  This software may be modified and distributed under the terms
 //  of the MIT license. See the LICENSE file for details.
@@ -31,28 +31,18 @@ struct NameCallbackView: View {
     @State var text: String = ""
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            TextField(
-                callback.prompt,
-                text: $text
-            )
-            .autocorrectionDisabled()
-            .textInputAutocapitalization(.never)
-            .padding()
-            .background(
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color.gray, lineWidth: 1)
-            )
-            .onAppear(perform: {
-                text = callback.name
-            })
-            .onChange(of: text) { newValue in
-                callback.name = newValue // update internal state only
-            }
-            .onSubmit {
-                onNodeUpdated() // commit to node state only when done
-            }
-            .padding()
+        VStack(alignment: .leading, spacing: PingTheme.Spacing.small) {
+            Text(callback.prompt)
+                .pingSectionHeader()
+
+            TextField(callback.prompt, text: $text)
+                .pingTextFieldStyle()
+                .autocorrectionDisabled()
+                .textInputAutocapitalization(.never)
+                .onSubmit(onNodeUpdated)
         }
+        .onAppear { text = callback.name }
+        .onChange(of: text) { callback.name = $0 }
+        .padding(.vertical, PingTheme.Spacing.small)
     }
 }
