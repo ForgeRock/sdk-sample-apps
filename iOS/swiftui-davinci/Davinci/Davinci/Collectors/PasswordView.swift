@@ -2,7 +2,7 @@
 //  PasswordView.swift
 //  Davinci
 //
-//  Copyright (c) 2025 Ping Identity Corporation. All rights reserved.
+//  Copyright (c) 2025 - 2026 Ping Identity Corporation. All rights reserved.
 //
 //  This software may be modified and distributed under the terms
 //  of the MIT license. See the LICENSE file for details.
@@ -40,7 +40,7 @@ struct PasswordView: View {
     @State private var verifyPasswordVisibility: Bool = false
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        VStack(alignment: .leading, spacing: PingTheme.Spacing.medium) {
             // Password Input Field
             VStack(alignment: .leading) {
                 SecureFieldView(
@@ -64,6 +64,11 @@ struct PasswordView: View {
                 }
             }
             
+            // Password Policy Requirements
+            if let policy = field.passwordPolicy() {
+                PasswordRequirementsView(policy: policy, password: text)
+            }
+            
             // Password Verification Field
             if field.type == "PASSWORD_VERIFY" {
                 SecureFieldView(
@@ -79,7 +84,7 @@ struct PasswordView: View {
                 )
             }
         }
-        .padding()
+        .padding(.vertical, PingTheme.Spacing.small)
     }
 }
 
@@ -106,35 +111,19 @@ struct SecureFieldView: View {
     var onAppear: () -> Void
     var isError: Bool
     var errorMessages: [String]
-    
+
+    private var displayedErrorMessages: [String] {
+        isError ? errorMessages.filter { !$0.isEmpty } : []
+    }
+
     var body: some View {
-        VStack(alignment: .leading) {
-            HStack {
-                if isPasswordVisible {
-                    TextField(label, text: $value)
-                } else {
-                    SecureField(label, text: $value)
-                }
-                Button(action: { isPasswordVisible.toggle() }) {
-                    Image(systemName: isPasswordVisible ? "eye.slash" : "eye")
-                        .foregroundStyle(Color.themeButtonBackground)
-                        .frame(width: 20, height: 20)
-                }
-            }
-            .onAppear(perform: onAppear)
-            .onChange(of: value) { newValue in
-                onValueChange(value)
-            }
-            .padding()
-            .background(
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(isError ? Color.red : Color.gray, lineWidth: 1)
-            )
-            .textInputAutocapitalization(.never)
-            
-            if isError {
-                ErrorMessageView(errors: errorMessages)
-            }
-        }
+        PingSecureField(
+            label: label,
+            text: $value,
+            isVisible: $isPasswordVisible,
+            errorMessages: displayedErrorMessages
+        )
+        .onAppear(perform: onAppear)
+        .onChange(of: value) { onValueChange($0) }
     }
 }

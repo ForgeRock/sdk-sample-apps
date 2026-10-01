@@ -2,12 +2,11 @@
 //  DavinciView.swift
 //  Davinci
 //
-//  Copyright (c) 2024 - 2025 Ping Identity Corporation. All rights reserved.
+//  Copyright (c) 2024 - 2026 Ping Identity Corporation. All rights reserved.
 //
 //  This software may be modified and distributed under the terms
 //  of the MIT license. See the LICENSE file for details.
 //
-
 
 import Foundation
 import SwiftUI
@@ -20,7 +19,7 @@ struct DavinciView: View {
     @StateObject private var davinciViewModel = DavinciViewModel()
     /// A binding to the navigation stack path.
     @Binding var path: [String]
-    
+
     var body: some View {
         ZStack {
             ScrollView {
@@ -42,14 +41,10 @@ struct DavinciView: View {
                         switch apiError {
                         case .error(_, _, let message):
                             // Show error message from the API.
-                            ErrorView(message: message)
+                            ErrorView(title: "DaVinci Error", message: message)
                         default:
                             // Show a default error message.
-                            ErrorView(message: "unknown error")
-                        }
-                        // Handle failure node scenarios.
-                        if let nextNode = davinciViewModel.state.previous as? ContinueNode {
-                            ConnectorView(davinciViewModel: davinciViewModel, node: nextNode)
+                            ErrorView(title: "DaVinci Error", message: "unknown error")
                         }
                     case let errorNode as ErrorNode:
                         /// Displays the error node view with detailed error information
@@ -58,30 +53,19 @@ struct DavinciView: View {
                         if let nextNode = davinciViewModel.state.previous as? ContinueNode {
                             ConnectorView(davinciViewModel: davinciViewModel, node: nextNode)
                         }
-                        
-                        
                     default:
                         // Show an empty view for unhandled cases.
                         EmptyView()
                     }
                 }
             }
-            
-            Spacer()
-            
+
             // Show an activity indicator when loading.
             if davinciViewModel.isLoading {
-                /// Semi-transparent overlay to indicate loading state
-                Color.black.opacity(0.4)
-                    .edgesIgnoringSafeArea(.all)
-                
-                /// Circular progress indicator that provides visual feedback during loading operations
-                ProgressView()
-                    .progressViewStyle(CircularProgressViewStyle())
-                    .scaleEffect(2)
-                    .tint(.themeButtonBackground)
+                PingLoadingOverlay()
             }
         }
+        .pingScreenBackground()
     }
 }
 
@@ -93,15 +77,19 @@ struct ConnectorView: View {
     @ObservedObject var davinciViewModel: DavinciViewModel
     /// The next node to process in the flow.
     public var node: ContinueNode
-    
+
     var body: some View {
         VStack {
             /// App logo displayed at the top of the view
-            Image("Logo").resizable().scaledToFill().frame(width: 100, height: 100)
-            
+            Image("Logo")
+                .resizable()
+                .scaledToFit()
+                .frame(width: PingTheme.Control.iconSize, height: PingTheme.Control.iconSize)
+                .accessibilityHidden(true)
+
             /// The main node view that handles user interactions with the current flow step
             ContinueNodeView(continueNode: node,
-                             onNodeUpdated:  { davinciViewModel.refresh() },
+                             onNodeUpdated: { davinciViewModel.refresh() },
                              onStart: { Task { await davinciViewModel.startDavinci() }},
                              onNext: { isSubmit in Task {
                 /// Determines if validation should occur based on the submission state and node configuration

@@ -51,8 +51,11 @@ class UserInfoViewModel: ObservableObject {
             }
             LogManager.standard.e("", error: error)
         case .none:
-            // No data received, no further action required.
-            break
+            // No authenticated user (not logged in) — surface it instead of
+            // leaving the screen empty.
+            await MainActor.run {
+                self.userInfo = "No active session. Please launch the DaVinci flow to authenticate."
+            }
         }
     }
 }

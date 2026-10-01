@@ -1,8 +1,8 @@
 // 
 //  DeviceAuthenticationView.swift
-//  PingExample
+//  Davinci
 //
-//  Copyright (c) 2025 Ping Identity Corporation Corporation. All rights reserved.
+//  Copyright (c) 2025 - 2026 Ping Identity Corporation Corporation. All rights reserved.
 //
 //  This software may be modified and distributed under the terms
 //  of the MIT license. See the LICENSE file for details.
@@ -18,13 +18,13 @@ public struct DeviceAuthenticationView: View {
     @State private var selectedType: String?
     
     public var body: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: PingTheme.Spacing.medium) {
             Text("Select an MFA Device")
-                .font(.title)
+                .pingScreenTitle()
                 .padding(.top)
-            
+
             ScrollView {
-                LazyVStack(spacing: 12) {
+                LazyVStack(spacing: PingTheme.Spacing.compact) {
                     ForEach(field.devices, id: \.id) { device in
                         DeviceCardView(device: device, isSelected: selectedType == device.type)
                             .frame(maxWidth: .infinity)
@@ -36,7 +36,6 @@ public struct DeviceAuthenticationView: View {
                             }
                     }
                 }
-                .accentColor(.clear)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

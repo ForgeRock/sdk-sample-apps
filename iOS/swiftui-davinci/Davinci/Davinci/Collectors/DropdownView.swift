@@ -2,7 +2,7 @@
 //  DropdownView.swift
 //  Davinci
 //
-//  Copyright (c) 2025 Ping Identity Corporation. All rights reserved.
+//  Copyright (c) 2025 - 2026 Ping Identity Corporation. All rights reserved.
 //
 //  This software may be modified and distributed under the terms
 //  of the MIT license. See the LICENSE file for details.
@@ -36,10 +36,9 @@ struct DropdownView: View {
     @State private var isValid: Bool = true
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: PingTheme.Spacing.small) {
             Text(field.required ? "\(field.label)*" : field.label)
-                .font(.headline)
-                .padding(.bottom, 4)
+                .pingSectionHeader()
             Menu {
                 ForEach(field.options, id: \.value) { option in
                     Button(action: {
@@ -57,24 +56,20 @@ struct DropdownView: View {
             } label: {
                 HStack {
                     Text(selectedOption.isEmpty ? "Select an option" : selectedOption)
-                        .foregroundColor(selectedOption.isEmpty ? .gray : .primary)
+                        .foregroundStyle(selectedOption.isEmpty ? PingTheme.Color.contentSecondary : PingTheme.Color.contentPrimary)
                     Spacer()
                     Image(systemName: "chevron.down")
                         .rotationEffect(Angle(degrees: expanded ? 180 : 0))
-                        .foregroundStyle(Color.themeButtonBackground)
+                        .foregroundStyle(PingTheme.Color.actionPrimary)
                 }
-                .padding()
                 .frame(maxWidth: .infinity)
-                .background(
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(isValid ? Color.gray : Color.red, lineWidth: 1)
-                )
+                .pingTextFieldStyle(showsError: !isValid)
             }
             if !isValid {
-                ErrorMessageView(errors: field.validate().map { $0.errorMessage }.sorted())
+                PingFieldMessages(errorMessages: field.validate().map { $0.errorMessage }.sorted())
             }
         }
-        .padding()
+        .padding(.vertical, PingTheme.Spacing.small)
         .onAppear {
             selectedOption = field.value
         }
