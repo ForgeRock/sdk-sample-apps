@@ -2,13 +2,12 @@
 //  OidcLoginView.swift
 //  OidcExample
 //
-//  Copyright (c) 2025 Ping Identity Corporation. All rights reserved.
+//  Copyright (c) 2025 - 2026 Ping Identity Corporation. All rights reserved.
 //
 //  This software may be modified and distributed under the terms
 //  of the MIT license. See the LICENSE file for details.
 //
 
-import Foundation
 import SwiftUI
 import PingOrchestrate
 
@@ -20,107 +19,103 @@ struct OidcLoginView: View {
     @Binding var path: [String]
 
     var body: some View {
-        VStack(spacing: 20) {
+        Group {
             if oidcLoginViewModel.isLoading {
-                ProgressView("Authenticating...")
-                    .progressViewStyle(CircularProgressViewStyle())
-            } else {
-                // Handle different authentication states
-                if let state = oidcLoginViewModel.state {
-                    switch state {
-                    case .success(let _):
-                        VStack(spacing: 16) {
-                            Image(systemName: "checkmark.circle.fill")
-                                .font(.system(size: 60))
-                                .foregroundColor(.green)
-
-                            Text("Authentication Successful!")
-                                .font(.headline)
-
-                            Text("User authenticated")
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-
-                            // Navigate to token view
-                            Button(action: {
-                                path.append("Token")
-                            }) {
-                                Text("View Access Token")
-                                    .frame(maxWidth: .infinity)
-                                    .padding()
-                                    .background(Color.blue)
-                                    .foregroundColor(.white)
-                                    .cornerRadius(10)
-                            }
-                            .padding(.horizontal)
+                PingLoadingOverlay()
+            } else if let state = oidcLoginViewModel.state {
+                switch state {
+                case .success:
+                    resultCard(
+                        icon: "checkmark.circle.fill",
+                        tint: PingTheme.Color.statusSuccess,
+                        title: "Authentication Successful!",
+                        message: "User authenticated."
+                    ) {
+                        Button {
+                            path.append("Token")
+                        } label: {
+                            Label("View Access Token", systemImage: "key.fill")
                         }
-                        .padding()
-
-                    case .failure(let error):
-                        VStack(spacing: 16) {
-                            Image(systemName: "xmark.circle.fill")
-                                .font(.system(size: 60))
-                                .foregroundColor(.red)
-
-                            Text("Authentication Failed")
-                                .font(.headline)
-
-                            Text(error.localizedDescription)
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                                .multilineTextAlignment(.center)
-                                .padding(.horizontal)
-
-                            Button(action: {
-                                Task {
-                                    await oidcLoginViewModel.startOidcLogin()
-                                }
-                            }) {
-                                Text("Try Again")
-                                    .frame(maxWidth: .infinity)
-                                    .padding()
-                                    .background(Color.blue)
-                                    .foregroundColor(.white)
-                                    .cornerRadius(10)
-                            }
-                            .padding(.horizontal)
-                        }
-                        .padding()
+                        .buttonStyle(.pingPrimary)
                     }
-                } else {
-                    // Initial state - show login button
-                    VStack(spacing: 16) {
-                        Image(systemName: "person.circle")
-                            .font(.system(size: 60))
-                            .foregroundColor(.blue)
 
-                        Text("OIDC Authentication")
-                            .font(.headline)
-
-                        Text("Tap the button below to start the authentication flow")
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                            .multilineTextAlignment(.center)
-                            .padding(.horizontal)
-
-                        Button(action: {
-                            Task {
-                                await oidcLoginViewModel.startOidcLogin()
-                            }
-                        }) {
-                            Text("Start OIDC Login")
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(Color.blue)
-                                .foregroundColor(.white)
-                                .cornerRadius(10)
+                case .failure(let error):
+                    resultCard(
+                        icon: "xmark.circle.fill",
+                        tint: PingTheme.Color.statusError,
+                        title: "Authentication Failed",
+                        message: error.localizedDescription
+                    ) {
+                        Button {
+                            Task { await oidcLoginViewModel.startOidcLogin() }
+                        } label: {
+                            Label("Try Again", systemImage: "arrow.clockwise")
                         }
-                        .padding(.horizontal)
+                        .buttonStyle(.pingPrimary)
                     }
-                    .padding()
                 }
+            } else {
+                idleCard
             }
         }
+        .pingScreenBackground()
         .navigationTitle("OIDC Login")
+        .navigationBarTitleDisplayMode(.inline)
+    }
+
+    // MARK: - Idle
+
+    private var idleCard: some View {
+        ScrollView {
+            VStack(spacing: PingTheme.Spacing.large) {
+                Image(systemName: "person.badge.key.fill")
+                    .font(.system(size: PingTheme.Control.Glyph.hero))
+                    .foregroundStyle(PingTheme.Color.actionPrimary)
+
+                Text("OIDC Authentication")
+                    .pingScreenTitle()
+
+                Text("Tap the button below to start the authorization code flow.")
+                    .pingSupportingText()
+                    .multilineTextAlignment(.center)
+
+                Button {
+                    Task { await oidcLoginViewModel.startOidcLogin() }
+                } label: {
+                    Label("Start OIDC Login", systemImage: "play.fill")
+                }
+                .buttonStyle(.pingPrimary)
+            }
+            .pingScrollContentPadding(top: PingTheme.Spacing.large)
+        }
+    }
+
+    // MARK: - Result Card
+
+    /// Shared composition for the success and failure outcome states.
+    private func resultCard(
+        icon: String,
+        tint: Color,
+        title: String,
+        message: String,
+        @ViewBuilder actions: () -> some View
+    ) -> some View {
+        ScrollView {
+            VStack(spacing: PingTheme.Spacing.large) {
+                Image(systemName: icon)
+                    .font(.system(size: PingTheme.Control.Glyph.hero))
+                    .foregroundStyle(tint)
+
+                Text(title)
+                    .pingScreenTitle()
+
+                Text(message)
+                    .pingSupportingText()
+                    .multilineTextAlignment(.center)
+
+                actions()
+            }
+            .pingScrollContentPadding(top: PingTheme.Spacing.large)
+        }
     }
 }

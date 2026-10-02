@@ -94,7 +94,7 @@ public let oidcLogin = OidcWebClient.createOidcWebClient { config in
 
 ## Dependencies
 
-The application uses the following Ping iOS SDK modules (version 1.3.1):
+The application uses the following Ping iOS SDK modules (version 2.1.1):
 
 - **PingOrchestrate**: Core orchestration framework
 - **PingOidc**: OIDC authentication capabilities
@@ -110,7 +110,7 @@ Dependencies are managed via Swift Package Manager. See [OidcExample.xcodeproj/p
 ### Prerequisites
 
 - Xcode 15.0 or later
-- iOS 15.0 or later
+- iOS 16.0 or later
 - Swift 5.9 or later
 - A configured OAuth 2.0 client in PingOne, PingFederate, or PingAM
 
