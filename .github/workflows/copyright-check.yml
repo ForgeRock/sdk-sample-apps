@@ -1,0 +1,34 @@
+#
+# Copyright (c) 2026 Ping Identity Corporation. All rights reserved.
+#
+# This software may be modified and distributed under the terms
+# of the MIT license. See the LICENSE file for details.
+#
+
+# Validates Ping Identity copyright headers of the source files changed by a PR.
+# Runs on every PR, regardless of which platform directory it touches.
+
+name: 'Copyright Check'
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  copyright-check:
+    name: Validate copyright headers
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Validate copyright headers
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          BASE_REPO: ${{ github.event.pull_request.base.repo.full_name }}
+        run: bash .github/scripts/check-copyright.sh
