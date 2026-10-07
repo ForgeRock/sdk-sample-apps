@@ -57,6 +57,11 @@ struct ContentView: View {
                 NavigationLink(value: "Logout") {
                     Text("Logout")
                 }
+                /// Navigation option to pair the device via a DaVinci flow.
+                /// - Uses the PingOne MFA MOBILE_PAIRING collector.
+                NavigationLink(value: "DaVinciPairing") {
+                    Text("PingOne MFA Pairing")
+                }
             }.navigationDestination(for: String.self) { item in
                 /// Routes to different views based on the selected navigation option
                 switch item {
@@ -68,6 +73,8 @@ struct ContentView: View {
                     UserInfoView()
                 case "Logout":
                     LogOutView(path: $path)
+                case "DaVinciPairing":
+                    PingOneMFADavinciPairingView(path: $path)
                 default:
                     EmptyView()
                 }

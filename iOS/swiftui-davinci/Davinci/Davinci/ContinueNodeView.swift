@@ -13,6 +13,7 @@ import PingOrchestrate
 import PingDavinci
 import PingExternalIdP
 import PingProtect
+import PingOneMFA
 
 /// A view for displaying and handling user interaction with a continue node in the authentication flow.
 /// - This view renders different collectors based on their type and handles user input and validation.
@@ -25,7 +26,19 @@ struct ContinueNodeView: View {
     let onStart: () -> Void
     /// Callback for when the user proceeds to the next step, with a flag indicating if this is a submission.
     let onNext: (Bool) -> Void
-    
+
+    init(
+        continueNode: ContinueNode,
+        onNodeUpdated: @escaping () -> Void,
+        onStart: @escaping () -> Void,
+        onNext: @escaping (Bool) -> Void
+    ) {
+        self.continueNode = continueNode
+        self.onNodeUpdated = onNodeUpdated
+        self.onStart = onStart
+        self.onNext = onNext
+    }
+
     /// The validation view model shared across collectors to manage form validation state.
     @EnvironmentObject var validationViewModel: ValidationViewModel
     
@@ -111,13 +124,20 @@ struct ContinueNodeView: View {
                         /// View for PingProtect fraud detection and risk assessment
                         PingProtectView(field: protectCollector, onNodeUpdated: onNodeUpdated)
                     }
+                case let mobilePairingCollector as MobilePairingCollector:
+                    /// View that pairs the device with PingOne MFA and submits the outcome
+                    MobilePairingCollectorView(
+                        collector: mobilePairingCollector,
+                        onNext: { onNext(false) }
+                    )
+                    .id(ObjectIdentifier(mobilePairingCollector))
                 default:
                     EmptyView()
                 }
             }
             
             // Fallback Next Button
-            if !continueNode.collectors.contains(where: { $0 is FlowCollector || $0 is SubmitCollector || $0 is DeviceRegistrationCollector || $0 is DeviceAuthenticationCollector }) {
+            if !continueNode.collectors.contains(where: { $0 is FlowCollector || $0 is SubmitCollector || $0 is DeviceRegistrationCollector || $0 is DeviceAuthenticationCollector || $0 is MobilePairingCollector }) {
                 Button(action: { onNext(false) }) {
                     Text("Next")
                         .frame(maxWidth: .infinity)

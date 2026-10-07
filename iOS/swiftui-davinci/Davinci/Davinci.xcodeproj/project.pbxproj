@@ -112,6 +112,8 @@
 		A5EED25B2CF7B5480064B168 /* UserInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoView.swift; sourceTree = "<group>"; };
 		A5EED25D2CF7B8F80064B168 /* UserInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoViewModel.swift; sourceTree = "<group>"; };
 		A5EED25F2CF7B9380064B168 /* LogOutViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogOutViewModel.swift; sourceTree = "<group>"; };
+		B4A000010000000000000012 /* PingOneMFADavinciPairingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PingOneMFADavinciPairingView.swift; sourceTree = "<group>"; };
+		B4A000010000000000000013 /* MobilePairingCollectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobilePairingCollectorView.swift; sourceTree = "<group>"; };
 		EC83DE2E2E5F2BD600D2B5B4 /* DeviceAuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceAuthenticationView.swift; sourceTree = "<group>"; };
 		EC83DE2F2E5F2BD600D2B5B4 /* DeviceRegistrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceRegistrationView.swift; sourceTree = "<group>"; };
 		EC83DE302E5F2BD600D2B5B4 /* PhoneNumberView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneNumberView.swift; sourceTree = "<group>"; };
@@ -192,6 +194,7 @@
 				3A8092F32BE99F0F00AD667F /* CustomViews.swift */,
 				3A8532322BE2D5D800F8619D /* DavinciView.swift */,
 				3ACD90E02BE586BC00DABCE6 /* DavinciViewModel.swift */,
+				B4A000010000000000000012 /* PingOneMFADavinciPairingView.swift */,
 				A5A5F8642D5CE4A60053BF24 /* ErrorView.swift */,
 				A5EED2592CF7B10E0064B168 /* LogOutView.swift */,
 				A5EED25F2CF7B9380064B168 /* LogOutViewModel.swift */,
@@ -231,6 +234,7 @@
 				A5A5F8522D5CE16A0053BF24 /* FlowButtonView.swift */,
 				A5A5F8532D5CE16A0053BF24 /* LabelView.swift */,
 				A5A5F8542D5CE16A0053BF24 /* PasswordView.swift */,
+				B4A000010000000000000013 /* MobilePairingCollectorView.swift */,
 				ECC5A5202EE714D30034504A /* PingProtectView.swift */,
 				EC83DE302E5F2BD600D2B5B4 /* PhoneNumberView.swift */,
 				A5A5F8552D5CE16A0053BF24 /* RadioButtonView.swift */,
@@ -345,6 +349,8 @@
 				A5A5F8612D5CE16A0053BF24 /* TextView.swift in Sources */,
 				3A3709962BEB038200AA7B51 /* AccessTokenView.swift in Sources */,
 				A5A5F8652D5CE4A60053BF24 /* ErrorView.swift in Sources */,
+				B4A000010000000000000002 /* PingOneMFADavinciPairingView.swift in Sources */,
+				B4A000010000000000000003 /* MobilePairingCollectorView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
