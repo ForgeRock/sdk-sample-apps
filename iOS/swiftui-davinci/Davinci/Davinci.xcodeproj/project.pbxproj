@@ -195,6 +195,7 @@
 				3A8532322BE2D5D800F8619D /* DavinciView.swift */,
 				3ACD90E02BE586BC00DABCE6 /* DavinciViewModel.swift */,
 				B4A000010000000000000012 /* PingOneMFADavinciPairingView.swift */,
+				B4A000010000000000000014 /* PingOneMFADeviceAuthorizationView.swift */,
 				A5A5F8642D5CE4A60053BF24 /* ErrorView.swift */,
 				A5EED2592CF7B10E0064B168 /* LogOutView.swift */,
 				A5EED25F2CF7B9380064B168 /* LogOutViewModel.swift */,
@@ -235,6 +236,7 @@
 				A5A5F8532D5CE16A0053BF24 /* LabelView.swift */,
 				A5A5F8542D5CE16A0053BF24 /* PasswordView.swift */,
 				B4A000010000000000000013 /* MobilePairingCollectorView.swift */,
+				B4A000010000000000000015 /* MetadataView.swift */,
 				ECC5A5202EE714D30034504A /* PingProtectView.swift */,
 				EC83DE302E5F2BD600D2B5B4 /* PhoneNumberView.swift */,
 				A5A5F8552D5CE16A0053BF24 /* RadioButtonView.swift */,
@@ -351,6 +353,8 @@
 				A5A5F8652D5CE4A60053BF24 /* ErrorView.swift in Sources */,
 				B4A000010000000000000002 /* PingOneMFADavinciPairingView.swift in Sources */,
 				B4A000010000000000000003 /* MobilePairingCollectorView.swift in Sources */,
+				B4A000010000000000000006 /* PingOneMFADeviceAuthorizationView.swift in Sources */,
+				B4A000010000000000000007 /* MetadataView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -62,6 +62,11 @@ struct ContentView: View {
                 NavigationLink(value: "DaVinciPairing") {
                     Text("PingOne MFA Pairing")
                 }
+                /// Navigation option to authorize the device via a DaVinci flow.
+                /// - Sends the PingOne MFA mobile payload and validates the result.
+                NavigationLink(value: "DaVinciDeviceAuthorization") {
+                    Text("PingOne MFA Device Authorization")
+                }
             }.navigationDestination(for: String.self) { item in
                 /// Routes to different views based on the selected navigation option
                 switch item {
@@ -75,6 +80,8 @@ struct ContentView: View {
                     LogOutView(path: $path)
                 case "DaVinciPairing":
                     PingOneMFADavinciPairingView(path: $path)
+                case "DaVinciDeviceAuthorization":
+                    PingOneMFADeviceAuthorizationView()
                 default:
                     EmptyView()
                 }

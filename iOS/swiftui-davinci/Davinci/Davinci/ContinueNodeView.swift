@@ -26,17 +26,22 @@ struct ContinueNodeView: View {
     let onStart: () -> Void
     /// Callback for when the user proceeds to the next step, with a flag indicating if this is a submission.
     let onNext: (Bool) -> Void
+    /// Optional builder that overrides how a METADATA collector is rendered, so a flow
+    /// can own specific METADATA steps (e.g. mobile payload collection) with custom UI.
+    let metadataViewBuilder: ((MetadataCollector, @escaping (Bool) -> Void) -> AnyView)?
 
     init(
         continueNode: ContinueNode,
         onNodeUpdated: @escaping () -> Void,
         onStart: @escaping () -> Void,
-        onNext: @escaping (Bool) -> Void
+        onNext: @escaping (Bool) -> Void,
+        metadataViewBuilder: ((MetadataCollector, @escaping (Bool) -> Void) -> AnyView)? = nil
     ) {
         self.continueNode = continueNode
         self.onNodeUpdated = onNodeUpdated
         self.onStart = onStart
         self.onNext = onNext
+        self.metadataViewBuilder = metadataViewBuilder
     }
 
     /// The validation view model shared across collectors to manage form validation state.
@@ -110,6 +115,12 @@ struct ContinueNodeView: View {
                     DeviceRegistrationView(field: deviceRegistrationCollector, onNext: onNext)
                 case let deviceAuthenticationCollector as DeviceAuthenticationCollector:
                     DeviceAuthenticationView(field: deviceAuthenticationCollector, onNext: onNext)
+                case let metadataCollector as MetadataCollector:
+                    if let metadataViewBuilder {
+                        metadataViewBuilder(metadataCollector, onNext)
+                    } else {
+                        MetadataView(field: metadataCollector, onNext: onNext)
+                    }
                 case let phoneNumberCollector as PhoneNumberCollector:
                     PhoneNumberView(field: phoneNumberCollector, onNodeUpdated: onNodeUpdated)
                 case is IdpCollector:
