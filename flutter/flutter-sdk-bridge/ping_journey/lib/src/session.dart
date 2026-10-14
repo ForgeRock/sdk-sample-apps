@@ -15,6 +15,9 @@ class Session {
   const Session({
     required this.accessToken,
     this.refreshToken,
+    this.idToken,
+    this.tokenType,
+    this.scope,
     required this.expiresIn,
     this.userInfo = const {},
   });
@@ -24,6 +27,15 @@ class Session {
 
   /// The OAuth refresh token issued for the completed Journey, if the server returned one.
   final String? refreshToken;
+
+  /// The OIDC ID token, if the server returned one.
+  final String? idToken;
+
+  /// The OAuth token type (e.g. `Bearer`), if the server returned one.
+  final String? tokenType;
+
+  /// The granted scope string, if the server returned one.
+  final String? scope;
 
   /// The number of seconds until [accessToken] expires.
   final int expiresIn;
@@ -50,6 +62,24 @@ class Session {
         'Session.refreshToken must be a string when present',
       );
     }
+    final idToken = json['idToken'];
+    if (idToken != null && idToken is! String) {
+      throw const FormatException(
+        'Session.idToken must be a string when present',
+      );
+    }
+    final tokenType = json['tokenType'];
+    if (tokenType != null && tokenType is! String) {
+      throw const FormatException(
+        'Session.tokenType must be a string when present',
+      );
+    }
+    final scope = json['scope'];
+    if (scope != null && scope is! String) {
+      throw const FormatException(
+        'Session.scope must be a string when present',
+      );
+    }
     final userInfo = json['userInfo'];
     if (userInfo != null && userInfo is! Map) {
       throw const FormatException(
@@ -59,6 +89,9 @@ class Session {
     return Session(
       accessToken: accessToken,
       refreshToken: refreshToken as String?,
+      idToken: idToken as String?,
+      tokenType: tokenType as String?,
+      scope: scope as String?,
       expiresIn: expiresIn,
       userInfo: (userInfo as Map?)?.cast<String, Object?>() ?? const {},
     );
@@ -68,6 +101,9 @@ class Session {
   Map<String, Object?> toJson() => {
     'accessToken': accessToken,
     if (refreshToken != null) 'refreshToken': refreshToken,
+    if (idToken != null) 'idToken': idToken,
+    if (tokenType != null) 'tokenType': tokenType,
+    if (scope != null) 'scope': scope,
     'expiresIn': expiresIn,
     'userInfo': userInfo,
   };

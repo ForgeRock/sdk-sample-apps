@@ -31,7 +31,7 @@ class NodeMapper {
                   .toList() ??
               const [],
         ),
-        NodeType.successNode => const SuccessNode(),
+        NodeType.successNode => SuccessNode(sessionToken: message.sessionToken),
         NodeType.errorNode => ErrorNode(
           message: message.message ?? '',
           status: message.status,
@@ -142,18 +142,17 @@ class NodeMapper {
       policies: message.policies?.cast<String, Object?>(),
       failedPolicies: _castFailedPolicies(message.failedPolicies),
     ),
-    CallbackType.booleanAttributeInputCallback =>
-      BooleanAttributeInputCallback(
-        type: message.type,
-        index: message.index,
-        prompt: message.prompt,
-        name: message.name ?? '',
-        required: message.required ?? false,
-        value: message.value as bool? ?? false,
-        validateOnly: message.validateOnly ?? false,
-        policies: message.policies?.cast<String, Object?>(),
-        failedPolicies: _castFailedPolicies(message.failedPolicies),
-      ),
+    CallbackType.booleanAttributeInputCallback => BooleanAttributeInputCallback(
+      type: message.type,
+      index: message.index,
+      prompt: message.prompt,
+      name: message.name ?? '',
+      required: message.required ?? false,
+      value: message.value as bool? ?? false,
+      validateOnly: message.validateOnly ?? false,
+      policies: message.policies?.cast<String, Object?>(),
+      failedPolicies: _castFailedPolicies(message.failedPolicies),
+    ),
     _ => TextOutputCallback(
       type: message.type,
       index: message.index,
@@ -164,9 +163,7 @@ class NodeMapper {
     ),
   };
 
-  static List<Map<String, Object?>> _castFailedPolicies(
-    List<Object?>? raw,
-  ) =>
+  static List<Map<String, Object?>> _castFailedPolicies(List<Object?>? raw) =>
       raw
           ?.whereType<Map<Object?, Object?>>()
           .map((m) => m.cast<String, Object?>())

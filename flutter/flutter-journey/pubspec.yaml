@@ -36,6 +36,9 @@ dependencies:
   ping_journey:
     path: ../flutter-sdk-bridge/ping_journey
 
+  ping_oidc:
+    path: ../flutter-sdk-bridge/ping_oidc
+
   provider: ^6.1.5
   go_router: ^16.2.4
   shared_preferences: ^2.5.3

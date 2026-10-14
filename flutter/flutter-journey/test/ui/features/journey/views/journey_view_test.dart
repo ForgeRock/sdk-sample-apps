@@ -104,7 +104,14 @@ void main() {
       await tester.tap(find.widgetWithText(ElevatedButton, 'Next'));
       await tester.pumpAndSettle();
 
-      expect(find.text('The request timed out.'), findsOneWidget);
+      // The banner shows PingException.toString() (code/type/message), not the bare message —
+      // see JourneyViewModel's rationale comment for why.
+      expect(
+        find.text(
+          'PingException(code: JOURNEY_NEXT_ERROR, type: network, message: The request timed out.)',
+        ),
+        findsOneWidget,
+      );
       // The form itself is still rendered — the user isn't stuck on a blank screen.
       expect(find.widgetWithText(TextField, 'User Name'), findsOneWidget);
       expect(find.widgetWithText(TextField, 'Password'), findsOneWidget);

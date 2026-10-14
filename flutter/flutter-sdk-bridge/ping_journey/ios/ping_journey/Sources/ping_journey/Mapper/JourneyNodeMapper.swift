@@ -25,8 +25,13 @@ enum JourneyNodeMapper {
                 stage: continueNode.stage,
                 callbacks: mapCallbacks(continueNode)
             )
-        case is SuccessNode:
-            return NodeMessage(type: .successNode)
+        case let successNode as SuccessNode:
+            return NodeMessage(
+                type: .successNode,
+                sessionToken: successNode.session.value.isEmpty
+                    ? nil
+                    : successNode.session.value
+            )
         case let errorNode as ErrorNode:
             return NodeMessage(
                 type: .errorNode,

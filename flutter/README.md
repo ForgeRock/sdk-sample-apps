@@ -11,12 +11,14 @@ This is a native Dart [pub workspace](https://dart.dev/tools/pub/workspaces) —
 ## Samples
 
 - [**Journey — `flutter-journey/`**](flutter-journey/) — authenticates against a PingAM/PingOne Advanced Identity Cloud authentication Journey: dynamic callback rendering, login, self-registration, and post-login token retrieval.
+- [**OIDC — `flutter-oidc/`**](flutter-oidc/) — browser-based, centralized OIDC login: configure a client, authorize via the system browser, then read tokens/userinfo, refresh, revoke, and sign off.
 
 ## SDK Bridge
 
-- [`flutter-sdk-bridge/`](flutter-sdk-bridge/) — the `ping_core` + `ping_journey` plugin packages
-  the sample above is built on. See its README for how to add a bridge module for a future
-  sample (e.g. DaVinci, OIDC).
+- [`flutter-sdk-bridge/`](flutter-sdk-bridge/) — the `ping_core` + `ping_journey` + `ping_oidc`
+  plugin packages the samples above are built on. See its README for how the two modules share a
+  single configured OIDC client through `ping_core`'s registry, and how to add a bridge module for
+  a future sample (e.g. DaVinci).
 
 ## Requirements
 

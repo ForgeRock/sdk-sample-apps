@@ -1,3 +1,12 @@
+## 0.0.2
+
+#### Added
+- Completed `ping_oidc`'s post-authorize surface: browser authorize, `token`/`refresh`/`userInfo`/`revoke`/`signOff`, and a public Dart facade over the native Ping OIDC SDK for standalone, browser-based centralized login [SDKS-5265]
+- Added `ping_core`'s OIDC seam — so a module can consume a `ping_oidc`-configured client with no compile-time dependency on `ping_oidc`
+- Added `flutter-oidc`, a sample app demonstrating the full standalone OIDC flow browser authorize, token/userinfo display, refresh, revoke, sign off [SDKS-5266]
+- Added `ping_journey`'s optional `JourneyConfigMessage.oidcClientId`, letting a Journey delegate its OIDC configuration to a client shared via `ping_core`'s registry instead of repeating the same fields inline
+- Added `ping_journey`'s optional `JourneyConfigMessage.logLevel`, defaulting to no SDK HTTP/diagnostic logging (opt into `standard` for development-time diagnostics)
+
 ## 0.0.1
 
 #### Added

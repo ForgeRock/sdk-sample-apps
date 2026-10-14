@@ -11,6 +11,9 @@ enum JourneyErrorCodes {
     static let start = "JOURNEY_START_ERROR"
     static let next = "JOURNEY_NEXT_ERROR"
     static let getSession = "JOURNEY_GET_SESSION_ERROR"
+    static let refreshToken = "JOURNEY_REFRESH_ERROR"
+    static let revokeToken = "JOURNEY_REVOKE_ERROR"
+    static let getUserInfo = "JOURNEY_USERINFO_ERROR"
     static let signOff = "JOURNEY_SIGN_OFF_ERROR"
     static let dispose = "JOURNEY_DISPOSE_ERROR"
 }

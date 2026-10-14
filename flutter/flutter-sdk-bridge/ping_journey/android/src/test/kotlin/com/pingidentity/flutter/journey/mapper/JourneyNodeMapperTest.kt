@@ -49,7 +49,19 @@ class JourneyNodeMapperTest {
         val result = JourneyNodeMapper.map(node)
 
         assertEquals(NodeType.SUCCESS_NODE, result.type)
+        assertEquals(null, result.sessionToken)
     }
+
+    @Test
+    fun `map SuccessNode carries session token from Session value`() {
+        val node = SuccessNode(session = FakeSession("test-token"))
+
+        val result = JourneyNodeMapper.map(node)
+
+        assertEquals("test-token", result.sessionToken)
+    }
+
+    private class FakeSession(override val value: String) : com.pingidentity.orchestrate.Session
 
     @Test
     fun `map ErrorNode returns ERROR_NODE type with message`() {

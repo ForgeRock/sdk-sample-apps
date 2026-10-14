@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright (c) 2026 Ping Identity Corporation. All rights reserved.
+
+  This software may be modified and distributed under the terms
+  of the MIT license. See the LICENSE file for details.
+
+  Debug-only network policy for the ping_journey integration-test host.
+
+  The hermetic integration-test mode starts an in-process HttpServer inside the test process and
+  points the SDK at it over plain HTTP. Android blocks cleartext traffic by default (API 28+), so
+  loopback — and only loopback — is opted back in here. Everything else keeps the platform default,
+  which is HTTPS-only, so pointing the tests at a real tenant still requires TLS.
+
+  This file lives in src/debug/ and is therefore never merged into a release build.
+-->
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="false">127.0.0.1</domain>
+        <domain includeSubdomains="false">localhost</domain>
+    </domain-config>
+</network-security-config>

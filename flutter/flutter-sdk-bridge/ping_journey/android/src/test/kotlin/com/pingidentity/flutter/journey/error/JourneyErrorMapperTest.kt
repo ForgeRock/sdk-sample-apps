@@ -124,6 +124,71 @@ class JourneyErrorMapperTest {
     }
 
     @Test
+    fun `fromOidcError AuthorizeError surfaces ApiException status and body`() {
+        // The native session agent's exact failure shape: AuthorizeException(message, cause) where
+        // cause is the ApiException carrying the server's HTTP status and response body.
+        val cause = AuthorizeException(
+            "Authorize failed, session is discarded. Please start Journey flow to authenticate.",
+            ApiException(403, "{\"error\":\"access_denied\"}"),
+        )
+        val error = OidcError.AuthorizeError(cause)
+
+        val result = JourneyErrorMapper.fromOidcError(code, error)
+
+        assertEquals("auth", result.details)
+        assertEquals(
+            "Authorize failed: API error 403: {\"error\":\"access_denied\"}",
+            result.message,
+        )
+    }
+
+    @Test
+    fun `fromOidcError AuthorizeError on a blank-body redirect explains the ambiguity`() {
+        // sessionAgent.authorize()'s exact "redirected without a code" shape: status 302, and a
+        // redirect never carries a body, so ApiException.content is always blank here.
+        val cause = AuthorizeException(
+            "Authorize failed, session is discarded. Please start Journey flow to authenticate.",
+            ApiException(302, ""),
+        )
+        val error = OidcError.AuthorizeError(cause)
+
+        val result = JourneyErrorMapper.fromOidcError(code, error)
+        val message = result.message
+        check(message != null) { "expected a non-null message" }
+
+        assertEquals("auth", result.details)
+        assert(message.startsWith("Authorize failed: API error 302:")) {
+            "expected message to start with the status prefix, was: $message"
+        }
+        assert(message.contains("session wasn't accepted as authenticated")) {
+            "expected message to explain the ambiguous cause, was: $message"
+        }
+        assert(message.contains("serverinfo")) {
+            "expected message to point at serverinfo's cookieName field, was: $message"
+        }
+    }
+
+    @Test
+    fun `fromOidcError AuthorizeError on a blank-body non-redirect status stays plain`() {
+        val cause = AuthorizeException("boom", ApiException(500, ""))
+        val error = OidcError.AuthorizeError(cause)
+
+        val result = JourneyErrorMapper.fromOidcError(code, error)
+
+        assertEquals("Authorize failed: API error 500: (no response body)", result.message)
+    }
+
+    @Test
+    fun `fromOidcError AuthorizeError with non-ApiException cause keeps its message`() {
+        val error = OidcError.AuthorizeError(IllegalStateException("some other failure"))
+
+        val result = JourneyErrorMapper.fromOidcError(code, error)
+
+        assertEquals("auth", result.details)
+        assertEquals("some other failure", result.message)
+    }
+
+    @Test
     fun `fromOidcError AuthorizeError falls back to default message when cause has none`() {
         val error = OidcError.AuthorizeError(RuntimeException())
 

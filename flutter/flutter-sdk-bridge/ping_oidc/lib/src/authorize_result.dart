@@ -7,8 +7,7 @@
 
 /// The outcome of a browser-based [OidcClient.authorize] call.
 ///
-/// A two-case closed union is a value type, not a `Node`/mapper hierarchy — see
-/// `IMPLEMENTATION_PLAN_OIDC.md`'s explicit carve-out for this and [OidcError].
+/// A two-case closed union is a value type, not a `Node`/mapper hierarchy.
 sealed class AuthorizeResult {
   const AuthorizeResult();
 }

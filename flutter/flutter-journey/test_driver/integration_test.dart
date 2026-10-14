@@ -7,4 +7,5 @@
 
 import 'package:integration_test/integration_test_driver.dart';
 
+/// Runs the integration tests using the integration test driver.
 Future<void> main() => integrationDriver();

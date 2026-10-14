@@ -32,7 +32,7 @@ enum JourneyErrorMapper {
         switch error {
         case JourneyHostApiError.journeyNotFound, JourneyHostApiError.stateError:
             type = "state"
-        case JourneyHostApiError.callbackApply:
+        case JourneyHostApiError.callbackApply, JourneyHostApiError.argument:
             type = "argument"
         case JourneyHostApiError.unsupported:
             // Matches Kotlin's UnsupportedOperationException -> "unsupported" mapping for the

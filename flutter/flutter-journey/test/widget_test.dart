@@ -9,6 +9,8 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:flutter_journey/main.dart';
 
+/// This is a basic Flutter widget test.
+/// Runs a basic test to verify that the app boots to the active-environment config screen.
 void main() {
   testWidgets('boots to the active-environment config screen', (
     WidgetTester tester,

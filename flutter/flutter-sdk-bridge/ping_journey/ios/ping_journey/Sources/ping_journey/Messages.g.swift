@@ -197,6 +197,15 @@ enum NodeType: Int, CaseIterable {
   case failureNode = 3
 }
 
+/// SDK HTTP/diagnostic logging verbosity. Defaults to [none] (matching the native Android SDK's
+/// own default) if [JourneyConfigMessage.logLevel] is unset — [standard] is a development aid
+/// that routes every SDK request/response through platform logs and should not ship as a
+/// production default, since it can surface session cookie/auth material there.
+enum JourneyLogLevel: Int, CaseIterable {
+  case none = 0
+  case standard = 1
+}
+
 /// Flat, wire-serializable Journey configuration. OIDC fields are hoisted to
 /// the top level rather than nested, since Pigeon classes can't express an
 /// "OIDC configured only if any OIDC field is present" union cleanly.
@@ -208,6 +217,9 @@ struct JourneyConfigMessage: Hashable, CustomStringConvertible {
   var cookie: String? = nil
   /// Milliseconds.
   var timeoutMillis: Int64? = nil
+  /// Defaults to [JourneyLogLevel.none] when unset. See [JourneyLogLevel] for what [standard]
+  /// exposes and why it isn't the default.
+  var logLevel: JourneyLogLevel? = nil
   var clientId: String? = nil
   var discoveryEndpoint: String? = nil
   var redirectUri: String? = nil
@@ -223,6 +235,10 @@ struct JourneyConfigMessage: Hashable, CustomStringConvertible {
   var display: String? = nil
   var prompt: String? = nil
   var additionalParameters: [String?: String?]? = nil
+  /// Id of a native OIDC client already registered in `ping_core`'s shared
+  /// `CoreRuntime.oidcClientRegistry` (e.g. via `ping_oidc`'s `OidcClient.configure`).
+  /// Mutually exclusive with the flat OIDC fields above — set this OR them, never both.
+  var oidcClientId: String? = nil
 
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
@@ -231,26 +247,29 @@ struct JourneyConfigMessage: Hashable, CustomStringConvertible {
     let realm: String? = nilOrValue(pigeonVar_list[1])
     let cookie: String? = nilOrValue(pigeonVar_list[2])
     let timeoutMillis: Int64? = nilOrValue(pigeonVar_list[3])
-    let clientId: String? = nilOrValue(pigeonVar_list[4])
-    let discoveryEndpoint: String? = nilOrValue(pigeonVar_list[5])
-    let redirectUri: String? = nilOrValue(pigeonVar_list[6])
-    let scopes: [String?]? = nilOrValue(pigeonVar_list[7])
-    let acrValues: String? = nilOrValue(pigeonVar_list[8])
-    let signOutRedirectUri: String? = nilOrValue(pigeonVar_list[9])
-    let state: String? = nilOrValue(pigeonVar_list[10])
-    let nonce: String? = nilOrValue(pigeonVar_list[11])
-    let uiLocales: String? = nilOrValue(pigeonVar_list[12])
-    let refreshThreshold: Int64? = nilOrValue(pigeonVar_list[13])
-    let loginHint: String? = nilOrValue(pigeonVar_list[14])
-    let display: String? = nilOrValue(pigeonVar_list[15])
-    let prompt: String? = nilOrValue(pigeonVar_list[16])
-    let additionalParameters: [String?: String?]? = nilOrValue(pigeonVar_list[17])
+    let logLevel: JourneyLogLevel? = nilOrValue(pigeonVar_list[4])
+    let clientId: String? = nilOrValue(pigeonVar_list[5])
+    let discoveryEndpoint: String? = nilOrValue(pigeonVar_list[6])
+    let redirectUri: String? = nilOrValue(pigeonVar_list[7])
+    let scopes: [String?]? = nilOrValue(pigeonVar_list[8])
+    let acrValues: String? = nilOrValue(pigeonVar_list[9])
+    let signOutRedirectUri: String? = nilOrValue(pigeonVar_list[10])
+    let state: String? = nilOrValue(pigeonVar_list[11])
+    let nonce: String? = nilOrValue(pigeonVar_list[12])
+    let uiLocales: String? = nilOrValue(pigeonVar_list[13])
+    let refreshThreshold: Int64? = nilOrValue(pigeonVar_list[14])
+    let loginHint: String? = nilOrValue(pigeonVar_list[15])
+    let display: String? = nilOrValue(pigeonVar_list[16])
+    let prompt: String? = nilOrValue(pigeonVar_list[17])
+    let additionalParameters: [String?: String?]? = nilOrValue(pigeonVar_list[18])
+    let oidcClientId: String? = nilOrValue(pigeonVar_list[19])
 
     return JourneyConfigMessage(
       serverUrl: serverUrl,
       realm: realm,
       cookie: cookie,
       timeoutMillis: timeoutMillis,
+      logLevel: logLevel,
       clientId: clientId,
       discoveryEndpoint: discoveryEndpoint,
       redirectUri: redirectUri,
@@ -264,7 +283,8 @@ struct JourneyConfigMessage: Hashable, CustomStringConvertible {
       loginHint: loginHint,
       display: display,
       prompt: prompt,
-      additionalParameters: additionalParameters
+      additionalParameters: additionalParameters,
+      oidcClientId: oidcClientId
     )
   }
   func toList() -> [Any?] {
@@ -273,6 +293,7 @@ struct JourneyConfigMessage: Hashable, CustomStringConvertible {
       realm,
       cookie,
       timeoutMillis,
+      logLevel,
       clientId,
       discoveryEndpoint,
       redirectUri,
@@ -287,13 +308,14 @@ struct JourneyConfigMessage: Hashable, CustomStringConvertible {
       display,
       prompt,
       additionalParameters,
+      oidcClientId,
     ]
   }
   static func == (lhs: JourneyConfigMessage, rhs: JourneyConfigMessage) -> Bool {
     if Swift.type(of: lhs) != Swift.type(of: rhs) {
       return false
     }
-    return MessagesPigeonInternal.deepEquals(lhs.serverUrl, rhs.serverUrl) && MessagesPigeonInternal.deepEquals(lhs.realm, rhs.realm) && MessagesPigeonInternal.deepEquals(lhs.cookie, rhs.cookie) && MessagesPigeonInternal.deepEquals(lhs.timeoutMillis, rhs.timeoutMillis) && MessagesPigeonInternal.deepEquals(lhs.clientId, rhs.clientId) && MessagesPigeonInternal.deepEquals(lhs.discoveryEndpoint, rhs.discoveryEndpoint) && MessagesPigeonInternal.deepEquals(lhs.redirectUri, rhs.redirectUri) && MessagesPigeonInternal.deepEquals(lhs.scopes, rhs.scopes) && MessagesPigeonInternal.deepEquals(lhs.acrValues, rhs.acrValues) && MessagesPigeonInternal.deepEquals(lhs.signOutRedirectUri, rhs.signOutRedirectUri) && MessagesPigeonInternal.deepEquals(lhs.state, rhs.state) && MessagesPigeonInternal.deepEquals(lhs.nonce, rhs.nonce) && MessagesPigeonInternal.deepEquals(lhs.uiLocales, rhs.uiLocales) && MessagesPigeonInternal.deepEquals(lhs.refreshThreshold, rhs.refreshThreshold) && MessagesPigeonInternal.deepEquals(lhs.loginHint, rhs.loginHint) && MessagesPigeonInternal.deepEquals(lhs.display, rhs.display) && MessagesPigeonInternal.deepEquals(lhs.prompt, rhs.prompt) && MessagesPigeonInternal.deepEquals(lhs.additionalParameters, rhs.additionalParameters)
+    return MessagesPigeonInternal.deepEquals(lhs.serverUrl, rhs.serverUrl) && MessagesPigeonInternal.deepEquals(lhs.realm, rhs.realm) && MessagesPigeonInternal.deepEquals(lhs.cookie, rhs.cookie) && MessagesPigeonInternal.deepEquals(lhs.timeoutMillis, rhs.timeoutMillis) && MessagesPigeonInternal.deepEquals(lhs.logLevel, rhs.logLevel) && MessagesPigeonInternal.deepEquals(lhs.clientId, rhs.clientId) && MessagesPigeonInternal.deepEquals(lhs.discoveryEndpoint, rhs.discoveryEndpoint) && MessagesPigeonInternal.deepEquals(lhs.redirectUri, rhs.redirectUri) && MessagesPigeonInternal.deepEquals(lhs.scopes, rhs.scopes) && MessagesPigeonInternal.deepEquals(lhs.acrValues, rhs.acrValues) && MessagesPigeonInternal.deepEquals(lhs.signOutRedirectUri, rhs.signOutRedirectUri) && MessagesPigeonInternal.deepEquals(lhs.state, rhs.state) && MessagesPigeonInternal.deepEquals(lhs.nonce, rhs.nonce) && MessagesPigeonInternal.deepEquals(lhs.uiLocales, rhs.uiLocales) && MessagesPigeonInternal.deepEquals(lhs.refreshThreshold, rhs.refreshThreshold) && MessagesPigeonInternal.deepEquals(lhs.loginHint, rhs.loginHint) && MessagesPigeonInternal.deepEquals(lhs.display, rhs.display) && MessagesPigeonInternal.deepEquals(lhs.prompt, rhs.prompt) && MessagesPigeonInternal.deepEquals(lhs.additionalParameters, rhs.additionalParameters) && MessagesPigeonInternal.deepEquals(lhs.oidcClientId, rhs.oidcClientId)
   }
 
   func hash(into hasher: inout Hasher) {
@@ -302,6 +324,7 @@ struct JourneyConfigMessage: Hashable, CustomStringConvertible {
     MessagesPigeonInternal.deepHash(value: realm, hasher: &hasher)
     MessagesPigeonInternal.deepHash(value: cookie, hasher: &hasher)
     MessagesPigeonInternal.deepHash(value: timeoutMillis, hasher: &hasher)
+    MessagesPigeonInternal.deepHash(value: logLevel, hasher: &hasher)
     MessagesPigeonInternal.deepHash(value: clientId, hasher: &hasher)
     MessagesPigeonInternal.deepHash(value: discoveryEndpoint, hasher: &hasher)
     MessagesPigeonInternal.deepHash(value: redirectUri, hasher: &hasher)
@@ -316,10 +339,11 @@ struct JourneyConfigMessage: Hashable, CustomStringConvertible {
     MessagesPigeonInternal.deepHash(value: display, hasher: &hasher)
     MessagesPigeonInternal.deepHash(value: prompt, hasher: &hasher)
     MessagesPigeonInternal.deepHash(value: additionalParameters, hasher: &hasher)
+    MessagesPigeonInternal.deepHash(value: oidcClientId, hasher: &hasher)
   }
 
   public var description: String {
-    return "JourneyConfigMessage(serverUrl: \(String(describing: serverUrl)), realm: \(String(describing: realm)), cookie: \(String(describing: cookie)), timeoutMillis: \(String(describing: timeoutMillis)), clientId: \(String(describing: clientId)), discoveryEndpoint: \(String(describing: discoveryEndpoint)), redirectUri: \(String(describing: redirectUri)), scopes: \(String(describing: scopes)), acrValues: \(String(describing: acrValues)), signOutRedirectUri: \(String(describing: signOutRedirectUri)), state: \(String(describing: state)), nonce: \(String(describing: nonce)), uiLocales: \(String(describing: uiLocales)), refreshThreshold: \(String(describing: refreshThreshold)), loginHint: \(String(describing: loginHint)), display: \(String(describing: display)), prompt: \(String(describing: prompt)), additionalParameters: \(String(describing: additionalParameters)))"
+    return "JourneyConfigMessage(serverUrl: \(String(describing: serverUrl)), realm: \(String(describing: realm)), cookie: \(String(describing: cookie)), timeoutMillis: \(String(describing: timeoutMillis)), logLevel: \(String(describing: logLevel)), clientId: \(String(describing: clientId)), discoveryEndpoint: \(String(describing: discoveryEndpoint)), redirectUri: \(String(describing: redirectUri)), scopes: \(String(describing: scopes)), acrValues: \(String(describing: acrValues)), signOutRedirectUri: \(String(describing: signOutRedirectUri)), state: \(String(describing: state)), nonce: \(String(describing: nonce)), uiLocales: \(String(describing: uiLocales)), refreshThreshold: \(String(describing: refreshThreshold)), loginHint: \(String(describing: loginHint)), display: \(String(describing: display)), prompt: \(String(describing: prompt)), additionalParameters: \(String(describing: additionalParameters)), oidcClientId: \(String(describing: oidcClientId)))"
   }
 }
 
@@ -596,6 +620,10 @@ struct NodeMessage: Hashable, CustomStringConvertible {
   var stage: String? = nil
   var callbacks: [CallbackMessage?]? = nil
   var input: [String?: Any?]? = nil
+  /// The AM session token (`tokenId`) carried on `SuccessNode.session.value`,
+  /// present even when the Journey has no OIDC configuration. Empty native
+  /// sessions (`EmptySession`) are mapped to null.
+  var sessionToken: String? = nil
 
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
@@ -609,6 +637,7 @@ struct NodeMessage: Hashable, CustomStringConvertible {
     let stage: String? = nilOrValue(pigeonVar_list[6])
     let callbacks: [CallbackMessage?]? = nilOrValue(pigeonVar_list[7])
     let input: [String?: Any?]? = nilOrValue(pigeonVar_list[8])
+    let sessionToken: String? = nilOrValue(pigeonVar_list[9])
 
     return NodeMessage(
       type: type,
@@ -619,7 +648,8 @@ struct NodeMessage: Hashable, CustomStringConvertible {
       pageDescription: pageDescription,
       stage: stage,
       callbacks: callbacks,
-      input: input
+      input: input,
+      sessionToken: sessionToken
     )
   }
   func toList() -> [Any?] {
@@ -633,13 +663,14 @@ struct NodeMessage: Hashable, CustomStringConvertible {
       stage,
       callbacks,
       input,
+      sessionToken,
     ]
   }
   static func == (lhs: NodeMessage, rhs: NodeMessage) -> Bool {
     if Swift.type(of: lhs) != Swift.type(of: rhs) {
       return false
     }
-    return MessagesPigeonInternal.deepEquals(lhs.type, rhs.type) && MessagesPigeonInternal.deepEquals(lhs.message, rhs.message) && MessagesPigeonInternal.deepEquals(lhs.cause, rhs.cause) && MessagesPigeonInternal.deepEquals(lhs.status, rhs.status) && MessagesPigeonInternal.deepEquals(lhs.header, rhs.header) && MessagesPigeonInternal.deepEquals(lhs.pageDescription, rhs.pageDescription) && MessagesPigeonInternal.deepEquals(lhs.stage, rhs.stage) && MessagesPigeonInternal.deepEquals(lhs.callbacks, rhs.callbacks) && MessagesPigeonInternal.deepEquals(lhs.input, rhs.input)
+    return MessagesPigeonInternal.deepEquals(lhs.type, rhs.type) && MessagesPigeonInternal.deepEquals(lhs.message, rhs.message) && MessagesPigeonInternal.deepEquals(lhs.cause, rhs.cause) && MessagesPigeonInternal.deepEquals(lhs.status, rhs.status) && MessagesPigeonInternal.deepEquals(lhs.header, rhs.header) && MessagesPigeonInternal.deepEquals(lhs.pageDescription, rhs.pageDescription) && MessagesPigeonInternal.deepEquals(lhs.stage, rhs.stage) && MessagesPigeonInternal.deepEquals(lhs.callbacks, rhs.callbacks) && MessagesPigeonInternal.deepEquals(lhs.input, rhs.input) && MessagesPigeonInternal.deepEquals(lhs.sessionToken, rhs.sessionToken)
   }
 
   func hash(into hasher: inout Hasher) {
@@ -653,10 +684,11 @@ struct NodeMessage: Hashable, CustomStringConvertible {
     MessagesPigeonInternal.deepHash(value: stage, hasher: &hasher)
     MessagesPigeonInternal.deepHash(value: callbacks, hasher: &hasher)
     MessagesPigeonInternal.deepHash(value: input, hasher: &hasher)
+    MessagesPigeonInternal.deepHash(value: sessionToken, hasher: &hasher)
   }
 
   public var description: String {
-    return "NodeMessage(type: \(String(describing: type)), message: \(String(describing: message)), cause: \(String(describing: cause)), status: \(String(describing: status)), header: \(String(describing: header)), pageDescription: \(String(describing: pageDescription)), stage: \(String(describing: stage)), callbacks: \(String(describing: callbacks)), input: \(String(describing: input)))"
+    return "NodeMessage(type: \(String(describing: type)), message: \(String(describing: message)), cause: \(String(describing: cause)), status: \(String(describing: status)), header: \(String(describing: header)), pageDescription: \(String(describing: pageDescription)), stage: \(String(describing: stage)), callbacks: \(String(describing: callbacks)), input: \(String(describing: input)), sessionToken: \(String(describing: sessionToken)))"
   }
 }
 
@@ -664,6 +696,13 @@ struct NodeMessage: Hashable, CustomStringConvertible {
 struct SessionMessage: Hashable, CustomStringConvertible {
   var accessToken: String
   var refreshToken: String? = nil
+  /// The OIDC ID token, when the server returned one (not present in every
+  /// token response).
+  var idToken: String? = nil
+  /// The OAuth token type (e.g. `Bearer`), when the server returned one.
+  var tokenType: String? = nil
+  /// The granted scope string, when the server returned one.
+  var scope: String? = nil
   var expiresIn: Int64
   var userInfo: [String?: Any?]? = nil
 
@@ -672,12 +711,18 @@ struct SessionMessage: Hashable, CustomStringConvertible {
   static func fromList(_ pigeonVar_list: [Any?]) -> SessionMessage? {
     let accessToken = pigeonVar_list[0] as! String
     let refreshToken: String? = nilOrValue(pigeonVar_list[1])
-    let expiresIn = pigeonVar_list[2] as! Int64
-    let userInfo: [String?: Any?]? = nilOrValue(pigeonVar_list[3])
+    let idToken: String? = nilOrValue(pigeonVar_list[2])
+    let tokenType: String? = nilOrValue(pigeonVar_list[3])
+    let scope: String? = nilOrValue(pigeonVar_list[4])
+    let expiresIn = pigeonVar_list[5] as! Int64
+    let userInfo: [String?: Any?]? = nilOrValue(pigeonVar_list[6])
 
     return SessionMessage(
       accessToken: accessToken,
       refreshToken: refreshToken,
+      idToken: idToken,
+      tokenType: tokenType,
+      scope: scope,
       expiresIn: expiresIn,
       userInfo: userInfo
     )
@@ -686,6 +731,9 @@ struct SessionMessage: Hashable, CustomStringConvertible {
     return [
       accessToken,
       refreshToken,
+      idToken,
+      tokenType,
+      scope,
       expiresIn,
       userInfo,
     ]
@@ -694,19 +742,22 @@ struct SessionMessage: Hashable, CustomStringConvertible {
     if Swift.type(of: lhs) != Swift.type(of: rhs) {
       return false
     }
-    return MessagesPigeonInternal.deepEquals(lhs.accessToken, rhs.accessToken) && MessagesPigeonInternal.deepEquals(lhs.refreshToken, rhs.refreshToken) && MessagesPigeonInternal.deepEquals(lhs.expiresIn, rhs.expiresIn) && MessagesPigeonInternal.deepEquals(lhs.userInfo, rhs.userInfo)
+    return MessagesPigeonInternal.deepEquals(lhs.accessToken, rhs.accessToken) && MessagesPigeonInternal.deepEquals(lhs.refreshToken, rhs.refreshToken) && MessagesPigeonInternal.deepEquals(lhs.idToken, rhs.idToken) && MessagesPigeonInternal.deepEquals(lhs.tokenType, rhs.tokenType) && MessagesPigeonInternal.deepEquals(lhs.scope, rhs.scope) && MessagesPigeonInternal.deepEquals(lhs.expiresIn, rhs.expiresIn) && MessagesPigeonInternal.deepEquals(lhs.userInfo, rhs.userInfo)
   }
 
   func hash(into hasher: inout Hasher) {
     hasher.combine("SessionMessage")
     MessagesPigeonInternal.deepHash(value: accessToken, hasher: &hasher)
     MessagesPigeonInternal.deepHash(value: refreshToken, hasher: &hasher)
+    MessagesPigeonInternal.deepHash(value: idToken, hasher: &hasher)
+    MessagesPigeonInternal.deepHash(value: tokenType, hasher: &hasher)
+    MessagesPigeonInternal.deepHash(value: scope, hasher: &hasher)
     MessagesPigeonInternal.deepHash(value: expiresIn, hasher: &hasher)
     MessagesPigeonInternal.deepHash(value: userInfo, hasher: &hasher)
   }
 
   public var description: String {
-    return "SessionMessage(accessToken: \(String(describing: accessToken)), refreshToken: \(String(describing: refreshToken)), expiresIn: \(String(describing: expiresIn)), userInfo: \(String(describing: userInfo)))"
+    return "SessionMessage(accessToken: \(String(describing: accessToken)), refreshToken: \(String(describing: refreshToken)), idToken: \(String(describing: idToken)), tokenType: \(String(describing: tokenType)), scope: \(String(describing: scope)), expiresIn: \(String(describing: expiresIn)), userInfo: \(String(describing: userInfo)))"
   }
 }
 
@@ -720,16 +771,22 @@ private class MessagesPigeonCodecReader: FlutterStandardReader {
       }
       return nil
     case 130:
-      return JourneyConfigMessage.fromList(self.readValue() as! [Any?])
+      let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
+      if let enumResultAsInt = enumResultAsInt {
+        return JourneyLogLevel(rawValue: enumResultAsInt)
+      }
+      return nil
     case 131:
-      return StartOptionsMessage.fromList(self.readValue() as! [Any?])
+      return JourneyConfigMessage.fromList(self.readValue() as! [Any?])
     case 132:
-      return CallbackMessage.fromList(self.readValue() as! [Any?])
+      return StartOptionsMessage.fromList(self.readValue() as! [Any?])
     case 133:
-      return CallbackValueMessage.fromList(self.readValue() as! [Any?])
+      return CallbackMessage.fromList(self.readValue() as! [Any?])
     case 134:
-      return NodeMessage.fromList(self.readValue() as! [Any?])
+      return CallbackValueMessage.fromList(self.readValue() as! [Any?])
     case 135:
+      return NodeMessage.fromList(self.readValue() as! [Any?])
+    case 136:
       return SessionMessage.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -742,23 +799,26 @@ private class MessagesPigeonCodecWriter: FlutterStandardWriter {
     if let value = value as? NodeType {
       super.writeByte(129)
       super.writeValue(value.rawValue)
-    } else if let value = value as? JourneyConfigMessage {
+    } else if let value = value as? JourneyLogLevel {
       super.writeByte(130)
-      super.writeValue(value.toList())
-    } else if let value = value as? StartOptionsMessage {
+      super.writeValue(value.rawValue)
+    } else if let value = value as? JourneyConfigMessage {
       super.writeByte(131)
       super.writeValue(value.toList())
-    } else if let value = value as? CallbackMessage {
+    } else if let value = value as? StartOptionsMessage {
       super.writeByte(132)
       super.writeValue(value.toList())
-    } else if let value = value as? CallbackValueMessage {
+    } else if let value = value as? CallbackMessage {
       super.writeByte(133)
       super.writeValue(value.toList())
-    } else if let value = value as? NodeMessage {
+    } else if let value = value as? CallbackValueMessage {
       super.writeByte(134)
       super.writeValue(value.toList())
-    } else if let value = value as? SessionMessage {
+    } else if let value = value as? NodeMessage {
       super.writeByte(135)
+      super.writeValue(value.toList())
+    } else if let value = value as? SessionMessage {
+      super.writeByte(136)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -787,6 +847,19 @@ protocol PingJourneyHostApi {
   func start(journeyId: String, name: String, options: StartOptionsMessage, completion: @escaping (Result<NodeMessage, Error>) -> Void)
   func next(journeyId: String, values: [CallbackValueMessage?], completion: @escaping (Result<NodeMessage, Error>) -> Void)
   func getSession(journeyId: String, completion: @escaping (Result<SessionMessage?, Error>) -> Void)
+  /// Refreshes the OIDC token for a completed Journey, returning the new token
+  /// set (userInfo is null on this message — fetch claims via getUserInfo).
+  /// Throws a typed error when the Journey has no OIDC configuration or no
+  /// user session.
+  func refreshToken(journeyId: String, completion: @escaping (Result<SessionMessage, Error>) -> Void)
+  /// Revokes the OIDC token for a completed Journey. Native swallows server-side
+  /// revocation errors (matching the native SDKs), so completion is not proof
+  /// of invalidation. Throws a typed error when no OIDC/user session exists.
+  func revokeToken(journeyId: String, completion: @escaping (Result<Void, Error>) -> Void)
+  /// Fetches the OIDC userinfo claims for a completed Journey. [cache] is
+  /// always passed explicitly — the native SDKs' own defaults differ.
+  /// Throws a typed error when no OIDC/user session exists.
+  func getUserInfo(journeyId: String, cache: Bool, completion: @escaping (Result<[String?: Any?], Error>) -> Void)
   func signOff(journeyId: String, completion: @escaping (Result<Bool, Error>) -> Void)
   func dispose(journeyId: String, completion: @escaping (Result<Void, Error>) -> Void)
 }
@@ -867,6 +940,68 @@ class PingJourneyHostApiSetup {
       }
     } else {
       getSessionChannel.setMessageHandler(nil)
+    }
+    /// Refreshes the OIDC token for a completed Journey, returning the new token
+    /// set (userInfo is null on this message — fetch claims via getUserInfo).
+    /// Throws a typed error when the Journey has no OIDC configuration or no
+    /// user session.
+    let refreshTokenChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.ping_journey.PingJourneyHostApi.refreshToken\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      refreshTokenChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let journeyIdArg = args[0] as! String
+        api.refreshToken(journeyId: journeyIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      refreshTokenChannel.setMessageHandler(nil)
+    }
+    /// Revokes the OIDC token for a completed Journey. Native swallows server-side
+    /// revocation errors (matching the native SDKs), so completion is not proof
+    /// of invalidation. Throws a typed error when no OIDC/user session exists.
+    let revokeTokenChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.ping_journey.PingJourneyHostApi.revokeToken\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      revokeTokenChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let journeyIdArg = args[0] as! String
+        api.revokeToken(journeyId: journeyIdArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      revokeTokenChannel.setMessageHandler(nil)
+    }
+    /// Fetches the OIDC userinfo claims for a completed Journey. [cache] is
+    /// always passed explicitly — the native SDKs' own defaults differ.
+    /// Throws a typed error when no OIDC/user session exists.
+    let getUserInfoChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.ping_journey.PingJourneyHostApi.getUserInfo\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getUserInfoChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let journeyIdArg = args[0] as! String
+        let cacheArg = args[1] as! Bool
+        api.getUserInfo(journeyId: journeyIdArg, cache: cacheArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getUserInfoChannel.setMessageHandler(nil)
     }
     let signOffChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.ping_journey.PingJourneyHostApi.signOff\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
