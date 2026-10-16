@@ -1,0 +1,2058 @@
+{
+  "version": "6.0",
+  "nxVersion": "17.1.3",
+  "deps": {
+    "@forgerock/davinci-client": "latest",
+    "@paralleldrive/cuid2": "^2.2.2",
+    "@playwright/test": "^1.41.2",
+    "@types/node": "^20.11.20",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.11.0",
+    "cors": "^2.8.5",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^10.1.2",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.8.0",
+    "rimraf": "^5.0.10",
+    "typescript": "^5.2.2",
+    "webpack-cli": "^5.1.4"
+  },
+  "pathMappings": {},
+  "nxJsonPlugins": [],
+  "fileMap": {
+    "projectFileMap": {
+      "angular-todo": [
+        {
+          "file": "angular-todo/.editorconfig",
+          "hash": "6686520031028425313"
+        },
+        {
+          "file": "angular-todo/.env.example",
+          "hash": "7455060234709115778"
+        },
+        {
+          "file": "angular-todo/.eslintrc.json",
+          "hash": "8604914726694717506"
+        },
+        {
+          "file": "angular-todo/.gitignore",
+          "hash": "5953955090655080506"
+        },
+        {
+          "file": "angular-todo/README.md",
+          "hash": "871127551952537516"
+        },
+        {
+          "file": "angular-todo/angular.json",
+          "hash": "15518354003633764032"
+        },
+        {
+          "file": "angular-todo/e2e/centralized-login.spec.ts",
+          "hash": "332501015907332437"
+        },
+        {
+          "file": "angular-todo/e2e/embedded-login.spec.ts",
+          "hash": "3888515529988786215"
+        },
+        {
+          "file": "angular-todo/e2e/register-new-user.spec.ts",
+          "hash": "15139714739817165909"
+        },
+        {
+          "file": "angular-todo/e2e/social-login.spec.ts",
+          "hash": "10401390096712646479"
+        },
+        {
+          "file": "angular-todo/e2e/virtual-authenticator.spec.ts",
+          "hash": "4899537414297815853"
+        },
+        {
+          "file": "angular-todo/package.json",
+          "hash": "4232523825366253936",
+          "deps": [
+            "npm:@angular/animations",
+            "npm:@angular/common",
+            "npm:@angular/compiler",
+            "npm:@angular/core",
+            "npm:@angular/forms",
+            "npm:@angular/platform-browser",
+            "npm:@angular/platform-browser-dynamic",
+            "npm:@angular/router",
+            "npm:@forgerock/javascript-sdk",
+            "npm:bootstrap",
+            "npm:rxjs",
+            "npm:tslib",
+            "npm:zone.js",
+            "npm:@angular-devkit/build-angular",
+            "npm:@angular-eslint/builder",
+            "npm:@angular-eslint/eslint-plugin",
+            "npm:@angular-eslint/eslint-plugin-template",
+            "npm:@angular-eslint/schematics",
+            "npm:@angular-eslint/template-parser",
+            "npm:@angular/cli",
+            "npm:@angular/compiler-cli",
+            "npm:@types/jasmine",
+            "npm:@typescript-eslint/eslint-plugin",
+            "npm:@typescript-eslint/parser",
+            "npm:dotenv",
+            "npm:eslint",
+            "npm:jasmine-core",
+            "npm:karma",
+            "npm:karma-chrome-launcher",
+            "npm:karma-coverage",
+            "npm:karma-jasmine",
+            "npm:karma-jasmine-html-reporter",
+            "npm:typescript"
+          ]
+        },
+        {
+          "file": "angular-todo/playwright.config.ts",
+          "hash": "15185078334298522874"
+        },
+        {
+          "file": "angular-todo/set-env.mjs",
+          "hash": "13982503780120573641"
+        },
+        {
+          "file": "angular-todo/src/app/app-routing.module.ts",
+          "hash": "9790484882743568151"
+        },
+        {
+          "file": "angular-todo/src/app/app.component.html",
+          "hash": "9299075054573728916"
+        },
+        {
+          "file": "angular-todo/src/app/app.component.ts",
+          "hash": "9451571345086557190"
+        },
+        {
+          "file": "angular-todo/src/app/app.module.ts",
+          "hash": "4569867452155756712"
+        },
+        {
+          "file": "angular-todo/src/app/auth/auth.guard.ts",
+          "hash": "17008093624117815716"
+        },
+        {
+          "file": "angular-todo/src/app/features/journey/alert/alert.component.html",
+          "hash": "15269596511881143072"
+        },
+        {
+          "file": "angular-todo/src/app/features/journey/alert/alert.component.ts",
+          "hash": "7172534726994444631"
+        },
+        {
+          "file": "angular-todo/src/app/features/journey/boolean/boolean.component.html",
+          "hash": "16484566129817347207"
+        },
+        {
+          "file": "angular-todo/src/app/features/journey/boolean/boolean.component.ts",
+          "hash": "2470712971755186660"
+        },
+        {
+          "file": "angular-todo/src/app/features/journey/button/button.component.html",
+          "hash": "10616642662931469694"
+        },
+        {
+          "file": "angular-todo/src/app/features/journey/button/button.component.ts",
+          "hash": "13671321293908064131"
+        },
+        {
+          "file": "angular-todo/src/app/features/journey/choice/choice.component.html",
+          "hash": "10557239636902727757"
+        },
+        {
+          "file": "angular-todo/src/app/features/journey/choice/choice.component.ts",
+          "hash": "104355461015501677"
+        },
+        {
+          "file": "angular-todo/src/app/features/journey/confirmation/confirmation.component.html",
+          "hash": "8461066967579994519"
+        },
+        {
+          "file": "angular-todo/src/app/features/journey/confirmation/confirmation.component.ts",
+          "hash": "14948105225642177988"
+        },
+        {
+          "file": "angular-todo/src/app/features/journey/form/form.component.html",
+          "hash": "4514781921454225096"
+        },
+        {
+          "file": "angular-todo/src/app/features/journey/form/form.component.ts",
+          "hash": "5211703563428554907"
+        },
+        {
+          "file": "angular-todo/src/app/features/journey/identityProvider/identity-provider.component.html",
+          "hash": "12681367364707853615"
+        },
+        {
+          "file": "angular-todo/src/app/features/journey/identityProvider/identity-provider.component.ts",
+          "hash": "13960662007463958854"
+        },
+        {
+          "file": "angular-todo/src/app/features/journey/kba/kba.component.html",
+          "hash": "7382194496941679937"
+        },
+        {
+          "file": "angular-todo/src/app/features/journey/kba/kba.component.ts",
+          "hash": "6318725638691221308"
+        },
+        {
+          "file": "angular-todo/src/app/features/journey/password/password.component.html",
+          "hash": "4867048920683213115"
+        },
+        {
+          "file": "angular-todo/src/app/features/journey/password/password.component.ts",
+          "hash": "1390677791790263417"
+        },
+        {
+          "file": "angular-todo/src/app/features/journey/terms-conditions/terms-conditions.component.html",
+          "hash": "11769591349503254618"
+        },
+        {
+          "file": "angular-todo/src/app/features/journey/terms-conditions/terms-conditions.component.ts",
+          "hash": "16438326957113623790"
+        },
+        {
+          "file": "angular-todo/src/app/features/journey/text/text.component.html",
+          "hash": "8624171995781768759"
+        },
+        {
+          "file": "angular-todo/src/app/features/journey/text/text.component.ts",
+          "hash": "5639939182938459779"
+        },
+        {
+          "file": "angular-todo/src/app/features/journey/textOutput/textOutput.component.html",
+          "hash": "4896610091251177084"
+        },
+        {
+          "file": "angular-todo/src/app/features/journey/textOutput/textOutput.component.ts",
+          "hash": "10273546266921643367"
+        },
+        {
+          "file": "angular-todo/src/app/features/journey/unknown/unknown.component.html",
+          "hash": "12896691079426630827"
+        },
+        {
+          "file": "angular-todo/src/app/features/journey/unknown/unknown.component.ts",
+          "hash": "16325423955978738013"
+        },
+        {
+          "file": "angular-todo/src/app/features/journey/webAuthn/webAuthn.component.html",
+          "hash": "10240520580223700965"
+        },
+        {
+          "file": "angular-todo/src/app/features/journey/webAuthn/webAuthn.component.ts",
+          "hash": "2652083510096585129"
+        },
+        {
+          "file": "angular-todo/src/app/features/logout/logout.component.html",
+          "hash": "7024188345486030440"
+        },
+        {
+          "file": "angular-todo/src/app/features/logout/logout.component.ts",
+          "hash": "2361044891750239701"
+        },
+        {
+          "file": "angular-todo/src/app/features/todo/todo.component.html",
+          "hash": "12090033121949901234"
+        },
+        {
+          "file": "angular-todo/src/app/features/todo/todo.component.ts",
+          "hash": "1691409461704745383"
+        },
+        {
+          "file": "angular-todo/src/app/features/todo/todo.ts",
+          "hash": "5854067445399648115"
+        },
+        {
+          "file": "angular-todo/src/app/icons/account-icon/account-icon.component.html",
+          "hash": "10565736357714531838"
+        },
+        {
+          "file": "angular-todo/src/app/icons/account-icon/account-icon.component.ts",
+          "hash": "8169517427178166140"
+        },
+        {
+          "file": "angular-todo/src/app/icons/action-icon/action-icon.component.html",
+          "hash": "16200928213765282173"
+        },
+        {
+          "file": "angular-todo/src/app/icons/action-icon/action-icon.component.ts",
+          "hash": "13897113872236862580"
+        },
+        {
+          "file": "angular-todo/src/app/icons/alert-icon/alert-icon.component.html",
+          "hash": "9561820328461826522"
+        },
+        {
+          "file": "angular-todo/src/app/icons/alert-icon/alert-icon.component.ts",
+          "hash": "4616340193688846282"
+        },
+        {
+          "file": "angular-todo/src/app/icons/angular-icon/angular-icon.component.html",
+          "hash": "5629453149904258283"
+        },
+        {
+          "file": "angular-todo/src/app/icons/angular-icon/angular-icon.component.ts",
+          "hash": "13192508483978245626"
+        },
+        {
+          "file": "angular-todo/src/app/icons/apple-icon/apple-icon.component.html",
+          "hash": "16424596028322545364"
+        },
+        {
+          "file": "angular-todo/src/app/icons/apple-icon/apple-icon.component.ts",
+          "hash": "2065096113794380967"
+        },
+        {
+          "file": "angular-todo/src/app/icons/eye-icon/eye-icon.component.html",
+          "hash": "11027805147343417649"
+        },
+        {
+          "file": "angular-todo/src/app/icons/eye-icon/eye-icon.component.ts",
+          "hash": "13465303607688070493"
+        },
+        {
+          "file": "angular-todo/src/app/icons/finger-print-icon/finger-print-icon.component.html",
+          "hash": "2049867795203516715"
+        },
+        {
+          "file": "angular-todo/src/app/icons/finger-print-icon/finger-print-icon.component.ts",
+          "hash": "236676317055538389"
+        },
+        {
+          "file": "angular-todo/src/app/icons/forgerock-icon/forgerock-icon.component.html",
+          "hash": "17029172192964900549"
+        },
+        {
+          "file": "angular-todo/src/app/icons/forgerock-icon/forgerock-icon.component.ts",
+          "hash": "2954307821195416077"
+        },
+        {
+          "file": "angular-todo/src/app/icons/google-icon/google-icon.component.html",
+          "hash": "1131520608246968732"
+        },
+        {
+          "file": "angular-todo/src/app/icons/google-icon/google-icon.component.ts",
+          "hash": "6913221390711773839"
+        },
+        {
+          "file": "angular-todo/src/app/icons/home-icon/home-icon.component.html",
+          "hash": "16458583106271182824"
+        },
+        {
+          "file": "angular-todo/src/app/icons/home-icon/home-icon.component.ts",
+          "hash": "13133306741252822838"
+        },
+        {
+          "file": "angular-todo/src/app/icons/key-icon/key-icon.component.html",
+          "hash": "13222315864740692011"
+        },
+        {
+          "file": "angular-todo/src/app/icons/key-icon/key-icon.component.ts",
+          "hash": "5226342893033608949"
+        },
+        {
+          "file": "angular-todo/src/app/icons/left-arrow-icon/left-arrow-icon.component.html",
+          "hash": "14564157989719357213"
+        },
+        {
+          "file": "angular-todo/src/app/icons/left-arrow-icon/left-arrow-icon.component.ts",
+          "hash": "12802856619041189847"
+        },
+        {
+          "file": "angular-todo/src/app/icons/lock-icon/lock-icon.component.html",
+          "hash": "7451300116003693273"
+        },
+        {
+          "file": "angular-todo/src/app/icons/lock-icon/lock-icon.component.ts",
+          "hash": "3184648934626185094"
+        },
+        {
+          "file": "angular-todo/src/app/icons/new-user-icon/new-user-icon.component.html",
+          "hash": "2524898332554559152"
+        },
+        {
+          "file": "angular-todo/src/app/icons/new-user-icon/new-user-icon.component.ts",
+          "hash": "5828024504454240758"
+        },
+        {
+          "file": "angular-todo/src/app/icons/todo-icon/todo-icon.component.html",
+          "hash": "7994196608779552655"
+        },
+        {
+          "file": "angular-todo/src/app/icons/todo-icon/todo-icon.component.ts",
+          "hash": "3421036563644982933"
+        },
+        {
+          "file": "angular-todo/src/app/icons/todos-icon/todos-icon.component.html",
+          "hash": "4581239891490148598"
+        },
+        {
+          "file": "angular-todo/src/app/icons/todos-icon/todos-icon.component.ts",
+          "hash": "17008302870996011239"
+        },
+        {
+          "file": "angular-todo/src/app/icons/verified-icon/verified-icon.component.html",
+          "hash": "11354771899786437184"
+        },
+        {
+          "file": "angular-todo/src/app/icons/verified-icon/verified-icon.component.ts",
+          "hash": "13536898755504741878"
+        },
+        {
+          "file": "angular-todo/src/app/layout/footer/footer.component.html",
+          "hash": "6433067164925739008"
+        },
+        {
+          "file": "angular-todo/src/app/layout/footer/footer.component.ts",
+          "hash": "15047311632490318717"
+        },
+        {
+          "file": "angular-todo/src/app/layout/header/header.component.html",
+          "hash": "9821861909379956217"
+        },
+        {
+          "file": "angular-todo/src/app/layout/header/header.component.ts",
+          "hash": "12478063906508838335"
+        },
+        {
+          "file": "angular-todo/src/app/services/todo.service.ts",
+          "hash": "16278554747468627671"
+        },
+        {
+          "file": "angular-todo/src/app/services/user.service.ts",
+          "hash": "18328486494806469325"
+        },
+        {
+          "file": "angular-todo/src/app/shared/idps.types.ts",
+          "hash": "3005971656399866658"
+        },
+        {
+          "file": "angular-todo/src/app/utilities/back-home/back-home.component.html",
+          "hash": "6652635952616940571"
+        },
+        {
+          "file": "angular-todo/src/app/utilities/back-home/back-home.component.ts",
+          "hash": "6983596530426126021"
+        },
+        {
+          "file": "angular-todo/src/app/utilities/loading/loading.component.html",
+          "hash": "14374820139059300370"
+        },
+        {
+          "file": "angular-todo/src/app/utilities/loading/loading.component.ts",
+          "hash": "6992803751803026348"
+        },
+        {
+          "file": "angular-todo/src/app/views/home/home.component.html",
+          "hash": "3782653013921339713"
+        },
+        {
+          "file": "angular-todo/src/app/views/home/home.component.ts",
+          "hash": "17214064106157671035"
+        },
+        {
+          "file": "angular-todo/src/app/views/login/login.component.html",
+          "hash": "4113833372786394715"
+        },
+        {
+          "file": "angular-todo/src/app/views/login/login.component.ts",
+          "hash": "12855953455525263307"
+        },
+        {
+          "file": "angular-todo/src/app/views/register/register.component.html",
+          "hash": "17007321255614899329"
+        },
+        {
+          "file": "angular-todo/src/app/views/register/register.component.ts",
+          "hash": "11837471986322831203"
+        },
+        {
+          "file": "angular-todo/src/app/views/todos/todos.component.html",
+          "hash": "3818930522292136048"
+        },
+        {
+          "file": "angular-todo/src/app/views/todos/todos.component.ts",
+          "hash": "7641838347098523715"
+        },
+        {
+          "file": "angular-todo/src/callback.html",
+          "hash": "2785395145324400028"
+        },
+        {
+          "file": "angular-todo/src/environments/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "angular-todo/src/environments/environment.prod.ts",
+          "hash": "1009454096594827178"
+        },
+        {
+          "file": "angular-todo/src/environments/environment.ts",
+          "hash": "16039905928401598244"
+        },
+        {
+          "file": "angular-todo/src/favicon.ico",
+          "hash": "3464744996580215640"
+        },
+        {
+          "file": "angular-todo/src/index.html",
+          "hash": "17936865648756474546"
+        },
+        {
+          "file": "angular-todo/src/main.ts",
+          "hash": "4705571066100339050"
+        },
+        {
+          "file": "angular-todo/src/polyfills.ts",
+          "hash": "16804394042125234976"
+        },
+        {
+          "file": "angular-todo/src/styles/_custom-styles.scss",
+          "hash": "6070637327720418743"
+        },
+        {
+          "file": "angular-todo/src/styles/_custom-variables.scss",
+          "hash": "7528674080479960959"
+        },
+        {
+          "file": "angular-todo/src/styles.scss",
+          "hash": "6973196161447681879"
+        },
+        {
+          "file": "angular-todo/src/test-setup.ts",
+          "hash": "17711435995618823417"
+        },
+        {
+          "file": "angular-todo/tsconfig.app.json",
+          "hash": "11674506502668556549"
+        },
+        {
+          "file": "angular-todo/tsconfig.json",
+          "hash": "16468715764716101749"
+        },
+        {
+          "file": "angular-todo/tsconfig.spec.json",
+          "hash": "11901043454877211451"
+        }
+      ],
+      "reactjs-todo-davinci": [
+        {
+          "file": "reactjs-todo-davinci/.env.example",
+          "hash": "13822865000720759458"
+        },
+        {
+          "file": "reactjs-todo-davinci/.eslintrc.js",
+          "hash": "15219841475860676306"
+        },
+        {
+          "file": "reactjs-todo-davinci/.gitignore",
+          "hash": "18346123406719347893"
+        },
+        {
+          "file": "reactjs-todo-davinci/README.md",
+          "hash": "18085683613051406347"
+        },
+        {
+          "file": "reactjs-todo-davinci/babel.config.js",
+          "hash": "9828660790244425879"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/components/README.md",
+          "hash": "11221163990194035984"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/components/davinci-client/alert.js",
+          "hash": "4547429864557874074"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/components/davinci-client/error.js",
+          "hash": "15245434977713927969"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/components/davinci-client/flow-link.js",
+          "hash": "13060171989317520449"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/components/davinci-client/form.js",
+          "hash": "9573856359280047236"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/components/davinci-client/hooks/create-client.utils.js",
+          "hash": "12033968783681475007"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/components/davinci-client/hooks/davinci.hook.js",
+          "hash": "15485115228788947743"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/components/davinci-client/hooks/oauth.hook.js",
+          "hash": "1009366561562221169"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/components/davinci-client/object-value.js",
+          "hash": "17615281610157191047"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/components/davinci-client/password.js",
+          "hash": "4402305024417758941"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/components/davinci-client/protect.js",
+          "hash": "11108797982479533928"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/components/davinci-client/readonly.js",
+          "hash": "8487122620813844607"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/components/davinci-client/single-select.js",
+          "hash": "11230791021913428926"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/components/davinci-client/social-login-button.js",
+          "hash": "6835023593662937633"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/components/davinci-client/submit-button.js",
+          "hash": "3271896215816518483"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/components/davinci-client/text.js",
+          "hash": "6018399673338564879"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/components/davinci-client/unknown.js",
+          "hash": "9804032366326005246"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/components/icons/account-icon.js",
+          "hash": "4198606587596774438"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/components/icons/action-icon.js",
+          "hash": "4000321824698610890"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/components/icons/alert-icon.js",
+          "hash": "10223703005108187318"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/components/icons/apple-icon.js",
+          "hash": "6000206716200467094"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/components/icons/eye-icon.js",
+          "hash": "6773594641005756699"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/components/icons/finger-print-icon.js",
+          "hash": "13358719512847610228"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/components/icons/google-icon.js",
+          "hash": "17966899509652250469"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/components/icons/home-icon.js",
+          "hash": "2217454361081615469"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/components/icons/key-icon.js",
+          "hash": "3798083512093642891"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/components/icons/left-arrow-icon.js",
+          "hash": "4390879898475367907"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/components/icons/lock-icon.js",
+          "hash": "905386282937701061"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/components/icons/new-user-icon.js",
+          "hash": "11099662313665387795"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/components/icons/ping-icon.js",
+          "hash": "4733709784302567676"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/components/icons/react-icon.js",
+          "hash": "1119826786155735669"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/components/icons/todo-icon.js",
+          "hash": "126394070345862145"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/components/icons/todos-icon.js",
+          "hash": "17026491141179564538"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/components/icons/verified-icon.js",
+          "hash": "6166822220533212482"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/components/layout/card.js",
+          "hash": "12708386437525346647"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/components/layout/footer.js",
+          "hash": "4123760633546056876"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/components/layout/header.js",
+          "hash": "7151928505823724120"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/components/todo/todo.js",
+          "hash": "1291923765715080798"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/components/todos/create.js",
+          "hash": "18313794122247523684"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/components/todos/delete.js",
+          "hash": "2053486838114549366"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/components/todos/edit.js",
+          "hash": "10218146468387671853"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/components/todos/fetch.js",
+          "hash": "8375108673498442229"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/components/todos/reducer.js",
+          "hash": "15991191522310635296"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/components/todos/todo.js",
+          "hash": "2875431157584139890"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/components/utilities/back-home.js",
+          "hash": "14165297800229482809"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/components/utilities/loading.js",
+          "hash": "7577266884718566894"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/constants.js",
+          "hash": "16877905781105606773"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/global-state.js",
+          "hash": "6040429796613117393"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/index.js",
+          "hash": "17731489040383129022"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/router.js",
+          "hash": "18061617711172255962"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/styles/README.md",
+          "hash": "1266782523606485064"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/styles/_custom-styles.scss",
+          "hash": "7249807118128347181"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/styles/_custom-variables.scss",
+          "hash": "14994215728083981149"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/styles/index.scss",
+          "hash": "8872588377922197974"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/utilities/README.md",
+          "hash": "10029362049274514690"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/utilities/create-config.js",
+          "hash": "6980629478351149152"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/utilities/decode.js",
+          "hash": "4652771024825032846"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/utilities/request.js",
+          "hash": "13944549507030911554"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/utilities/route.js",
+          "hash": "7780357106726300656"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/views/README.md",
+          "hash": "15862277257597404380"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/views/home.js",
+          "hash": "17457202357202821144"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/views/login.js",
+          "hash": "2346608143198633714"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/views/logout.js",
+          "hash": "17310807971297075731"
+        },
+        {
+          "file": "reactjs-todo-davinci/client/views/todos.js",
+          "hash": "17991685254618541329"
+        },
+        {
+          "file": "reactjs-todo-davinci/e2e/davinci-login.spec.js",
+          "hash": "129741303508182267"
+        },
+        {
+          "file": "reactjs-todo-davinci/e2e/davinci-logout.spec.js",
+          "hash": "202230629136158962"
+        },
+        {
+          "file": "reactjs-todo-davinci/e2e/davinci-password-reset.spec.js",
+          "hash": "12611774463671713177"
+        },
+        {
+          "file": "reactjs-todo-davinci/e2e/davinci-register-user.spec.js",
+          "hash": "8568555368307343989"
+        },
+        {
+          "file": "reactjs-todo-davinci/e2e/davinci-todo.spec.js",
+          "hash": "4888776297649720994"
+        },
+        {
+          "file": "reactjs-todo-davinci/package.json",
+          "hash": "11870449946213038675",
+          "deps": [
+            "npm:@forgerock/davinci-client",
+            "npm:@forgerock/javascript-sdk",
+            "npm:cookie-parser",
+            "npm:cors",
+            "npm:dotenv",
+            "npm:express",
+            "npm:pouchdb",
+            "npm:react",
+            "npm:react-dom",
+            "npm:react-router-dom",
+            "npm:uuid",
+            "npm:@babel/cli",
+            "npm:@babel/core",
+            "npm:@babel/eslint-parser",
+            "npm:@babel/preset-env",
+            "npm:@babel/preset-react",
+            "npm:@playwright/test",
+            "npm:@types/node",
+            "npm:autoprefixer",
+            "npm:babel-loader",
+            "npm:bootstrap",
+            "npm:css-loader",
+            "npm:eslint",
+            "npm:eslint-config-prettier",
+            "npm:eslint-config-standard",
+            "npm:eslint-plugin-import",
+            "npm:eslint-plugin-jsx",
+            "npm:eslint-plugin-n",
+            "npm:eslint-plugin-prettier",
+            "npm:eslint-plugin-promise",
+            "npm:eslint-plugin-react",
+            "npm:eslint-plugin-react-hooks",
+            "npm:local-web-server",
+            "npm:mini-css-extract-plugin",
+            "npm:postcss",
+            "npm:postcss-loader",
+            "npm:prettier",
+            "npm:sass",
+            "npm:sass-loader",
+            "npm:shx",
+            "npm:style-loader",
+            "npm:webpack",
+            "npm:webpack-cli",
+            "npm:webpack-dev-server"
+          ]
+        },
+        {
+          "file": "reactjs-todo-davinci/playwright.config.ts",
+          "hash": "16595441204867646642"
+        },
+        {
+          "file": "reactjs-todo-davinci/public/callback.html",
+          "hash": "3612517944893702183"
+        },
+        {
+          "file": "reactjs-todo-davinci/public/index.html",
+          "hash": "18138796056395708872"
+        },
+        {
+          "file": "reactjs-todo-davinci/webpack.config.js",
+          "hash": "1008971358360680849"
+        }
+      ],
+      "todo-api": [
+        {
+          "file": "todo-api/.env.example",
+          "hash": "6506848261946039846"
+        },
+        {
+          "file": "todo-api/.eslintrc.cjs",
+          "hash": "13812718279627391869"
+        },
+        {
+          "file": "todo-api/package.json",
+          "hash": "12480342699709060430",
+          "deps": [
+            "npm:cookie-parser",
+            "npm:cors",
+            "npm:dotenv",
+            "npm:express",
+            "npm:pouchdb",
+            "npm:superagent",
+            "npm:util",
+            "npm:uuid",
+            "npm:eslint",
+            "npm:eslint-config-standard",
+            "npm:eslint-plugin-import",
+            "npm:eslint-plugin-n",
+            "npm:eslint-plugin-promise"
+          ]
+        },
+        {
+          "file": "todo-api/src/app/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "todo-api/src/app/README.md",
+          "hash": "12844770039598009459"
+        },
+        {
+          "file": "todo-api/src/app/constants.js",
+          "hash": "17038100785483956344"
+        },
+        {
+          "file": "todo-api/src/app/db.js",
+          "hash": "10778894485056622315"
+        },
+        {
+          "file": "todo-api/src/app/middleware.js",
+          "hash": "354650995824696222"
+        },
+        {
+          "file": "todo-api/src/app/routes.js",
+          "hash": "9823404597033095013"
+        },
+        {
+          "file": "todo-api/src/assets/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "todo-api/src/environments/environment.prod.ts",
+          "hash": "10220522844224226756"
+        },
+        {
+          "file": "todo-api/src/environments/environment.ts",
+          "hash": "1135292433917692033"
+        },
+        {
+          "file": "todo-api/src/index.js",
+          "hash": "12130828017160358630"
+        },
+        {
+          "file": "todo-api/tsconfig.json",
+          "hash": "7003096431214034422"
+        }
+      ],
+      "central-login-oidc": [
+        {
+          "file": "central-login-oidc/.env.example",
+          "hash": "8535517530909853623"
+        },
+        {
+          "file": "central-login-oidc/.eslintrc.cjs",
+          "hash": "13812718279627391869"
+        },
+        {
+          "file": "central-login-oidc/README.md",
+          "hash": "9094011077692387747"
+        },
+        {
+          "file": "central-login-oidc/package.json",
+          "hash": "16733206725519349079",
+          "deps": [
+            "npm:@forgerock/javascript-sdk",
+            "npm:css-loader",
+            "npm:dotenv",
+            "npm:eslint",
+            "npm:eslint-config-prettier",
+            "npm:eslint-config-standard",
+            "npm:eslint-plugin-import",
+            "npm:eslint-plugin-n",
+            "npm:eslint-plugin-prettier",
+            "npm:eslint-plugin-promise",
+            "npm:html-webpack-plugin",
+            "npm:style-loader",
+            "npm:webpack",
+            "npm:webpack-cli",
+            "npm:webpack-dev-server"
+          ]
+        },
+        {
+          "file": "central-login-oidc/src/main.js",
+          "hash": "16773879094727439910"
+        },
+        {
+          "file": "central-login-oidc/src/polyfills.ts",
+          "hash": "12959605551678143287"
+        },
+        {
+          "file": "central-login-oidc/src/public/favicon.ico",
+          "hash": "17324173822744327927"
+        },
+        {
+          "file": "central-login-oidc/src/public/index.html",
+          "hash": "9030208465298776194"
+        },
+        {
+          "file": "central-login-oidc/src/styles.css",
+          "hash": "6923834966006207886"
+        },
+        {
+          "file": "central-login-oidc/webpack.config.js",
+          "hash": "4624405891948839131"
+        }
+      ],
+      "embedded-login": [
+        {
+          "file": "embedded-login/.env.example",
+          "hash": "13746188561242565878"
+        },
+        {
+          "file": "embedded-login/.eslintrc.cjs",
+          "hash": "2001192815215823409"
+        },
+        {
+          "file": "embedded-login/README.md",
+          "hash": "17999132111103918960"
+        },
+        {
+          "file": "embedded-login/img/fr-ico.png",
+          "hash": "15318106953790942262"
+        },
+        {
+          "file": "embedded-login/package.json",
+          "hash": "14858115237440153475",
+          "deps": [
+            "npm:@forgerock/javascript-sdk",
+            "npm:css-loader",
+            "npm:dotenv",
+            "npm:eslint",
+            "npm:eslint-config-standard",
+            "npm:eslint-plugin-import",
+            "npm:eslint-plugin-n",
+            "npm:eslint-plugin-promise",
+            "npm:html-webpack-plugin",
+            "npm:style-loader",
+            "npm:webpack",
+            "npm:webpack-cli",
+            "npm:webpack-dev-server"
+          ]
+        },
+        {
+          "file": "embedded-login/src/main.js",
+          "hash": "7604097960234983789"
+        },
+        {
+          "file": "embedded-login/src/public/callback.html",
+          "hash": "8535524838945172440"
+        },
+        {
+          "file": "embedded-login/src/public/favicon.ico",
+          "hash": "9303420814833116677"
+        },
+        {
+          "file": "embedded-login/src/public/img/fr-ico.png",
+          "hash": "15318106953790942262"
+        },
+        {
+          "file": "embedded-login/src/public/index.html",
+          "hash": "8755624292028934471"
+        },
+        {
+          "file": "embedded-login/src/styles.css",
+          "hash": "3179611316447301584"
+        },
+        {
+          "file": "embedded-login/tsconfig.app.json",
+          "hash": "6134963129703834549"
+        },
+        {
+          "file": "embedded-login/tsconfig.json",
+          "hash": "6240538891403235665"
+        },
+        {
+          "file": "embedded-login/webpack.config.js",
+          "hash": "16893631674573850714"
+        }
+      ],
+      "embedded-login-davinci": [
+        {
+          "file": "embedded-login-davinci/.env.example",
+          "hash": "16100209184072090218"
+        },
+        {
+          "file": "embedded-login-davinci/components/flow-link.ts",
+          "hash": "16832238904276184109"
+        },
+        {
+          "file": "embedded-login-davinci/components/password.ts",
+          "hash": "3535459615283320854"
+        },
+        {
+          "file": "embedded-login-davinci/components/protect.ts",
+          "hash": "13497673087981353059"
+        },
+        {
+          "file": "embedded-login-davinci/components/social-login-button.ts",
+          "hash": "8614786650489550278"
+        },
+        {
+          "file": "embedded-login-davinci/components/submit-button.ts",
+          "hash": "10405181368534175948"
+        },
+        {
+          "file": "embedded-login-davinci/components/text.ts",
+          "hash": "3022485338087730845"
+        },
+        {
+          "file": "embedded-login-davinci/index.html",
+          "hash": "8434423664281773398"
+        },
+        {
+          "file": "embedded-login-davinci/main.ts",
+          "hash": "9752602746766142189"
+        },
+        {
+          "file": "embedded-login-davinci/package.json",
+          "hash": "15544976290044133263",
+          "deps": [
+            "npm:@forgerock/davinci-client",
+            "npm:@forgerock/javascript-sdk",
+            "npm:vite"
+          ]
+        },
+        {
+          "file": "embedded-login-davinci/public/javascript.svg",
+          "hash": "8148257050081513771"
+        },
+        {
+          "file": "embedded-login-davinci/public/typescript.svg",
+          "hash": "8667544980518902788"
+        },
+        {
+          "file": "embedded-login-davinci/public/vite.svg",
+          "hash": "16046085400642193116"
+        },
+        {
+          "file": "embedded-login-davinci/style.css",
+          "hash": "2574883677066347612"
+        },
+        {
+          "file": "embedded-login-davinci/tsconfig.json",
+          "hash": "206115777995998649"
+        },
+        {
+          "file": "embedded-login-davinci/vite-env.d.ts",
+          "hash": "13289839346657617509"
+        },
+        {
+          "file": "embedded-login-davinci/vite.config.ts",
+          "hash": "1652943336070036792"
+        }
+      ],
+      "reactjs-todo": [
+        {
+          "file": "reactjs-todo/.env.example",
+          "hash": "6388595275525394954"
+        },
+        {
+          "file": "reactjs-todo/.eslintrc.js",
+          "hash": "15219841475860676306"
+        },
+        {
+          "file": "reactjs-todo/.gitignore",
+          "hash": "10436825940704344450"
+        },
+        {
+          "file": "reactjs-todo/README.md",
+          "hash": "8001614853675244972"
+        },
+        {
+          "file": "reactjs-todo/babel.config.js",
+          "hash": "9828660790244425879"
+        },
+        {
+          "file": "reactjs-todo/client/README.md",
+          "hash": "10084003441822028996"
+        },
+        {
+          "file": "reactjs-todo/client/components/README.md",
+          "hash": "11221163990194035984"
+        },
+        {
+          "file": "reactjs-todo/client/components/icons/account-icon.js",
+          "hash": "17226136213689497284"
+        },
+        {
+          "file": "reactjs-todo/client/components/icons/action-icon.js",
+          "hash": "3048033409425756952"
+        },
+        {
+          "file": "reactjs-todo/client/components/icons/alert-icon.js",
+          "hash": "13799630238955967376"
+        },
+        {
+          "file": "reactjs-todo/client/components/icons/apple-icon.js",
+          "hash": "13018049048610794630"
+        },
+        {
+          "file": "reactjs-todo/client/components/icons/eye-icon.js",
+          "hash": "8035016756520355785"
+        },
+        {
+          "file": "reactjs-todo/client/components/icons/finger-print-icon.js",
+          "hash": "10105565728243064189"
+        },
+        {
+          "file": "reactjs-todo/client/components/icons/forgerock-icon.js",
+          "hash": "14249384859599666709"
+        },
+        {
+          "file": "reactjs-todo/client/components/icons/google-icon.js",
+          "hash": "5111117881621917519"
+        },
+        {
+          "file": "reactjs-todo/client/components/icons/home-icon.js",
+          "hash": "178584782846568826"
+        },
+        {
+          "file": "reactjs-todo/client/components/icons/key-icon.js",
+          "hash": "6143423416528487319"
+        },
+        {
+          "file": "reactjs-todo/client/components/icons/left-arrow-icon.js",
+          "hash": "16817021318744974746"
+        },
+        {
+          "file": "reactjs-todo/client/components/icons/lock-icon.js",
+          "hash": "8801829884328230587"
+        },
+        {
+          "file": "reactjs-todo/client/components/icons/new-user-icon.js",
+          "hash": "491474292543162722"
+        },
+        {
+          "file": "reactjs-todo/client/components/icons/ping-logo-square-color.svg",
+          "hash": "6142848601115184230"
+        },
+        {
+          "file": "reactjs-todo/client/components/icons/react-icon.js",
+          "hash": "11744481338691092767"
+        },
+        {
+          "file": "reactjs-todo/client/components/icons/todo-icon.js",
+          "hash": "11061064724677139826"
+        },
+        {
+          "file": "reactjs-todo/client/components/icons/todos-icon.js",
+          "hash": "13714740065498362894"
+        },
+        {
+          "file": "reactjs-todo/client/components/icons/verified-icon.js",
+          "hash": "7029823616785260278"
+        },
+        {
+          "file": "reactjs-todo/client/components/journey/alert.js",
+          "hash": "2336322564125643684"
+        },
+        {
+          "file": "reactjs-todo/client/components/journey/boolean.js",
+          "hash": "13335998985876226392"
+        },
+        {
+          "file": "reactjs-todo/client/components/journey/button.js",
+          "hash": "7780971685558315116"
+        },
+        {
+          "file": "reactjs-todo/client/components/journey/choice.js",
+          "hash": "9679391770451247903"
+        },
+        {
+          "file": "reactjs-todo/client/components/journey/confirmation.js",
+          "hash": "3866839653668824104"
+        },
+        {
+          "file": "reactjs-todo/client/components/journey/form.js",
+          "hash": "7293322567688829630"
+        },
+        {
+          "file": "reactjs-todo/client/components/journey/identity-provider.js",
+          "hash": "9822586653495661382"
+        },
+        {
+          "file": "reactjs-todo/client/components/journey/journey-state.js",
+          "hash": "7656803527874641206"
+        },
+        {
+          "file": "reactjs-todo/client/components/journey/kba.js",
+          "hash": "1543651001363244099"
+        },
+        {
+          "file": "reactjs-todo/client/components/journey/password.js",
+          "hash": "891334977971101882"
+        },
+        {
+          "file": "reactjs-todo/client/components/journey/protect.js",
+          "hash": "14158933977859347926"
+        },
+        {
+          "file": "reactjs-todo/client/components/journey/terms-conditions.js",
+          "hash": "15066080278525462060"
+        },
+        {
+          "file": "reactjs-todo/client/components/journey/text-output.js",
+          "hash": "15895034744476288289"
+        },
+        {
+          "file": "reactjs-todo/client/components/journey/text.js",
+          "hash": "11295155638492054091"
+        },
+        {
+          "file": "reactjs-todo/client/components/journey/tree-reducer.js",
+          "hash": "2698219037510184266"
+        },
+        {
+          "file": "reactjs-todo/client/components/journey/unknown.js",
+          "hash": "13195726208550337297"
+        },
+        {
+          "file": "reactjs-todo/client/components/journey/web-authn.js",
+          "hash": "7365788942826783706"
+        },
+        {
+          "file": "reactjs-todo/client/components/layout/card.js",
+          "hash": "15900812828579229017"
+        },
+        {
+          "file": "reactjs-todo/client/components/layout/footer.js",
+          "hash": "6809378948625466722"
+        },
+        {
+          "file": "reactjs-todo/client/components/layout/header.js",
+          "hash": "712192040334716212"
+        },
+        {
+          "file": "reactjs-todo/client/components/todo/todo.js",
+          "hash": "18059838375005487198"
+        },
+        {
+          "file": "reactjs-todo/client/components/todos/create.js",
+          "hash": "14076693448344355564"
+        },
+        {
+          "file": "reactjs-todo/client/components/todos/delete.js",
+          "hash": "12316568905267361878"
+        },
+        {
+          "file": "reactjs-todo/client/components/todos/edit.js",
+          "hash": "3853302876418693490"
+        },
+        {
+          "file": "reactjs-todo/client/components/todos/fetch.js",
+          "hash": "12370771917408475826"
+        },
+        {
+          "file": "reactjs-todo/client/components/todos/reducer.js",
+          "hash": "6113093243550142956"
+        },
+        {
+          "file": "reactjs-todo/client/components/todos/todo.js",
+          "hash": "4448362864707544305"
+        },
+        {
+          "file": "reactjs-todo/client/components/utilities/back-home.js",
+          "hash": "6143298354644772714"
+        },
+        {
+          "file": "reactjs-todo/client/components/utilities/loading.js",
+          "hash": "16944579053845239554"
+        },
+        {
+          "file": "reactjs-todo/client/constants.js",
+          "hash": "12199366746925473647"
+        },
+        {
+          "file": "reactjs-todo/client/global-state.js",
+          "hash": "15256393776177732538"
+        },
+        {
+          "file": "reactjs-todo/client/index.js",
+          "hash": "17523469420771070204"
+        },
+        {
+          "file": "reactjs-todo/client/router.js",
+          "hash": "10203990327101667719"
+        },
+        {
+          "file": "reactjs-todo/client/styles/README.md",
+          "hash": "1266782523606485064"
+        },
+        {
+          "file": "reactjs-todo/client/styles/_custom-styles.scss",
+          "hash": "16964317754828774070"
+        },
+        {
+          "file": "reactjs-todo/client/styles/_custom-variables.scss",
+          "hash": "14994215728083981149"
+        },
+        {
+          "file": "reactjs-todo/client/styles/index.scss",
+          "hash": "8872588377922197974"
+        },
+        {
+          "file": "reactjs-todo/client/utilities/README.md",
+          "hash": "10029362049274514690"
+        },
+        {
+          "file": "reactjs-todo/client/utilities/decode.js",
+          "hash": "14931046082108399081"
+        },
+        {
+          "file": "reactjs-todo/client/utilities/request.js",
+          "hash": "16499615472387031684"
+        },
+        {
+          "file": "reactjs-todo/client/utilities/route.js",
+          "hash": "17610731777513916810"
+        },
+        {
+          "file": "reactjs-todo/client/views/README.md",
+          "hash": "15862277257597404380"
+        },
+        {
+          "file": "reactjs-todo/client/views/home.js",
+          "hash": "16786239860286029218"
+        },
+        {
+          "file": "reactjs-todo/client/views/login.js",
+          "hash": "16086619857909960987"
+        },
+        {
+          "file": "reactjs-todo/client/views/logout.js",
+          "hash": "6637862057084227305"
+        },
+        {
+          "file": "reactjs-todo/client/views/register.js",
+          "hash": "16786251908362459543"
+        },
+        {
+          "file": "reactjs-todo/client/views/todos.js",
+          "hash": "1004486568796125512"
+        },
+        {
+          "file": "reactjs-todo/e2e/centralized-login.spec.js",
+          "hash": "13224499254085654539"
+        },
+        {
+          "file": "reactjs-todo/e2e/embedded-login.spec.js",
+          "hash": "13881863859133394534"
+        },
+        {
+          "file": "reactjs-todo/e2e/protect.spec.js",
+          "hash": "3388842219296109628"
+        },
+        {
+          "file": "reactjs-todo/e2e/register-new-user.spec.js",
+          "hash": "12111507786970791413"
+        },
+        {
+          "file": "reactjs-todo/e2e/social-login.spec.js",
+          "hash": "12139259716074010381"
+        },
+        {
+          "file": "reactjs-todo/e2e/virtual-authenticator.spec.js",
+          "hash": "8955384503390053557"
+        },
+        {
+          "file": "reactjs-todo/package.json",
+          "hash": "9154943084292194222",
+          "deps": [
+            "npm:@forgerock/javascript-sdk",
+            "npm:@forgerock/ping-protect",
+            "npm:cookie-parser",
+            "npm:cors",
+            "npm:dotenv",
+            "npm:express",
+            "npm:pouchdb",
+            "npm:react",
+            "npm:react-dom",
+            "npm:react-router-dom",
+            "npm:uuid",
+            "npm:@babel/cli",
+            "npm:@babel/core",
+            "npm:@babel/eslint-parser",
+            "npm:@babel/preset-env",
+            "npm:@babel/preset-react",
+            "npm:@playwright/test",
+            "npm:@types/node",
+            "npm:autoprefixer",
+            "npm:babel-loader",
+            "npm:bootstrap",
+            "npm:css-loader",
+            "npm:eslint",
+            "npm:eslint-config-prettier",
+            "npm:eslint-config-standard",
+            "npm:eslint-plugin-import",
+            "npm:eslint-plugin-jsx",
+            "npm:eslint-plugin-n",
+            "npm:eslint-plugin-prettier",
+            "npm:eslint-plugin-promise",
+            "npm:eslint-plugin-react",
+            "npm:eslint-plugin-react-hooks",
+            "npm:local-web-server",
+            "npm:mini-css-extract-plugin",
+            "npm:postcss",
+            "npm:postcss-loader",
+            "npm:prettier",
+            "npm:sass",
+            "npm:sass-loader",
+            "npm:shx",
+            "npm:style-loader",
+            "npm:webpack",
+            "npm:webpack-cli"
+          ]
+        },
+        {
+          "file": "reactjs-todo/playwright.config.ts",
+          "hash": "496831205716661829"
+        },
+        {
+          "file": "reactjs-todo/webpack.config.js",
+          "hash": "4374790819900749700"
+        }
+      ]
+    },
+    "nonProjectFiles": [
+      {
+        "file": ".cache/ms-playwright/webkit-2182/WebCore.framework/Versions/A/PrivateHeaders/CurrentUserDetailsOptions.h",
+        "hash": "7851970354162702184"
+      },
+      {
+        "file": ".dockerignore",
+        "hash": "11532551937659660698"
+      },
+      {
+        "file": ".eslintrc.js",
+        "hash": "11512961981873274153"
+      },
+      {
+        "file": ".gitignore",
+        "hash": "13546432301836428221"
+      },
+      {
+        "file": ".node-version",
+        "hash": "9870864018799265221"
+      },
+      {
+        "file": ".nx/cache/file-map.json",
+        "hash": "9441078921206097811"
+      },
+      {
+        "file": ".nx/cache/lockfile.hash",
+        "hash": "16191217046963972021"
+      },
+      {
+        "file": ".nx/cache/parsed-lock-file.json",
+        "hash": "1100617634523244953"
+      },
+      {
+        "file": ".nx/cache/project-graph.json",
+        "hash": "2850482614016635050"
+      },
+      {
+        "file": ".prettierrc",
+        "hash": "8956249211225399380"
+      },
+      {
+        "file": "Dockerfile.angular",
+        "hash": "6387364002922430038"
+      },
+      {
+        "file": "Dockerfile.api",
+        "hash": "3826631615344574472"
+      },
+      {
+        "file": "Dockerfile.react",
+        "hash": "15073461516189507379"
+      },
+      {
+        "file": "Dockerfile.vite",
+        "hash": "6208028072442496478"
+      },
+      {
+        "file": "README.docker.md",
+        "hash": "7779238828647814266"
+      },
+      {
+        "file": "README.md",
+        "hash": "15267061246615600735"
+      },
+      {
+        "file": "angular-todo-davinci/.editorconfig",
+        "hash": "6686520031028425313"
+      },
+      {
+        "file": "angular-todo-davinci/.env.example",
+        "hash": "13057160313445999162"
+      },
+      {
+        "file": "angular-todo-davinci/.eslintrc.json",
+        "hash": "9310540616391178807"
+      },
+      {
+        "file": "angular-todo-davinci/.gitignore",
+        "hash": "13449171869374220631"
+      },
+      {
+        "file": "angular-todo-davinci/README.md",
+        "hash": "2445638245684084052"
+      },
+      {
+        "file": "angular-todo-davinci/angular.json",
+        "hash": "16099517248199981940"
+      },
+      {
+        "file": "angular-todo-davinci/e2e/davinci-login.spec.js",
+        "hash": "5638217177034608214"
+      },
+      {
+        "file": "angular-todo-davinci/e2e/davinci-logout.spec.js",
+        "hash": "8210289905741133945"
+      },
+      {
+        "file": "angular-todo-davinci/e2e/davinci-password-reset.spec.js",
+        "hash": "8984901559917291848"
+      },
+      {
+        "file": "angular-todo-davinci/e2e/davinci-register-user.spec.js",
+        "hash": "3045064232354710435"
+      },
+      {
+        "file": "angular-todo-davinci/e2e/davinci-todo.spec.js",
+        "hash": "17623439371655951232"
+      },
+      {
+        "file": "angular-todo-davinci/package.json",
+        "hash": "2603406894660772216"
+      },
+      {
+        "file": "angular-todo-davinci/playwright.config.ts",
+        "hash": "2147594702025931434"
+      },
+      {
+        "file": "angular-todo-davinci/set-env.mjs",
+        "hash": "2517564103555354655"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/app-routing.module.ts",
+        "hash": "2804821855112168"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/app.component.html",
+        "hash": "16828731775370455543"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/app.component.ts",
+        "hash": "17290819592919701229"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/auth/auth.guard.ts",
+        "hash": "8148820633914556358"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/features/davinci/alert/alert.component.html",
+        "hash": "12063422961993600633"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/features/davinci/alert/alert.component.ts",
+        "hash": "10298017984682770543"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/features/davinci/davinci.utils.ts",
+        "hash": "7917668265246415449"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/features/davinci/flow-link/flow-link.component.html",
+        "hash": "12018360668881863101"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/features/davinci/flow-link/flow-link.component.ts",
+        "hash": "17975113814079192711"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/features/davinci/form/form.component.html",
+        "hash": "4359640642292770253"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/features/davinci/form/form.component.ts",
+        "hash": "15707669275583517137"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/features/davinci/password/password.component.html",
+        "hash": "17865293644768165769"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/features/davinci/password/password.component.ts",
+        "hash": "13282613290664332180"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/features/davinci/protect/protect.component.html",
+        "hash": "17441126763737285813"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/features/davinci/protect/protect.component.ts",
+        "hash": "9192105040451405770"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/features/davinci/submit-button/submit-button.component.html",
+        "hash": "2325327471756589152"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/features/davinci/submit-button/submit-button.component.ts",
+        "hash": "13104721989694362255"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/features/davinci/text-input/text-input.component.html",
+        "hash": "17444052052839522399"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/features/davinci/text-input/text-input.component.ts",
+        "hash": "11038328930588368338"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/features/davinci/unknown/unknown.component.html",
+        "hash": "13130863315652556811"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/features/davinci/unknown/unknown.component.ts",
+        "hash": "16215567684607120922"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/features/todo/todo.component.html",
+        "hash": "17609884462101476517"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/features/todo/todo.component.ts",
+        "hash": "6082827491496510346"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/features/todo/todo.types.ts",
+        "hash": "3220320726251110591"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/icons/account-icon/account-icon.component.html",
+        "hash": "11112591438957485670"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/icons/account-icon/account-icon.component.ts",
+        "hash": "10575557634165391766"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/icons/action-icon/action-icon.component.html",
+        "hash": "12677477916334821098"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/icons/action-icon/action-icon.component.ts",
+        "hash": "16772478169921504972"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/icons/alert-icon/alert-icon.component.html",
+        "hash": "7327514190766492092"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/icons/alert-icon/alert-icon.component.ts",
+        "hash": "17988758473912072670"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/icons/angular-icon/angular-icon.component.html",
+        "hash": "9967742448742180330"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/icons/angular-icon/angular-icon.component.ts",
+        "hash": "6693483946840341974"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/icons/apple-icon/apple-icon.component.html",
+        "hash": "16424596028322545364"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/icons/apple-icon/apple-icon.component.ts",
+        "hash": "8798431641737748308"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/icons/eye-icon/eye-icon.component.html",
+        "hash": "8138567738871818844"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/icons/eye-icon/eye-icon.component.ts",
+        "hash": "4386487918171120061"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/icons/finger-print-icon/finger-print-icon.component.html",
+        "hash": "10101896338632074278"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/icons/finger-print-icon/finger-print-icon.component.ts",
+        "hash": "5741978598550091804"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/icons/google-icon/google-icon.component.html",
+        "hash": "1131520608246968732"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/icons/google-icon/google-icon.component.ts",
+        "hash": "2829669574582535297"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/icons/home-icon/home-icon.component.html",
+        "hash": "5902687977660312533"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/icons/home-icon/home-icon.component.ts",
+        "hash": "7848468594897606972"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/icons/key-icon/key-icon.component.html",
+        "hash": "15814417321265461435"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/icons/key-icon/key-icon.component.ts",
+        "hash": "13502235137196830132"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/icons/left-arrow-icon/left-arrow-icon.component.html",
+        "hash": "13521865002989840370"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/icons/left-arrow-icon/left-arrow-icon.component.ts",
+        "hash": "7666389287512322271"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/icons/lock-icon/lock-icon.component.html",
+        "hash": "6613440750345437470"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/icons/lock-icon/lock-icon.component.ts",
+        "hash": "6449798715281970670"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/icons/new-user-icon/new-user-icon.component.html",
+        "hash": "2373069745553750962"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/icons/new-user-icon/new-user-icon.component.ts",
+        "hash": "9848117387549364023"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/icons/ping-icon/ping-icon.component.html",
+        "hash": "15089514589002018982"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/icons/ping-icon/ping-icon.component.ts",
+        "hash": "17683866679834574746"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/icons/todo-icon/todo-icon.component.html",
+        "hash": "10765640982540524937"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/icons/todo-icon/todo-icon.component.ts",
+        "hash": "1368136480648172943"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/icons/todos-icon/todos-icon.component.html",
+        "hash": "10108129994616033639"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/icons/todos-icon/todos-icon.component.ts",
+        "hash": "17150209350134900412"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/icons/verified-icon/verified-icon.component.html",
+        "hash": "2791690053431516079"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/icons/verified-icon/verified-icon.component.ts",
+        "hash": "16858379503699501682"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/layout/footer/footer.component.html",
+        "hash": "11479087779559345057"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/layout/footer/footer.component.ts",
+        "hash": "1182132288058698539"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/layout/header/header.component.html",
+        "hash": "13955760973654776140"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/layout/header/header.component.ts",
+        "hash": "14432833407297104842"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/services/sdk.service.ts",
+        "hash": "10185210804125973743"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/services/todo.service.ts",
+        "hash": "17111567953150579876"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/utilities/back-home/back-home.component.html",
+        "hash": "12388783160113707693"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/utilities/back-home/back-home.component.ts",
+        "hash": "5240352561274813770"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/utilities/loading/loading.component.html",
+        "hash": "2455849284762546888"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/utilities/loading/loading.component.ts",
+        "hash": "16037865121808650674"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/views/home/home.component.html",
+        "hash": "12147618466309687959"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/views/home/home.component.ts",
+        "hash": "12535821250463238515"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/views/login/login.component.html",
+        "hash": "2925974221770056263"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/views/login/login.component.ts",
+        "hash": "17174533268775549760"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/views/logout/logout.component.html",
+        "hash": "429101383927065894"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/views/logout/logout.component.ts",
+        "hash": "9726012434602900781"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/views/todos/todos.component.html",
+        "hash": "4735083366700282369"
+      },
+      {
+        "file": "angular-todo-davinci/src/app/views/todos/todos.component.ts",
+        "hash": "5427485705046745090"
+      },
+      {
+        "file": "angular-todo-davinci/src/callback.html",
+        "hash": "2785395145324400028"
+      },
+      {
+        "file": "angular-todo-davinci/src/environments/.gitkeep",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "angular-todo-davinci/src/favicon.ico",
+        "hash": "3464744996580215640"
+      },
+      {
+        "file": "angular-todo-davinci/src/index.html",
+        "hash": "5601742795173823255"
+      },
+      {
+        "file": "angular-todo-davinci/src/main.ts",
+        "hash": "10932277164503416197"
+      },
+      {
+        "file": "angular-todo-davinci/src/polyfills.ts",
+        "hash": "7040016832824372024"
+      },
+      {
+        "file": "angular-todo-davinci/src/styles/_custom-styles.scss",
+        "hash": "15328031473015577581"
+      },
+      {
+        "file": "angular-todo-davinci/src/styles/_custom-variables.scss",
+        "hash": "3050225497165805981"
+      },
+      {
+        "file": "angular-todo-davinci/src/styles.scss",
+        "hash": "7525651455752889729"
+      },
+      {
+        "file": "angular-todo-davinci/src/test-setup.ts",
+        "hash": "17711435995618823417"
+      },
+      {
+        "file": "angular-todo-davinci/src/utilities/create-config.ts",
+        "hash": "3774099855793187908"
+      },
+      {
+        "file": "angular-todo-davinci/tsconfig.app.json",
+        "hash": "11674506502668556549"
+      },
+      {
+        "file": "angular-todo-davinci/tsconfig.json",
+        "hash": "18094102497738200692"
+      },
+      {
+        "file": "angular-todo-davinci/tsconfig.spec.json",
+        "hash": "11901043454877211451"
+      },
+      {
+        "file": "docker-compose.yml",
+        "hash": "7573748086949734266"
+      },
+      {
+        "file": "logs/.bb9d891453bf54bbab5df5ad0494cd988a415e53-audit.json",
+        "hash": "11330169574909581457"
+      },
+      {
+        "file": "package-lock.json",
+        "hash": "6283332477687631844"
+      },
+      {
+        "file": "package.json",
+        "hash": "17697298553124249270"
+      }
+    ]
+  }
+}
