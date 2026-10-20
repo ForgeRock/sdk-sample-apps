@@ -2,10 +2,18 @@ name: 'JS Continuous Integration'
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
     paths:
       - 'javascript/**/*'
 
 jobs:
+  block-merge-label:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fail if PR carries "do not merge" label
+        run: |
+          echo '${{ toJSON(github.event.pull_request.labels.*.name) }}' | tr '[:upper:]' '[:lower:]' | grep -q '"do not merge"' && { echo "::error::Merge blocked: PR is labeled 'do not merge'."; exit 1; } || exit 0
+
   pr:
     strategy:
       matrix:
