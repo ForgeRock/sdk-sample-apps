@@ -90,11 +90,11 @@ dependencies {
     }
 
     implementation(project(":ping_core"))
-    implementation("com.pingidentity.sdks:oidc:2.1.0")
-    implementation("com.pingidentity.sdks:browser:2.1.0")
-    implementation("com.pingidentity.sdks:storage:2.1.0")
-    implementation("com.pingidentity.sdks:orchestrate:2.1.0")
-    implementation("com.pingidentity.sdks:android:2.1.0")
+    implementation("com.pingidentity.sdks:oidc:2.2.0")
+    implementation("com.pingidentity.sdks:browser:2.2.0")
+    implementation("com.pingidentity.sdks:storage:2.2.0")
+    implementation("com.pingidentity.sdks:orchestrate:2.2.0")
+    implementation("com.pingidentity.sdks:android:2.2.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.11.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0")
 

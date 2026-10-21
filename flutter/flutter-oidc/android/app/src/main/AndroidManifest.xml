@@ -1,5 +1,4 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:label="flutter_oidc"
@@ -25,25 +24,6 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-        </activity>
-        <!-- Registers the OIDC redirect scheme for the Custom Tab the `ping_oidc`/`browser`
-             native SDK launches. `browser-2.1.0.aar` ships `CustomTabActivity`'s own manifest
-             entry with the scheme already resolved to a literal placeholder value at
-             AAR-publish time, so `manifestPlaceholders["appRedirectUriScheme"]` alone (set in
-             this module's build.gradle.kts) has no effect on the merged manifest. The only mechanism 
-             that works today is this `tools:node="merge"` re-declaration, which is additive: it 
-             produces a second intent-filter alongside the SDK's own baked-in one. Update the scheme
-             below to match `Env.redirectUri`'s scheme if you change it. -->
-        <activity
-            android:name="com.pingidentity.browser.CustomTabActivity"
-            android:exported="true"
-            tools:node="merge">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:scheme="com.pingidentity.flutter.oidc"/>
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.

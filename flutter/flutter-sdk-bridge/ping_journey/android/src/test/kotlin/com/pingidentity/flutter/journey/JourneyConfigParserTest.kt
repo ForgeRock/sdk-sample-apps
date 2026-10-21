@@ -156,6 +156,26 @@ class JourneyConfigParserTest {
     }
 
     @Test
+    fun `applyHandle initializes discoveryEndpoint for an openId-only handle`() {
+        val handle =
+            FakeOidcConfigHandle(
+                discoveryEndpoint = null,
+                openId =
+                    OidcOpenIdConfig(
+                        authorizationEndpoint = "https://example.com/authorize",
+                        tokenEndpoint = "https://example.com/token",
+                        userinfoEndpoint = "https://example.com/userinfo",
+                    ),
+            )
+
+        val config = OidcClientConfig().apply { applyHandle(handle) }
+
+        // Guards the OidcClientConfig.clone() workaround in applyHandle.
+        assertEquals("", config.discoveryEndpoint)
+        assertEquals("https://example.com/authorize", config.openId.authorizationEndpoint)
+    }
+
+    @Test
     fun `applyHandle maps par`() {
         val handle = FakeOidcConfigHandle(par = true)
 

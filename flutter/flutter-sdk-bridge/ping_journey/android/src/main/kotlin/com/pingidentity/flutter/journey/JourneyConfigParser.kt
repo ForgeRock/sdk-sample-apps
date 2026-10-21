@@ -118,7 +118,10 @@ internal fun resolveOidcHandle(oidcClientId: String): OidcConfigHandle {
  */
 internal fun OidcClientConfig.applyHandle(handle: OidcConfigHandle) {
     clientId = handle.clientId
-    handle.discoveryEndpoint?.let { discoveryEndpoint = it }
+    // TODO: Remove once the SDK fixes it. `OidcClientConfig.clone()` reads the lateinit
+    // `discoveryEndpoint` unconditionally, so openId-only configs crash on authorize. The empty
+    // value is never fetched while `openId` is set.
+    discoveryEndpoint = handle.discoveryEndpoint ?: ""
     handle.openId?.let {
         openId =
             OpenIdConfiguration(

@@ -41,25 +41,28 @@ final class OidcConfigParserTests: XCTestCase {
         XCTAssertEqual(result.discoveryEndpoint, "https://example.com/.well-known/openid-configuration")
     }
 
-    func testParseThrowsWhenOnlyOpenIdIsSetWithNoDiscoveryEndpoint() {
+    func testParseSucceedsWhenOnlyOpenIdIsSetAndAssignsItDirectly() throws {
         let openId = OidcOpenIdConfigMessage(
             authorizationEndpoint: "https://example.com/authorize",
             tokenEndpoint: "https://example.com/token",
-            userinfoEndpoint: "https://example.com/userinfo"
+            userinfoEndpoint: "https://example.com/userinfo",
+            endSessionEndpoint: "https://example.com/signoff",
+            revocationEndpoint: "https://example.com/revoke"
         )
         let message = baseMessage(openId: openId)
 
-        // Must throw — `openIdOverride` cannot fire without a prior successful `discover()`
-        // call, so an openId-only config can never actually populate `openId` on iOS at 2.1.0.
-        XCTAssertThrowsError(try OidcConfigParser.parse(message)) { error in
-            guard case OidcHostApiError.argumentError = error else {
-                XCTFail("Expected argumentError, got \(error)")
-                return
-            }
-        }
+        // openId-only is valid and needs no discovery, as on Android.
+        let result = try OidcConfigParser.parse(message)
+
+        XCTAssertEqual(result.openId?.authorizationEndpoint, "https://example.com/authorize")
+        XCTAssertEqual(result.openId?.tokenEndpoint, "https://example.com/token")
+        XCTAssertEqual(result.openId?.userinfoEndpoint, "https://example.com/userinfo")
+        XCTAssertEqual(result.openId?.endSessionEndpoint, "https://example.com/signoff")
+        XCTAssertEqual(result.openId?.revocationEndpoint, "https://example.com/revoke")
+        XCTAssertNil(result.openIdOverride)
     }
 
-    func testParseSucceedsWhenBothDiscoveryEndpointAndOpenIdAreSet() throws {
+    func testParseWithBothDiscoveryEndpointAndOpenIdPrefersOpenId() throws {
         let openId = OidcOpenIdConfigMessage(
             authorizationEndpoint: "https://example.com/authorize",
             tokenEndpoint: "https://example.com/token",
@@ -70,9 +73,11 @@ final class OidcConfigParserTests: XCTestCase {
             openId: openId
         )
 
-        // Must not throw — discoveryEndpoint is present, so openId is a valid override on top
-        // of it rather than a standalone (and unreachable) config source.
-        XCTAssertNoThrow(try OidcConfigParser.parse(message))
+        // Explicit openId wins; the discovery endpoint is kept but unused.
+        let result = try OidcConfigParser.parse(message)
+
+        XCTAssertEqual(result.discoveryEndpoint, "https://example.com/.well-known/openid-configuration")
+        XCTAssertEqual(result.openId?.authorizationEndpoint, "https://example.com/authorize")
     }
 
     func testParseMapsClientIdAndRedirectUri() throws {

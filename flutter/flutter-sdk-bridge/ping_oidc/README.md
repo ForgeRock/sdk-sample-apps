@@ -79,10 +79,10 @@ Tokens are native-owned: persisted only in native secure storage (Android `Encry
 
 ## Build / dependency wiring
 
-- **Android**: `namespace 'com.pingidentity.flutter.oidc'`, `minSdk 29`, `compileSdk 36`, Java 17; `implementation project(':ping_core')` + `com.pingidentity.sdks:oidc:2.1.0` + `com.pingidentity.sdks:storage:2.1.0` + `com.pingidentity.sdks:orchestrate:2.1.0` + `com.pingidentity.sdks:android:2.1.0` + `kotlinx-coroutines-android` + `kotlinx-serialization-json`.
-  ⚠️ **`com.pingidentity.sdks:browser:2.1.0` must be added explicitly** — it's `compileOnly` inside the native SDK's own `foundation/oidc` module ("make it optional for using centralized login"), so it is *not* pulled in transitively. A consumer that wants browser login and forgets this dependency fails at runtime, not at compile time.
-- **iOS (SPM)**: platform `.iOS(.v16)`; dependencies = local `ping_core` package + `.package(url: "https://github.com/ForgeRock/ping-ios-sdk", exact: "2.1.0")`; the target links `PingOidc`, `PingBrowser`, `PingStorage`, `PingOrchestrate`, `PingLogger`. A CocoaPods podspec (`ping_oidc.podspec`) is kept as an optional fallback for host apps not yet on SPM, with the same explicit dependency list.
-- Native SDK version is pinned to **2.1.0** on both platforms — see [`../README.md`](../README.md).
+- **Android**: `namespace 'com.pingidentity.flutter.oidc'`, `minSdk 29`, `compileSdk 36`, Java 17; `implementation project(':ping_core')` + `com.pingidentity.sdks:oidc:2.2.0` + `com.pingidentity.sdks:storage:2.2.0` + `com.pingidentity.sdks:orchestrate:2.2.0` + `com.pingidentity.sdks:android:2.2.0` + `kotlinx-coroutines-android` + `kotlinx-serialization-json`.
+  ⚠️ **`com.pingidentity.sdks:browser:2.2.0` must be added explicitly** — it's `compileOnly` inside the native SDK's own `foundation/oidc` module ("make it optional for using centralized login"), so it is *not* pulled in transitively. A consumer that wants browser login and forgets this dependency fails at runtime, not at compile time.
+- **iOS (SPM)**: platform `.iOS(.v16)`; dependencies = local `ping_core` package + `.package(url: "https://github.com/ForgeRock/ping-ios-sdk", exact: "2.2.0")`; the target links `PingOidc`, `PingBrowser`, `PingStorage`, `PingOrchestrate`, `PingLogger`. A CocoaPods podspec (`ping_oidc.podspec`) is kept as an optional fallback for host apps not yet on SPM, with the same explicit dependency list.
+- Native SDK version is pinned to **2.2.0** on both platforms — see [`../README.md`](../README.md).
 
 ## Testing
 

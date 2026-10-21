@@ -1,3 +1,13 @@
+## Unreleased
+
+#### Updated
+- Bumped to native Ping SDK `2.2.0` (Android Maven, iOS SPM)
+
+#### Changed
+- Android: an OIDC client handle carrying only `openId` no longer fails the token exchange on the native `OidcClientConfig.clone()` `lateinit discoveryEndpoint` bug
+- iOS: an OIDC client handle carrying `openId` now sets it directly (skipping discovery), the same as Android
+- iOS: native `OidcError.configurationError` (new in 2.2.0) maps to `PingException.type == "argument"`
+
 ## 0.0.1
 
 #### Added

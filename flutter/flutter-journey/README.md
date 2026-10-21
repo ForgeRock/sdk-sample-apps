@@ -48,7 +48,9 @@ To try out the Journey Flutter sample, perform these steps:
    - `oidcConfig` — your OAuth 2.0 client's `clientId`/`discoveryEndpoint`/`scopes`/`redirectUri`,
      or leave `null` to skip the post-login token exchange (Journey-only, session login).
 5. If you set `oidcConfig`, register `redirectUri`'s custom scheme with the Android host:
-   - Android: add an `intent-filter` for the scheme in `android/app/src/main/AndroidManifest.xml`.
+   - Android: set `manifestPlaceholders["appRedirectUriScheme"]` in `android/app/build.gradle.kts`
+     to the scheme (already set for this sample's scheme). Since native `browser` 2.2.0 this
+     placeholder is required even when `oidcConfig` is `null`, because the app links `ping_oidc`.
    - iOS: no `Info.plist` change is required — `ASWebAuthenticationSession`'s callback scheme is
      set programmatically from `redirectUri`, so there is no `CFBundleURLTypes` entry to add.
 6. Run the app: `flutter run` from this directory (`flutter-journey/`), or open
@@ -91,9 +93,9 @@ This sample carries two layers of test coverage, rather than choosing one over t
 
 ## Native SDK version
 
-Both platforms pin the native Ping SDK to **2.1.0** — Android via Maven
+Both platforms pin the native Ping SDK to **2.2.0** — Android via Maven
 (`com.pingidentity.sdks:*`), iOS via Swift Package Manager
-(`github.com/ForgeRock/ping-ios-sdk`, exact `2.1.0`).
+(`github.com/ForgeRock/ping-ios-sdk`, exact `2.2.0`).
 
 ## Additional Resources
 

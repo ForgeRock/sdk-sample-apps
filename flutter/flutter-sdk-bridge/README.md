@@ -118,9 +118,9 @@ independence actually holds, not just a doc claim.
 
 ## Native SDK version
 
-Both platforms pin the native Ping SDKs to **2.1.0** — Android via Maven
+Both platforms pin the native Ping SDKs to **2.2.0** — Android via Maven
 (`com.pingidentity.sdks:*`), iOS via Swift Package Manager
-(`github.com/ForgeRock/ping-ios-sdk`, exact `2.1.0`).
+(`github.com/ForgeRock/ping-ios-sdk`, exact `2.2.0`).
 
 ## Testing
 

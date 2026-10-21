@@ -23,6 +23,9 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        // Required by `browser` 2.2.0+, which leaves this placeholder for the app. Must match
+        // `OidcHarness.hermeticRedirectUri`'s scheme.
+        manifestPlaceholders["appRedirectUriScheme"] = "pingoidcexample"
     }
 
     buildTypes {

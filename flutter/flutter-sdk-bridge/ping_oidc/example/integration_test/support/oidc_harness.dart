@@ -14,10 +14,9 @@ import 'test_config.dart';
 /// A configured [OidcClient] plus whatever backs it, so a scenario reads the same whether it is
 /// configured against the in-process [MockDiscoveryServer] or a real tenant.
 ///
-/// Construct with [start] and let it pick the mode from [E2eConfig]; the redirect URI is never
-/// registered anywhere on purpose, since no scenario in this suite drives [OidcClient.authorize]
-/// — that call opens a system browser, which nothing here can complete. Call [dispose] (or
-/// `addTearDown(harness.dispose)`) to release the native client and shut the mock down.
+/// Construct with [start] and let it pick the mode from [E2eConfig]. Scenarios built on this harness
+/// never call [OidcClient.authorize]; the browser scenario uses `MockOidcProvider` instead. Call
+/// [dispose] (or `addTearDown(harness.dispose)`) to release the native client and stop the mock.
 class OidcHarness {
   OidcHarness._({required this.client, required this.server});
 
@@ -27,7 +26,8 @@ class OidcHarness {
   /// The mock server backing [client], or `null` in live mode.
   final MockDiscoveryServer? server;
 
-  /// The redirect URI used by the hermetic client. Registered nowhere — see the class docs.
+  /// The redirect URI used by hermetic clients. Its scheme matches the test host's Android
+  /// `appRedirectUriScheme` placeholder.
   static const hermeticRedirectUri = 'pingoidcexample://oauth2redirect';
 
   /// Client id used by the hermetic client. The mock never checks it.

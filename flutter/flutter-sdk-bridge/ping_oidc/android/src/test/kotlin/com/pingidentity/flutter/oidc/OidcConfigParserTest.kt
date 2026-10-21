@@ -62,6 +62,8 @@ class OidcConfigParserTest {
         assertEquals("https://example.com/authorize", result.openId.authorizationEndpoint)
         assertEquals("https://example.com/token", result.openId.tokenEndpoint)
         assertEquals("https://example.com/userinfo", result.openId.userinfoEndpoint)
+        // Guards the OidcClientConfig.clone() workaround in applyMessage.
+        assertEquals("", result.discoveryEndpoint)
     }
 
     @Test
