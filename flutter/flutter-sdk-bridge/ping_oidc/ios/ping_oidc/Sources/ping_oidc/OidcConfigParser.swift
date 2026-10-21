@@ -13,8 +13,8 @@ import PingOidc
 /// The native SDK only reports a missing `discoveryEndpoint`/`openId` on first use, so this parser
 /// checks up front and `configureOidc` fails fast with a typed error.
 ///
-/// A supplied `openId` is assigned directly, so the SDK skips discovery even when
-/// `discoveryEndpoint` is also set, the same rule as Android.
+/// An openId-only config is assigned directly and skips discovery. With a `discoveryEndpoint` too,
+/// `openId` patches the discovered document instead. Both rules match Android.
 enum OidcConfigParser {
     static func parse(_ message: OidcConfigMessage) throws -> OidcClientConfig {
         guard message.discoveryEndpoint != nil || message.openId != nil else {
@@ -38,14 +38,27 @@ enum OidcConfigParser {
             config.discoveryEndpoint = discoveryEndpoint
         }
         if let openId = message.openId {
-            config.openId = OpenIdConfiguration(
-                authorizationEndpoint: openId.authorizationEndpoint,
-                tokenEndpoint: openId.tokenEndpoint,
-                userinfoEndpoint: openId.userinfoEndpoint,
-                endSessionEndpoint: openId.endSessionEndpoint ?? "",
-                revocationEndpoint: openId.revocationEndpoint ?? "",
-                pingEndsessionEndpoint: openId.pingEndIdpSessionEndpoint
-            )
+            if message.discoveryEndpoint == nil {
+                config.openId = OpenIdConfiguration(
+                    authorizationEndpoint: openId.authorizationEndpoint,
+                    tokenEndpoint: openId.tokenEndpoint,
+                    userinfoEndpoint: openId.userinfoEndpoint,
+                    endSessionEndpoint: openId.endSessionEndpoint ?? "",
+                    revocationEndpoint: openId.revocationEndpoint ?? "",
+                    pingEndsessionEndpoint: openId.pingEndIdpSessionEndpoint
+                )
+            } else {
+                // Patch the discovered document, so endpoints openId doesn't carry (e.g. PAR)
+                // still come from discovery. Android does the same.
+                config.openIdOverride = { discovered in
+                    discovered.authorizationEndpoint = openId.authorizationEndpoint
+                    discovered.tokenEndpoint = openId.tokenEndpoint
+                    discovered.userinfoEndpoint = openId.userinfoEndpoint
+                    if let value = openId.endSessionEndpoint { discovered.endSessionEndpoint = value }
+                    if let value = openId.revocationEndpoint { discovered.revocationEndpoint = value }
+                    if let value = openId.pingEndIdpSessionEndpoint { discovered.pingEndsessionEndpoint = value }
+                }
+            }
         }
         if let scopes = message.scopes {
             config.scopes = Set(scopes.compactMap { $0 })

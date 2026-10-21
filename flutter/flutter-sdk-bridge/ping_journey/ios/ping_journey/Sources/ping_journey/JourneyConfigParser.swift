@@ -70,15 +70,26 @@ enum JourneyConfigParser {
         oidcConfig.clientId = handle.clientId
         if let discoveryEndpoint = handle.discoveryEndpoint { oidcConfig.discoveryEndpoint = discoveryEndpoint }
         if let openId = handle.openId {
-            // Setting openId skips discovery, matching Android.
-            oidcConfig.openId = OpenIdConfiguration(
-                authorizationEndpoint: openId.authorizationEndpoint,
-                tokenEndpoint: openId.tokenEndpoint,
-                userinfoEndpoint: openId.userinfoEndpoint,
-                endSessionEndpoint: openId.endSessionEndpoint ?? "",
-                revocationEndpoint: openId.revocationEndpoint ?? "",
-                pingEndsessionEndpoint: openId.pingEndIdpSessionEndpoint
-            )
+            if handle.discoveryEndpoint == nil {
+                oidcConfig.openId = OpenIdConfiguration(
+                    authorizationEndpoint: openId.authorizationEndpoint,
+                    tokenEndpoint: openId.tokenEndpoint,
+                    userinfoEndpoint: openId.userinfoEndpoint,
+                    endSessionEndpoint: openId.endSessionEndpoint ?? "",
+                    revocationEndpoint: openId.revocationEndpoint ?? "",
+                    pingEndsessionEndpoint: openId.pingEndIdpSessionEndpoint
+                )
+            } else {
+                // Same rule as ping_oidc's OidcConfigParser: patch the discovered document.
+                oidcConfig.openIdOverride = { discovered in
+                    discovered.authorizationEndpoint = openId.authorizationEndpoint
+                    discovered.tokenEndpoint = openId.tokenEndpoint
+                    discovered.userinfoEndpoint = openId.userinfoEndpoint
+                    if let value = openId.endSessionEndpoint { discovered.endSessionEndpoint = value }
+                    if let value = openId.revocationEndpoint { discovered.revocationEndpoint = value }
+                    if let value = openId.pingEndIdpSessionEndpoint { discovered.pingEndsessionEndpoint = value }
+                }
+            }
         }
         if let redirectUri = handle.redirectUri { oidcConfig.redirectUri = redirectUri }
         if !handle.scopes.isEmpty { oidcConfig.scopes = Set(handle.scopes) }

@@ -6,6 +6,7 @@
  */
 
 import XCTest
+import PingOidc
 @testable import ping_oidc
 
 /// Unit tests for `OidcConfigParser`'s validation and field-mapping logic.
@@ -62,7 +63,7 @@ final class OidcConfigParserTests: XCTestCase {
         XCTAssertNil(result.openIdOverride)
     }
 
-    func testParseWithBothDiscoveryEndpointAndOpenIdPrefersOpenId() throws {
+    func testParseWithBothDiscoveryEndpointAndOpenIdPatchesTheDiscoveredDocument() throws {
         let openId = OidcOpenIdConfigMessage(
             authorizationEndpoint: "https://example.com/authorize",
             tokenEndpoint: "https://example.com/token",
@@ -73,11 +74,23 @@ final class OidcConfigParserTests: XCTestCase {
             openId: openId
         )
 
-        // Explicit openId wins; the discovery endpoint is kept but unused.
         let result = try OidcConfigParser.parse(message)
+        var discovered = OpenIdConfiguration(
+            authorizationEndpoint: "https://discovered/authorize",
+            tokenEndpoint: "https://discovered/token",
+            userinfoEndpoint: "https://discovered/userinfo",
+            endSessionEndpoint: "https://discovered/end",
+            revocationEndpoint: "https://discovered/revoke",
+            pushedAuthorizationRequestEndpoint: "https://discovered/par"
+        )
+        result.openIdOverride?(&discovered)
 
-        XCTAssertEqual(result.discoveryEndpoint, "https://example.com/.well-known/openid-configuration")
-        XCTAssertEqual(result.openId?.authorizationEndpoint, "https://example.com/authorize")
+        XCTAssertNil(result.openId)
+        XCTAssertEqual(discovered.authorizationEndpoint, "https://example.com/authorize")
+        XCTAssertEqual(discovered.tokenEndpoint, "https://example.com/token")
+        // Fields openId doesn't supply keep their discovered values, including PAR.
+        XCTAssertEqual(discovered.pushedAuthorizationRequestEndpoint, "https://discovered/par")
+        XCTAssertEqual(discovered.endSessionEndpoint, "https://discovered/end")
     }
 
     func testParseMapsClientIdAndRedirectUri() throws {

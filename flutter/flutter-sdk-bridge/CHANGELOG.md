@@ -4,10 +4,13 @@
 - Bumped `ping_journey` and `ping_oidc` to native Ping SDK `2.2.0` on both platforms
 
 #### Changed
-- `ping_oidc` (iOS): an `OidcConfig` with `openId` and no `discoveryEndpoint` is now accepted, and an explicit `openId` skips discovery, matching Android (native `OidcClientConfig.openId` setter restored in iOS 2.2.0, SDKS-5301)
+- `ping_oidc` / `ping_journey`: explicit `openId` now behaves the same on both platforms. An `openId`-only config (no `discoveryEndpoint`) is accepted on iOS too and skips discovery. With a `discoveryEndpoint` as well, `openId` patches the discovered document, so endpoints it doesn't carry (such as PAR) still come from discovery. Android previously skipped discovery in that case, and iOS rejected openId-only configs
 - `ping_oidc` / `ping_journey` (Android): work around a native 2.2.0 bug where an `openId`-only config threw on authorize (`lateinit discoveryEndpoint` read by `OidcClientConfig.clone()`)
 - `ping_oidc/example`: new hermetic `oidc_openid_only_authorize_test.dart` drives a real browser authorize against an auto-redirecting mock and asserts no discovery request
 - `flutter-oidc` (Android): removed the `CustomTabActivity` manifest re-declaration; the `appRedirectUriScheme` placeholder alone now sets the redirect scheme (native `browser` 2.2.0, SDKS-5296)
+
+#### Known limitations
+- `ping_oidc` / `ping_journey`: `par: true` with an `openId`-only config does not use PAR, because `OidcOpenIdConfig` has no PAR endpoint. iOS falls back to a standard authorize request, and Android fails. Supply a `discoveryEndpoint` to use PAR
 
 ## 0.0.2
 

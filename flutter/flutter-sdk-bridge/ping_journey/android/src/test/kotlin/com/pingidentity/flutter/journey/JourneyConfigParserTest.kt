@@ -12,6 +12,7 @@ import com.pingidentity.flutter.core.oidc.OidcConfigHandle
 import com.pingidentity.flutter.core.oidc.OidcOpenIdConfig
 import com.pingidentity.flutter.core.registry.NativeHandle
 import com.pingidentity.oidc.OidcClientConfig
+import com.pingidentity.oidc.OpenIdConfiguration
 import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -139,6 +140,7 @@ class JourneyConfigParserTest {
     fun `applyHandle maps openId, coercing null endpoints to empty strings`() {
         val handle =
             FakeOidcConfigHandle(
+                discoveryEndpoint = null,
                 openId =
                     OidcOpenIdConfig(
                         authorizationEndpoint = "https://example.com/authorize",
@@ -173,6 +175,26 @@ class JourneyConfigParserTest {
         // Guards the OidcClientConfig.clone() workaround in applyHandle.
         assertEquals("", config.discoveryEndpoint)
         assertEquals("https://example.com/authorize", config.openId.authorizationEndpoint)
+    }
+
+    @Test
+    fun `applyHandle with discoveryEndpoint and openId patches the discovered document`() {
+        val handle =
+            FakeOidcConfigHandle(
+                openId =
+                    OidcOpenIdConfig(
+                        authorizationEndpoint = "https://example.com/authorize",
+                        tokenEndpoint = "https://example.com/token",
+                        userinfoEndpoint = "https://example.com/userinfo",
+                    ),
+            )
+
+        val config = OidcClientConfig().apply { applyHandle(handle) }
+        val discovered = OpenIdConfiguration(pushAuthorizationRequestEndpoint = "https://discovered/par")
+        config.openIdOverride!!.invoke(discovered)
+
+        assertEquals("https://example.com/authorize", discovered.authorizationEndpoint)
+        assertEquals("https://discovered/par", discovered.pushAuthorizationRequestEndpoint)
     }
 
     @Test

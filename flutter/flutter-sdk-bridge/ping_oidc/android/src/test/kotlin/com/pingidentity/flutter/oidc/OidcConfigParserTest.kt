@@ -7,6 +7,7 @@
 
 package com.pingidentity.flutter.oidc
 
+import com.pingidentity.oidc.OpenIdConfiguration
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -64,6 +65,39 @@ class OidcConfigParserTest {
         assertEquals("https://example.com/userinfo", result.openId.userinfoEndpoint)
         // Guards the OidcClientConfig.clone() workaround in applyMessage.
         assertEquals("", result.discoveryEndpoint)
+        assertNull(result.openIdOverride)
+    }
+
+    @Test
+    fun `parse with discoveryEndpoint and openId patches the discovered document`() {
+        val config =
+            OidcConfigMessage(
+                clientId = "client-1",
+                redirectUri = "https://example.com/callback",
+                discoveryEndpoint = "https://example.com/.well-known/openid-configuration",
+                openId =
+                    OidcOpenIdConfigMessage(
+                        authorizationEndpoint = "https://example.com/authorize",
+                        tokenEndpoint = "https://example.com/token",
+                        userinfoEndpoint = "https://example.com/userinfo",
+                    ),
+                par = true,
+            )
+
+        val result = OidcConfigParser.parse(config)
+        val discovered =
+            OpenIdConfiguration(
+                pushAuthorizationRequestEndpoint = "https://discovered/par",
+                endSessionEndpoint = "https://discovered/end",
+            )
+        result.openIdOverride!!.invoke(discovered)
+
+        assertEquals("https://example.com/authorize", discovered.authorizationEndpoint)
+        assertEquals("https://example.com/token", discovered.tokenEndpoint)
+        assertEquals("https://example.com/userinfo", discovered.userinfoEndpoint)
+        // Fields openId doesn't supply keep their discovered values, including PAR.
+        assertEquals("https://discovered/par", discovered.pushAuthorizationRequestEndpoint)
+        assertEquals("https://discovered/end", discovered.endSessionEndpoint)
     }
 
     @Test
