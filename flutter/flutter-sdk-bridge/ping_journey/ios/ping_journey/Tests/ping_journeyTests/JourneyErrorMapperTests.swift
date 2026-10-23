@@ -130,4 +130,13 @@ final class JourneyErrorMapperTests: XCTestCase {
 
         XCTAssertEqual(result.details as? String, "unknown")
     }
+
+    func testFromOidcErrorClassifiesConfigurationErrorAsArgument() {
+        let error = OidcError.configurationError(message: "no discoveryEndpoint or openId")
+
+        let result = JourneyErrorMapper.from(code, error)
+
+        XCTAssertEqual(result.details as? String, "argument")
+        XCTAssertEqual(result.message, error.errorMessage)
+    }
 }

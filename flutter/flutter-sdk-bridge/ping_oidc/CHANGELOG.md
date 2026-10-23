@@ -1,3 +1,17 @@
+## Unreleased
+
+#### Updated
+- Bumped to native Ping SDK `2.2.0` (Android Maven, iOS SPM)
+
+#### Changed
+- Android: an `openId`-only config no longer fails `authorize()` with "lateinit property discoveryEndpoint has not been initialized". Works around a native 2.2.0 `OidcClientConfig.clone()` bug by initializing `discoveryEndpoint` to `""` (never fetched when `openId` is set)
+- iOS: an `openId`-only config (no `discoveryEndpoint`) is now accepted instead of rejected with an `argument` error. It is assigned directly and discovery is skipped, the same as Android
+- Android: a config with both `discoveryEndpoint` and `openId` now runs discovery and patches the result with `openId`, as iOS already did, instead of skipping discovery. Endpoints `openId` doesn't carry (such as PAR) now come from discovery on both platforms
+- iOS: native `OidcError.configurationError` (new in 2.2.0) maps to `PingException.type == "argument"`
+
+#### Known limitations
+- `par: true` with an `openId`-only config does not use PAR, because `OidcOpenIdConfig` has no PAR endpoint. iOS falls back to a standard authorize request, and Android fails. Supply a `discoveryEndpoint` to use PAR
+
 ## 0.0.1
 
 #### Added

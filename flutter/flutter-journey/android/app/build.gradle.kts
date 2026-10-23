@@ -23,6 +23,9 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        // Required by `browser` 2.2.0+, which leaves this placeholder for the app. Must match
+        // `Env.redirectUri`'s scheme.
+        manifestPlaceholders["appRedirectUriScheme"] = "com.pingidentity.flutter.oidc.journey"
     }
 
     buildTypes {

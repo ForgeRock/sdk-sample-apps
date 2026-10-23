@@ -78,30 +78,16 @@ config level and must never appear literally in `env.dart`.
    }
    ```
 
-2. That placeholder alone is **not sufficient** on the native SDK's current published release
-   (`browser:2.1.0` ships `CustomTabActivity`'s manifest entry with its scheme already resolved to
-   a literal placeholder value, not the unresolved token — filed as
-   [SDKS-5296](https://pingidentity.atlassian.net/browse/SDKS-5296) against `ping-android-sdk`). The
-   mechanism that actually works is an app-level manifest re-declaration with
-   `tools:node="merge"`, already present in
-   [`android/app/src/main/AndroidManifest.xml`](android/app/src/main/AndroidManifest.xml):
+2. That placeholder is all Android needs. Since `browser:2.2.0`
+   ([SDKS-5296](https://pingidentity.atlassian.net/browse/SDKS-5296)) the published AAR leaves
+   `CustomTabActivity`'s scheme as the unresolved `${appRedirectUriScheme}` token, so your value is
+   what lands in the merged manifest. That also makes the placeholder **required**: an app that pulls
+   in `browser` without setting it fails the manifest merge. (On `browser:2.1.0` the AAR shipped the
+   scheme pre-resolved, and this sample re-declared `CustomTabActivity` with `tools:node="merge"` to
+   work around it. That re-declaration is gone now.)
 
-   ```xml
-   <activity
-       android:name="com.pingidentity.browser.CustomTabActivity"
-       android:exported="true"
-       tools:node="merge">
-       <intent-filter>
-           <action android:name="android.intent.action.VIEW"/>
-           <category android:name="android.intent.category.DEFAULT"/>
-           <category android:name="android.intent.category.BROWSABLE"/>
-           <data android:scheme="com.pingidentity.flutter.oidc"/>
-       </intent-filter>
-   </activity>
-   ```
-
-   If you change the scheme, update **both** the `manifestPlaceholders` entry and this `<data
-   android:scheme="...">` value, and update `env.dart`'s `redirectUri` to match.
+   If you change the scheme, update the `manifestPlaceholders` entry and `env.dart`'s `redirectUri`
+   to match.
 
 ### iOS
 
@@ -132,9 +118,9 @@ If you want to verify the full browser login round trip against your own tenant,
 
 ## Native SDK version
 
-Both platforms pin the native Ping SDK to **2.1.0** — Android via Maven
+Both platforms pin the native Ping SDK to **2.2.0** — Android via Maven
 (`com.pingidentity.sdks:*`), iOS via Swift Package Manager
-(`github.com/ForgeRock/ping-ios-sdk`, exact `2.1.0`).
+(`github.com/ForgeRock/ping-ios-sdk`, exact `2.2.0`).
 
 ## Additional Resources
 

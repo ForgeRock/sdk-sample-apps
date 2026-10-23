@@ -47,8 +47,8 @@ enum OidcWebClientFactory {
                 case "authSession": config.browserType = .authSession
                 case "ephemeralAuthSession": config.browserType = .ephemeralAuthSession
                 default:
-                    // `.nativeBrowserApp`/`.sfViewController` are declared but not implemented at
-                    // 2.1.0 (`Browser/README.md`) — reject rather than silently no-op.
+                    // `.nativeBrowserApp`/`.sfViewController` aren't bridged yet (they need
+                    // app-side URL forwarding) — reject rather than silently ignore.
                     applyError = OidcHostApiError.argumentError(
                         "Unsupported browserType on iOS: \(browserType)"
                     )

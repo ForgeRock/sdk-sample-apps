@@ -17,11 +17,11 @@ token management from Dart via ping_core.
   s.source_files = 'ping_oidc/Sources/ping_oidc/**/*'
   s.dependency 'Flutter'
   s.dependency 'ping_core'
-  s.dependency 'PingOidc', '2.1.0'
-  s.dependency 'PingBrowser', '2.1.0'
-  s.dependency 'PingStorage', '2.1.0'
-  s.dependency 'PingOrchestrate', '2.1.0'
-  s.dependency 'PingLogger', '2.1.0'
+  s.dependency 'PingOidc', '2.2.0'
+  s.dependency 'PingBrowser', '2.2.0'
+  s.dependency 'PingStorage', '2.2.0'
+  s.dependency 'PingOrchestrate', '2.2.0'
+  s.dependency 'PingLogger', '2.2.0'
   s.platform = :ios, '16.0'
 
   # Flutter.framework does not contain a i386 slice.

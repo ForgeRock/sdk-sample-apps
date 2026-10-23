@@ -34,16 +34,18 @@ secret store and are never written to a file in this repository — this is a pu
 
 ## What this suite does not cover
 
-`OidcClient.authorize()` opens the system browser, and nothing under `integration_test/` can drive
-or complete that UI — there is no headless equivalent the way `ping_journey`'s OIDC-in-Journey
-flow has, because that flow authorizes with the AM session cookie as a request header, while this
-one requires an actual user to interact with a Custom Tab / `ASWebAuthenticationSession`. That
-means a genuine signed-in session is unreachable from this suite in either mode, so neither can
-this suite cover the success path of `token`/`refresh`/`userInfo`/`revoke`/`signOff` — only the
-"no session yet" failure path each of them takes before it would need one.
+A real interactive login. `OidcClient.authorize()` opens the system browser, and nothing under
+`integration_test/` can type credentials into a Custom Tab / `ASWebAuthenticationSession`. So against
+a **live** tenant this suite can't reach a signed-in session, and the live success path of
+`token`/`refresh`/`userInfo`/`revoke`/`signOff` stays a manual check against the `flutter/flutter-oidc`
+sample app (see its README).
 
-The real, end-to-end round trip — browser login → token → userinfo → refresh → revoke/sign-off —
-is a manual check against the `flutter/flutter-oidc` sample app; see its README.
+**Hermetically** one browser round trip *is* covered. `oidc_openid_only_authorize_test.dart` points an
+explicit-`openId` client at `MockOidcProvider`, whose `/oauth2/authorize` answers the browser's first
+request with a `302` straight to the redirect URI. The browser follows it into the app with no UI
+interaction, and the native SDK redeems the code. That proves authorize → token → userinfo works with
+an `openId`-only config and **no discovery request**, on both platforms (impossible on iOS before
+native 2.2.0, SDKS-5301).
 
 ## What runs in which mode
 
@@ -51,6 +53,18 @@ is a manual check against the `flutter/flutter-oidc` sample app; see its README.
 | --- | --- | --- |
 | `oidc_configure_test.dart` | yes | yes |
 | `oidc_no_session_test.dart` | yes | yes |
+| `oidc_openid_only_authorize_test.dart` | yes | skips (needs the mock's auto-redirect) |
+
+## Preconditions for the browser scenario
+
+- **Android:** Chrome must have completed its first-run screen on the emulator/device at least once
+  (open Chrome by hand and get through the welcome screens). Otherwise Chrome's `FirstRunActivity`
+  intercepts the Custom Tab and `authorize()` never reaches the mock; the scenario fails after 60 s
+  with a message saying so. The test host sets `manifestPlaceholders["appRedirectUriScheme"] =
+  "pingoidcexample"` so the redirect lands back in the app.
+- **iOS:** none. The scenario uses `ephemeralAuthSession`, which shows no "wants to use … to sign in"
+  consent alert. Run from a clean Keychain (`xcrun simctl keychain <udid> reset`) if an earlier run
+  left a session behind.
 
 ## The mock server
 
@@ -61,6 +75,7 @@ special case. Two platform permissions make that work, scoped as narrowly as pos
 network security config that permits cleartext for loopback only, placed in `src/debug/` so it
 cannot reach a release build, and `NSAllowsLocalNetworking` in the iOS `Info.plist`.
 
+(`MockDiscoveryServer` only. The browser scenario uses its own `MockOidcProvider`, described above.)
 Its purpose is the opposite of `ping_journey`'s mock server: proving discovery is *never* fetched
 by the calls this suite can reach. Native discovery (`config.init()`) is lazy — it only runs inside
 calls that need resolved endpoints, and every one of those (`token`, `refresh`, `userInfo`) first

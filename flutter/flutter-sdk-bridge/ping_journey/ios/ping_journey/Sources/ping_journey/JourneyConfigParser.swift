@@ -70,26 +70,31 @@ enum JourneyConfigParser {
         oidcConfig.clientId = handle.clientId
         if let discoveryEndpoint = handle.discoveryEndpoint { oidcConfig.discoveryEndpoint = discoveryEndpoint }
         if let openId = handle.openId {
-            // openId can only be applied via openIdOverride — OidcClientConfig.openId is
-            // `public private(set)` at ping-ios-sdk 2.1.0 (SDKS-5301 tracks a cleaner API). This
-            // closure only fires after discover() succeeds, which requires discoveryEndpoint —
-            // ping_oidc's own OidcConfigParser already guarantees any handle registered via
-            // OidcClient.configure() has one, so this is safe here without re-validating.
-            oidcConfig.openIdOverride = { discovered in
-                discovered.authorizationEndpoint = openId.authorizationEndpoint
-                discovered.tokenEndpoint = openId.tokenEndpoint
-                discovered.userinfoEndpoint = openId.userinfoEndpoint
-                discovered.endSessionEndpoint = openId.endSessionEndpoint ?? ""
-                discovered.revocationEndpoint = openId.revocationEndpoint ?? ""
-                discovered.pingEndsessionEndpoint = openId.pingEndIdpSessionEndpoint
+            if handle.discoveryEndpoint == nil {
+                oidcConfig.openId = OpenIdConfiguration(
+                    authorizationEndpoint: openId.authorizationEndpoint,
+                    tokenEndpoint: openId.tokenEndpoint,
+                    userinfoEndpoint: openId.userinfoEndpoint,
+                    endSessionEndpoint: openId.endSessionEndpoint ?? "",
+                    revocationEndpoint: openId.revocationEndpoint ?? "",
+                    pingEndsessionEndpoint: openId.pingEndIdpSessionEndpoint
+                )
+            } else {
+                // Same rule as ping_oidc's OidcConfigParser: patch the discovered document.
+                oidcConfig.openIdOverride = { discovered in
+                    discovered.authorizationEndpoint = openId.authorizationEndpoint
+                    discovered.tokenEndpoint = openId.tokenEndpoint
+                    discovered.userinfoEndpoint = openId.userinfoEndpoint
+                    if let value = openId.endSessionEndpoint { discovered.endSessionEndpoint = value }
+                    if let value = openId.revocationEndpoint { discovered.revocationEndpoint = value }
+                    if let value = openId.pingEndIdpSessionEndpoint { discovered.pingEndsessionEndpoint = value }
+                }
             }
         }
         if let redirectUri = handle.redirectUri { oidcConfig.redirectUri = redirectUri }
         if !handle.scopes.isEmpty { oidcConfig.scopes = Set(handle.scopes) }
         if let acrValues = handle.acrValues { oidcConfig.acrValues = acrValues }
-        // signOutRedirectUri: no equivalent field on iOS's OidcClientConfig at 2.1.0 — same
-        // asymmetry already documented for the existing inline path
-        // (ping_oidc/ios/.../OidcConfigParser.swift).
+        // signOutRedirectUri: no equivalent field on iOS's OidcClientConfig.
         if let state = handle.state { oidcConfig.state = state }
         if let nonce = handle.nonce { oidcConfig.nonce = nonce }
         if let uiLocales = handle.uiLocales { oidcConfig.uiLocales = uiLocales }

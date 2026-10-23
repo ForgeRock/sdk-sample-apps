@@ -51,6 +51,8 @@ enum JourneyErrorMapper {
         case .authorizeError: type = "auth"
         case .networkError: type = "network"
         case .apiError: type = "exchange"
+        // Neither a usable `discoveryEndpoint` nor `openId`: a caller error.
+        case .configurationError: type = "argument"
         case .unknown: type = "unknown"
         }
         return PigeonError(code: code, message: error.errorMessage, details: type)

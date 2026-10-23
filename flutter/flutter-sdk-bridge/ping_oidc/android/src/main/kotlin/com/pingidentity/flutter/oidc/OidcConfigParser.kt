@@ -38,21 +38,37 @@ internal object OidcConfigParser {
 internal fun OidcClientConfig.applyMessage(config: OidcConfigMessage) {
     clientId = config.clientId
     redirectUri = config.redirectUri
-    config.discoveryEndpoint?.let { discoveryEndpoint = it }
+    // TODO: Remove once the SDK fixes it. `OidcClientConfig.clone()` reads the lateinit
+    // `discoveryEndpoint` unconditionally, so openId-only configs crash on authorize. The empty
+    // value is never fetched while `openId` is set.
+    discoveryEndpoint = config.discoveryEndpoint ?: ""
     config.openId?.let {
-        openId =
-            OpenIdConfiguration(
-                authorizationEndpoint = it.authorizationEndpoint,
-                tokenEndpoint = it.tokenEndpoint,
-                userinfoEndpoint = it.userinfoEndpoint,
-                endSessionEndpoint = it.endSessionEndpoint ?: "",
-                pingEndIdpSessionEndpoint = it.pingEndIdpSessionEndpoint ?: "",
-                revocationEndpoint = it.revocationEndpoint ?: "",
-            )
+        if (config.discoveryEndpoint == null) {
+            openId =
+                OpenIdConfiguration(
+                    authorizationEndpoint = it.authorizationEndpoint,
+                    tokenEndpoint = it.tokenEndpoint,
+                    userinfoEndpoint = it.userinfoEndpoint,
+                    endSessionEndpoint = it.endSessionEndpoint ?: "",
+                    pingEndIdpSessionEndpoint = it.pingEndIdpSessionEndpoint ?: "",
+                    revocationEndpoint = it.revocationEndpoint ?: "",
+                )
+        } else {
+            // Patch the discovered document, so endpoints openId doesn't carry (e.g. PAR)
+            // still come from discovery. iOS does the same.
+            openIdOverride = {
+                authorizationEndpoint = it.authorizationEndpoint
+                tokenEndpoint = it.tokenEndpoint
+                userinfoEndpoint = it.userinfoEndpoint
+                it.endSessionEndpoint?.let { value -> endSessionEndpoint = value }
+                it.pingEndIdpSessionEndpoint?.let { value -> pingEndIdpSessionEndpoint = value }
+                it.revocationEndpoint?.let { value -> revocationEndpoint = value }
+            }
+        }
     }
     config.scopes?.let { scopes = it.filterNotNull().toMutableSet() }
     config.acrValues?.let { acrValues = it }
-    // Android-only — no equivalent field on iOS's OidcClientConfig at 2.1.0.
+    // Android-only — no equivalent field on iOS's OidcClientConfig.
     config.signOutRedirectUri?.let { signOutRedirectUri = it }
     config.state?.let { state = it }
     config.nonce?.let { nonce = it }

@@ -155,6 +155,47 @@ final class JourneyConfigParserTests: XCTestCase {
         XCTAssertEqual(config.scopes, Set(["openid", "email"]))
     }
 
+    func testApplyHandleFieldsAssignsOpenIdDirectlyWhenThereIsNoDiscoveryEndpoint() {
+        let openId = OidcOpenIdConfig(
+            authorizationEndpoint: "https://example.com/authorize",
+            tokenEndpoint: "https://example.com/token",
+            userinfoEndpoint: "https://example.com/userinfo"
+        )
+        let config = OidcClientConfig()
+
+        JourneyConfigParser.applyHandleFields(
+            FakeOidcConfigHandle(discoveryEndpoint: nil, openId: openId),
+            to: config
+        )
+
+        XCTAssertEqual(config.openId?.authorizationEndpoint, "https://example.com/authorize")
+        XCTAssertNil(config.openIdOverride)
+    }
+
+    func testApplyHandleFieldsPatchesTheDiscoveredDocumentWhenBothAreSet() {
+        let openId = OidcOpenIdConfig(
+            authorizationEndpoint: "https://example.com/authorize",
+            tokenEndpoint: "https://example.com/token",
+            userinfoEndpoint: "https://example.com/userinfo"
+        )
+        let config = OidcClientConfig()
+        JourneyConfigParser.applyHandleFields(FakeOidcConfigHandle(openId: openId), to: config)
+        var discovered = OpenIdConfiguration(
+            authorizationEndpoint: "https://discovered/authorize",
+            tokenEndpoint: "https://discovered/token",
+            userinfoEndpoint: "https://discovered/userinfo",
+            endSessionEndpoint: "",
+            revocationEndpoint: "",
+            pushedAuthorizationRequestEndpoint: "https://discovered/par"
+        )
+
+        config.openIdOverride?(&discovered)
+
+        XCTAssertNil(config.openId)
+        XCTAssertEqual(discovered.authorizationEndpoint, "https://example.com/authorize")
+        XCTAssertEqual(discovered.pushedAuthorizationRequestEndpoint, "https://discovered/par")
+    }
+
     func testApplyHandleFieldsMapsPar() {
         let handle = FakeOidcConfigHandle(par: true)
         let config = OidcClientConfig()

@@ -34,14 +34,15 @@ jobs:
             echo "::endgroup::"
           done
 
-      - name: Android unit tests (ping_core, ping_journey)
-        working-directory: flutter/flutter-journey/android
-        run: ./gradlew :ping_core:testDebugUnitTest :ping_journey:testDebugUnitTest
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          # The native SDK AARs ship Java 21 bytecode, which the unit tests load directly.
+          java-version: '21'
 
-      - name: Android unit tests (ping_oidc)
-        # No consuming Flutter app wires ping_oidc into a project yet (deferred to the
-        # flutter-oidc sample app in SDKS-5266), so it's built standalone via its own wrapper.
-        # `FLUTTER_ROOT` (set by subosito/flutter-action above) supplies `flutter.jar` since
-        # there's no `local.properties` on CI.
-        working-directory: flutter/flutter-sdk-bridge/ping_oidc/android
-        run: ./gradlew testDebugUnitTest
+      - name: Android unit tests (ping_core, ping_journey, ping_oidc)
+        # The Gradle wrapper is gitignored in Flutter app projects; `--config-only` generates it.
+        working-directory: flutter/flutter-journey
+        run: |
+          flutter build apk --config-only
+          cd android && ./gradlew :ping_core:testDebugUnitTest :ping_journey:testDebugUnitTest :ping_oidc:testDebugUnitTest

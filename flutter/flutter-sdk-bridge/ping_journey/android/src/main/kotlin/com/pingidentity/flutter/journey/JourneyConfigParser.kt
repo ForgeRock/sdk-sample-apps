@@ -118,20 +118,32 @@ internal fun resolveOidcHandle(oidcClientId: String): OidcConfigHandle {
  */
 internal fun OidcClientConfig.applyHandle(handle: OidcConfigHandle) {
     clientId = handle.clientId
-    handle.discoveryEndpoint?.let { discoveryEndpoint = it }
+    // TODO: Remove once the SDK fixes it. `OidcClientConfig.clone()` reads the lateinit
+    // `discoveryEndpoint` unconditionally, so openId-only configs crash on authorize. The empty
+    // value is never fetched while `openId` is set.
+    discoveryEndpoint = handle.discoveryEndpoint ?: ""
     handle.openId?.let {
-        openId =
-            OpenIdConfiguration(
-                authorizationEndpoint = it.authorizationEndpoint,
-                tokenEndpoint = it.tokenEndpoint,
-                userinfoEndpoint = it.userinfoEndpoint,
-                // Coercions: native SDK's OpenIdConfiguration requires non-null endpoints, but
-                // ping_core's OidcOpenIdConfig leaves them nullable (mirrors ping_oidc's own
-                // OidcConfigParser.applyMessage).
-                endSessionEndpoint = it.endSessionEndpoint ?: "",
-                pingEndIdpSessionEndpoint = it.pingEndIdpSessionEndpoint ?: "",
-                revocationEndpoint = it.revocationEndpoint ?: "",
-            )
+        if (handle.discoveryEndpoint == null) {
+            openId =
+                OpenIdConfiguration(
+                    authorizationEndpoint = it.authorizationEndpoint,
+                    tokenEndpoint = it.tokenEndpoint,
+                    userinfoEndpoint = it.userinfoEndpoint,
+                    endSessionEndpoint = it.endSessionEndpoint ?: "",
+                    pingEndIdpSessionEndpoint = it.pingEndIdpSessionEndpoint ?: "",
+                    revocationEndpoint = it.revocationEndpoint ?: "",
+                )
+        } else {
+            // Same rule as ping_oidc's applyMessage: patch the discovered document.
+            openIdOverride = {
+                authorizationEndpoint = it.authorizationEndpoint
+                tokenEndpoint = it.tokenEndpoint
+                userinfoEndpoint = it.userinfoEndpoint
+                it.endSessionEndpoint?.let { value -> endSessionEndpoint = value }
+                it.pingEndIdpSessionEndpoint?.let { value -> pingEndIdpSessionEndpoint = value }
+                it.revocationEndpoint?.let { value -> revocationEndpoint = value }
+            }
+        }
     }
     handle.redirectUri?.let { redirectUri = it }
     if (handle.scopes.isNotEmpty()) scopes = handle.scopes.toMutableSet()

@@ -35,10 +35,13 @@ class OidcConfig {
   /// The OAuth2/OIDC client id.
   final String clientId;
 
-  /// The discovery endpoint URL, if discovery is used instead of an explicit [openId].
+  /// The discovery endpoint URL. Required for PAR.
   final String? discoveryEndpoint;
 
-  /// The explicit OpenID endpoint configuration, if discovery is not used.
+  /// The explicit OpenID endpoint configuration.
+  ///
+  /// On its own it replaces discovery. Alongside [discoveryEndpoint] it overrides the matching
+  /// discovered endpoints. PAR needs a [discoveryEndpoint], since this type has no PAR endpoint.
   final OidcOpenIdConfig? openId;
 
   /// The redirect URI registered for this client.

@@ -23,10 +23,8 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
-        // Decorative on `browser` SDK 2.1.0 — its AAR manifest ships this placeholder already
-        // resolved, so nothing downstream can override it (see AndroidManifest.xml's
-        // CustomTabActivity re-declaration for the mechanism that actually works. Kept for
-        // consistency with the other Ping modules that set it.
+        // Required by `browser` 2.2.0+, which leaves this placeholder for the app. Must match
+        // `Env.redirectUri`'s scheme.
         manifestPlaceholders["appRedirectUriScheme"] = "com.pingidentity.flutter.oidc"
     }
 

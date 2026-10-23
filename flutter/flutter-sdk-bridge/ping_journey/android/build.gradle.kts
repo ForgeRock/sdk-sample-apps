@@ -89,7 +89,7 @@ dependencies {
     }
 
     implementation(project(":ping_core"))
-    implementation("com.pingidentity.sdks:journey:2.1.0")
+    implementation("com.pingidentity.sdks:journey:2.2.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.11.0")
 
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")

@@ -69,7 +69,8 @@ void main() {
       expect(
         harness.mock.requests,
         <String>['GET /.well-known/openid-configuration'],
-        reason: 'A repeat hasUser call re-fetched discovery instead of reusing the cached '
+        reason:
+            'A repeat hasUser call re-fetched discovery instead of reusing the cached '
             'document. Mode: ${E2eConfig.describe}.',
       );
     }
