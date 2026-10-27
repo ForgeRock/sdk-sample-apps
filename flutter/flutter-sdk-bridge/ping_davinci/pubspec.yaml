@@ -1,0 +1,32 @@
+name: ping_davinci
+description: "Flutter bridge for the Ping DaVinci SDK: drives native DaVinci orchestration (nodes, collectors, sessions) from Dart via ping_core."
+version: 0.0.1
+homepage:
+publish_to: none
+
+environment:
+  sdk: ^3.12.2
+  flutter: '>=3.3.0'
+
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+  ping_core:
+    path: ../ping_core
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  pigeon: ^27.1.2
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: com.pingidentity.flutter.davinci
+        pluginClass: PingDaVinciPlugin
+      ios:
+        pluginClass: PingDaVinciPlugin

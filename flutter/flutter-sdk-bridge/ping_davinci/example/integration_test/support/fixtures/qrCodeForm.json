@@ -1,0 +1,59 @@
+{
+  "enablePolling": false,
+  "pollInterval": "2000",
+  "pollRetries": "60",
+  "pollChallengeStatus": true,
+  "form": {
+    "components": {
+      "fields": [
+        {
+          "type": "LABEL",
+          "content": "QR Code Collector Test\n\n",
+          "key": "title-text",
+          "richContent": {
+            "content": "QR Code Collector Test"
+          }
+        },
+        {
+          "type": "ERROR_DISPLAY"
+        },
+        {
+          "type": "QR_CODE",
+          "key": "qr-code",
+          "content": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAXIAAAFyAQAAAADAX2ykAAACkUlEQVR4nO2bQW7cMAxFH2sBWcpAD5CjyDfomXoz+yhzgADWMoCM34UsZzqDNgnquuOCXAzG1lt8QKBIirSJz9j05VM4OO+8884777zzv+JttQBTD0wWsIHFILe14UA9zu/FI0kiSZLmThAl0gwaAdLc6QoZH02/8x/j8+qhGrMZU9+JNHc1ua6Ofawe5/fhw92b+HL1TuRj9Ti/L3+7v5ZmBLk3Td9e7a46fjT9zv/e2v5GARkEYMQSjLiuXW/yo+l3/kP8ZGZmPdiQA6TLk0iXJ9nAUtPnY/U4vxNf8+dra1lVtfTzoufPp+RtyKH+1Po3zQB00ghYrYQP1OP8XvzmvwWSChBLrXpJUi2SNEavf0/Kt/uN7VSu2xi13XR0kuZt4dH0O/+OXQfXWNAYmzvztskqePw9MW9DNrMhPwlYzIYaeheDHND3Hmw4UI/ze/G1/hWUAHHGiJ2Y+vWfwWKCTnaMHuf/Br+6brbqsKRLoLpuPak9fz4r3+IqAG+hl61/tAVmj79n5Ft+NYNGOkEs1IS55leAxlg8fz41XxuCejWNOWADnd4uOaAmXgfqcX4nfuvvr14raS2SWn1UaLcf7r/n41tcja3gTW0vG9B5/D0xX+sjS5eApiEUTf0LwNLKJRaj9oQP0eP8vvxt/2gdvdoy6dTe+fl8Sn713/WpKyJ3xdIlFEsjQP5amJ5LmwN4NP3Ov2Mtv5KkbVayZs20JhIef8/Ot/nJOquR5nZhNdVHv3/+T/gaesfquqvX1jvLf6PH+T/j7+YnwRCxoKmfAZbA9Cy8v3BK/i7+jlG381fe/z0v307gauv3Ke1LlTaug98/n5Xf+r+rrf9iQe1J18Sj6Xfeeeedd975M/I/AGqNCUqqCEV/AAAAAElFTkSuQmCC",
+          "fallbackText": "If you can't scan the QR code, use the following link:https://www.pingidentity.com/en.html"
+        },
+        {
+          "type": "SUBMIT_BUTTON",
+          "label": "Continue",
+          "key": "submit"
+        }
+      ]
+    },
+    "name": "Automation - QR Code",
+    "description": "Test QR Code Collector",
+    "category": "CUSTOM_FORM"
+  },
+  "routeClientErrorsToFalseBranch": false,
+  "qrCodeContents": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAXIAAAFyAQAAAADAX2ykAAACkUlEQVR4nO2bQW7cMAxFH2sBWcpAD5CjyDfomXoz+yhzgADWMoCM34UsZzqDNgnquuOCXAzG1lt8QKBIirSJz9j05VM4OO+8884777zzv+JttQBTD0wWsIHFILe14UA9zu/FI0kiSZLmThAl0gwaAdLc6QoZH02/8x/j8+qhGrMZU9+JNHc1ua6Ofawe5/fhw92b+HL1TuRj9Ti/L3+7v5ZmBLk3Td9e7a46fjT9zv/e2v5GARkEYMQSjLiuXW/yo+l3/kP8ZGZmPdiQA6TLk0iXJ9nAUtPnY/U4vxNf8+dra1lVtfTzoufPp+RtyKH+1Po3zQB00ghYrYQP1OP8XvzmvwWSChBLrXpJUi2SNEavf0/Kt/uN7VSu2xi13XR0kuZt4dH0O/+OXQfXWNAYmzvztskqePw9MW9DNrMhPwlYzIYaeheDHND3Hmw4UI/ze/G1/hWUAHHGiJ2Y+vWfwWKCTnaMHuf/Br+6brbqsKRLoLpuPak9fz4r3+IqAG+hl61/tAVmj79n5Ft+NYNGOkEs1IS55leAxlg8fz41XxuCejWNOWADnd4uOaAmXgfqcX4nfuvvr14raS2SWn1UaLcf7r/n41tcja3gTW0vG9B5/D0xX+sjS5eApiEUTf0LwNLKJRaj9oQP0eP8vvxt/2gdvdoy6dTe+fl8Sn713/WpKyJ3xdIlFEsjQP5amJ5LmwN4NP3Ov2Mtv5KkbVayZs20JhIef8/Ot/nJOquR5nZhNdVHv3/+T/gaesfquqvX1jvLf6PH+T/j7+YnwRCxoKmfAZbA9Cy8v3BK/i7+jlG381fe/z0v307gauv3Ke1LlTaug98/n5Xf+r+rrf9iQe1J18Sj6Xfeeeedd975M/I/AGqNCUqqCEV/AAAAAElFTkSuQmCC",
+  "enableMagicLinkAuthentication": true,
+  "agreement": "useAgreementId",
+  "nodeTitle": "Automation - QRCode",
+  "envId": "300c4f2a-39d4-4ba9-a18a-f6de246006f4",
+  "formId": "59e229e9-6c8f-440d-b9ce-0cefb44f168c",
+  "isResponseCompatibleWithMobileAndWebSdks": true,
+  "id": "4yij5qnzl5",
+  "connectionId": "eb6a94a33f2f479eff234e8fa5049459",
+  "capabilityName": "showForm",
+  "interactionId": "scrubbed",
+  "_links": {
+    "next": {
+      "href": "{{baseUrl}}/300c4f2a-39d4-4ba9-a18a-f6de246006f4/davinci/connections/eb6a94a33f2f479eff234e8fa5049459/capabilities/showForm"
+    },
+    "self": {
+      "href": "{{baseUrl}}/300c4f2a-39d4-4ba9-a18a-f6de246006f4/davinci/connections/867ed4363b2bc21c860085ad2baa817d/capabilities/customHTMLTemplate"
+    }
+  },
+  "skProxyApiEnvironmentId": "deprecated",
+  "interactionToken": "scrubbed"
+}
