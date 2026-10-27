@@ -48,7 +48,10 @@ To try out the OIDC Flutter sample, perform these steps:
 3. From `sdk-sample-apps/flutter/`, run `flutter pub get` to resolve the pub workspace
    (`flutter-sdk-bridge/ping_core`, `flutter-sdk-bridge/ping_oidc`, `flutter-oidc`).
 4. Open [`lib/config/env.dart`](lib/config/env.dart) and replace the TODO placeholders with your
-   client's `discoveryEndpoint`, `clientId`, `redirectUri`, and `scopes`.
+   client's `discoveryEndpoint`, `clientId`, `redirectUri`, and `scopes`. Each value can
+   instead be passed at build time with `--dart-define` (or `--dart-define-from-file=../.env`) using
+   the keys `PINGAIC_DISCOVERY_ENDPOINT`, `PINGAIC_CLIENT_ID`, `PINGAIC_REDIRECT_URI`,
+   `PINGAIC_SCOPES` (comma- or space-separated) and, optionally, `PINGAIC_SIGN_OUT_REDIRECT_URI`.
 5. Register `redirectUri`'s custom scheme with both native hosts — see § Redirect URI setup below
    for the exact snippets, since this is the step most likely to trip up a first run.
 6. Run the app: `flutter run` from this directory (`flutter-oidc/`), or open
