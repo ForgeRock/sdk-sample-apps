@@ -1479,6 +1479,84 @@ class TokenMessage {
   }
 }
 
+/// What [PingDaVinciHostApi.retainedState] reports. Every count is 0 once each configured handle
+/// has been disposed.
+class RetainedStateMessage {
+  RetainedStateMessage({
+    required this.registeredHandles,
+    required this.cachedNodes,
+    required this.cachedSessions,
+    required this.flowLocks,
+    required this.activePolls,
+  });
+
+  /// Handles in the shared `davinciRegistry`.
+  int registeredHandles;
+
+  /// Cached `ContinueNode`s: a current form or an `ErrorNode`'s retry node.
+  int cachedNodes;
+
+  /// Cached `SuccessNode` sessions.
+  int cachedSessions;
+
+  /// Per-handle locks serializing the calls that move a flow on. iOS drops each one when its
+  /// queue drains, Android on dispose.
+  int flowLocks;
+
+  /// Polls whose native task the bridge still holds.
+  int activePolls;
+
+  List<Object?> _toList() {
+    return <Object?>[
+      registeredHandles,
+      cachedNodes,
+      cachedSessions,
+      flowLocks,
+      activePolls,
+    ];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static RetainedStateMessage decode(Object result) {
+    result as List<Object?>;
+    return RetainedStateMessage(
+      registeredHandles: result[0]! as int,
+      cachedNodes: result[1]! as int,
+      cachedSessions: result[2]! as int,
+      flowLocks: result[3]! as int,
+      activePolls: result[4]! as int,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! RetainedStateMessage || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return _deepEquals(registeredHandles, other.registeredHandles) &&
+        _deepEquals(cachedNodes, other.cachedNodes) &&
+        _deepEquals(cachedSessions, other.cachedSessions) &&
+        _deepEquals(flowLocks, other.flowLocks) &&
+        _deepEquals(activePolls, other.activePolls);
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => _deepHash(<Object?>[runtimeType, ..._toList()]);
+
+  @override
+  String toString() {
+    return 'RetainedStateMessage(registeredHandles: $registeredHandles, cachedNodes: $cachedNodes, cachedSessions: $cachedSessions, flowLocks: $flowLocks, activePolls: $activePolls)';
+  }
+}
+
 /// One status a running poll reported, normalized so both platforms send the same sequence (see
 /// [PingDaVinciHostApi.startPolling]).
 class PollingEventMessage {
@@ -1622,8 +1700,11 @@ class _PigeonCodec extends StandardMessageCodec {
     } else if (value is TokenMessage) {
       buffer.putUint8(145);
       writeValue(buffer, value.encode());
-    } else if (value is PollingEventMessage) {
+    } else if (value is RetainedStateMessage) {
       buffer.putUint8(146);
+      writeValue(buffer, value.encode());
+    } else if (value is PollingEventMessage) {
+      buffer.putUint8(147);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -1672,6 +1753,8 @@ class _PigeonCodec extends StandardMessageCodec {
       case 145:
         return TokenMessage.decode(readValue(buffer)!);
       case 146:
+        return RetainedStateMessage.decode(readValue(buffer)!);
+      case 147:
         return PollingEventMessage.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -1990,6 +2073,27 @@ class PingDaVinciHostApi {
       isNullValid: false,
     );
     return pigeonVar_replyValue! as int;
+  }
+
+  /// Diagnostic: how much per-handle state the bridge holds across every DaVinci handle. Exists
+  /// for the configure-to-dispose leak check; not part of the public Dart API.
+  Future<RetainedStateMessage> retainedState() async {
+    final pigeonVar_channelName =
+        'dev.flutter.pigeon.ping_davinci.PingDaVinciHostApi.retainedState$pigeonVar_messageChannelSuffix';
+    final pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
+    final pigeonVar_replyList = await pigeonVar_sendFuture as List<Object?>?;
+
+    final Object? pigeonVar_replyValue = _extractReplyValueOrThrow(
+      pigeonVar_replyList,
+      pigeonVar_channelName,
+      isNullValid: false,
+    );
+    return pigeonVar_replyValue! as RetainedStateMessage;
   }
 
   /// Diagnostic: the collector type keys the native collector factory resolves right now,

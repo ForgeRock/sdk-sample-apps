@@ -20,4 +20,5 @@ enum DaVinciErrorCodes {
     static let startPolling = "DAVINCI_START_POLLING_ERROR"
     static let cancelPolling = "DAVINCI_CANCEL_POLLING_ERROR"
     static let activePollCount = "DAVINCI_ACTIVE_POLL_COUNT_ERROR"
+    static let retainedState = "DAVINCI_RETAINED_STATE_ERROR"
 }

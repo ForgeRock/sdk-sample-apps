@@ -24,6 +24,9 @@ public class PingDaVinciPlugin: NSObject, FlutterPlugin {
 
     public func detachFromEngine(for registrar: FlutterPluginRegistrar) {
         PingDaVinciHostApiSetup.setUp(binaryMessenger: registrar.messenger(), api: nil)
+        if let api {
+            Task { await api.shutdown() }
+        }
         api = nil
     }
 }

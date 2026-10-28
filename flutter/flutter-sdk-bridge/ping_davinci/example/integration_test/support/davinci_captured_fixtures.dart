@@ -1740,4 +1740,3 @@ const deviceAuthenticationForm = r'''
   "interactionToken": "scrubbed"
 }
 ''';
-

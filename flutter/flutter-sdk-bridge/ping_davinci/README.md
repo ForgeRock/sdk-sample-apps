@@ -6,8 +6,6 @@ DaVinci bridge plugin for the Flutter Ping SDK bridge — see [`../README.md`](.
 
 Wraps the native Ping DaVinci SDK (Android `com.pingidentity.sdks:davinci`, iOS SPM `PingDavinci`, both pinned to `2.2.0`) behind a Pigeon-generated `HostApi`. Depends on `ping_core` for the shared `CoreRuntime.davinciRegistry` and the OIDC handle seam.
 
-> **Status:** in progress — see [`IMPLEMENTATION_PLAN_DAVINCI.md`](../../IMPLEMENTATION_PLAN_DAVINCI.md). `configure`, `start`, `next`, `validate`, `poll`, the post-success calls (`getSession`, `getToken`, `getUserInfo`, `signOff`), and `dispose` work. All 17 collector keys the native `davinci` module registers are typed; add-on collectors (social login, FIDO, Protect, mobile pairing) are Plan 3.
-
 ## Node engine
 
 `DaVinciClient.start()` returns a sealed `DaVinciNode` — `ContinueNode`, `SuccessNode`, `ErrorNode`, or `FailureNode` — so a `switch` over it is exhaustive. A `ContinueNode` carries the form's `id`, `name`, `pageDescription`, `category`, and its `collectors`.
@@ -123,6 +121,23 @@ After editing the schema, regenerate from this directory and check in the genera
 dart run pigeon --input pigeons/messages.dart
 ```
 
+## Lifecycle
+
+Each `DaVinciClient` owns one native handle in `CoreRuntime.davinciRegistry`, plus the bridge's per-handle
+state: the cached `ContinueNode` (the current form, or an `ErrorNode`'s retry node), the `SuccessNode`'s
+session, a lock, and any running poll. Every call that reads or moves the flow (`start`, `next`, `validate`,
+`startPolling`, `signOff`, `dispose`) takes that handle's lock, so two can't touch the same collectors at
+once. `dispose` waits for the call ahead of it, then removes the handle **before** anything else, so a call
+queued behind it fails with `PingException(type: 'state')` instead of caching a node or starting a poll. A
+never-submitted cached node is closed on dispose, so its `Closeable` collectors drop their values.
+
+When the Flutter engine detaches, Android cancels every in-flight call and poll (its coroutine scope), and
+iOS stops reporting every poll. The SDK's own iOS polling task still can't be cancelled (see Polling).
+
+`davinci_lifecycle_leak_test` runs configure → start → next ×3 → error → retry → success → token → signOff →
+dispose five times and checks, through the diagnostic `retainedState()` host method, that nothing is left
+behind. `davinci_polling_leak_test` does the same for polls.
+
 ## Native implementation shape
 
 | Concern | Android | iOS |
@@ -150,6 +165,10 @@ dart run pigeon --input pigeons/messages.dart
 
   ```sh
   xcodebuild test -workspace Runner.xcworkspace -scheme Runner \
-    -destination 'platform=iOS Simulator,id=<udid>' -only-testing:RunnerTests
+    -destination 'platform=iOS Simulator,id=<udid>' -only-testing:RunnerTests \
+    -parallel-testing-enabled NO
   ```
+
+  Without `-parallel-testing-enabled NO`, Xcode 27 may try to clone the simulator and fail ("Failed to clone
+  device"). `xcodebuild test` shuts the simulator down afterwards; boot it again before `flutter test`.
 - Integration tests: `example/` — see [`example/README.md`](example/README.md).

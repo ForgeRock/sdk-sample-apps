@@ -13,7 +13,8 @@ void main() {
     test('exposes all fields when fully constructed, incl. nested openId', () {
       const config = OidcConfig(
         clientId: 'client-1',
-        discoveryEndpoint: 'https://example.com/.well-known/openid-configuration',
+        discoveryEndpoint:
+            'https://example.com/.well-known/openid-configuration',
         openId: OidcOpenIdConfig(
           authorizationEndpoint: 'https://example.com/authorize',
           tokenEndpoint: 'https://example.com/token',
@@ -39,7 +40,10 @@ void main() {
         config.discoveryEndpoint,
         'https://example.com/.well-known/openid-configuration',
       );
-      expect(config.openId?.authorizationEndpoint, 'https://example.com/authorize');
+      expect(
+        config.openId?.authorizationEndpoint,
+        'https://example.com/authorize',
+      );
       expect(config.redirectUri, 'com.example.app://callback');
       expect(config.scopes, ['openid', 'profile']);
       expect(config.acrValues, 'acr1');
@@ -55,15 +59,18 @@ void main() {
       expect(config.par, isTrue);
     });
 
-    test('defaults scopes, additionalParameters, and par when only clientId is given', () {
-      const config = OidcConfig(clientId: 'client-1');
+    test(
+      'defaults scopes, additionalParameters, and par when only clientId is given',
+      () {
+        const config = OidcConfig(clientId: 'client-1');
 
-      expect(config.scopes, isEmpty);
-      expect(config.additionalParameters, isEmpty);
-      expect(config.par, isFalse);
-      expect(config.discoveryEndpoint, isNull);
-      expect(config.openId, isNull);
-    });
+        expect(config.scopes, isEmpty);
+        expect(config.additionalParameters, isEmpty);
+        expect(config.par, isFalse);
+        expect(config.discoveryEndpoint, isNull);
+        expect(config.openId, isNull);
+      },
+    );
   });
 
   group('OidcConfig.fromJson', () {
@@ -82,7 +89,10 @@ void main() {
       });
 
       expect(config.clientId, 'client-1');
-      expect(config.openId?.authorizationEndpoint, 'https://example.com/authorize');
+      expect(
+        config.openId?.authorizationEndpoint,
+        'https://example.com/authorize',
+      );
       expect(config.scopes, ['openid', 'profile']);
       expect(config.refreshThreshold, 30);
       expect(config.additionalParameters, {'foo': 'bar'});

@@ -1390,6 +1390,72 @@ data class TokenMessage (
 }
 
 /**
+ * What [PingDaVinciHostApi.retainedState] reports. Every count is 0 once each configured handle
+ * has been disposed.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class RetainedStateMessage (
+  /** Handles in the shared `davinciRegistry`. */
+  val registeredHandles: Long,
+  /** Cached `ContinueNode`s: a current form or an `ErrorNode`'s retry node. */
+  val cachedNodes: Long,
+  /** Cached `SuccessNode` sessions. */
+  val cachedSessions: Long,
+  /**
+   * Per-handle locks serializing the calls that move a flow on. iOS drops each one when its
+   * queue drains, Android on dispose.
+   */
+  val flowLocks: Long,
+  /** Polls whose native task the bridge still holds. */
+  val activePolls: Long
+)
+ {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): RetainedStateMessage {
+      val registeredHandles = pigeonVar_list[0] as Long
+      val cachedNodes = pigeonVar_list[1] as Long
+      val cachedSessions = pigeonVar_list[2] as Long
+      val flowLocks = pigeonVar_list[3] as Long
+      val activePolls = pigeonVar_list[4] as Long
+      return RetainedStateMessage(registeredHandles, cachedNodes, cachedSessions, flowLocks, activePolls)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      registeredHandles,
+      cachedNodes,
+      cachedSessions,
+      flowLocks,
+      activePolls,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other == null || other.javaClass != javaClass) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    val other = other as RetainedStateMessage
+    return MessagesPigeonUtils.deepEquals(this.registeredHandles, other.registeredHandles) && MessagesPigeonUtils.deepEquals(this.cachedNodes, other.cachedNodes) && MessagesPigeonUtils.deepEquals(this.cachedSessions, other.cachedSessions) && MessagesPigeonUtils.deepEquals(this.flowLocks, other.flowLocks) && MessagesPigeonUtils.deepEquals(this.activePolls, other.activePolls)
+  }
+
+  override fun hashCode(): Int {
+    var result = javaClass.hashCode()
+    result = 31 * result + MessagesPigeonUtils.deepHash(this.registeredHandles)
+    result = 31 * result + MessagesPigeonUtils.deepHash(this.cachedNodes)
+    result = 31 * result + MessagesPigeonUtils.deepHash(this.cachedSessions)
+    result = 31 * result + MessagesPigeonUtils.deepHash(this.flowLocks)
+    result = 31 * result + MessagesPigeonUtils.deepHash(this.activePolls)
+    return result
+  }
+  override fun toString(): String {
+    return "RetainedStateMessage(registeredHandles=$registeredHandles, cachedNodes=$cachedNodes, cachedSessions=$cachedSessions, flowLocks=$flowLocks, activePolls=$activePolls)"
+  }
+}
+
+/**
  * One status a running poll reported, normalized so both platforms send the same sequence (see
  * [PingDaVinciHostApi.startPolling]).
  *
@@ -1549,6 +1615,11 @@ private open class MessagesPigeonCodec : StandardMessageCodec() {
       }
       146.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
+          RetainedStateMessage.fromList(it)
+        }
+      }
+      147.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
           PollingEventMessage.fromList(it)
         }
       }
@@ -1625,8 +1696,12 @@ private open class MessagesPigeonCodec : StandardMessageCodec() {
         stream.write(145)
         writeValue(stream, value.toList())
       }
-      is PollingEventMessage -> {
+      is RetainedStateMessage -> {
         stream.write(146)
+        writeValue(stream, value.toList())
+      }
+      is PollingEventMessage -> {
+        stream.write(147)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -1699,6 +1774,11 @@ interface PingDaVinciHostApi {
    * leak check; not part of the public Dart API.
    */
   fun activePollCount(callback: (Result<Long>) -> Unit)
+  /**
+   * Diagnostic: how much per-handle state the bridge holds across every DaVinci handle. Exists
+   * for the configure-to-dispose leak check; not part of the public Dart API.
+   */
+  fun retainedState(callback: (Result<RetainedStateMessage>) -> Unit)
   /**
    * Diagnostic: the collector type keys the native collector factory resolves right now,
    * sorted. Exists to check that iOS's asynchronous collector registration has completed by
@@ -1944,6 +2024,24 @@ interface PingDaVinciHostApi {
         if (api != null) {
           channel.setMessageHandler { _, reply ->
             api.activePollCount{ result: Result<Long> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(MessagesPigeonUtils.wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(MessagesPigeonUtils.wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.ping_davinci.PingDaVinciHostApi.retainedState$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            api.retainedState{ result: Result<RetainedStateMessage> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(MessagesPigeonUtils.wrapError(error))

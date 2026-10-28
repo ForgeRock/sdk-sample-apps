@@ -29,4 +29,7 @@ class SimpleRegistry : Registry {
     override fun remove(id: String) {
         map.remove(id)
     }
+
+    override val size: Int
+        get() = map.size
 }

@@ -71,6 +71,17 @@ final class DaVinciPolling: @unchecked Sendable {
         }
     }
 
+    /// Cancels every poll, of every handle: on engine detach.
+    func cancelAll() async {
+        let all = lock.withLock {
+            defer { polls.removeAll() }
+            return Array(polls.values)
+        }
+        for poll in all {
+            await poll.stop()
+        }
+    }
+
     private func run(_ pollId: String, _ poll: Poll, _ collector: PollingCollector) async {
         var normalizer = PollingStatusNormalizer(
             challengeMode: collector.pollChallengeStatus && !collector.challenge.isEmpty

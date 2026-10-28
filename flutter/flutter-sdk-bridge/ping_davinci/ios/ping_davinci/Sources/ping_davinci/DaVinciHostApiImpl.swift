@@ -39,9 +39,17 @@ final class DaVinciHostApiImpl: PingDaVinciHostApi, @unchecked Sendable {
     /// The session of the `SuccessNode` each daVinciId reached, until it starts over or signs off.
     private var successSessionMap: [String: Session] = [:]
 
-    /// Serializes `next()` and `validate()` per daVinciId, so neither can apply values while the
-    /// other is reading or submitting the same collectors.
-    private let nextSerializer = KeyedSerialExecutor()
+    /// Serializes every call that reads or moves a handle's flow (`start`, `next`, `validate`,
+    /// `startPolling`, `signOff`, `dispose`) per daVinciId, so none can apply values while another
+    /// is reading or submitting the same collectors, and nothing cached or started can outlive
+    /// `dispose`.
+    private let flowSerializer = KeyedSerialExecutor()
+
+    /// Stops reporting every poll. Invoked from `PingDaVinciPlugin.detachFromEngine`: the SDK's own
+    /// polling tasks run on regardless (see `DaVinciPolling`).
+    func shutdown() async {
+        await polling.cancelAll()
+    }
 
     func configureDaVinci(config: DaVinciConfigMessage, completion: @escaping (Result<String, Error>) -> Void) {
         Task {
@@ -55,14 +63,18 @@ final class DaVinciHostApiImpl: PingDaVinciHostApi, @unchecked Sendable {
 
     func start(daVinciId: String, completion: @escaping (Result<NodeMessage, Error>) -> Void) {
         Task {
-            guard let handle = await resolveHandle(daVinciId) else {
-                completion(.failure(DaVinciErrorMapper.from(DaVinciErrorCodes.start, notFound(daVinciId))))
-                return
+            do {
+                let message = try await flowSerializer.run(key: daVinciId) { [self] in
+                    guard let handle = await self.resolveHandle(daVinciId) else { throw self.notFound(daVinciId) }
+                    await self.polling.cancelAll(daVinciId: daVinciId)
+                    let node = await handle.daVinci.start()
+                    self.setNode(daVinciId: daVinciId, node: node)
+                    return await DaVinciNodeMapper.map(node, daVinci: handle.daVinci)
+                }
+                completion(.success(message))
+            } catch {
+                completion(.failure(DaVinciErrorMapper.from(DaVinciErrorCodes.start, error)))
             }
-            await polling.cancelAll(daVinciId: daVinciId)
-            let node = await handle.daVinci.start()
-            setNode(daVinciId: daVinciId, node: node)
-            completion(.success(await DaVinciNodeMapper.map(node, daVinci: handle.daVinci)))
         }
     }
 
@@ -73,7 +85,7 @@ final class DaVinciHostApiImpl: PingDaVinciHostApi, @unchecked Sendable {
     ) {
         Task {
             do {
-                let message = try await nextSerializer.run(key: daVinciId) { [self] in
+                let message = try await flowSerializer.run(key: daVinciId) { [self] in
                     guard let currentNode = self.activeContinueNode(daVinciId) else {
                         throw DaVinciHostApiError.stateError(
                             "No active ContinueNode found for daVinciId=\(daVinciId)"
@@ -111,7 +123,7 @@ final class DaVinciHostApiImpl: PingDaVinciHostApi, @unchecked Sendable {
     ) {
         Task {
             do {
-                let errors = try await nextSerializer.run(key: daVinciId) { [self] in
+                let errors = try await flowSerializer.run(key: daVinciId) { [self] in
                     guard let currentNode = self.activeContinueNode(daVinciId) else {
                         throw DaVinciHostApiError.stateError(
                             "No active ContinueNode found for daVinciId=\(daVinciId)"
@@ -191,32 +203,60 @@ final class DaVinciHostApiImpl: PingDaVinciHostApi, @unchecked Sendable {
     /// `signOff()` result that `logout()` discards.
     func signOff(daVinciId: String, completion: @escaping (Result<Bool, Error>) -> Void) {
         Task {
-            guard let handle = await resolveHandle(daVinciId) else {
-                completion(.failure(DaVinciErrorMapper.from(DaVinciErrorCodes.signOff, notFound(daVinciId))))
-                return
+            do {
+                let signedOff = try await flowSerializer.run(key: daVinciId) { [self] in
+                    guard let handle = await self.resolveHandle(daVinciId) else { throw self.notFound(daVinciId) }
+                    await self.polling.cancelAll(daVinciId: daVinciId)
+                    _ = handle.daVinci.sharedContext.removeValue(forKey: SharedContext.Keys.userKey)
+                    let signedOff: Bool
+                    switch await handle.daVinci.signOff() {
+                    case .success:
+                        signedOff = true
+                    case .failure(let error):
+                        NSLog("PingDaVinci: signOff failed for daVinciId=%@: %@", daVinciId, "\(error)")
+                        signedOff = false
+                    }
+                    self.clearNodeState(daVinciId: daVinciId)
+                    return signedOff
+                }
+                completion(.success(signedOff))
+            } catch {
+                completion(.failure(DaVinciErrorMapper.from(DaVinciErrorCodes.signOff, error)))
             }
-            await polling.cancelAll(daVinciId: daVinciId)
-            _ = handle.daVinci.sharedContext.removeValue(forKey: SharedContext.Keys.userKey)
-            let signedOff: Bool
-            switch await handle.daVinci.signOff() {
-            case .success:
-                signedOff = true
-            case .failure(let error):
-                NSLog("PingDaVinci: signOff failed for daVinciId=%@: %@", daVinciId, "\(error)")
-                signedOff = false
-            }
-            clearNodeState(daVinciId: daVinciId)
-            completion(.success(signedOff))
         }
     }
 
+    /// Waits for the call ahead of it in the handle's serializer, then removes the handle before
+    /// anything else, so a call queued behind it fails as not found instead of caching a node or
+    /// starting a poll. The serializer drops the key itself once its queue drains. Disposing an
+    /// unknown id is a no-op.
     func dispose(daVinciId: String, completion: @escaping (Result<Void, Error>) -> Void) {
         Task {
-            await polling.cancelAll(daVinciId: daVinciId)
-            clearNodeState(daVinciId: daVinciId)
-            await nextSerializer.remove(key: daVinciId)
-            await CoreRuntime.davinciRegistry.remove(daVinciId)
-            completion(.success(()))
+            do {
+                try await flowSerializer.run(key: daVinciId) { [self] in
+                    await CoreRuntime.davinciRegistry.remove(daVinciId)
+                    await self.polling.cancelAll(daVinciId: daVinciId)
+                    self.clearNodeState(daVinciId: daVinciId)
+                }
+                completion(.success(()))
+            } catch {
+                completion(.failure(DaVinciErrorMapper.from(DaVinciErrorCodes.dispose, error)))
+            }
+        }
+    }
+
+    func retainedState(completion: @escaping (Result<RetainedStateMessage, Error>) -> Void) {
+        Task {
+            let registeredHandles = await CoreRuntime.davinciRegistry.count()
+            let flowLocks = await flowSerializer.count
+            let (cachedNodes, cachedSessions) = lock.withLock { (continueNodeMap.count, successSessionMap.count) }
+            completion(.success(RetainedStateMessage(
+                registeredHandles: Int64(registeredHandles),
+                cachedNodes: Int64(cachedNodes),
+                cachedSessions: Int64(cachedSessions),
+                flowLocks: Int64(flowLocks),
+                activePolls: Int64(polling.activeCount)
+            )))
         }
     }
 
@@ -243,7 +283,7 @@ final class DaVinciHostApiImpl: PingDaVinciHostApi, @unchecked Sendable {
     ) {
         Task {
             do {
-                try await nextSerializer.run(key: daVinciId) { [self] in
+                try await flowSerializer.run(key: daVinciId) { [self] in
                     guard await self.resolveHandle(daVinciId) != nil else { throw self.notFound(daVinciId) }
                     guard let currentNode = self.activeContinueNode(daVinciId) else {
                         throw DaVinciHostApiError.stateError(

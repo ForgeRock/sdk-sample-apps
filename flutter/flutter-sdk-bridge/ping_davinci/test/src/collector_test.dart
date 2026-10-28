@@ -140,327 +140,321 @@ void main() {
     });
   });
 
-  group(
-    'round trip: CollectorMessage -> Collector -> CollectorValueMessage',
-    () {
-      /// `[type, index, value]` — a list, so `expect` compares the value deeply.
-      List<Object?> wire(Collector collector) {
-        final value = collector.toValue()!;
-        return [value.type, value.index, value.value];
-      }
+  group('round trip: CollectorMessage -> Collector -> CollectorValueMessage', () {
+    /// `[type, index, value]` — a list, so `expect` compares the value deeply.
+    List<Object?> wire(Collector collector) {
+      final value = collector.toValue()!;
+      return [value.type, value.index, value.value];
+    }
 
-      test('nothing is submitted until the app sets a value', () {
-        final text =
-            Collector.fromMessage(
-                  message('TEXT', CollectorKind.text, value: 'default'),
-                )
-                as TextCollector;
+    test('nothing is submitted until the app sets a value', () {
+      final text =
+          Collector.fromMessage(
+                message('TEXT', CollectorKind.text, value: 'default'),
+              )
+              as TextCollector;
 
-        expect(text.value, 'default');
-        expect(text.hasChanged, isFalse);
-        expect(text.toValue(), isNull);
-      });
+      expect(text.value, 'default');
+      expect(text.hasChanged, isFalse);
+      expect(text.toValue(), isNull);
+    });
 
-      test('text', () {
-        final text =
-            Collector.fromMessage(
-                  CollectorMessage(
-                    type: 'TEXT',
-                    index: 2,
-                    kind: CollectorKind.text,
-                    value: 'default',
-                    validationRegex: r'^[a-z]+$',
-                    validationErrorMessage: 'Lowercase only',
+    test('text', () {
+      final text =
+          Collector.fromMessage(
+                CollectorMessage(
+                  type: 'TEXT',
+                  index: 2,
+                  kind: CollectorKind.text,
+                  value: 'default',
+                  validationRegex: r'^[a-z]+$',
+                  validationErrorMessage: 'Lowercase only',
+                ),
+              )
+              as TextCollector;
+
+      expect(text.validation?.regex, r'^[a-z]+$');
+      expect(text.validation?.errorMessage, 'Lowercase only');
+      text.value = 'alice';
+      expect(text.hasChanged, isTrue);
+      expect(wire(text), ['TEXT', 2, 'alice']);
+    });
+
+    test('password, starting empty whatever native sends', () {
+      final password =
+          Collector.fromMessage(
+                CollectorMessage(
+                  type: 'PASSWORD_VERIFY',
+                  index: 3,
+                  kind: CollectorKind.password,
+                  value: 'never-sent',
+                  passwordPolicy: PasswordPolicyMessage(
+                    lengthMin: 8,
+                    minUniqueCharacters: 5,
+                    maxRepeatedCharacters: 2,
+                    minCharacters: <String?, int?>{'0123456789': 1, null: 3},
                   ),
-                )
-                as TextCollector;
+                ),
+              )
+              as PasswordCollector;
 
-        expect(text.validation?.regex, r'^[a-z]+$');
-        expect(text.validation?.errorMessage, 'Lowercase only');
-        text.value = 'alice';
-        expect(text.hasChanged, isTrue);
-        expect(wire(text), ['TEXT', 2, 'alice']);
-      });
+      expect(password.value, isEmpty);
+      expect(password.validation, isNull);
+      final policy = password.passwordPolicy!;
+      expect(policy.lengthMin, 8);
+      expect(policy.lengthMax, isNull, reason: 'unbounded');
+      expect(policy.minUniqueCharacters, 5);
+      expect(policy.maxRepeatedCharacters, 2);
+      expect(policy.minCharacters, {'0123456789': 1});
+      password.value = 's3cret!';
+      expect(wire(password), ['PASSWORD_VERIFY', 3, 's3cret!']);
+    });
 
-      test('password, starting empty whatever native sends', () {
-        final password =
-            Collector.fromMessage(
-                  CollectorMessage(
-                    type: 'PASSWORD_VERIFY',
-                    index: 3,
-                    kind: CollectorKind.password,
-                    value: 'never-sent',
-                    passwordPolicy: PasswordPolicyMessage(
-                      lengthMin: 8,
-                      minUniqueCharacters: 5,
-                      maxRepeatedCharacters: 2,
-                      minCharacters: <String?, int?>{'0123456789': 1, null: 3},
-                    ),
-                  ),
-                )
-                as PasswordCollector;
+    test('a password with no policy has none', () {
+      final password =
+          Collector.fromMessage(message('PASSWORD', CollectorKind.password))
+              as PasswordCollector;
+      expect(password.passwordPolicy, isNull);
+    });
 
-        expect(password.value, isEmpty);
-        expect(password.validation, isNull);
-        final policy = password.passwordPolicy!;
-        expect(policy.lengthMin, 8);
-        expect(policy.lengthMax, isNull, reason: 'unbounded');
-        expect(policy.minUniqueCharacters, 5);
-        expect(policy.maxRepeatedCharacters, 2);
-        expect(policy.minCharacters, {'0123456789': 1});
-        password.value = 's3cret!';
-        expect(wire(password), ['PASSWORD_VERIFY', 3, 's3cret!']);
-      });
+    test('single select', () {
+      final select =
+          Collector.fromMessage(
+                CollectorMessage(
+                  type: 'RADIO',
+                  index: 1,
+                  kind: CollectorKind.singleSelect,
+                  value: 'b',
+                  options: [
+                    OptionMessage(label: 'A', value: 'a'),
+                    null,
+                    OptionMessage(label: 'B', value: 'b'),
+                  ],
+                ),
+              )
+              as SingleSelectCollector;
 
-      test('a password with no policy has none', () {
-        final password =
-            Collector.fromMessage(message('PASSWORD', CollectorKind.password))
-                as PasswordCollector;
-        expect(password.passwordPolicy, isNull);
-      });
+      expect(select.options, const [
+        Option(label: 'A', value: 'a'),
+        Option(label: 'B', value: 'b'),
+      ]);
+      expect(select.value, 'b');
+      select.value = 'a';
+      expect(wire(select), ['RADIO', 1, 'a']);
+    });
 
-      test('single select', () {
-        final select =
-            Collector.fromMessage(
-                  CollectorMessage(
-                    type: 'RADIO',
-                    index: 1,
-                    kind: CollectorKind.singleSelect,
-                    value: 'b',
-                    options: [
-                      OptionMessage(label: 'A', value: 'a'),
-                      null,
-                      OptionMessage(label: 'B', value: 'b'),
+    test('multi select, with an unmodifiable value', () {
+      final multi =
+          Collector.fromMessage(
+                CollectorMessage(
+                  type: 'COMBOBOX',
+                  index: 5,
+                  kind: CollectorKind.multiSelect,
+                  value: <Object?>['a', 'c'],
+                  options: [OptionMessage(label: 'A', value: 'a')],
+                ),
+              )
+              as MultiSelectCollector;
+
+      expect(multi.value, ['a', 'c']);
+      expect(() => multi.value.add('b'), throwsUnsupportedError);
+      expect(multi.hasChanged, isFalse);
+      multi.value = [...multi.value, 'b'];
+      expect(wire(multi), [
+        'COMBOBOX',
+        5,
+        ['a', 'c', 'b'],
+      ]);
+      expect(() => multi.value.clear(), throwsUnsupportedError);
+    });
+
+    test('boolean, with appearance and rich content', () {
+      final boolean =
+          Collector.fromMessage(
+                CollectorMessage(
+                  type: 'SINGLE_CHECKBOX',
+                  index: 0,
+                  kind: CollectorKind.boolean,
+                  value: false,
+                  appearance: 'SWITCH',
+                  errorMessage: 'Select the checkbox to continue.',
+                  richContent: RichContentMessage(
+                    content: 'I agree to the {{link1}}',
+                    replacements: [
+                      RichContentReplacementMessage(
+                        key: 'link1',
+                        value: 'Terms',
+                        href: 'https://example.com/terms',
+                        type: 'link',
+                        target: '_blank',
+                      ),
                     ],
                   ),
-                )
-                as SingleSelectCollector;
+                ),
+              )
+              as BooleanCollector;
 
-        expect(select.options, const [
-          Option(label: 'A', value: 'a'),
-          Option(label: 'B', value: 'b'),
-        ]);
-        expect(select.value, 'b');
-        select.value = 'a';
-        expect(wire(select), ['RADIO', 1, 'a']);
-      });
+      expect(boolean.value, isFalse);
+      expect(boolean.appearance, BooleanAppearance.toggleSwitch);
+      expect(boolean.errorMessage, 'Select the checkbox to continue.');
+      expect(boolean.richContent!.content, 'I agree to the {{link1}}');
+      final link = boolean.richContent!.replacements['link1']!;
+      expect(link.value, 'Terms');
+      expect(link.href, 'https://example.com/terms');
+      expect(link.type, 'link');
+      expect(link.target, '_blank');
+      boolean.value = true;
+      expect(wire(boolean), ['SINGLE_CHECKBOX', 0, true]);
+    });
 
-      test('multi select, with an unmodifiable value', () {
-        final multi =
-            Collector.fromMessage(
-                  CollectorMessage(
-                    type: 'COMBOBOX',
-                    index: 5,
-                    kind: CollectorKind.multiSelect,
-                    value: <Object?>['a', 'c'],
-                    options: [OptionMessage(label: 'A', value: 'a')],
-                  ),
-                )
-                as MultiSelectCollector;
+    test('boolean appearance defaults to a checkbox', () {
+      final boolean =
+          Collector.fromMessage(
+                message('SINGLE_CHECKBOX', CollectorKind.boolean),
+              )
+              as BooleanCollector;
+      expect(boolean.appearance, BooleanAppearance.checkbox);
+      expect(boolean.value, isFalse);
+      expect(boolean.richContent, isNull);
+    });
 
-        expect(multi.value, ['a', 'c']);
-        expect(() => multi.value.add('b'), throwsUnsupportedError);
-        expect(multi.hasChanged, isFalse);
-        multi.value = [...multi.value, 'b'];
-        expect(wire(multi), [
-          'COMBOBOX',
-          5,
-          ['a', 'c', 'b'],
-        ]);
-        expect(() => multi.value.clear(), throwsUnsupportedError);
-      });
+    test('phone number, as three parts', () {
+      final phone =
+          Collector.fromMessage(
+                CollectorMessage(
+                  type: 'PHONE_NUMBER',
+                  index: 8,
+                  kind: CollectorKind.phoneNumber,
+                  defaultCountryCode: 'BF',
+                  validatePhoneNumber: true,
+                  showExtension: true,
+                  extensionLabel: 'Extension',
+                  countryCode: 'GB',
+                  phoneNumber: '(555)555-1234',
+                  phoneExtension: '4321',
+                ),
+              )
+              as PhoneNumberCollector;
 
-      test('boolean, with appearance and rich content', () {
-        final boolean =
-            Collector.fromMessage(
-                  CollectorMessage(
-                    type: 'SINGLE_CHECKBOX',
-                    index: 0,
-                    kind: CollectorKind.boolean,
-                    value: false,
-                    appearance: 'SWITCH',
-                    errorMessage: 'Select the checkbox to continue.',
-                    richContent: RichContentMessage(
-                      content: 'I agree to the {{link1}}',
-                      replacements: [
-                        RichContentReplacementMessage(
-                          key: 'link1',
-                          value: 'Terms',
-                          href: 'https://example.com/terms',
-                          type: 'link',
-                          target: '_blank',
-                        ),
-                      ],
-                    ),
-                  ),
-                )
-                as BooleanCollector;
-
-        expect(boolean.value, isFalse);
-        expect(boolean.appearance, BooleanAppearance.toggleSwitch);
-        expect(boolean.errorMessage, 'Select the checkbox to continue.');
-        expect(boolean.richContent!.content, 'I agree to the {{link1}}');
-        final link = boolean.richContent!.replacements['link1']!;
-        expect(link.value, 'Terms');
-        expect(link.href, 'https://example.com/terms');
-        expect(link.type, 'link');
-        expect(link.target, '_blank');
-        boolean.value = true;
-        expect(wire(boolean), ['SINGLE_CHECKBOX', 0, true]);
-      });
-
-      test('boolean appearance defaults to a checkbox', () {
-        final boolean =
-            Collector.fromMessage(
-                  message('SINGLE_CHECKBOX', CollectorKind.boolean),
-                )
-                as BooleanCollector;
-        expect(boolean.appearance, BooleanAppearance.checkbox);
-        expect(boolean.value, isFalse);
-        expect(boolean.richContent, isNull);
-      });
-
-      test('phone number, as three parts', () {
-        final phone =
-            Collector.fromMessage(
-                  CollectorMessage(
-                    type: 'PHONE_NUMBER',
-                    index: 8,
-                    kind: CollectorKind.phoneNumber,
-                    defaultCountryCode: 'BF',
-                    validatePhoneNumber: true,
-                    showExtension: true,
-                    extensionLabel: 'Extension',
-                    countryCode: 'GB',
-                    phoneNumber: '(555)555-1234',
-                    phoneExtension: '4321',
-                  ),
-                )
-                as PhoneNumberCollector;
-
-        expect(phone.defaultCountryCode, 'BF');
-        expect(phone.validatePhoneNumber, isTrue);
-        expect(phone.showExtension, isTrue);
-        expect(phone.extensionLabel, 'Extension');
-        expect(
-          phone.value,
-          const PhoneNumberValue(
-            countryCode: 'GB',
-            phoneNumber: '(555)555-1234',
-            phoneExtension: '4321',
-          ),
-        );
-        phone.value = phone.value.copyWith(
-          countryCode: 'US',
-          phoneExtension: '',
-        );
-        expect(wire(phone), [
-          'PHONE_NUMBER',
-          8,
-          {
-            'countryCode': 'US',
-            'phoneNumber': '(555)555-1234',
-            'phoneExtension': '',
-          },
-        ]);
-      });
-
-      test('submit and flow buttons submit their key when selected', () {
-        final submit =
-            Collector.fromMessage(
-                  message(
-                    'SUBMIT_BUTTON',
-                    CollectorKind.submit,
-                    index: 6,
-                    key: 'SIGNON',
-                    value: '',
-                  ),
-                )
-                as SubmitCollector;
-        final flow =
-            Collector.fromMessage(
-                  message(
-                    'FLOW_LINK',
-                    CollectorKind.flow,
-                    index: 7,
-                    key: 'TROUBLE',
-                  ),
-                )
-                as FlowCollector;
-
-        expect(submit.value, isEmpty);
-        expect(submit.toValue(), isNull);
-        submit.select();
-        flow.select();
-        expect(wire(submit), ['SUBMIT_BUTTON', 6, 'SIGNON']);
-        expect(wire(flow), ['FLOW_LINK', 7, 'TROUBLE']);
-      });
-
-      test(
-        'label, read-only text, and image carry their fields and submit nothing',
-        () {
-          final label =
-              Collector.fromMessage(
-                    CollectorMessage(
-                      type: 'LABEL',
-                      index: 0,
-                      kind: CollectorKind.label,
-                      content: 'Hello',
-                      richContent: RichContentMessage(content: 'Hello'),
-                    ),
-                  )
-                  as LabelCollector;
-          final agreement =
-              Collector.fromMessage(
-                    CollectorMessage(
-                      type: 'AGREEMENT',
-                      index: 1,
-                      kind: CollectorKind.readOnlyText,
-                      key: 'agreement',
-                      content: 'Terms text',
-                      title: 'Terms of Service',
-                      titleEnabled: true,
-                      enabled: true,
-                      agreementId: 'agreement-id',
-                      useDynamicAgreement: false,
-                    ),
-                  )
-                  as ReadOnlyTextCollector;
-          final image =
-              Collector.fromMessage(
-                    CollectorMessage(
-                      type: 'IMAGE',
-                      index: 2,
-                      kind: CollectorKind.image,
-                      key: 'image',
-                      imageUrl: 'https://example.com/a.png',
-                      imageDescription: 'An image',
-                      hyperlinkUrl: 'https://example.com',
-                    ),
-                  )
-                  as ImageCollector;
-
-          expect(label.key, isEmpty, reason: 'labels may have no key');
-          expect(label.content, 'Hello');
-          expect(label.richContent!.replacements, isEmpty);
-          expect(agreement.content, 'Terms text');
-          expect(agreement.title, 'Terms of Service');
-          expect(agreement.titleEnabled, isTrue);
-          expect(agreement.enabled, isTrue);
-          expect(agreement.agreementId, 'agreement-id');
-          expect(agreement.useDynamicAgreement, isFalse);
-          expect(image.imageUrl, 'https://example.com/a.png');
-          expect(image.imageDescription, 'An image');
-          expect(image.hyperlinkUrl, 'https://example.com');
-          expect([label, agreement, image].map((c) => c.toValue()), [
-            null,
-            null,
-            null,
-          ]);
-        },
+      expect(phone.defaultCountryCode, 'BF');
+      expect(phone.validatePhoneNumber, isTrue);
+      expect(phone.showExtension, isTrue);
+      expect(phone.extensionLabel, 'Extension');
+      expect(
+        phone.value,
+        const PhoneNumberValue(
+          countryCode: 'GB',
+          phoneNumber: '(555)555-1234',
+          phoneExtension: '4321',
+        ),
       );
-    },
-  );
+      phone.value = phone.value.copyWith(countryCode: 'US', phoneExtension: '');
+      expect(wire(phone), [
+        'PHONE_NUMBER',
+        8,
+        {
+          'countryCode': 'US',
+          'phoneNumber': '(555)555-1234',
+          'phoneExtension': '',
+        },
+      ]);
+    });
+
+    test('submit and flow buttons submit their key when selected', () {
+      final submit =
+          Collector.fromMessage(
+                message(
+                  'SUBMIT_BUTTON',
+                  CollectorKind.submit,
+                  index: 6,
+                  key: 'SIGNON',
+                  value: '',
+                ),
+              )
+              as SubmitCollector;
+      final flow =
+          Collector.fromMessage(
+                message(
+                  'FLOW_LINK',
+                  CollectorKind.flow,
+                  index: 7,
+                  key: 'TROUBLE',
+                ),
+              )
+              as FlowCollector;
+
+      expect(submit.value, isEmpty);
+      expect(submit.toValue(), isNull);
+      submit.select();
+      flow.select();
+      expect(wire(submit), ['SUBMIT_BUTTON', 6, 'SIGNON']);
+      expect(wire(flow), ['FLOW_LINK', 7, 'TROUBLE']);
+    });
+
+    test(
+      'label, read-only text, and image carry their fields and submit nothing',
+      () {
+        final label =
+            Collector.fromMessage(
+                  CollectorMessage(
+                    type: 'LABEL',
+                    index: 0,
+                    kind: CollectorKind.label,
+                    content: 'Hello',
+                    richContent: RichContentMessage(content: 'Hello'),
+                  ),
+                )
+                as LabelCollector;
+        final agreement =
+            Collector.fromMessage(
+                  CollectorMessage(
+                    type: 'AGREEMENT',
+                    index: 1,
+                    kind: CollectorKind.readOnlyText,
+                    key: 'agreement',
+                    content: 'Terms text',
+                    title: 'Terms of Service',
+                    titleEnabled: true,
+                    enabled: true,
+                    agreementId: 'agreement-id',
+                    useDynamicAgreement: false,
+                  ),
+                )
+                as ReadOnlyTextCollector;
+        final image =
+            Collector.fromMessage(
+                  CollectorMessage(
+                    type: 'IMAGE',
+                    index: 2,
+                    kind: CollectorKind.image,
+                    key: 'image',
+                    imageUrl: 'https://example.com/a.png',
+                    imageDescription: 'An image',
+                    hyperlinkUrl: 'https://example.com',
+                  ),
+                )
+                as ImageCollector;
+
+        expect(label.key, isEmpty, reason: 'labels may have no key');
+        expect(label.content, 'Hello');
+        expect(label.richContent!.replacements, isEmpty);
+        expect(agreement.content, 'Terms text');
+        expect(agreement.title, 'Terms of Service');
+        expect(agreement.titleEnabled, isTrue);
+        expect(agreement.enabled, isTrue);
+        expect(agreement.agreementId, 'agreement-id');
+        expect(agreement.useDynamicAgreement, isFalse);
+        expect(image.imageUrl, 'https://example.com/a.png');
+        expect(image.imageDescription, 'An image');
+        expect(image.hyperlinkUrl, 'https://example.com');
+        expect([label, agreement, image].map((c) => c.toValue()), [
+          null,
+          null,
+          null,
+        ]);
+      },
+    );
+  });
   group('Phase 6 collectors', () {
     /// A captured field from `example/integration_test/support/fixtures/<name>.json`.
     Map<String, Object?> capturedField(String name, String type) {

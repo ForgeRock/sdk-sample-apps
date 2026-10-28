@@ -528,6 +528,26 @@ class TokenMessage {
   String? idToken;
 }
 
+/// What [PingDaVinciHostApi.retainedState] reports. Every count is 0 once each configured handle
+/// has been disposed.
+class RetainedStateMessage {
+  /// Handles in the shared `davinciRegistry`.
+  late int registeredHandles;
+
+  /// Cached `ContinueNode`s: a current form or an `ErrorNode`'s retry node.
+  late int cachedNodes;
+
+  /// Cached `SuccessNode` sessions.
+  late int cachedSessions;
+
+  /// Per-handle locks serializing the calls that move a flow on. iOS drops each one when its
+  /// queue drains, Android on dispose.
+  late int flowLocks;
+
+  /// Polls whose native task the bridge still holds.
+  late int activePolls;
+}
+
 /// One status a running poll reported, normalized so both platforms send the same sequence (see
 /// [PingDaVinciHostApi.startPolling]).
 class PollingEventMessage {
@@ -627,6 +647,11 @@ abstract class PingDaVinciHostApi {
   /// leak check; not part of the public Dart API.
   @async
   int activePollCount();
+
+  /// Diagnostic: how much per-handle state the bridge holds across every DaVinci handle. Exists
+  /// for the configure-to-dispose leak check; not part of the public Dart API.
+  @async
+  RetainedStateMessage retainedState();
 
   /// Diagnostic: the collector type keys the native collector factory resolves right now,
   /// sorted. Exists to check that iOS's asynchronous collector registration has completed by

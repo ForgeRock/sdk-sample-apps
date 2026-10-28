@@ -9,7 +9,8 @@ import Foundation
 
 /// Serializes async work per key: two calls to `run(key:_:)` with the same `key` never overlap,
 /// while calls with different keys run concurrently. Used to prevent a double-submitted `next()`
-/// for the same `daVinciId` from racing on the same cached `ContinueNode`'s collector values.
+/// for the same `daVinciId` from racing on the same cached `ContinueNode`'s collector values, and
+/// any call from outliving the handle's `dispose()`. A key is dropped once its queue drains.
 actor KeyedSerialExecutor {
     private var tails: [String: Task<Void, Never>] = [:]
     private var generations: [String: UInt64] = [:]
@@ -34,10 +35,9 @@ actor KeyedSerialExecutor {
         return try box.get()
     }
 
-    /// Drops any pending chain for `key`, e.g. once its DaVinci handle is disposed.
-    func remove(key: String) {
-        tails.removeValue(forKey: key)
-        generations.removeValue(forKey: key)
+    /// The keys with work queued or running. A diagnostic, for leak checks.
+    var count: Int {
+        tails.count
     }
 
     private static func runCatching<T>(_ operation: () async throws -> T) async -> Result<T, Error> {

@@ -65,10 +65,12 @@ class DaVinciHostApiImpl : PingDaVinciHostApi {
     private val successSessionMap = ConcurrentHashMap<String, Session>()
 
     /**
-     * Serializes [next] and [validate] per daVinciId, so neither can apply values while the other
-     * is reading or submitting the same collectors.
+     * Serializes every call that reads or moves a handle's flow ([start], [next], [validate],
+     * [startPolling], [signOff], [dispose]) per daVinciId, so none can apply values while another
+     * is reading or submitting the same collectors, and nothing cached or started can outlive
+     * [dispose]. See [withFlowLock].
      */
-    private val nextMutexes = ConcurrentHashMap<String, Mutex>()
+    private val flowMutexes = ConcurrentHashMap<String, Mutex>()
 
     /** Cancels every in-flight call. Invoked from [PingDaVinciPlugin.onDetachedFromEngine]. */
     fun shutdown() {
@@ -88,11 +90,12 @@ class DaVinciHostApiImpl : PingDaVinciHostApi {
     override fun start(daVinciId: String, callback: (Result<NodeMessage>) -> Unit) {
         scope.launch {
             val result = runCatching {
-                val handle = resolveHandle(daVinciId)
-                polling.cancelAll(daVinciId)
-                val node = handle.daVinci.start()
-                setNode(daVinciId, node)
-                DaVinciNodeMapper.map(node)
+                withFlowLock(daVinciId) { handle ->
+                    polling.cancelAll(daVinciId)
+                    val node = handle.daVinci.start()
+                    setNode(daVinciId, node)
+                    DaVinciNodeMapper.map(node)
+                }
             }
             callback(result.classifyError(DaVinciErrorCodes.START))
         }
@@ -104,9 +107,8 @@ class DaVinciHostApiImpl : PingDaVinciHostApi {
         callback: (Result<NodeMessage>) -> Unit
     ) {
         scope.launch {
-            val mutex = nextMutexes.getOrPut(daVinciId) { Mutex() }
-            val result = mutex.withLock {
-                runCatching {
+            val result = runCatching {
+                withFlowLock(daVinciId) {
                     val currentNode = activeContinueNode(daVinciId)
                     DaVinciCollectorValueApplier.apply(currentNode.collectors, values.filterNotNull())
                     // A finished poll has already set its collector's value; a running one is
@@ -135,9 +137,8 @@ class DaVinciHostApiImpl : PingDaVinciHostApi {
         callback: (Result<List<ValidationErrorMessage?>>) -> Unit
     ) {
         scope.launch {
-            val mutex = nextMutexes.getOrPut(daVinciId) { Mutex() }
-            val result = mutex.withLock {
-                runCatching {
+            val result = runCatching {
+                withFlowLock(daVinciId) {
                     val currentNode = activeContinueNode(daVinciId)
                     DaVinciCollectorValueApplier.apply(currentNode.collectors, values.filterNotNull())
                     DaVinciValidationMapper.validate(currentNode.collectors)
@@ -208,26 +209,35 @@ class DaVinciHostApiImpl : PingDaVinciHostApi {
     override fun signOff(daVinciId: String, callback: (Result<Boolean>) -> Unit) {
         scope.launch {
             val result = runCatching {
-                val handle = resolveHandle(daVinciId)
-                polling.cancelAll(daVinciId)
-                val signedOff =
-                    handle.daVinci.signOff()
-                        .onFailure { Log.w(TAG, "signOff failed for daVinciId=$daVinciId", it) }
-                        .isSuccess
-                clearNodeState(daVinciId)
-                signedOff
+                withFlowLock(daVinciId) { handle ->
+                    polling.cancelAll(daVinciId)
+                    val signedOff =
+                        handle.daVinci.signOff()
+                            .onFailure { Log.w(TAG, "signOff failed for daVinciId=$daVinciId", it) }
+                            .isSuccess
+                    clearNodeState(daVinciId)
+                    signedOff
+                }
             }
             callback(result.classifyError(DaVinciErrorCodes.SIGN_OFF))
         }
     }
 
+    /**
+     * Waits for the call holding the handle's flow lock, then removes the handle before anything
+     * else, so a call queued behind it fails as not found instead of caching a node or starting a
+     * poll. Disposing an unknown id is a no-op.
+     */
     override fun dispose(daVinciId: String, callback: (Result<Unit>) -> Unit) {
         scope.launch {
             val result = runCatching {
-                polling.cancelAll(daVinciId)
-                clearNodeState(daVinciId)
-                nextMutexes.remove(daVinciId)
-                CoreRuntime.davinciRegistry.remove(daVinciId)
+                val mutex = flowMutexes.getOrPut(daVinciId) { Mutex() }
+                mutex.withLock {
+                    CoreRuntime.davinciRegistry.remove(daVinciId)
+                    polling.cancelAll(daVinciId)
+                    clearNodeState(daVinciId)
+                }
+                flowMutexes.remove(daVinciId, mutex)
                 Unit
             }
             callback(result.classifyError(DaVinciErrorCodes.DISPOSE))
@@ -246,10 +256,8 @@ class DaVinciHostApiImpl : PingDaVinciHostApi {
         callback: (Result<Unit>) -> Unit
     ) {
         scope.launch {
-            val mutex = nextMutexes.getOrPut(daVinciId) { Mutex() }
-            val result = mutex.withLock {
-                runCatching {
-                    resolveHandle(daVinciId)
+            val result = runCatching {
+                withFlowLock(daVinciId) {
                     val collectors = activeContinueNode(daVinciId).collectors
                     val collector =
                         collectors.getOrNull(index.toInt())
@@ -284,6 +292,20 @@ class DaVinciHostApiImpl : PingDaVinciHostApi {
         )
     }
 
+    override fun retainedState(callback: (Result<RetainedStateMessage>) -> Unit) {
+        callback(
+            runCatching {
+                RetainedStateMessage(
+                    registeredHandles = CoreRuntime.davinciRegistry.size.toLong(),
+                    cachedNodes = continueNodeMap.size.toLong(),
+                    cachedSessions = successSessionMap.size.toLong(),
+                    flowLocks = flowMutexes.size.toLong(),
+                    activePolls = polling.activeCount.toLong(),
+                )
+            }.classifyError(DaVinciErrorCodes.RETAINED_STATE)
+        )
+    }
+
     override fun registeredCollectorTypes(
         daVinciId: String,
         callback: (Result<List<String>>) -> Unit
@@ -299,6 +321,23 @@ class DaVinciHostApiImpl : PingDaVinciHostApi {
     private fun resolveHandle(daVinciId: String): DaVinciHandle =
         CoreRuntime.davinciRegistry.resolve(daVinciId) as? DaVinciHandle
             ?: throw IllegalStateException("DaVinci instance not found for id=$daVinciId")
+
+    /**
+     * Runs [block] under the handle's flow lock, with the handle resolved inside it, so a call
+     * queued behind [dispose] fails as not found. A lock created after [dispose] removed the
+     * handle's (by a call that resolved the handle just before) is dropped again on the way out.
+     */
+    private suspend fun <T> withFlowLock(daVinciId: String, block: suspend (DaVinciHandle) -> T): T {
+        resolveHandle(daVinciId)
+        val mutex = flowMutexes.getOrPut(daVinciId) { Mutex() }
+        try {
+            return mutex.withLock { block(resolveHandle(daVinciId)) }
+        } finally {
+            if (CoreRuntime.davinciRegistry.resolve(daVinciId) == null) {
+                flowMutexes.remove(daVinciId, mutex)
+            }
+        }
+    }
 
     private fun activeContinueNode(daVinciId: String): ContinueNode =
         continueNodeMap[daVinciId]?.node

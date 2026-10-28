@@ -24,7 +24,7 @@ android {
         versionCode = flutter.versionCode
         versionName = flutter.versionName
         // Required by `browser` 2.2.0+, which leaves this placeholder for the app: the library
-        // module's own value does not reach it. Phase 2's hermetic redirect URI uses this scheme.
+        // module's own value does not reach it.
         manifestPlaceholders["appRedirectUriScheme"] = "pingdavinciexample"
     }
 

@@ -1375,6 +1375,70 @@ struct TokenMessage: Hashable, CustomStringConvertible {
   }
 }
 
+/// What [PingDaVinciHostApi.retainedState] reports. Every count is 0 once each configured handle
+/// has been disposed.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct RetainedStateMessage: Hashable, CustomStringConvertible {
+  /// Handles in the shared `davinciRegistry`.
+  var registeredHandles: Int64
+  /// Cached `ContinueNode`s: a current form or an `ErrorNode`'s retry node.
+  var cachedNodes: Int64
+  /// Cached `SuccessNode` sessions.
+  var cachedSessions: Int64
+  /// Per-handle locks serializing the calls that move a flow on. iOS drops each one when its
+  /// queue drains, Android on dispose.
+  var flowLocks: Int64
+  /// Polls whose native task the bridge still holds.
+  var activePolls: Int64
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> RetainedStateMessage? {
+    let registeredHandles = pigeonVar_list[0] as! Int64
+    let cachedNodes = pigeonVar_list[1] as! Int64
+    let cachedSessions = pigeonVar_list[2] as! Int64
+    let flowLocks = pigeonVar_list[3] as! Int64
+    let activePolls = pigeonVar_list[4] as! Int64
+
+    return RetainedStateMessage(
+      registeredHandles: registeredHandles,
+      cachedNodes: cachedNodes,
+      cachedSessions: cachedSessions,
+      flowLocks: flowLocks,
+      activePolls: activePolls
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      registeredHandles,
+      cachedNodes,
+      cachedSessions,
+      flowLocks,
+      activePolls,
+    ]
+  }
+  static func == (lhs: RetainedStateMessage, rhs: RetainedStateMessage) -> Bool {
+    if Swift.type(of: lhs) != Swift.type(of: rhs) {
+      return false
+    }
+    return MessagesPigeonInternal.deepEquals(lhs.registeredHandles, rhs.registeredHandles) && MessagesPigeonInternal.deepEquals(lhs.cachedNodes, rhs.cachedNodes) && MessagesPigeonInternal.deepEquals(lhs.cachedSessions, rhs.cachedSessions) && MessagesPigeonInternal.deepEquals(lhs.flowLocks, rhs.flowLocks) && MessagesPigeonInternal.deepEquals(lhs.activePolls, rhs.activePolls)
+  }
+
+  func hash(into hasher: inout Hasher) {
+    hasher.combine("RetainedStateMessage")
+    MessagesPigeonInternal.deepHash(value: registeredHandles, hasher: &hasher)
+    MessagesPigeonInternal.deepHash(value: cachedNodes, hasher: &hasher)
+    MessagesPigeonInternal.deepHash(value: cachedSessions, hasher: &hasher)
+    MessagesPigeonInternal.deepHash(value: flowLocks, hasher: &hasher)
+    MessagesPigeonInternal.deepHash(value: activePolls, hasher: &hasher)
+  }
+
+  public var description: String {
+    return "RetainedStateMessage(registeredHandles: \(String(describing: registeredHandles)), cachedNodes: \(String(describing: cachedNodes)), cachedSessions: \(String(describing: cachedSessions)), flowLocks: \(String(describing: flowLocks)), activePolls: \(String(describing: activePolls)))"
+  }
+}
+
 /// One status a running poll reported, normalized so both platforms send the same sequence (see
 /// [PingDaVinciHostApi.startPolling]).
 ///
@@ -1499,6 +1563,8 @@ private class MessagesPigeonCodecReader: FlutterStandardReader {
     case 145:
       return TokenMessage.fromList(self.readValue() as! [Any?])
     case 146:
+      return RetainedStateMessage.fromList(self.readValue() as! [Any?])
+    case 147:
       return PollingEventMessage.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -1559,8 +1625,11 @@ private class MessagesPigeonCodecWriter: FlutterStandardWriter {
     } else if let value = value as? TokenMessage {
       super.writeByte(145)
       super.writeValue(value.toList())
-    } else if let value = value as? PollingEventMessage {
+    } else if let value = value as? RetainedStateMessage {
       super.writeByte(146)
+      super.writeValue(value.toList())
+    } else if let value = value as? PollingEventMessage {
+      super.writeByte(147)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -1629,6 +1698,9 @@ protocol PingDaVinciHostApi {
   /// Diagnostic: the number of polls whose native task the bridge still holds. Exists for the
   /// leak check; not part of the public Dart API.
   func activePollCount(completion: @escaping (Result<Int64, Error>) -> Void)
+  /// Diagnostic: how much per-handle state the bridge holds across every DaVinci handle. Exists
+  /// for the configure-to-dispose leak check; not part of the public Dart API.
+  func retainedState(completion: @escaping (Result<RetainedStateMessage, Error>) -> Void)
   /// Diagnostic: the collector type keys the native collector factory resolves right now,
   /// sorted. Exists to check that iOS's asynchronous collector registration has completed by
   /// the time [configureDaVinci] returns; not part of the public Dart API. Android lists the
@@ -1877,6 +1949,23 @@ class PingDaVinciHostApiSetup {
       }
     } else {
       activePollCountChannel.setMessageHandler(nil)
+    }
+    /// Diagnostic: how much per-handle state the bridge holds across every DaVinci handle. Exists
+    /// for the configure-to-dispose leak check; not part of the public Dart API.
+    let retainedStateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.ping_davinci.PingDaVinciHostApi.retainedState\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      retainedStateChannel.setMessageHandler { _, reply in
+        api.retainedState { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      retainedStateChannel.setMessageHandler(nil)
     }
     /// Diagnostic: the collector type keys the native collector factory resolves right now,
     /// sorted. Exists to check that iOS's asynchronous collector registration has completed by

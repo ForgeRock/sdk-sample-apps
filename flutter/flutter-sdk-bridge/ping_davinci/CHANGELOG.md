@@ -9,4 +9,7 @@
 - Android: server error `details` decode when `rawResponse` lacks `id`/`code`/`message`, where native `ErrorNode.details()` throws [SDKS-5267]
 - iOS: the factory awaits its own registration of the 23 core collector keys before returning, closing the native `createDaVinci` detached-`Task` registration race [SDKS-5267]
 - Typed `QRCodeCollector` (data URI and `imageBytes`), `PollingCollector`, `DeviceRegistrationCollector`/`DeviceAuthenticationCollector` (`selectDevice`) and `MetadataCollector` (`setResult`/`setError`), completing the 17 core collector keys [SDKS-5267]
+- Every call that reads or moves a flow (`start`, `next`, `validate`, `startPolling`, `signOff`, `dispose`) is serialized per handle, and `dispose` removes the handle first: a `next` or `startPolling` in flight when `dispose` is called can no longer leave a cached node or a running poll behind [SDKS-5267]
+- iOS: detaching the Flutter engine stops reporting every running poll, as Android's does [SDKS-5267]
+- A diagnostic `retainedState()` host method reports the handles, cached nodes and sessions, flow locks and polls the bridge holds, for the configure-to-dispose leak check (`davinci_lifecycle_leak_test`) [SDKS-5267]
 - `DaVinciClient.poll` streams a polling collector's native statuses as a sealed `PollingStatus`, over one Pigeon event channel, in the same order on both platforms; the flow moving on ends the poll [SDKS-5267]
