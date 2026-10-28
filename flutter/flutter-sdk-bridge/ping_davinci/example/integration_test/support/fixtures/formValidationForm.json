@@ -1,0 +1,156 @@
+{
+  "enablePolling": false,
+  "pollInterval": "2000",
+  "pollRetries": "60",
+  "pollChallengeStatus": true,
+  "form": {
+    "components": {
+      "fields": [
+        {
+          "type": "LABEL",
+          "content": "Simple Registration Form",
+          "key": "rich-text",
+          "richContent": {
+            "content": "Simple Registration Form"
+          }
+        },
+        {
+          "type": "TEXT",
+          "key": "user.username",
+          "label": "Username",
+          "required": true,
+          "validation": {
+            "regex": "^[a-zA-Z0-9]+$",
+            "errorMessage": "Must be alphanumeric"
+          }
+        },
+        {
+          "type": "TEXT",
+          "key": "user.email",
+          "label": "Email Address",
+          "required": true,
+          "validation": {
+            "regex": "^[^@]+@[^@]+\\.[^@]+$",
+            "errorMessage": "Not a valid email"
+          }
+        },
+        {
+          "type": "PASSWORD_VERIFY",
+          "key": "user.password",
+          "label": "Password",
+          "required": true,
+          "passwordPolicy": {
+            "id": "355c19f7-0732-4efc-9082-e83ee05745d9",
+            "environment": {
+              "id": "300c4f2a-39d4-4ba9-a18a-f6de246006f4"
+            },
+            "name": "Standard",
+            "description": "A standard policy that incorporates industry best practices",
+            "excludesProfileData": true,
+            "notSimilarToCurrent": true,
+            "excludesCommonlyUsed": true,
+            "maxAgeDays": 182,
+            "minAgeDays": 1,
+            "maxRepeatedCharacters": 2,
+            "minUniqueCharacters": 5,
+            "history": {
+              "count": 6,
+              "retentionDays": 365
+            },
+            "lockout": {
+              "failureCount": 5,
+              "durationSeconds": 900
+            },
+            "length": {
+              "min": 8,
+              "max": 255
+            },
+            "minCharacters": {
+              "~!@#$%^&*()-_=+[]{}|;:,.<>/?": 1,
+              "0123456789": 1,
+              "ABCDEFGHIJKLMNOPQRSTUVWXYZ": 1,
+              "abcdefghijklmnopqrstuvwxyz": 1
+            },
+            "populationCount": 0,
+            "createdAt": "2026-05-04T21:15:01.258Z",
+            "updatedAt": "2026-05-04T21:15:01.258Z",
+            "default": true
+          }
+        },
+        {
+          "type": "SUBMIT_BUTTON",
+          "label": "Submit",
+          "key": "submit"
+        }
+      ]
+    },
+    "name": "Automation - Form Fields Validation",
+    "category": "CUSTOM_FORM"
+  },
+  "formData": {
+    "value": {
+      "user.username": "default username",
+      "user.email": "default email",
+      "user.password": "default password"
+    }
+  },
+  "routeClientErrorsToFalseBranch": false,
+  "enableMagicLinkAuthentication": true,
+  "agreement": "useAgreementId",
+  "nodeTitle": "Form Fields Validation",
+  "nodeDescription": "Display the Fields Validation Test Form",
+  "envId": "300c4f2a-39d4-4ba9-a18a-f6de246006f4",
+  "formId": "9785a183-78e2-452b-9763-a533d7389415",
+  "passwordPolicy": {
+    "id": "355c19f7-0732-4efc-9082-e83ee05745d9",
+    "environment": {
+      "id": "300c4f2a-39d4-4ba9-a18a-f6de246006f4"
+    },
+    "name": "Standard",
+    "description": "A standard policy that incorporates industry best practices",
+    "excludesProfileData": true,
+    "notSimilarToCurrent": true,
+    "excludesCommonlyUsed": true,
+    "maxAgeDays": 182,
+    "minAgeDays": 1,
+    "maxRepeatedCharacters": 2,
+    "minUniqueCharacters": 5,
+    "history": {
+      "count": 6,
+      "retentionDays": 365
+    },
+    "lockout": {
+      "failureCount": 5,
+      "durationSeconds": 900
+    },
+    "length": {
+      "min": 8,
+      "max": 255
+    },
+    "minCharacters": {
+      "~!@#$%^&*()-_=+[]{}|;:,.<>/?": 1,
+      "0123456789": 1,
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZ": 1,
+      "abcdefghijklmnopqrstuvwxyz": 1
+    },
+    "populationCount": 0,
+    "createdAt": "2026-05-04T21:15:01.258Z",
+    "updatedAt": "2026-05-04T21:15:01.258Z",
+    "default": true
+  },
+  "isResponseCompatibleWithMobileAndWebSdks": true,
+  "id": "vnm2x4yf2o",
+  "connectionId": "eb6a94a33f2f479eff234e8fa5049459",
+  "capabilityName": "customForm",
+  "interactionId": "scrubbed",
+  "_links": {
+    "next": {
+      "href": "{{baseUrl}}/300c4f2a-39d4-4ba9-a18a-f6de246006f4/davinci/connections/eb6a94a33f2f479eff234e8fa5049459/capabilities/customForm"
+    },
+    "self": {
+      "href": "{{baseUrl}}/300c4f2a-39d4-4ba9-a18a-f6de246006f4/davinci/connections/867ed4363b2bc21c860085ad2baa817d/capabilities/customHTMLTemplate"
+    }
+  },
+  "skProxyApiEnvironmentId": "deprecated",
+  "interactionToken": "scrubbed"
+}

@@ -67,17 +67,20 @@ void main() {
       );
     });
 
-    test('throws FormatException when an optional endpoint has the wrong type', () {
-      expect(
-        () => OidcOpenIdConfig.fromJson({
-          'authorizationEndpoint': 'https://example.com/authorize',
-          'tokenEndpoint': 'https://example.com/token',
-          'userinfoEndpoint': 'https://example.com/userinfo',
-          'revocationEndpoint': 42,
-        }),
-        throwsA(isA<FormatException>()),
-      );
-    });
+    test(
+      'throws FormatException when an optional endpoint has the wrong type',
+      () {
+        expect(
+          () => OidcOpenIdConfig.fromJson({
+            'authorizationEndpoint': 'https://example.com/authorize',
+            'tokenEndpoint': 'https://example.com/token',
+            'userinfoEndpoint': 'https://example.com/userinfo',
+            'revocationEndpoint': 42,
+          }),
+          throwsA(isA<FormatException>()),
+        );
+      },
+    );
   });
 
   group('OidcOpenIdConfig.toJson', () {
@@ -93,7 +96,10 @@ void main() {
 
       final roundTripped = OidcOpenIdConfig.fromJson(original.toJson());
 
-      expect(roundTripped.authorizationEndpoint, original.authorizationEndpoint);
+      expect(
+        roundTripped.authorizationEndpoint,
+        original.authorizationEndpoint,
+      );
       expect(roundTripped.tokenEndpoint, original.tokenEndpoint);
       expect(roundTripped.userinfoEndpoint, original.userinfoEndpoint);
       expect(roundTripped.endSessionEndpoint, original.endSessionEndpoint);

@@ -1,0 +1,64 @@
+{
+  "eventName": "continue",
+  "isResponseCompatibleWithMobileAndWebSdks": true,
+  "id": "9sq46sbnox",
+  "interactionId": "scrubbed",
+  "companyId": "300c4f2a-39d4-4ba9-a18a-f6de246006f4",
+  "flowId": "bc96b658bb1dbb76c585a1f93a8721e4",
+  "connectionId": "867ed4363b2bc21c860085ad2baa817d",
+  "capabilityName": "customHTMLTemplate",
+  "form": {
+    "name": "Select Test Form",
+    "description": "Select form for testing",
+    "category": "CUSTOM_HTML",
+    "components": {
+      "fields": [
+        {
+          "type": "SUBMIT_BUTTON",
+          "label": "DEVICE_REGISTRATION",
+          "key": "DEVICE_REGISTRATION"
+        },
+        {
+          "type": "FLOW_BUTTON",
+          "label": "DEVICE_AUTHENTICATION",
+          "key": "DEVICE_AUTHENTICATION",
+          "inputType": "ACTION"
+        },
+        {
+          "type": "FLOW_BUTTON",
+          "label": "USER_REGISTRATION",
+          "key": "USER_REGISTRATION",
+          "inputType": "ACTION"
+        },
+        {
+          "type": "FLOW_BUTTON",
+          "label": "USER_LOGIN",
+          "key": "USER_LOGIN",
+          "inputType": "ACTION"
+        },
+        {
+          "type": "FLOW_BUTTON",
+          "label": "USER_DELETE",
+          "key": "USER_DELETE",
+          "inputType": "ACTION"
+        },
+        {
+          "type": "FLOW_BUTTON",
+          "label": "USER_NAMELESS",
+          "key": "USER_NAMELESS",
+          "inputType": "ACTION"
+        }
+      ]
+    }
+  },
+  "_links": {
+    "next": {
+      "href": "{{baseUrl}}/300c4f2a-39d4-4ba9-a18a-f6de246006f4/davinci/connections/867ed4363b2bc21c860085ad2baa817d/capabilities/customHTMLTemplate"
+    },
+    "self": {
+      "href": "{{baseUrl}}/300c4f2a-39d4-4ba9-a18a-f6de246006f4/davinci/policy/ef38c1f30b8936007480bb918f088087/start"
+    }
+  },
+  "skProxyApiEnvironmentId": "deprecated",
+  "interactionToken": "scrubbed"
+}

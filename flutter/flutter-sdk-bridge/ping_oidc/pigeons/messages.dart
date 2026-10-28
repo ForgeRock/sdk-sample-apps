@@ -18,7 +18,6 @@ import 'package:pigeon/pigeon.dart';
     dartPackageName: 'ping_oidc',
   ),
 )
-
 /// Explicit OpenID endpoint configuration — the "skip discovery" escape
 /// hatch. Mirrors ping_core's `OidcOpenIdConfig` field-for-field.
 class OidcOpenIdConfigMessage {

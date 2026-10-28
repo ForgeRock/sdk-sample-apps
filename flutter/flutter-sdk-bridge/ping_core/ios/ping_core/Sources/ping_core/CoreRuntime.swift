@@ -21,4 +21,7 @@ public enum CoreRuntime {
 
     /// Registry for OIDC web client instances.
     public static let oidcWebClientRegistry: Registry = SimpleRegistry()
+
+    /// Registry for DaVinci client instances.
+    public static let davinciRegistry: Registry = SimpleRegistry()
 }

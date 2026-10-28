@@ -1,0 +1,12 @@
+*.iml
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/build
+/captures
+.cxx
+
+# The repo root ignores *.jar; the wrapper jar is needed for standalone ./gradlew builds.
+!/gradle/wrapper/gradle-wrapper.jar

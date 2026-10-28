@@ -147,7 +147,7 @@ class OidcClient {
   /// Fetches the userinfo claims for the signed-in user.
   ///
   /// [cache] defaults to `false`: this matches Android's own native default, and a forced fresh
-  /// fetch is a safer default failure mode than silently serving a stale cached claim set. The 
+  /// fetch is a safer default failure mode than silently serving a stale cached claim set. The
   /// bridge always passes [cache] to native explicitly regardless of this Dart-level default.
   Future<OidcUserInfo> userInfo({bool cache = false}) async {
     final result = await _guard(() => _hostApi.userInfo(_webHandleId, cache));

@@ -1,0 +1,75 @@
+{
+  "enablePolling": true,
+  "pollInterval": "2000",
+  "pollRetries": "3",
+  "pollChallengeStatus": true,
+  "challenge": "0tlWPR7s41CvLAc1M3Gw0vW_q9Nby9ha83aHkgX5Pgw",
+  "form": {
+    "components": {
+      "fields": [
+        {
+          "type": "LABEL",
+          "content": "Authenticator App",
+          "key": "title-text",
+          "richContent": {
+            "content": "Authenticator App"
+          }
+        },
+        {
+          "type": "ERROR_DISPLAY"
+        },
+        {
+          "type": "POLLING",
+          "key": "polling-field",
+          "pollInterval": "2000",
+          "pollRetries": "3",
+          "pollChallengeStatus": true,
+          "challenge": "0tlWPR7s41CvLAc1M3Gw0vW_q9Nby9ha83aHkgX5Pgw"
+        },
+        {
+          "type": "LABEL",
+          "content": "Number Challenge {{baseUrl}}/300c4f2a-39d4-4ba9-a18a-f6de246006f4/davinci/connections/2581eb287bb1d9bd29ae9886d675f89f/callback/oobContinue?challenge=TULtPZ06dG15n04mX5vTA5tUgRAzqC-iBuJ9xx9tVKQ-scrubbed",
+          "key": "rich-text",
+          "richContent": {
+            "content": "Number Challenge {{baseUrl}}/300c4f2a-39d4-4ba9-a18a-f6de246006f4/davinci/connections/2581eb287bb1d9bd29ae9886d675f89f/callback/oobContinue?challenge=TULtPZ06dG15n04mX5vTA5tUgRAzqC-iBuJ9xx9tVKQ-scrubbed"
+          }
+        },
+        {
+          "type": "FLOW_BUTTON",
+          "key": "Finish",
+          "label": "Finish",
+          "inputType": "ACTION"
+        }
+      ]
+    },
+    "name": "Automation - Polling",
+    "description": "Used by E2E Automation Tests",
+    "category": "CUSTOM_FORM"
+  },
+  "routeClientErrorsToFalseBranch": false,
+  "dynamicText": [
+    {
+      "key": "challenge",
+      "value": "{{baseUrl}}/300c4f2a-39d4-4ba9-a18a-f6de246006f4/davinci/connections/2581eb287bb1d9bd29ae9886d675f89f/callback/oobContinue?challenge=TULtPZ06dG15n04mX5vTA5tUgRAzqC-iBuJ9xx9tVKQ-scrubbed"
+    }
+  ],
+  "enableMagicLinkAuthentication": true,
+  "agreement": "useAgreementId",
+  "envId": "300c4f2a-39d4-4ba9-a18a-f6de246006f4",
+  "formId": "658b150f-da19-461e-afcb-79ea7bb52076",
+  "isResponseCompatibleWithMobileAndWebSdks": true,
+  "id": "1zibef6q58",
+  "connectionId": "eb6a94a33f2f479eff234e8fa5049459",
+  "capabilityName": "customForm",
+  "interactionId": "scrubbed",
+  "_links": {
+    "next": {
+      "href": "{{baseUrl}}/300c4f2a-39d4-4ba9-a18a-f6de246006f4/davinci/connections/eb6a94a33f2f479eff234e8fa5049459/capabilities/customForm"
+    },
+    "self": {
+      "href": "{{baseUrl}}/300c4f2a-39d4-4ba9-a18a-f6de246006f4/davinci/connections/867ed4363b2bc21c860085ad2baa817d/capabilities/customHTMLTemplate"
+    }
+  },
+  "skProxyApiEnvironmentId": "deprecated",
+  "interactionToken": "scrubbed"
+}

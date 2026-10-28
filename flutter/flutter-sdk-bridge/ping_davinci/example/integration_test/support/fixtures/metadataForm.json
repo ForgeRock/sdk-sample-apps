@@ -1,0 +1,30 @@
+{
+  "id": "k6n6yl18pu",
+  "interactionId": "scrubbed",
+  "companyId": "300c4f2a-39d4-4ba9-a18a-f6de246006f4",
+  "capabilityName": "exchangeCustomMetadata",
+  "isResponseCompatibleWithMobileAndWebSdks": true,
+  "form": {
+    "components": {
+      "fields": [
+        {
+          "type": "METADATA",
+          "key": "sdkMetadata",
+          "payload": {
+            "testkey": "testValue"
+          }
+        }
+      ]
+    }
+  },
+  "_links": {
+    "next": {
+      "href": "{{baseUrl}}/300c4f2a-39d4-4ba9-a18a-f6de246006f4/davinci/connections/16ee9ae9df33974336f8438f200599d6/capabilities/exchangeCustomMetadata"
+    },
+    "self": {
+      "href": "{{baseUrl}}/300c4f2a-39d4-4ba9-a18a-f6de246006f4/davinci/connections/867ed4363b2bc21c860085ad2baa817d/capabilities/customHTMLTemplate"
+    }
+  },
+  "skProxyApiEnvironmentId": "deprecated",
+  "interactionToken": "scrubbed"
+}

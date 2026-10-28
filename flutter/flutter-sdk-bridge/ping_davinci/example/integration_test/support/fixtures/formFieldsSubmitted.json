@@ -1,0 +1,34 @@
+{
+  "eventName": "continue",
+  "isResponseCompatibleWithMobileAndWebSdks": true,
+  "id": "pntgt5vbhu",
+  "interactionId": "scrubbed",
+  "companyId": "300c4f2a-39d4-4ba9-a18a-f6de246006f4",
+  "flowId": "46c6239e1b22810728f220f557903665",
+  "connectionId": "867ed4363b2bc21c860085ad2baa817d",
+  "capabilityName": "customHTMLTemplate",
+  "form": {
+    "name": "Success",
+    "description": "Successfully submitted form",
+    "category": "CUSTOM_HTML",
+    "components": {
+      "fields": [
+        {
+          "type": "SUBMIT_BUTTON",
+          "label": "Continue",
+          "key": "CONTINUE"
+        }
+      ]
+    }
+  },
+  "_links": {
+    "next": {
+      "href": "{{baseUrl}}/300c4f2a-39d4-4ba9-a18a-f6de246006f4/davinci/connections/867ed4363b2bc21c860085ad2baa817d/capabilities/customHTMLTemplate"
+    },
+    "self": {
+      "href": "{{baseUrl}}/300c4f2a-39d4-4ba9-a18a-f6de246006f4/davinci/connections/eb6a94a33f2f479eff234e8fa5049459/capabilities/customForm"
+    }
+  },
+  "skProxyApiEnvironmentId": "deprecated",
+  "interactionToken": "scrubbed"
+}
