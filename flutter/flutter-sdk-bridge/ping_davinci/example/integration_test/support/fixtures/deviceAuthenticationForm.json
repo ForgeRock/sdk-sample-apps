@@ -1,0 +1,72 @@
+{
+  "enablePolling": false,
+  "pollInterval": "2000",
+  "pollRetries": "60",
+  "pollChallengeStatus": true,
+  "form": {
+    "components": {
+      "fields": [
+        {
+          "type": "ERROR_DISPLAY"
+        },
+        {
+          "type": "DEVICE_AUTHENTICATION",
+          "key": "device-authentication",
+          "label": "MFA Device Selection - Authentication",
+          "required": true,
+          "options": [
+            {
+              "type": "EMAIL",
+              "title": "Email",
+              "description": "Receive an authentication passcode in your email.",
+              "iconSrc": "https://assets.pingone.com/ux/end-user/2.10.0/images/icon-outline-mail.svg",
+              "id": "fixture-device-1",
+              "default": true
+            },
+            {
+              "type": "SMS",
+              "title": "Text Message",
+              "description": "Receive an authentication passcode in a text message.",
+              "iconSrc": "https://assets.pingone.com/ux/end-user/2.18.2/images/icon-outline-text-message.svg",
+              "id": "fixture-device-2",
+              "default": false
+            },
+            {
+              "type": "VOICE",
+              "title": "Voice",
+              "description": "Receive a phone call with an authentication passcode.",
+              "iconSrc": "https://assets.pingone.com/ux/end-user/2.10.0/images/icon-outline-call.svg",
+              "id": "fixture-device-3",
+              "default": false
+            }
+          ]
+        }
+      ]
+    },
+    "name": "Automation - Device Registration",
+    "category": "CUSTOM_FORM"
+  },
+  "routeClientErrorsToFalseBranch": false,
+  "mfaPolicyId": "3e720ca4-7711-48cf-b615-c92d8cb324d1",
+  "enableMagicLinkAuthentication": true,
+  "agreement": "useAgreementId",
+  "nodeTitle": "DEVICE_REGISTRATION collector test",
+  "nodeDescription": "Displays available DEVICE_REGISTRATION types",
+  "envId": "300c4f2a-39d4-4ba9-a18a-f6de246006f4",
+  "formId": "4b880dae-22c7-441a-b288-454f937a85f8",
+  "isResponseCompatibleWithMobileAndWebSdks": true,
+  "id": "7egq6vnyck",
+  "connectionId": "eb6a94a33f2f479eff234e8fa5049459",
+  "capabilityName": "customForm",
+  "interactionId": "scrubbed",
+  "_links": {
+    "next": {
+      "href": "{{baseUrl}}/300c4f2a-39d4-4ba9-a18a-f6de246006f4/davinci/connections/eb6a94a33f2f479eff234e8fa5049459/capabilities/customForm"
+    },
+    "self": {
+      "href": "{{baseUrl}}/300c4f2a-39d4-4ba9-a18a-f6de246006f4/davinci/connections/867ed4363b2bc21c860085ad2baa817d/capabilities/customHTMLTemplate"
+    }
+  },
+  "skProxyApiEnvironmentId": "deprecated",
+  "interactionToken": "scrubbed"
+}

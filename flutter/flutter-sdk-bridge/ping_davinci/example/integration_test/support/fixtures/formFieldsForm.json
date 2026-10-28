@@ -1,0 +1,223 @@
+{
+  "enablePolling": false,
+  "pollInterval": "2000",
+  "pollRetries": "60",
+  "pollChallengeStatus": true,
+  "form": {
+    "components": {
+      "fields": [
+        {
+          "type": "LABEL",
+          "content": "<p><strong><em>Rich Text fields produce LABELs</em></strong></p><hr><p><br></p>"
+        },
+        {
+          "type": "LABEL",
+          "content": "Translatable Rich Text produce LABELs too!\n\n",
+          "key": "translatable-rich-text-key",
+          "richContent": {
+            "content": "Translatable Rich Text produce LABELs too!"
+          }
+        },
+        {
+          "type": "LABEL",
+          "content": "A translatable rich text to take the user to google.com and apple.com",
+          "key": "rich-text",
+          "richContent": {
+            "content": "A translatable rich text to take the user to {{link1}} and {{link2}}",
+            "replacements": {
+              "link1": {
+                "value": "google.com",
+                "href": "https://www.google.com",
+                "type": "link",
+                "target": "_self"
+              },
+              "link2": {
+                "value": "apple.com",
+                "href": "https://www.apple.com",
+                "type": "link",
+                "target": "_blank"
+              }
+            }
+          }
+        },
+        {
+          "type": "TEXT",
+          "key": "text-input-key",
+          "label": "Text Input Label",
+          "required": true
+        },
+        {
+          "type": "CHECKBOX",
+          "key": "checkbox-field-key",
+          "label": "Checkbox List Label",
+          "required": true,
+          "options": [
+            {
+              "label": "option1 label",
+              "value": "option1 value"
+            },
+            {
+              "label": "option2 label",
+              "value": "option2 value"
+            }
+          ],
+          "inputType": "MULTI_SELECT"
+        },
+        {
+          "type": "DROPDOWN",
+          "key": "dropdown-field-key",
+          "label": "Dropdown List Label",
+          "required": true,
+          "options": [
+            {
+              "label": "dropdown-option1-label",
+              "value": "dropdown-option1-value"
+            },
+            {
+              "label": "dropdown-option2-label",
+              "value": "dropdown-option2-value"
+            },
+            {
+              "label": "dropdown-option3-label",
+              "value": "dropdown-option3-value"
+            }
+          ],
+          "inputType": "SINGLE_SELECT"
+        },
+        {
+          "type": "RADIO",
+          "key": "radio-group-key",
+          "label": "Radio Group Label",
+          "required": true,
+          "options": [
+            {
+              "label": "option1 label",
+              "value": "option1 value"
+            },
+            {
+              "label": "option2 label",
+              "value": "option2 value"
+            },
+            {
+              "label": "option3 label",
+              "value": "option3 value"
+            }
+          ],
+          "inputType": "SINGLE_SELECT"
+        },
+        {
+          "type": "COMBOBOX",
+          "key": "combobox-field-key",
+          "label": "Combobox Label",
+          "required": true,
+          "options": [
+            {
+              "label": "option1 label",
+              "value": "option1 value"
+            },
+            {
+              "label": "option2 label",
+              "value": "option2 value"
+            },
+            {
+              "label": "option3 label",
+              "value": "option3 value"
+            }
+          ],
+          "inputType": "MULTI_SELECT"
+        },
+        {
+          "type": "PHONE_NUMBER",
+          "key": "phone-field",
+          "label": "Phone Collector",
+          "required": true,
+          "defaultCountryCode": "BF",
+          "validatePhoneNumber": true,
+          "showExtension": true,
+          "extensionLabel": "Extension"
+        },
+        {
+          "type": "SINGLE_CHECKBOX",
+          "key": "single-checkbox-field",
+          "label": "I agree to the Terms and Conditions",
+          "required": true,
+          "inputType": "BOOLEAN",
+          "appearance": "SWITCH",
+          "errorMessage": "Select the checkbox to continue.",
+          "richContent": {
+            "content": "I agree to the {{link1}}",
+            "replacements": {
+              "link1": {
+                "value": "Terms and Conditions",
+                "href": "https://www.pingidentity.com",
+                "type": "link",
+                "target": "_blank"
+              }
+            }
+          }
+        },
+        {
+          "type": "FLOW_BUTTON",
+          "key": "flow-button-field",
+          "label": "Flow Button",
+          "inputType": "ACTION"
+        },
+        {
+          "type": "FLOW_LINK",
+          "key": "flow-link-field",
+          "label": "Flow Link",
+          "inputType": "ACTION"
+        },
+        {
+          "type": "SUBMIT_BUTTON",
+          "label": "Submit",
+          "key": "submit"
+        }
+      ]
+    },
+    "name": "Automation - Form Fields Tests",
+    "category": "CUSTOM_FORM"
+  },
+  "formData": {
+    "value": {
+      "checkbox-field-key": [
+        "option1 value",
+        "option2 value"
+      ],
+      "text-input-key": "default text",
+      "radio-group-key": "option2 value",
+      "dropdown-field-key": "dropdown-option2-value",
+      "combobox-field-key": [
+        "option1 value",
+        "option3 value"
+      ],
+      "phone-field": {
+        "phoneNumber": "(555)555-1234",
+        "countryCode": "GB",
+        "extension": "4321"
+      }
+    }
+  },
+  "routeClientErrorsToFalseBranch": false,
+  "enableMagicLinkAuthentication": true,
+  "agreement": "useAgreementId",
+  "nodeTitle": "Form Fields Tests",
+  "nodeDescription": "Display the Test Supported Fields Form",
+  "envId": "300c4f2a-39d4-4ba9-a18a-f6de246006f4",
+  "formId": "93802e47-ff66-43b7-98c3-3eccaed7679c",
+  "isResponseCompatibleWithMobileAndWebSdks": true,
+  "id": "xv07ni4t9c",
+  "connectionId": "eb6a94a33f2f479eff234e8fa5049459",
+  "capabilityName": "customForm",
+  "interactionId": "scrubbed",
+  "_links": {
+    "next": {
+      "href": "{{baseUrl}}/300c4f2a-39d4-4ba9-a18a-f6de246006f4/davinci/connections/eb6a94a33f2f479eff234e8fa5049459/capabilities/customForm"
+    },
+    "self": {
+      "href": "{{baseUrl}}/300c4f2a-39d4-4ba9-a18a-f6de246006f4/davinci/connections/867ed4363b2bc21c860085ad2baa817d/capabilities/customHTMLTemplate"
+    }
+  },
+  "skProxyApiEnvironmentId": "deprecated",
+  "interactionToken": "scrubbed"
+}

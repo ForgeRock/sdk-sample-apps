@@ -46,7 +46,13 @@ To try out the Journey Flutter sample, perform these steps:
 4. Open [`lib/config/env.dart`](lib/config/env.dart) and replace the TODO placeholders:
    - `serverUrl`, `realm`, `cookie` — your tenant's Journey server configuration.
    - `oidcConfig` — your OAuth 2.0 client's `clientId`/`discoveryEndpoint`/`scopes`/`redirectUri`,
-     or leave `null` to skip the post-login token exchange (Journey-only, session login).
+     or leave `null` to skip the post-login token exchange (Journey-only, session login). It stays
+     `null` until `clientId` is configured.
+
+   Every value can instead be passed at build time with `--dart-define` (or
+   `--dart-define-from-file=../.env`) using the keys `PINGAIC_SERVER_URL`, `PINGAIC_REALM`, `PINGAIC_COOKIE`,
+   `PINGAIC_DISCOVERY_ENDPOINT`, `PINGAIC_CLIENT_ID`, `PINGAIC_REDIRECT_URI` and `PINGAIC_SCOPES`
+   (comma- or space-separated).
 5. If you set `oidcConfig`, register `redirectUri`'s custom scheme with the Android host:
    - Android: set `manifestPlaceholders["appRedirectUriScheme"]` in `android/app/build.gradle.kts`
      to the scheme (already set for this sample's scheme). Since native `browser` 2.2.0 this

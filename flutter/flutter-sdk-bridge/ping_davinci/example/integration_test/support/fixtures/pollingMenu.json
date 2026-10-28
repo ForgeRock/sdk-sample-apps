@@ -1,0 +1,46 @@
+{
+  "eventName": "continue",
+  "isResponseCompatibleWithMobileAndWebSdks": true,
+  "id": "uc4fp6815q",
+  "interactionId": "scrubbed",
+  "companyId": "300c4f2a-39d4-4ba9-a18a-f6de246006f4",
+  "flowId": "03209dede7fdab087a75b012e973916e",
+  "connectionId": "867ed4363b2bc21c860085ad2baa817d",
+  "capabilityName": "customHTMLTemplate",
+  "form": {
+    "name": "Select Test Form",
+    "description": "Select form for testing",
+    "category": "CUSTOM_HTML",
+    "components": {
+      "fields": [
+        {
+          "type": "SUBMIT_BUTTON",
+          "label": "Continue Polling",
+          "key": "Continue Polling"
+        },
+        {
+          "type": "FLOW_BUTTON",
+          "label": "Challenge Polling",
+          "key": "Challenge Polling",
+          "inputType": "ACTION"
+        },
+        {
+          "type": "FLOW_BUTTON",
+          "label": "Challenge Polling QRCode",
+          "key": "Challenge Polling QRCode",
+          "inputType": "ACTION"
+        }
+      ]
+    }
+  },
+  "_links": {
+    "next": {
+      "href": "{{baseUrl}}/300c4f2a-39d4-4ba9-a18a-f6de246006f4/davinci/connections/867ed4363b2bc21c860085ad2baa817d/capabilities/customHTMLTemplate"
+    },
+    "self": {
+      "href": "{{baseUrl}}/300c4f2a-39d4-4ba9-a18a-f6de246006f4/davinci/policy/fae6bc3d08a5c4f5b8ff95175b117278/start"
+    }
+  },
+  "skProxyApiEnvironmentId": "deprecated",
+  "interactionToken": "scrubbed"
+}

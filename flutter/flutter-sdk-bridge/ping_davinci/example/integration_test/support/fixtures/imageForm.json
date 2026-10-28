@@ -1,0 +1,58 @@
+{
+  "enablePolling": false,
+  "pollInterval": "2000",
+  "pollRetries": "60",
+  "pollChallengeStatus": true,
+  "form": {
+    "components": {
+      "fields": [
+        {
+          "type": "LABEL",
+          "content": "Image Collector Test\n\n",
+          "key": "title-text",
+          "richContent": {
+            "content": "Image Collector Test"
+          }
+        },
+        {
+          "type": "ERROR_DISPLAY"
+        },
+        {
+          "type": "IMAGE",
+          "key": "image",
+          "description": "Image Collector Test",
+          "imageUrl": "https://img.magnific.com/free-photo/closeup-shot-beautiful-butterfly-with-interesting-textures-orange-petaled-flower_181624-7640.jpg",
+          "hyperlinkUrl": "https://www.pingidentity.com/en.html"
+        },
+        {
+          "type": "SUBMIT_BUTTON",
+          "label": "Continue",
+          "key": "submit"
+        }
+      ]
+    },
+    "name": "Automation - Image",
+    "category": "CUSTOM_FORM"
+  },
+  "routeClientErrorsToFalseBranch": false,
+  "enableMagicLinkAuthentication": true,
+  "agreement": "useAgreementId",
+  "nodeTitle": "Image",
+  "envId": "300c4f2a-39d4-4ba9-a18a-f6de246006f4",
+  "formId": "e3ccf840-0e5b-4690-aa73-782412dd377f",
+  "isResponseCompatibleWithMobileAndWebSdks": true,
+  "id": "huhhb650sb",
+  "connectionId": "eb6a94a33f2f479eff234e8fa5049459",
+  "capabilityName": "showForm",
+  "interactionId": "scrubbed",
+  "_links": {
+    "next": {
+      "href": "{{baseUrl}}/300c4f2a-39d4-4ba9-a18a-f6de246006f4/davinci/connections/eb6a94a33f2f479eff234e8fa5049459/capabilities/showForm"
+    },
+    "self": {
+      "href": "{{baseUrl}}/300c4f2a-39d4-4ba9-a18a-f6de246006f4/davinci/connections/867ed4363b2bc21c860085ad2baa817d/capabilities/customHTMLTemplate"
+    }
+  },
+  "skProxyApiEnvironmentId": "deprecated",
+  "interactionToken": "scrubbed"
+}

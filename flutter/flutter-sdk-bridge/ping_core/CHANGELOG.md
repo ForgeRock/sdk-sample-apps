@@ -1,3 +1,8 @@
+## Unreleased
+
+#### Added
+- Added `CoreRuntime.davinciRegistry` (Android and iOS) for `ping_davinci`'s DaVinci client handles [SDKS-5267]
+
 ## 0.0.1
 
 #### Added

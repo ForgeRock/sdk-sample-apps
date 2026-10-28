@@ -78,7 +78,9 @@ void main() {
     var continued = false;
 
     await tester.pumpWidget(
-      MaterialApp(home: ConfigView(onContinue: () => continued = true)),
+      MaterialApp(
+        home: ConfigView(onContinue: () => continued = true, oidcConfig: null),
+      ),
     );
 
     await tester.tap(find.widgetWithText(ElevatedButton, 'Continue'));
