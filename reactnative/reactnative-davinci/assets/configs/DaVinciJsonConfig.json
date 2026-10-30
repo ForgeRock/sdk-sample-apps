@@ -1,0 +1,27 @@
+{
+  "timeout": 30000,
+  "log": "DEBUG",
+  "oidc": {
+    "clientId": "my-client-id",
+    "discoveryEndpoint": "https://example.com/.well-known/openid-configuration",
+    "scopes": [
+      "openid",
+      "profile",
+      "email"
+    ],
+    "redirectUri": "app:/oauth2redirect",
+    "signOutRedirectUri": "app:/logout",
+    "refreshThreshold": 60,
+    "loginHint": "user@example.com",
+    "state": "custom-state-value",
+    "nonce": "custom-nonce-value",
+    "display": "page",
+    "prompt": "login",
+    "uiLocales": "en-US",
+    "acrValues": "Level3",
+    "additionalParameters": {
+      "custom_param": "custom_value",
+      "max_age": "3600"
+    }
+  }
+}

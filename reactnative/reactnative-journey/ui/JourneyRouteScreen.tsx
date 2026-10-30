@@ -31,7 +31,8 @@ type Props = NativeStackScreenProps<RootStackParamList, 'JourneyRoute'>;
  * @returns Journey route screen element.
  */
 export default function JourneyRouteScreen(props: Props): React.ReactElement {
-  const { navigation } = props;
+  const { navigation, route } = props;
+  const verificationUri = route.params?.verificationUri;
   const [journeyName, setJourneyName] = useState<string>('');
   const [recentJourneys, setRecentJourneys] = useState<string[]>([]);
   const [usedTestJourneys, setUsedTestJourneys] = useState<string[]>([]);
@@ -113,8 +114,17 @@ export default function JourneyRouteScreen(props: Props): React.ReactElement {
       // Ignore local suggestion persistence failures and continue to Journey flow.
     }
 
-    navigation.navigate('JourneyHelper', { journeyName: trimmedName });
-  }, [journeyName, markTestJourneyUsed, navigation, saveRecentJourney]);
+    navigation.navigate('JourneyHelper', {
+      journeyName: trimmedName,
+      verificationUri,
+    });
+  }, [
+    journeyName,
+    markTestJourneyUsed,
+    navigation,
+    saveRecentJourney,
+    verificationUri,
+  ]);
 
   const handlePressRecentJourney = useCallback((name: string): void => {
     setJourneyName(name);

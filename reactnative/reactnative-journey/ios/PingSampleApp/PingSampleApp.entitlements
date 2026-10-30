@@ -10,7 +10,7 @@
 	</array>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>webcredentials:idc.petrov.ca</string>
+		<string>webcredentials:$(ASSOCIATED_DOMAIN)</string>
 	</array>
 </dict>
 </plist>

@@ -38,15 +38,14 @@ target 'PingSampleApp' do
   :path => '../node_modules/@ping-identity/rn-binding'
   pod 'RNPingDeviceClient',
   :path => '../node_modules/@ping-identity/rn-device-client'
-  pod 'PingExternalIdPApple', '2.0.0'
-  pod 'PingExternalIdPFacebook', '2.0.0'
-  pod 'PingExternalIdPGoogle', '2.0.0'
+  pod 'PingExternalIdPApple', '2.1.0'
+  pod 'PingExternalIdPFacebook', '2.1.0'
+  pod 'PingExternalIdPGoogle', '2.1.0'
 
-  # Pin transitive Google Sign-In dependency versions to match the versions
-  # validated against this SDK release — newer AppCheckCore releases pull in
-  # RecaptchaInterop, which breaks static-library integration.
-  pod 'AppCheckCore', '11.2.0'
-  pod 'GoogleUtilities', '8.1.0'
+  # PingExternalIdPGoogle -> GoogleSignIn -> AppCheckCore pulls these in; neither
+  # defines a module, which Swift requires to import them under static linkage.
+  pod 'RecaptchaInterop', :modular_headers => true
+  pod 'GoogleUtilities', :modular_headers => true
 
   post_install do |installer|
     # https://github.com/facebook/react-native/blob/main/packages/react-native/scripts/react_native_pods.rb#L197-L202

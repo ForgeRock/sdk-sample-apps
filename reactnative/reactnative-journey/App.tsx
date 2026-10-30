@@ -5,8 +5,12 @@
  * of the MIT license. See the LICENSE file for details.
  */
 
-import React, { useEffect, useMemo, useState } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import React, { useEffect, useMemo, useState, useRef } from 'react';
+import {
+  NavigationContainer,
+  type NavigationState,
+  type PartialState,
+} from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Pressable, Text, TextInput, View } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -18,6 +22,8 @@ import JourneyHelperScreen from './ui/JourneyHelperScreen';
 import JourneyFullScreen from './ui/JourneyFullScreen';
 import BrowserScreen from './ui/BrowserScreen';
 import LoggerScreen from './ui/LoggerScreen';
+import DeviceAuthorizationScreen from './ui/DeviceAuthorizationScreen';
+import ApproveDeviceScreen from './ui/ApproveDeviceScreen';
 import DeviceProfileScreen from './ui/DeviceProfileScreen';
 import DevicesScreen from './ui/DevicesScreen';
 import UserProfileScreen from './ui/UserProfileScreen';
@@ -30,7 +36,18 @@ import { PushNotificationProvider } from './ui/push/PushNotificationProvider';
 import OathTokensScreen from './ui/OathTokensScreen';
 import QRScannerScreen from './ui/QRScannerScreen';
 import { JourneyProvider } from '@ping-identity/rn-journey';
-import { sampleAppClientProfiles } from './src/clients';
+import { DeviceAuthGrantProvider } from '@ping-identity/rn-oidc';
+import {
+  createPresetProfiles,
+  sampleAppClientProfiles as bundledProfiles,
+  setActiveJourneyConnection,
+  unconfiguredDeviceAuthClient,
+  type SampleAppClientProfile,
+} from './src/clients';
+import { useStoredSelection } from './src/config/useStoredSelection';
+import { useCustomConfigs } from './src/config/useCustomConfigs';
+import ConfigEditorScreen from './ui/ConfigEditorScreen';
+import type { ConfigEditorParams } from './src/config/useConfigActions';
 import { configureBrowser } from '@ping-identity/rn-browser';
 import { logger } from '@ping-identity/rn-logger';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
@@ -54,12 +71,15 @@ type ComponentWithDefaultStyle = {
 export type RootStackParamList = {
   Home: undefined;
   Configuration: undefined;
+  ConfigEditor: ConfigEditorParams;
   Storage: undefined;
-  JourneyRoute: undefined;
-  JourneyHelper: { journeyName?: string } | undefined;
+  JourneyRoute: { verificationUri?: string } | undefined;
+  JourneyHelper: { journeyName?: string; verificationUri?: string } | undefined;
   JourneyFull: undefined;
   Browser: undefined;
   Logger: undefined;
+  DeviceAuthorization: undefined;
+  ApproveDevice: { verificationUri?: string } | undefined;
   DeviceProfile: undefined;
   Devices: undefined;
   UserProfile: undefined;
@@ -106,20 +126,53 @@ function ConfigurationRequiredScreen(
 }
 
 /**
+ * Releases the lazily built clients of a JSON preset profile when it is
+ * deselected. `.env` profiles share long-lived clients and are left alone.
+ *
+ * @param profile Profile that was just deselected.
+ */
+function disposeProfileClients(
+  profile: SampleAppClientProfile | null | undefined,
+): void {
+  if (!profile?.dispose) {
+    return;
+  }
+  profile.dispose().catch((error: unknown) => {
+    console.warn(`Failed to dispose profile '${profile.key}'`, error);
+  });
+}
+
+/**
+ * Provider key that changes when a custom config is edited, so providers
+ * rebuild against the updated client.
+ *
+ * @param profile Selected profile, if any.
+ * @returns Stable key for the profile's current configuration.
+ */
+function profileRevision(
+  profile: SampleAppClientProfile | null | undefined,
+): string {
+  return profile
+    ? `${profile.key}:${JSON.stringify(profile.unifiedConfig ?? '')}`
+    : 'none';
+}
+
+/**
  * Root sample app component that wires navigation and initializes demo clients.
  *
  * ## Structure
  *
  * 1. **Profile selection** — `sampleAppClientProfiles` (defined in `src/clients.ts`) lists
- *    pre-built client configurations. The active profile is stored as `selectedJourneyProfileKey`
- *    and defaults to `DEFAULT_SAMPLE_APP_CLIENT_PROFILE_KEY`.
+ *    client configurations: the bundled `assets/configs/*.json` presets plus custom configs. The active profile is stored as `selectedJourneyProfileKey` and restored from
+ *    AsyncStorage on start; with no stored selection the Journey routes show Configuration Required.
  *
  * 2. **Client initialization** — whenever `selectedJourneyProfile` changes the component calls
  *    `journeyClient.init()` inside a guarded async effect. Init errors are surfaced as an
  *    inline message instead of crashing.
  *
- * 3. **Context providers** — `JourneyProvider` exposes the active client to every screen via
- *    React context so screens do not import clients directly.
+ * 3. **Context providers** — `JourneyProvider` and `DeviceAuthGrantProvider` expose the
+ *    active clients to every screen via React context so screens do not import clients
+ *    directly.
  *
  * 4. **Navigation** — a `NativeStackNavigator` registers all demo screens.
  *
@@ -128,15 +181,45 @@ function ConfigurationRequiredScreen(
  *    so browser diagnostics can be filtered independently.
  */
 export default function App() {
+  // Providers below are re-keyed when the selected config changes; keeping the
+  // navigation state here restores the user's position after the remount.
+  const navigationState = useRef<
+    NavigationState | PartialState<NavigationState> | undefined
+  >(undefined);
   // Dedicated browser logger keeps browser diagnostics separate from global SDK logging.
   const browserLogger = useMemo(() => logger({ level: 'debug' }), []);
   /** Non-null while the journey client failed to initialise after a profile switch. */
   const [initError, setInitError] = useState<string | null>(null);
-  const [selectedJourneyProfileKey, setSelectedJourneyProfileKey] = useState<
-    string | null
-  >(null);
+  const {
+    key: selectedJourneyProfileKey,
+    select: setSelectedJourneyProfileKey,
+    restored: journeySelectionRestored,
+  } = useStoredSelection('selectedJourneyProfileKey');
+  const {
+    key: selectedDeviceAuthProfileKey,
+    select: setSelectedDeviceAuthProfileKey,
+    restored: deviceAuthSelectionRestored,
+  } = useStoredSelection('selectedDeviceAuthProfileKey');
 
-  const journeyProfiles = useMemo(() => sampleAppClientProfiles, []);
+  const customConfigs = useCustomConfigs();
+  const sampleAppClientProfiles = useMemo(
+    () => [
+      ...bundledProfiles,
+      ...customConfigs.presets.flatMap(createPresetProfiles),
+    ],
+    [customConfigs.presets],
+  );
+
+  const journeyProfiles = useMemo(
+    () =>
+      sampleAppClientProfiles.filter(profile => profile.group === 'Journey'),
+    [sampleAppClientProfiles],
+  );
+  const deviceAuthProfiles = useMemo(
+    () =>
+      sampleAppClientProfiles.filter(profile => profile.group === 'Auth Grant'),
+    [sampleAppClientProfiles],
+  );
 
   const selectedJourneyProfile = useMemo(
     () =>
@@ -145,9 +228,31 @@ export default function App() {
       ) ?? null,
     [journeyProfiles, selectedJourneyProfileKey],
   );
+  const selectedDeviceAuthProfile = useMemo(
+    () =>
+      deviceAuthProfiles.find(
+        profile => profile.key === selectedDeviceAuthProfileKey,
+      ) ?? null,
+    [deviceAuthProfiles, selectedDeviceAuthProfileKey],
+  );
 
   const journeyProviderClient =
     selectedJourneyProfile?.journeyClient ?? journeyProfiles[0]?.journeyClient;
+  const deviceAuthProviderClient =
+    selectedDeviceAuthProfile?.deviceAuthClient ?? unconfiguredDeviceAuthClient;
+
+  useEffect(() => {
+    setActiveJourneyConnection(selectedJourneyProfile?.connection);
+  }, [selectedJourneyProfile]);
+
+  useEffect(
+    () => () => disposeProfileClients(selectedJourneyProfile),
+    [selectedJourneyProfile],
+  );
+  useEffect(
+    () => () => disposeProfileClients(selectedDeviceAuthProfile),
+    [selectedDeviceAuthProfile],
+  );
 
   useEffect(() => {
     let isMounted = true;
@@ -180,7 +285,7 @@ export default function App() {
       }
 
       try {
-        await Promise.resolve(selectedJourneyProfile.journeyClient.init());
+        await Promise.resolve(selectedJourneyProfile.journeyClient?.init());
         if (isMounted) {
           setInitError(null);
         }
@@ -225,167 +330,230 @@ export default function App() {
     };
   }, [browserLogger, selectedJourneyProfile]);
 
+  if (
+    !journeySelectionRestored ||
+    !deviceAuthSelectionRestored ||
+    !customConfigs.restored
+  ) {
+    return null;
+  }
+
   if (initError) {
     // Fail fast with a clear startup error instead of crashing on first journey API call.
     return <Text>{`Journey client init failed: ${initError}`}</Text>;
   }
 
-  const selectedConfigName = `Journey: ${selectedJourneyProfile?.name ?? 'None'}`;
+  const selectedConfigName = `Journey: ${
+    selectedJourneyProfile?.name ?? 'None'
+  } | Auth Grant: ${selectedDeviceAuthProfile?.name ?? 'None'}`;
 
   if (!journeyProviderClient) {
-    return <Text>Client profiles are not configured.</Text>;
+    return (
+      <Text>
+        No Journey configuration is available. Add a JSON file to
+        assets/configs.
+      </Text>
+    );
   }
 
   return (
-    // Journey hooks resolve the client from this context.
-    <JourneyProvider client={journeyProviderClient}>
-      <PushNotificationProvider>
-        <NavigationContainer>
-          <Stack.Navigator
-            initialRouteName="Home"
-            screenOptions={{
-              headerTitleStyle: { fontFamily: 'Montserrat-Medium' },
-              headerBackTitleStyle: { fontFamily: 'Montserrat-Regular' },
-              headerBackButtonDisplayMode: 'minimal',
+    // Journey and device-grant hooks resolve clients from these contexts.
+    <JourneyProvider
+      key={profileRevision(selectedJourneyProfile)}
+      client={journeyProviderClient}
+    >
+      <DeviceAuthGrantProvider
+        key={profileRevision(selectedDeviceAuthProfile)}
+        client={deviceAuthProviderClient}
+      >
+        <PushNotificationProvider>
+          <NavigationContainer
+            initialState={navigationState.current}
+            onStateChange={state => {
+              navigationState.current = state;
             }}
           >
-            <Stack.Screen
-              name="Home"
-              options={{ title: 'PingIdentity Demo', headerShown: false }}
+            <Stack.Navigator
+              initialRouteName="Home"
+              screenOptions={{
+                headerTitleStyle: { fontFamily: 'Montserrat-Medium' },
+                headerBackTitleStyle: { fontFamily: 'Montserrat-Regular' },
+                headerBackButtonDisplayMode: 'minimal',
+              }}
             >
-              {props => (
-                <HomeScreen {...props} selectedConfigName={selectedConfigName} />
-              )}
-            </Stack.Screen>
-            <Stack.Screen
-              name="Configuration"
-              options={{ title: 'Configuration' }}
-            >
-              {props => (
-                <ConfigurationScreen
-                  {...props}
-                  profiles={sampleAppClientProfiles}
-                  selectedJourneyProfileKey={selectedJourneyProfileKey}
-                  onSelectJourneyProfile={setSelectedJourneyProfileKey}
-                />
-              )}
-            </Stack.Screen>
-            <Stack.Screen
-              name="Storage"
-              component={MultiStorageScreen}
-              options={{ title: 'Storage' }}
-            />
-            <Stack.Screen
-              name="JourneyRoute"
-              options={{ title: 'Journey Configuration' }}
-            >
-              {props =>
-                selectedJourneyProfile ? (
-                  <JourneyRouteScreen {...props} />
-                ) : (
-                  <ConfigurationRequiredScreen
+              <Stack.Screen
+                name="Home"
+                options={{ title: 'PingIdentity Demo', headerShown: false }}
+              >
+                {props => (
+                  <HomeScreen
                     {...props}
-                    message="Please select a Journey configuration first."
+                    selectedConfigName={selectedConfigName}
                   />
-                )
-              }
-            </Stack.Screen>
-            <Stack.Screen name="JourneyHelper" options={{ title: 'Journey Flow' }}>
-              {props =>
-                selectedJourneyProfile ? (
-                  <JourneyHelperScreen
+                )}
+              </Stack.Screen>
+              <Stack.Screen
+                name="Configuration"
+                options={{ title: 'Configuration' }}
+              >
+                {props => (
+                  <ConfigurationScreen
                     {...props}
-                    journeyClient={selectedJourneyProfile.journeyClient}
-                    externalIdpRedirectUri={
-                      selectedJourneyProfile.externalIdpRedirectUri
+                    profiles={sampleAppClientProfiles}
+                    selectedJourneyProfileKey={selectedJourneyProfileKey}
+                    selectedDeviceAuthProfileKey={
+                      selectedDeviceAuthProfile?.key ?? null
                     }
+                    onSelectJourneyProfile={setSelectedJourneyProfileKey}
+                    onSelectDeviceAuthProfile={setSelectedDeviceAuthProfileKey}
+                    onAddCustomConfig={customConfigs.add}
+                    onDeleteCustomConfig={customConfigs.remove}
                   />
-                ) : (
-                  <ConfigurationRequiredScreen
+                )}
+              </Stack.Screen>
+              <Stack.Screen
+                name="ConfigEditor"
+                options={{ title: 'Configuration' }}
+              >
+                {props => (
+                  <ConfigEditorScreen
                     {...props}
-                    message="Please select a Journey configuration first."
+                    onAdd={customConfigs.add}
+                    onUpdate={customConfigs.update}
                   />
-                )
-              }
-            </Stack.Screen>
-            <Stack.Screen
-              name="JourneyFull"
-              options={{ title: 'Journey Full (API)' }}
-            >
-              {props =>
-                selectedJourneyProfile ? (
-                  <JourneyFullScreen />
-                ) : (
-                  <ConfigurationRequiredScreen
-                    {...props}
-                    message="Please select a Journey configuration first."
-                  />
-                )
-              }
-            </Stack.Screen>
-            <Stack.Screen
-              name="Browser"
-              component={BrowserScreen}
-              options={{ title: 'Browser Demo' }}
-            />
-            <Stack.Screen
-              name="Logger"
-              component={LoggerScreen}
-              options={{ title: 'Logger Demo' }}
-            />
-            <Stack.Screen
-              name="DeviceProfile"
-              component={DeviceProfileScreen}
-              options={{ title: 'Device Profile' }}
-            />
-            <Stack.Screen
-              name="Devices"
-              component={DevicesScreen}
-              options={{ title: 'Device Management' }}
-            />
-            <Stack.Screen
-              name="UserProfile"
-              component={UserProfileScreen}
-              options={{ title: 'User Profile' }}
-            />
-            <Stack.Screen
-              name="Token"
-              component={TokenScreen}
-              options={{ title: 'Token' }}
-            />
-            <Stack.Screen
-              name="Logout"
-              component={LogoutScreen}
-              options={{ title: 'Logout' }}
-            />
-            <Stack.Screen
-              name="BindingKeys"
-              component={BindingKeysScreen}
-              options={{ title: 'Binding Keys' }}
-            />
-            <Stack.Screen
-              name="Push"
-              component={PushScreen}
-              options={{ title: 'Push Authenticator' }}
-            />
-            <Stack.Screen
-              name="PushNotifications"
-              component={PushNotificationsScreen}
-              options={{ title: 'Push Notifications' }}
-            />
-            <Stack.Screen
-              name="OathTokens"
-              component={OathTokensScreen}
-              options={{ title: 'OATH Tokens' }}
-            />
-            <Stack.Screen
-              name="QRScanner"
-              component={QRScannerScreen}
-              options={{ title: 'QR Scanner' }}
-            />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </PushNotificationProvider>
+                )}
+              </Stack.Screen>
+              <Stack.Screen
+                name="Storage"
+                component={MultiStorageScreen}
+                options={{ title: 'Storage' }}
+              />
+              <Stack.Screen
+                name="JourneyRoute"
+                options={{ title: 'Journey Configuration' }}
+              >
+                {props =>
+                  selectedJourneyProfile ? (
+                    <JourneyRouteScreen {...props} />
+                  ) : (
+                    <ConfigurationRequiredScreen
+                      {...props}
+                      message="Please select a Journey configuration first."
+                    />
+                  )
+                }
+              </Stack.Screen>
+              <Stack.Screen
+                name="JourneyHelper"
+                options={{ title: 'Journey Flow' }}
+              >
+                {props =>
+                  selectedJourneyProfile ? (
+                    <JourneyHelperScreen
+                      {...props}
+                      journeyClient={journeyProviderClient}
+                      externalIdpRedirectUri={
+                        selectedJourneyProfile.externalIdpRedirectUri
+                      }
+                    />
+                  ) : (
+                    <ConfigurationRequiredScreen
+                      {...props}
+                      message="Please select a Journey configuration first."
+                    />
+                  )
+                }
+              </Stack.Screen>
+              <Stack.Screen
+                name="JourneyFull"
+                options={{ title: 'Journey Full (API)' }}
+              >
+                {props =>
+                  selectedJourneyProfile ? (
+                    <JourneyFullScreen />
+                  ) : (
+                    <ConfigurationRequiredScreen
+                      {...props}
+                      message="Please select a Journey configuration first."
+                    />
+                  )
+                }
+              </Stack.Screen>
+              <Stack.Screen
+                name="Browser"
+                component={BrowserScreen}
+                options={{ title: 'Browser Demo' }}
+              />
+              <Stack.Screen
+                name="Logger"
+                component={LoggerScreen}
+                options={{ title: 'Logger Demo' }}
+              />
+              <Stack.Screen
+                name="DeviceAuthorization"
+                options={{ title: 'Device Authorization' }}
+              >
+                {props => <DeviceAuthorizationScreen {...props} />}
+              </Stack.Screen>
+              <Stack.Screen
+                name="ApproveDevice"
+                component={ApproveDeviceScreen}
+                options={{ title: 'Approve Device' }}
+              />
+              <Stack.Screen
+                name="DeviceProfile"
+                component={DeviceProfileScreen}
+                options={{ title: 'Device Profile' }}
+              />
+              <Stack.Screen
+                name="Devices"
+                component={DevicesScreen}
+                options={{ title: 'Device Management' }}
+              />
+              <Stack.Screen
+                name="UserProfile"
+                component={UserProfileScreen}
+                options={{ title: 'User Profile' }}
+              />
+              <Stack.Screen
+                name="Token"
+                component={TokenScreen}
+                options={{ title: 'Token' }}
+              />
+              <Stack.Screen
+                name="Logout"
+                component={LogoutScreen}
+                options={{ title: 'Logout' }}
+              />
+              <Stack.Screen
+                name="BindingKeys"
+                component={BindingKeysScreen}
+                options={{ title: 'Binding Keys' }}
+              />
+              <Stack.Screen
+                name="Push"
+                component={PushScreen}
+                options={{ title: 'Push Authenticator' }}
+              />
+              <Stack.Screen
+                name="PushNotifications"
+                component={PushNotificationsScreen}
+                options={{ title: 'Push Notifications' }}
+              />
+              <Stack.Screen
+                name="OathTokens"
+                component={OathTokensScreen}
+                options={{ title: 'OATH Tokens' }}
+              />
+              <Stack.Screen
+                name="QRScanner"
+                component={QRScannerScreen}
+                options={{ title: 'QR Scanner' }}
+              />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </PushNotificationProvider>
+      </DeviceAuthGrantProvider>
     </JourneyProvider>
   );
 }

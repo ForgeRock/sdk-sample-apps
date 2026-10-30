@@ -75,6 +75,7 @@ export default function PingTextInput(
     placeholder,
     placeholderTextColor = colors.inputPlaceholder,
     secureTextEntry,
+    multiline = false,
     onFocus,
     onBlur,
     style,
@@ -180,7 +181,12 @@ export default function PingTextInput(
   return (
     <View style={[styles.container, containerStyle]}>
       <View
-        style={[styles.inputWrapper, inputWrapperStateStyle, inputWrapperStyle]}
+        style={[
+          styles.inputWrapper,
+          inputWrapperStateStyle,
+          multiline ? styles.inputWrapperMultiline : null,
+          inputWrapperStyle,
+        ]}
       >
         {showFloatingLabel && floatingLabel.length > 0 ? (
           <Animated.Text
@@ -197,14 +203,20 @@ export default function PingTextInput(
         ) : null}
         <TextInput
           {...textInputProps}
-          style={[styles.input, inputTextStateStyle, style]}
+          style={[
+            styles.input,
+            inputTextStateStyle,
+            multiline ? styles.inputMultiline : null,
+            style,
+          ]}
           value={value}
           onFocus={handleFocus}
           onBlur={handleBlur}
-          multiline={false}
+          multiline={multiline}
           placeholder={showFloatingLabel ? '' : placeholder}
           placeholderTextColor={placeholderTextColor}
           secureTextEntry={secureMode}
+          textAlignVertical={multiline ? 'top' : 'center'}
         />
         {supportsSecureToggle ? (
           <TouchableOpacity

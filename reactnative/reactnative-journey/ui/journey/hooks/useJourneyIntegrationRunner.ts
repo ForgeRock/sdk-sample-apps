@@ -121,16 +121,16 @@ export function useJourneyIntegrationRunner(
       const fields = form.fields.filter(
         (field: JourneyNormalizedField) =>
           field.executionMode === 'integration_required' &&
-          handledCallbackTypes.has(field.ref.type),
+          handledCallbackTypes.has(field.type),
       );
       for (const field of fields) {
-        const integration = integrationByType.get(field.ref.type);
+        const integration = integrationByType.get(field.type);
         if (!integration) continue;
         const result = await integration.run(field, journeyClient);
         if (result.cancelled) {
           cancelled = true;
           appendDebug(`Integration cancelled: ${integration.id}`, {
-            callbackType: field.ref.type,
+            callbackType: field.type,
           });
         }
       }
@@ -155,7 +155,7 @@ export function useJourneyIntegrationRunner(
     (form: JourneyFormResult): boolean => {
       for (const field of form.fields) {
         if (field.executionMode !== 'integration_required') continue;
-        const integration = integrationByType.get(field.ref.type);
+        const integration = integrationByType.get(field.type);
         if (!integration) return false;
         if (!integration.canAutoForwardField(field)) return false;
       }
@@ -177,7 +177,7 @@ export function useJourneyIntegrationRunner(
 
   const hasHandledCallback = useCallback(
     (form: JourneyFormResult): boolean =>
-      form.fields.some(field => handledCallbackTypes.has(field.ref.type)),
+      form.fields.some(field => handledCallbackTypes.has(field.type)),
     [handledCallbackTypes],
   );
 

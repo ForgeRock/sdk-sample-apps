@@ -54,10 +54,10 @@ export function bindingIntegration(
     id: 'binding',
     callbackTypes: ['DeviceBindingCallback', 'DeviceSigningVerifierCallback'],
     canAutoForwardField(field) {
-      return field.ref.type === 'DeviceSigningVerifierCallback';
+      return field.type === 'DeviceSigningVerifierCallback';
     },
     async run(field, journey) {
-      if (field.ref.type === 'DeviceBindingCallback') {
+      if (field.type === 'DeviceBindingCallback') {
         const entered = options.readDeviceNameInput?.(field.id)?.trim();
         const deviceName =
           entered && entered.length > 0
@@ -69,7 +69,7 @@ export function bindingIntegration(
         });
         return {};
       }
-      if (field.ref.type === 'DeviceSigningVerifierCallback') {
+      if (field.type === 'DeviceSigningVerifierCallback') {
         await binding.signForJourney(journey, {
           index: field.ref.typeIndex,
         });

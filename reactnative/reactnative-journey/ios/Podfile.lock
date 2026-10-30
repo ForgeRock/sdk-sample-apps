@@ -5,10 +5,12 @@ PODS:
   - AppAuth/Core (2.1.0)
   - AppAuth/ExternalUserAgent (2.1.0):
     - AppAuth/Core
-  - AppCheckCore (11.2.0):
+  - AppCheckCore (11.3.2):
     - GoogleUtilities/Environment (~> 8.0)
     - GoogleUtilities/UserDefaults (~> 8.0)
     - PromisesObjC (~> 2.4)
+    - PromisesSwift (~> 2.4)
+    - RecaptchaInterop (~> 101.0)
   - boost (1.84.0)
   - DoubleConversion (1.1.6)
   - fast_float (8.0.0)
@@ -23,7 +25,7 @@ PODS:
     - FBSDKCoreKit (= 16.3.1)
   - fmt (11.0.2)
   - glog (0.3.5)
-  - GoogleDataTransport (10.1.0):
+  - GoogleDataTransport (10.1.1):
     - nanopb (~> 3.30910.0)
     - PromisesObjC (~> 2.4)
   - GoogleMLKit/BarcodeScanning (8.0.0):
@@ -41,44 +43,44 @@ PODS:
     - GoogleToolboxForMac/Defines (= 4.2.1)
   - "GoogleToolboxForMac/NSData+zlib (4.2.1)":
     - GoogleToolboxForMac/Defines (= 4.2.1)
-  - GoogleUtilities (8.1.0):
-    - GoogleUtilities/AppDelegateSwizzler (= 8.1.0)
-    - GoogleUtilities/Environment (= 8.1.0)
-    - GoogleUtilities/Logger (= 8.1.0)
-    - GoogleUtilities/MethodSwizzler (= 8.1.0)
-    - GoogleUtilities/Network (= 8.1.0)
-    - "GoogleUtilities/NSData+zlib (= 8.1.0)"
-    - GoogleUtilities/Privacy (= 8.1.0)
-    - GoogleUtilities/Reachability (= 8.1.0)
-    - GoogleUtilities/SwizzlerTestHelpers (= 8.1.0)
-    - GoogleUtilities/UserDefaults (= 8.1.0)
-  - GoogleUtilities/AppDelegateSwizzler (8.1.0):
+  - GoogleUtilities (8.1.5):
+    - GoogleUtilities/AppDelegateSwizzler (= 8.1.5)
+    - GoogleUtilities/Environment (= 8.1.5)
+    - GoogleUtilities/Logger (= 8.1.5)
+    - GoogleUtilities/MethodSwizzler (= 8.1.5)
+    - GoogleUtilities/Network (= 8.1.5)
+    - "GoogleUtilities/NSData+zlib (= 8.1.5)"
+    - GoogleUtilities/Privacy (= 8.1.5)
+    - GoogleUtilities/Reachability (= 8.1.5)
+    - GoogleUtilities/SwizzlerTestHelpers (= 8.1.5)
+    - GoogleUtilities/UserDefaults (= 8.1.5)
+  - GoogleUtilities/AppDelegateSwizzler (8.1.5):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
     - GoogleUtilities/Network
     - GoogleUtilities/Privacy
-  - GoogleUtilities/Environment (8.1.0):
+  - GoogleUtilities/Environment (8.1.5):
     - GoogleUtilities/Privacy
-  - GoogleUtilities/Logger (8.1.0):
+  - GoogleUtilities/Logger (8.1.5):
     - GoogleUtilities/Environment
     - GoogleUtilities/Privacy
-  - GoogleUtilities/MethodSwizzler (8.1.0):
+  - GoogleUtilities/MethodSwizzler (8.1.5):
     - GoogleUtilities/Logger
     - GoogleUtilities/Privacy
-  - GoogleUtilities/Network (8.1.0):
+  - GoogleUtilities/Network (8.1.5):
     - GoogleUtilities/Logger
     - "GoogleUtilities/NSData+zlib"
     - GoogleUtilities/Privacy
     - GoogleUtilities/Reachability
-  - "GoogleUtilities/NSData+zlib (8.1.0)":
+  - "GoogleUtilities/NSData+zlib (8.1.5)":
     - GoogleUtilities/Privacy
-  - GoogleUtilities/Privacy (8.1.0)
-  - GoogleUtilities/Reachability (8.1.0):
+  - GoogleUtilities/Privacy (8.1.5)
+  - GoogleUtilities/Reachability (8.1.5):
     - GoogleUtilities/Logger
     - GoogleUtilities/Privacy
-  - GoogleUtilities/SwizzlerTestHelpers (8.1.0):
+  - GoogleUtilities/SwizzlerTestHelpers (8.1.5):
     - GoogleUtilities/MethodSwizzler
-  - GoogleUtilities/UserDefaults (8.1.0):
+  - GoogleUtilities/UserDefaults (8.1.5):
     - GoogleUtilities/Logger
     - GoogleUtilities/Privacy
   - GTMAppAuth (5.0.0):
@@ -171,67 +173,70 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - PingBinding (2.0.0):
-    - PingCommons (~> 2.0.0)
-    - PingDeviceId (~> 2.0.0)
-    - PingJourneyPlugin (~> 2.0.0)
-  - PingBrowser (2.0.0):
-    - PingLogger (~> 2.0.0)
-  - PingCommons (2.0.0):
-    - PingLogger (~> 2.0.0)
-  - PingDavinciPlugin (2.0.0):
-    - PingOrchestrate (~> 2.0.0)
-  - PingDeviceClient (2.0.0):
-    - PingCommons (~> 2.0.0)
-    - PingNetwork (~> 2.0.0)
-  - PingDeviceId (2.0.0):
-    - PingLogger (~> 2.0.0)
-    - PingStorage (~> 2.0.0)
-  - PingDeviceProfile (2.0.0):
-    - PingDeviceId (~> 2.0.0)
-    - PingJourneyPlugin (~> 2.0.0)
-    - PingTamperDetector (~> 2.0.0)
-  - PingExternalIdP (2.0.0):
-    - PingBrowser (~> 2.0.0)
-    - PingDavinciPlugin (~> 2.0.0)
-    - PingJourneyPlugin (~> 2.0.0)
-  - PingExternalIdPApple (2.0.0):
-    - PingExternalIdP (~> 2.0.0)
-  - PingExternalIdPFacebook (2.0.0):
+  - PingBinding (2.1.0):
+    - PingCommons (~> 2.1.0)
+    - PingDeviceId (~> 2.1.0)
+    - PingJourneyPlugin (~> 2.1.0)
+  - PingBrowser (2.1.0):
+    - PingLogger (~> 2.1.0)
+  - PingCommons (2.1.0):
+    - PingLogger (~> 2.1.0)
+  - PingDavinciPlugin (2.1.0):
+    - PingOrchestrate (~> 2.1.0)
+  - PingDeviceClient (2.1.0):
+    - PingCommons (~> 2.1.0)
+    - PingNetwork (~> 2.1.0)
+  - PingDeviceId (2.1.0):
+    - PingLogger (~> 2.1.0)
+    - PingStorage (~> 2.1.0)
+  - PingDeviceProfile (2.1.0):
+    - PingDeviceId (~> 2.1.0)
+    - PingJourneyPlugin (~> 2.1.0)
+    - PingTamperDetector (~> 2.1.0)
+  - PingExternalIdP (2.1.0):
+    - PingBrowser (~> 2.1.0)
+    - PingDavinciPlugin (~> 2.1.0)
+    - PingJourneyPlugin (~> 2.1.0)
+  - PingExternalIdPApple (2.1.0):
+    - PingExternalIdP (~> 2.1.0)
+  - PingExternalIdPFacebook (2.1.0):
     - FBSDKLoginKit (~> 16.3.1)
-    - PingExternalIdP (~> 2.0.0)
-  - PingExternalIdPGoogle (2.0.0):
+    - PingExternalIdP (~> 2.1.0)
+  - PingExternalIdPGoogle (2.1.0):
     - GoogleSignIn (~> 9.0.0)
-    - PingExternalIdP (~> 2.0.0)
-  - PingFido (2.0.0):
-    - PingCommons (~> 2.0.0)
-    - PingDavinciPlugin (~> 2.0.0)
-    - PingJourneyPlugin (~> 2.0.0)
-  - PingJourney (2.0.0):
-    - PingDeviceProfile (~> 2.0.0)
-    - PingJourneyPlugin (~> 2.0.0)
-    - PingOidc (~> 2.0.0)
-  - PingJourneyPlugin (2.0.0):
-    - PingOrchestrate (~> 2.0.0)
-  - PingLogger (2.0.0)
-  - PingNetwork (2.0.0):
-    - PingLogger (~> 2.0.0)
-  - PingOath (2.0.0):
-    - PingTamperDetector (~> 2.0.0)
-  - PingOidc (2.0.0):
-    - PingBrowser (~> 2.0.0)
-    - PingCommons (~> 2.0.0)
-    - PingOrchestrate (~> 2.0.0)
-  - PingOrchestrate (2.0.0):
-    - PingNetwork (~> 2.0.0)
-    - PingStorage (~> 2.0.0)
-  - PingPush (2.0.0):
-    - PingNetwork (~> 2.0.0)
-    - PingTamperDetector (~> 2.0.0)
-  - PingStorage (2.0.0)
-  - PingTamperDetector (2.0.0):
-    - PingCommons (~> 2.0.0)
+    - PingExternalIdP (~> 2.1.0)
+  - PingFido (2.1.0):
+    - PingCommons (~> 2.1.0)
+    - PingDavinciPlugin (~> 2.1.0)
+    - PingJourneyPlugin (~> 2.1.0)
+    - PingLogger (~> 2.1.0)
+  - PingJourney (2.1.0):
+    - PingDeviceProfile (~> 2.1.0)
+    - PingJourneyPlugin (~> 2.1.0)
+    - PingOidc (~> 2.1.0)
+  - PingJourneyPlugin (2.1.0):
+    - PingOrchestrate (~> 2.1.0)
+  - PingLogger (2.1.0)
+  - PingNetwork (2.1.0):
+    - PingLogger (~> 2.1.0)
+  - PingOath (2.1.0):
+    - PingTamperDetector (~> 2.1.0)
+  - PingOidc (2.1.0):
+    - PingBrowser (~> 2.1.0)
+    - PingCommons (~> 2.1.0)
+    - PingOrchestrate (~> 2.1.0)
+  - PingOrchestrate (2.1.0):
+    - PingNetwork (~> 2.1.0)
+    - PingStorage (~> 2.1.0)
+  - PingPush (2.1.0):
+    - PingNetwork (~> 2.1.0)
+    - PingTamperDetector (~> 2.1.0)
+  - PingStorage (2.1.0)
+  - PingTamperDetector (2.1.0):
+    - PingCommons (~> 2.1.0)
   - PromisesObjC (2.4.1)
+  - PromisesSwift (2.4.1):
+    - PromisesObjC (= 2.4.1)
   - RCT-Folly (2024.11.18.00):
     - boost
     - DoubleConversion
@@ -2467,6 +2472,7 @@ PODS:
     - React-perflogger (= 0.80.1)
     - React-utils (= 0.80.1)
     - SocketRocket
+  - RecaptchaInterop (101.0.0)
   - RNCAsyncStorage (2.2.0):
     - boost
     - DoubleConversion
@@ -2496,14 +2502,14 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - RNPingBinding (1.0.0):
+  - RNPingBinding (1.1.0):
     - boost
     - DoubleConversion
     - fast_float
     - fmt
     - glog
     - hermes-engine
-    - PingBinding (= 2.0.0)
+    - PingBinding (= 2.1.0)
     - RCT-Folly
     - RCT-Folly/Fabric
     - RCTRequired
@@ -2527,15 +2533,15 @@ PODS:
     - RNPingCore
     - SocketRocket
     - Yoga
-  - RNPingBrowser (1.0.0):
+  - RNPingBrowser (1.1.0):
     - boost
     - DoubleConversion
     - fast_float
     - fmt
     - glog
     - hermes-engine
-    - PingBrowser (= 2.0.0)
-    - PingLogger (= 2.0.0)
+    - PingBrowser (= 2.1.0)
+    - PingLogger (= 2.1.0)
     - RCT-Folly
     - RCT-Folly/Fabric
     - RCTRequired
@@ -2560,7 +2566,7 @@ PODS:
     - RNPingLogger
     - SocketRocket
     - Yoga
-  - RNPingCore (1.0.0):
+  - RNPingCore (1.1.0):
     - boost
     - DoubleConversion
     - fast_float
@@ -2589,45 +2595,14 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - RNPingDeviceClient (1.0.0):
+  - RNPingDeviceClient (1.1.0):
     - boost
     - DoubleConversion
     - fast_float
     - fmt
     - glog
     - hermes-engine
-    - PingDeviceClient (= 2.0.0)
-    - RCT-Folly
-    - RCT-Folly/Fabric
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Core
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-hermes
-    - React-ImageManager
-    - React-jsi
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-renderercss
-    - React-rendererdebug
-    - React-utils
-    - ReactCodegen
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - RNPingCore
-    - SocketRocket
-    - Yoga
-  - RNPingDeviceId (1.0.0):
-    - boost
-    - DoubleConversion
-    - fast_float
-    - fmt
-    - glog
-    - hermes-engine
-    - PingDeviceId (= 2.0.0)
+    - PingDeviceClient (= 2.1.0)
     - RCT-Folly
     - RCT-Folly/Fabric
     - RCTRequired
@@ -2651,14 +2626,14 @@ PODS:
     - RNPingCore
     - SocketRocket
     - Yoga
-  - RNPingDeviceProfile (1.0.0):
+  - RNPingDeviceId (1.1.0):
     - boost
     - DoubleConversion
     - fast_float
     - fmt
     - glog
     - hermes-engine
-    - PingDeviceProfile (= 2.0.0)
+    - PingDeviceId (= 2.1.0)
     - RCT-Folly
     - RCT-Folly/Fabric
     - RCTRequired
@@ -2682,14 +2657,14 @@ PODS:
     - RNPingCore
     - SocketRocket
     - Yoga
-  - RNPingExternalIdp (1.0.0):
+  - RNPingDeviceProfile (1.1.0):
     - boost
     - DoubleConversion
     - fast_float
     - fmt
     - glog
     - hermes-engine
-    - PingExternalIdP (= 2.0.0)
+    - PingDeviceProfile (= 2.1.0)
     - RCT-Folly
     - RCT-Folly/Fabric
     - RCTRequired
@@ -2713,14 +2688,14 @@ PODS:
     - RNPingCore
     - SocketRocket
     - Yoga
-  - RNPingFido (1.0.0):
+  - RNPingExternalIdp (1.1.0):
     - boost
     - DoubleConversion
     - fast_float
     - fmt
     - glog
     - hermes-engine
-    - PingFido (= 2.0.0)
+    - PingExternalIdP (= 2.1.0)
     - RCT-Folly
     - RCT-Folly/Fabric
     - RCTRequired
@@ -2744,21 +2719,15 @@ PODS:
     - RNPingCore
     - SocketRocket
     - Yoga
-  - RNPingJourney (1.0.0):
+  - RNPingFido (1.1.0):
     - boost
     - DoubleConversion
     - fast_float
     - fmt
     - glog
     - hermes-engine
-    - PingDavinciPlugin (= 2.0.0)
-    - PingFido (= 2.0.0)
-    - PingJourney (= 2.0.0)
-    - PingJourneyPlugin (= 2.0.0)
-    - PingLogger (= 2.0.0)
-    - PingOidc (= 2.0.0)
-    - PingOrchestrate (= 2.0.0)
-    - PingStorage (= 2.0.0)
+    - PingFido (= 2.1.0)
+    - PingLogger (= 2.1.0)
     - RCT-Folly
     - RCT-Folly/Fabric
     - RCTRequired
@@ -2782,14 +2751,20 @@ PODS:
     - RNPingCore
     - SocketRocket
     - Yoga
-  - RNPingLogger (1.0.0):
+  - RNPingJourney (1.1.0):
     - boost
     - DoubleConversion
     - fast_float
     - fmt
     - glog
     - hermes-engine
-    - PingLogger (= 2.0.0)
+    - PingDavinciPlugin (= 2.1.0)
+    - PingJourney (= 2.1.0)
+    - PingJourneyPlugin (= 2.1.0)
+    - PingLogger (= 2.1.0)
+    - PingOidc (= 2.1.0)
+    - PingOrchestrate (= 2.1.0)
+    - PingStorage (= 2.1.0)
     - RCT-Folly
     - RCT-Folly/Fabric
     - RCTRequired
@@ -2813,14 +2788,14 @@ PODS:
     - RNPingCore
     - SocketRocket
     - Yoga
-  - RNPingOath (1.0.0):
+  - RNPingLogger (1.1.0):
     - boost
     - DoubleConversion
     - fast_float
     - fmt
     - glog
     - hermes-engine
-    - PingOath (= 2.0.0)
+    - PingLogger (= 2.1.0)
     - RCT-Folly
     - RCT-Folly/Fabric
     - RCTRequired
@@ -2844,16 +2819,14 @@ PODS:
     - RNPingCore
     - SocketRocket
     - Yoga
-  - RNPingPush (1.0.0):
+  - RNPingOath (1.1.0):
     - boost
     - DoubleConversion
     - fast_float
     - fmt
     - glog
     - hermes-engine
-    - PingLogger (~> 2.0.0)
-    - PingPush (= 2.0.0)
-    - PingStorage (= 2.0.0)
+    - PingOath (= 2.1.0)
     - RCT-Folly
     - RCT-Folly/Fabric
     - RCTRequired
@@ -2877,14 +2850,82 @@ PODS:
     - RNPingCore
     - SocketRocket
     - Yoga
-  - RNPingStorage (1.0.0):
+  - RNPingOidc (1.1.0):
     - boost
     - DoubleConversion
     - fast_float
     - fmt
     - glog
     - hermes-engine
-    - PingStorage (= 2.0.0)
+    - PingBrowser (= 2.1.0)
+    - PingLogger (= 2.1.0)
+    - PingOidc (= 2.1.0)
+    - PingOrchestrate (= 2.1.0)
+    - PingStorage (= 2.1.0)
+    - RCT-Folly
+    - RCT-Folly/Fabric
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-hermes
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - RNPingCore
+    - SocketRocket
+    - Yoga
+  - RNPingPush (1.1.0):
+    - boost
+    - DoubleConversion
+    - fast_float
+    - fmt
+    - glog
+    - hermes-engine
+    - PingLogger (~> 2.1.0)
+    - PingPush (= 2.1.0)
+    - PingStorage (= 2.1.0)
+    - RCT-Folly
+    - RCT-Folly/Fabric
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-hermes
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - RNPingCore
+    - SocketRocket
+    - Yoga
+  - RNPingStorage (1.1.0):
+    - boost
+    - DoubleConversion
+    - fast_float
+    - fmt
+    - glog
+    - hermes-engine
+    - PingStorage (= 2.1.0)
     - RCT-Folly
     - RCT-Folly/Fabric
     - RCTRequired
@@ -3126,20 +3167,19 @@ PODS:
   - Yoga (0.0.0)
 
 DEPENDENCIES:
-  - AppCheckCore (= 11.2.0)
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - fast_float (from `../node_modules/react-native/third-party-podspecs/fast_float.podspec`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - fmt (from `../node_modules/react-native/third-party-podspecs/fmt.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
-  - GoogleUtilities (= 8.1.0)
+  - GoogleUtilities
   - hermes-engine (from `../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec`)
   - NitroImage (from `../node_modules/react-native-nitro-image`)
   - NitroModules (from `../node_modules/react-native-nitro-modules`)
-  - PingExternalIdPApple (= 2.0.0)
-  - PingExternalIdPFacebook (= 2.0.0)
-  - PingExternalIdPGoogle (= 2.0.0)
+  - PingExternalIdPApple (= 2.1.0)
+  - PingExternalIdPFacebook (= 2.1.0)
+  - PingExternalIdPGoogle (= 2.1.0)
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCTDeprecation (from `../node_modules/react-native/ReactApple/Libraries/RCTFoundation/RCTDeprecation`)
   - RCTRequired (from `../node_modules/react-native/Libraries/Required`)
@@ -3207,6 +3247,7 @@ DEPENDENCIES:
   - ReactAppDependencyProvider (from `build/generated/ios`)
   - ReactCodegen (from `build/generated/ios`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - RecaptchaInterop
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNPingBinding (from `../node_modules/@ping-identity/rn-binding`)"
   - "RNPingBrowser (from `../node_modules/@ping-identity/rn-browser`)"
@@ -3219,6 +3260,7 @@ DEPENDENCIES:
   - "RNPingJourney (from `../node_modules/@ping-identity/rn-journey`)"
   - "RNPingLogger (from `../node_modules/@ping-identity/rn-logger`)"
   - "RNPingOath (from `../node_modules/@ping-identity/rn-oath`)"
+  - "RNPingOidc (from `../node_modules/@ping-identity/rn-oidc`)"
   - "RNPingPush (from `../node_modules/@ping-identity/rn-push`)"
   - "RNPingStorage (from `../node_modules/@ping-identity/rn-storage`)"
   - RNScreens (from `../node_modules/react-native-screens`)
@@ -3272,6 +3314,8 @@ SPEC REPOS:
     - PingStorage
     - PingTamperDetector
     - PromisesObjC
+    - PromisesSwift
+    - RecaptchaInterop
     - SocketRocket
 
 EXTERNAL SOURCES:
@@ -3450,6 +3494,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@ping-identity/rn-logger"
   RNPingOath:
     :path: "../node_modules/@ping-identity/rn-oath"
+  RNPingOidc:
+    :path: "../node_modules/@ping-identity/rn-oidc"
   RNPingPush:
     :path: "../node_modules/@ping-identity/rn-push"
   RNPingStorage:
@@ -3469,7 +3515,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AppAuth: ef4da5a3fc2e10b90c09a0a94a9baeaedc0341d5
-  AppCheckCore: cc8fd0a3a230ddd401f326489c99990b013f0c4f
+  AppCheckCore: be8fce5469f68d7f6a29aa94b25f097409ff7fdc
   boost: 7e761d76ca2ce687f7cc98e698152abd03a18f90
   DoubleConversion: cb417026b2400c8f53ae97020b2be961b59470cb
   fast_float: b32c788ed9c6a8c584d114d0047beda9664e7cc6
@@ -3480,11 +3526,11 @@ SPEC CHECKSUMS:
   FBSDKLoginKit: 572cca0bc6c90067ef197187697cb3b584310c52
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
   glog: 5683914934d5b6e4240e497e0f4a3b42d1854183
-  GoogleDataTransport: aae35b7ea0c09004c3797d53c8c41f66f219d6a7
+  GoogleDataTransport: a24e58982ab3ba2f64d79613e027fe7f57e88539
   GoogleMLKit: ddd51d7dff36ff28defa69afedd9cdce684fd857
   GoogleSignIn: c7f09cfbc85a1abf69187be091997c317cc33b77
   GoogleToolboxForMac: d1a2cbf009c453f4d6ded37c105e2f67a32206d8
-  GoogleUtilities: 00c88b9a86066ef77f0da2fab05f65d7768ed8e1
+  GoogleUtilities: 7dc09b3fa9ecb5c2298b952313d14628b61b9da3
   GTMAppAuth: 217a876b249c3c585a54fd6f73e6b58c4f5c4238
   GTMSessionFetcher: 5aea5ba6bd522a239e236100971f10cb71b96ab6
   hermes-engine: 4f07404533b808de66cf48ac4200463068d0e95a
@@ -3495,29 +3541,30 @@ SPEC CHECKSUMS:
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
   NitroImage: 5c2e7ee0b9efd9179dbb18a5b6b14baab032fe85
   NitroModules: 7f1f24e38a8c6138e4f624ce65f929116edfd706
-  PingBinding: 46036fcbcd4e3cb6a453f08822493ba451d4c8ab
-  PingBrowser: d1526bdcc6197781d0d54fe7ac16ba09a55a1faa
-  PingCommons: 49f2244bda1c41913fa37d9481e969702d658ade
-  PingDavinciPlugin: d0d4c5a0e4fdd36608307e755ba435d41470d76f
-  PingDeviceClient: 4d2fa2ba2fb427cc4001c43ac3ed80bd994fb4f1
-  PingDeviceId: e773280c2bb679f4133c8ef855f189620b331ce3
-  PingDeviceProfile: f13a32c11b3d1f08d033900e1792eaef948336af
-  PingExternalIdP: bcf67ba8c880b03dee3f62cefbc4cbb2d774a875
-  PingExternalIdPApple: 07ccfba9e4b182d236e1052714a756592b39a6ad
-  PingExternalIdPFacebook: e0b504bb4bbedefe4939fdea07897a1dbc90a9ad
-  PingExternalIdPGoogle: 07162d50931d7645cac120629b373152f03ff03b
-  PingFido: bece1cdf6ade29fa61737dc225069658ae7ac8bb
-  PingJourney: ce7632b42878317414d0ace3b47f0c47fc1fdc9b
-  PingJourneyPlugin: f3ae6d2db6164d72a2feaa40e128557879e8658c
-  PingLogger: 6198d050fe04aa2a43ae8ad8b6bbd6571e58803a
-  PingNetwork: b8fde435c5d30ee4024aa7d7f1c95a1e0eafc2e8
-  PingOath: e401ec4a9bc3edad14ca1c205c1420b7636fbf80
-  PingOidc: eda685279cfaba6d42ca474a953306448987e760
-  PingOrchestrate: 21d780ed7eeb3c366ae43785017b2700478db783
-  PingPush: 71aed837ffd7bed5a75f9f08a05431c232094957
-  PingStorage: 7e3bc6966fbf7587523e56a8a7b0f5d85ea3bd94
-  PingTamperDetector: b5e4b7aa325a11f2de1f3df9bdd8cc3391cddf1c
+  PingBinding: e6c18b25ca49463faa790a8d7ab25d81197f67e0
+  PingBrowser: 9654254bfc8651cb81ca566cb7459459efa8a600
+  PingCommons: 62bde3af35f24a13e9b120e0ea098e467655cad6
+  PingDavinciPlugin: 7442a6d12d980368d2d1ce504e6e4c863826f4ca
+  PingDeviceClient: 7f61abbd4c2035b1551d57f97b35907adde85a9c
+  PingDeviceId: 60ca36f84b4c2d44a003f5552a6ef91dbaf9ec7a
+  PingDeviceProfile: 78f5b8fb8090457d50e6d96165da0e7b5f8e6a37
+  PingExternalIdP: 9f4f57dc168d8c182df79942e593333e4a8ab1ad
+  PingExternalIdPApple: b563b76a92c25c8be795f2d8ecc20aec70add005
+  PingExternalIdPFacebook: b61d88fd333a2070e22fa3e5dd3dfd6ee98cb5bd
+  PingExternalIdPGoogle: b781736f39441b87ef0987562138947155c27078
+  PingFido: 405240423b1865880811d0e24c6a40a4527f0b84
+  PingJourney: c60d7ac6f78c905d4fdaff35051e38ab2bff046c
+  PingJourneyPlugin: d2eb4c91a7b507466732caa0611321672d3175f7
+  PingLogger: 6e79b430564762c2a815b09cee7e099b9474d036
+  PingNetwork: 97b4a783caca3ff9382ecbfe2b6da1cff10ed647
+  PingOath: 34d6c81f32c87a4f568fceb48b531cd1be3e9464
+  PingOidc: e6d28c4d8c130691872d6aa3b12a1ef498567957
+  PingOrchestrate: 90365995dc6fc5bd14f78ae5c04f07d46d265523
+  PingPush: aef2216cade878592b6c7166a90d8b15f1c0b649
+  PingStorage: fdaebdd80f4359dc7eb4f780429cc6840ed01cee
+  PingTamperDetector: 99159fd12d0ffc40db6096fcff99daf554f248c8
   PromisesObjC: 752c3227f599e3467650e47ea36f433eeb10c273
+  PromisesSwift: 217dea0fd5d2ad65222a109c48698add13cc1c5b
   RCT-Folly: 59ec0ac1f2f39672a0c6e6cecdd39383b764646f
   RCTDeprecation: efa5010912100e944a7ac9a93a157e1def1988fe
   RCTRequired: bbc4cf999ddc4a4b076e076c74dd1d39d0254630
@@ -3584,20 +3631,22 @@ SPEC CHECKSUMS:
   ReactAppDependencyProvider: ba631a31783569c13056dd57ff39e19764abdd6f
   ReactCodegen: b16d00d43b4e9dc44af53be171b17d93b4b20267
   ReactCommon: 96684b90b235d6ae340d126141edd4563b7a446a
+  RecaptchaInterop: 11e0b637842dfb48308d242afc3f448062325aba
   RNCAsyncStorage: 767abb068db6ad28b5f59a129fbc9fab18b377e2
-  RNPingBinding: c9449a4e6b808afc9dcc311a07804559c0c522b4
-  RNPingBrowser: 042c960b67b47a85b0e1de373b76ddb2609487e1
-  RNPingCore: 3926e39f9ab60d83fb4d58225303864ca0d8171b
-  RNPingDeviceClient: bd78e33420a8f5dcd6ab3b21691805743b12079f
-  RNPingDeviceId: 24f49f8d518103367f6bbcbcf54138a424541ba7
-  RNPingDeviceProfile: 4c6b306859c9bc9cdad0aea830d9a8e0227dcc4a
-  RNPingExternalIdp: 372123fab1006f80c184a1f7992a3b335f69eb3c
-  RNPingFido: a67c3cb1fa2ff1930476189e5ebc1bc0a6e84d4a
-  RNPingJourney: 90546edde90b7c30f9b4a526a094e531a92094fe
-  RNPingLogger: db39fa39b31cd5026a7c279cd52996fafac190e1
-  RNPingOath: 2e64a03cd27ac198b21d2e4a4d767eaa31bd2b03
-  RNPingPush: 898e5dd90a372e2ac9a27f0c622c2f17614fbd26
-  RNPingStorage: 17cf506d51259fa7c64a649d97ed974bd5350b22
+  RNPingBinding: 2d36e1a69ee11ee53f2bf98edb4968240429f335
+  RNPingBrowser: abea36612516b9187c1841c3485e0b5eabe6bcce
+  RNPingCore: f4a461e75fbe3fccf3263e2b91938d9887324b32
+  RNPingDeviceClient: 018ce1c81f671b37d943f464f799852dbacd4d9a
+  RNPingDeviceId: 2537972a09ab70d4a03a7aa644d07770c59cc79f
+  RNPingDeviceProfile: 44fde49a965fb86123fca5db6cfc3075d29a28db
+  RNPingExternalIdp: ba514170a01d4ba51d141dcfe41d332bd092e300
+  RNPingFido: 6a17bfc93afcc20d5172c37ce39997a91e4576c6
+  RNPingJourney: f2907549187da7e4120e814c8704d4e96dcbdaa0
+  RNPingLogger: 493cca89cf636799f9e580115d46f37426afcbcb
+  RNPingOath: a84840889256fb6d360d6b0303b858fe6e5e1cd2
+  RNPingOidc: 3b1217530a24d2ab011be52c187bb7a7d3ba1bd4
+  RNPingPush: e276582ce2ee815d39b40f4f91c9399c4238728c
+  RNPingStorage: 75308e520dd9e0f8faf0802b73aa89e403f7ea3a
   RNScreens: 846d53087db560ed5fbc34feb0643adb5f9602c5
   RNSVG: e8fb86f41fccd7b67c4480bb9e179e0ad5785b80
   RNVectorIcons: 54df27a2e90ddeb674c7237d76060ec9762d0bc5
@@ -3606,6 +3655,6 @@ SPEC CHECKSUMS:
   VisionCameraBarcodeScanner: 0b6fe2e3c52ca68a0dbd5d25719c7523c68d807f
   Yoga: daa1e4de4b971b977b23bc842aaa3e135324f1f3
 
-PODFILE CHECKSUM: 03bc153f223686bc5458e5e7c5426816cc998d49
+PODFILE CHECKSUM: 4a53bb799839176f4c38c915196a722ff436591b
 
 COCOAPODS: 1.15.2

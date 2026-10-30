@@ -9,6 +9,10 @@
 const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
 
 const config = {
+  transformer: {
+    // Lets src/config/loadConfigs.ts discover assets/configs/*.json.
+    unstable_allowRequireContext: true,
+  },
   resolver: {
     resolveRequest: (context, moduleName, platform) => {
       // vision-camera's package.json points `source` at src/index (unbuilt TS).
