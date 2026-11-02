@@ -11,26 +11,16 @@ import {
   type OidcClientConfig,
   type OidcWebClient,
 } from '@ping-identity/rn-oidc';
-import Config from 'react-native-config';
-
 import { logger } from '@ping-identity/rn-logger';
 import { CacheStrategy, configureOidcStorage } from '@ping-identity/rn-storage';
-
-/**
- * Normalized Advanced Identity Cloud OAuth scopes sourced from `AIC_SCOPES`.
- */
-const aicScopes = (Config.AIC_SCOPES ?? '')
-  .split(',')
-  .map(item => item.trim())
-  .filter(Boolean);
-
-/**
- * Normalized PingOne OAuth scopes sourced from `PINGONE_SCOPES`.
- */
-const pingOneScopes = (Config.PINGONE_SCOPES ?? '')
-  .split(',')
-  .map(item => item.trim())
-  .filter(Boolean);
+import { lazyResource } from './config/lazyResource';
+import { loadJsonConfigPresets } from './config/loadConfigs';
+import {
+  bundledPreset,
+  type ConfigKind,
+  type ConfigPreset,
+} from './config/customConfigs';
+import { toLogLevel, type UnifiedConfig } from './config/unifiedConfig';
 
 /**
  * Shared logger instance used by sample clients.
@@ -38,83 +28,7 @@ const pingOneScopes = (Config.PINGONE_SCOPES ?? '')
 const appLogger = logger({ level: 'debug' });
 
 /**
- * OIDC client configuration for the Advanced Identity Cloud / PingAM tenant.
- */
-export const forgeblockOidcClientConfig: OidcClientConfig = {
-  clientId: Config.AIC_CLIENT_ID!,
-  discoveryEndpoint: Config.AIC_DISCOVERY_ENDPOINT!,
-  redirectUri: Config.AIC_REDIRECT_URI!,
-  scopes: aicScopes,
-  ios: {
-    browserType: 'authSession',
-    browserMode: 'login',
-  },
-};
-
-/**
- * PingOne OIDC client configuration mirrored from SDK test configuration.
- */
-const pingOneOidcClientConfig: OidcClientConfig = {
-  clientId: Config.PINGONE_CLIENT_ID!,
-  discoveryEndpoint: Config.PINGONE_DISCOVERY_ENDPOINT!,
-  redirectUri: Config.PINGONE_REDIRECT_URI!,
-  scopes: pingOneScopes,
-  acrValues: Config.PINGONE_ACR_VALUES!,
-  ios: {
-    browserType: 'authSession',
-    browserMode: 'login',
-  },
-};
-
-/**
- * OIDC storage handle used by the sample OIDC client.
- */
-const sampleOidcStorage = configureOidcStorage({
-  android: {
-    fileName: 'ping-oidc',
-    keyAlias: 'ping-oidc',
-    strongBoxPreferred: true,
-    cacheStrategy: CacheStrategy.CACHE_ON_FAILURE,
-  },
-  ios: {
-    account: 'com.pingidentity.rnsampleapp.oidc.oidc',
-    encryptor: true,
-    cacheable: true,
-  },
-});
-
-/**
- * Internal OIDC client instance for the Advanced Identity Cloud / PingAM tenant.
- */
-const forgeblockOidcClient = createOidcClient({
-  ...forgeblockOidcClientConfig,
-  storage: sampleOidcStorage,
-  logger: appLogger,
-});
-
-/**
- * Internal OIDC client instance for PingOne test-tenant validation.
- */
-const pingOneOidcClient = createOidcClient({
-  ...pingOneOidcClientConfig,
-  storage: sampleOidcStorage,
-  logger: appLogger,
-});
-
-/**
- * Web-capable OIDC client for the Advanced Identity Cloud / PingAM tenant.
- */
-export const forgeblockOidcWebClient: OidcWebClient =
-  createOidcWebClient(forgeblockOidcClient);
-
-/**
- * Web-capable OIDC client for the PingOne test tenant profile.
- */
-export const pingOneOidcWebClient: OidcWebClient =
-  createOidcWebClient(pingOneOidcClient);
-
-/**
- * Runtime-selectable sample app client profile.
+ * Selectable sample app client profile.
  */
 export type SampleAppClientProfile = {
   /**
@@ -141,6 +55,26 @@ export type SampleAppClientProfile = {
    * OIDC client configuration displayed by the OIDC demo panel.
    */
   oidcClientConfig: OidcClientConfig;
+  /**
+   * Where the profile's configuration came from: a bundled
+   * `assets/configs/*.json` file or a custom config created in the app.
+   */
+  source: 'json' | 'custom';
+  /**
+   * Configuration kind and the config it was built from. Used to duplicate or
+   * edit the profile.
+   */
+  kind?: ConfigKind;
+  unifiedConfig?: UnifiedConfig;
+  /**
+   * Custom entry id (custom profiles) or file name (JSON profiles).
+   */
+  presetId?: string;
+  /**
+   * Releases clients built lazily for the profile; they are rebuilt on next
+   * use.
+   */
+  dispose?: () => Promise<void>;
 };
 
 /**
@@ -154,30 +88,97 @@ function hostnameFrom(value: string): string {
   return normalized.split('/')[0] ?? value;
 }
 
-/**
- * Runtime-selectable sample app configurations shown in the Configuration screen.
- */
-export const sampleAppClientProfiles: readonly SampleAppClientProfile[] = [
-  {
-    key: 'oidc-forgeblock',
-    name: 'OIDC Forgeblock',
-    host: hostnameFrom(forgeblockOidcClientConfig.discoveryEndpoint ?? ''),
-    environment: 'Advanced Identity Cloud',
-    oidcClient: forgeblockOidcWebClient,
-    oidcClientConfig: forgeblockOidcClientConfig,
-  },
-  {
-    key: 'oidc-pingone',
-    name: 'OIDC PingOne',
-    host: hostnameFrom(pingOneOidcClientConfig.discoveryEndpoint ?? ''),
-    environment: Config.PINGONE_ENVIRONMENT_LABEL ?? 'PingOne',
-    oidcClient: pingOneOidcWebClient,
-    oidcClientConfig: pingOneOidcClientConfig,
-  },
-];
+const storageIdFor = (presetName: string): string =>
+  presetName.replace(/[^A-Za-z0-9]/g, '_');
+
+const profileCache = new WeakMap<ConfigPreset, SampleAppClientProfile[]>();
+
+const createWebProfile = (
+  preset: ConfigPreset,
+): SampleAppClientProfile | undefined => {
+  const { name, config } = preset;
+  const { oidc } = config;
+  if (!oidc) {
+    return undefined;
+  }
+  const storageId = storageIdFor(`${preset.source}-${preset.id}`);
+  const logLevel = toLogLevel(config.log);
+  const oidcClientConfig: OidcClientConfig = {
+    ...oidc,
+    ios: { browserType: 'authSession', browserMode: 'login' },
+  };
+  const client = lazyResource(
+    () => {
+      const base = createOidcClient({
+        ...oidcClientConfig,
+        storage: configureOidcStorage({
+          android: {
+            fileName: `json-${storageId}-oidc`,
+            keyAlias: `json.${storageId}.oidc`,
+            strongBoxPreferred: true,
+            cacheStrategy: CacheStrategy.CACHE_ON_FAILURE,
+          },
+          ios: {
+            account: `com.pingidentity.rnsampleapp.oidc.json.${storageId}`,
+            encryptor: true,
+            cacheable: true,
+          },
+        }),
+        logger: logLevel ? logger({ level: logLevel }) : appLogger,
+      });
+      return { base, web: createOidcWebClient(base) };
+    },
+    async ({ base, web }) => {
+      await web.dispose();
+      await base.dispose();
+    },
+  );
+  return {
+    key: `${preset.source}-oidc-${preset.id}`,
+    name,
+    host: hostnameFrom(oidc.discoveryEndpoint),
+    environment: 'OIDC',
+    get oidcClient() {
+      return client.get().web;
+    },
+    oidcClientConfig,
+    source: preset.source,
+    kind: 'web',
+    presetId: preset.id,
+    unifiedConfig: config,
+    dispose: () => client.dispose(),
+  };
+};
 
 /**
- * Default selected profile key for sample app boot.
+ * Builds the OIDC Web profile a preset applies to. Clients are created on
+ * first use, and the result is cached per preset object.
+ *
+ * @param preset Bundled or custom preset.
+ * @returns Profiles for the kinds this sample supports.
  */
-export const DEFAULT_SAMPLE_APP_CLIENT_PROFILE_KEY =
-  sampleAppClientProfiles[0].key;
+export function createPresetProfiles(
+  preset: ConfigPreset,
+): readonly SampleAppClientProfile[] {
+  const cached = profileCache.get(preset);
+  if (cached) {
+    return cached;
+  }
+  const profiles = preset.kinds.includes('web')
+    ? [createWebProfile(preset)].filter(
+        (profile): profile is SampleAppClientProfile => !!profile,
+      )
+    : [];
+  profileCache.set(preset, profiles);
+  return profiles;
+}
+
+/**
+ * Selectable sample app configurations shown in the Configuration screen: the
+ * bundled JSON presets. Custom configs are added at runtime through
+ * {@link createPresetProfiles}.
+ */
+export const sampleAppClientProfiles: readonly SampleAppClientProfile[] =
+  loadJsonConfigPresets(message => appLogger.warn(message)).flatMap(preset =>
+    createPresetProfiles(bundledPreset(preset)),
+  );

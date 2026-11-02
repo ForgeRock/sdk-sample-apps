@@ -57,14 +57,14 @@ const asDisplayValue = (value: unknown): string | null => {
  *
  * @param payload - User info payload.
  * @param keys - Candidate keys in lookup order.
- * @returns Display string for the first matching key.
+ * @returns Display string for the first matching key, or `null` when unavailable.
  */
 const readProfileField = (
   payload: Record<string, unknown> | null,
   keys: readonly string[],
-): string => {
+): string | null => {
   if (!payload) {
-    return 'Not available';
+    return null;
   }
   for (const key of keys) {
     const value = asDisplayValue(payload[key]);
@@ -72,17 +72,7 @@ const readProfileField = (
       return value;
     }
   }
-  return 'Not available';
-};
-
-/**
- * Adds quotes to values that are present.
- *
- * @param value - Display value.
- * @returns Quoted value when available.
- */
-const wrapProfileValue = (value: string): string => {
-  return value === 'Not available' ? value : `"${value}"`;
+  return null;
 };
 
 /**
@@ -96,18 +86,26 @@ export default function UserProfileInfoCard(
 ): React.ReactElement {
   const { title, userInfo, showRawUserInfo, onToggleRawUserInfo } = props;
 
-  const firstName = wrapProfileValue(
-    readProfileField(userInfo, ['given_name', 'firstName', 'first_name']),
-  );
-  const familyName = wrapProfileValue(
-    readProfileField(userInfo, ['family_name', 'lastName', 'last_name']),
-  );
-  const email = wrapProfileValue(readProfileField(userInfo, ['email']));
+  const firstName = readProfileField(userInfo, [
+    'given_name',
+    'firstName',
+    'first_name',
+  ]);
+  const familyName = readProfileField(userInfo, [
+    'family_name',
+    'lastName',
+    'last_name',
+  ]);
+  const email = readProfileField(userInfo, ['email']);
   const infoItems: KeyValueItem[] = [
-    { label: 'First name', value: firstName },
-    { label: 'Family name', value: familyName },
-    { label: 'Email', value: email },
-  ];
+    firstName !== null
+      ? { label: 'First name', value: `"${firstName}"` }
+      : null,
+    familyName !== null
+      ? { label: 'Family name', value: `"${familyName}"` }
+      : null,
+    { label: 'Email', value: email !== null ? `"${email}"` : 'Not available' },
+  ].filter((item): item is KeyValueItem => item !== null);
 
   return (
     <View style={commonStyles.userProfileCard}>

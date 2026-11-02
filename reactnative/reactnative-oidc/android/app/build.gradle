@@ -12,7 +12,6 @@ project.ext.vectoricons = [
     iconFontsDir: "../../node_modules/react-native-vector-icons/Fonts"
 ]
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
-apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
 
 /**
  * This is the configuration block to customize your React Native Android app.
@@ -123,6 +122,15 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
             excludes += "/META-INF/versions/9/OSGI-INF/MANIFEST.MF"
         }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_21
+        targetCompatibility JavaVersion.VERSION_21
+    }
+
+    kotlinOptions {
+        jvmTarget = "21"
     }
 }
 

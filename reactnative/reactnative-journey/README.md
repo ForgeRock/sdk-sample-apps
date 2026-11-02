@@ -26,79 +26,85 @@ This repository contains an example React Native project making full use of the 
 
 2. **Clone the repository**:
 
-    ```sh
-    git clone https://github.com/ForgeRock/sdk-sample-apps.git
-    cd sdk-sample-apps/reactnative/reactnative-journey
-    ```
+   ```sh
+   git clone https://github.com/ForgeRock/sdk-sample-apps.git
+   cd sdk-sample-apps/reactnative/reactnative-journey
+   ```
 
-3. **Configure the app**: Copy the example env file and fill in your server details.
+3. **Configure the app**: SDK runtime configuration is selected in the app, not from `.env`. Two sources are supported:
+   - **JSON presets**: add a JSON file to `assets/configs/`. The file name without `.json` becomes the preset name in the Configuration screen. Copy `journeyJsonConfig.json` as a starting point.
+   - **Custom configs**: create, edit, and delete configs directly on the app's Configuration screen. Custom configs persist on the device; they are not committed to the repo.
 
-    ```sh
-    cp .env.example .env
-    ```
+   The files use the unified SDK configuration schema shared with the native Android and iOS sample apps:
 
-    Locate the TODO comment in `.env.example` and replace the placeholder values in `.env` with your configuration:
+   | Key                                                | Required                      | Description                                                                                                                                                  |
+   | -------------------------------------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+   | `timeout`                                          | No                            | Request timeout in milliseconds                                                                                                                              |
+   | `log`                                              | No                            | `NONE`, `WARN`, or `DEBUG`                                                                                                                                   |
+   | `journey.serverUrl`                                | Yes when `journey` is present | Journey server base URL                                                                                                                                      |
+   | `journey.realm`                                    | No                            | Authentication realm                                                                                                                                         |
+   | `journey.cookieName`                               | No                            | Session cookie name (mapped to the SDK's `cookie` option)                                                                                                    |
+   | `oidc.clientId`                                    | Yes when `oidc` is present    | OAuth 2.0 client ID                                                                                                                                          |
+   | `oidc.discoveryEndpoint`                           | Yes when `oidc` is present    | OIDC discovery endpoint URL                                                                                                                                  |
+   | `oidc.scopes`                                      | Yes when `oidc` is present    | Array of OAuth scopes                                                                                                                                        |
+   | `oidc.redirectUri`                                 | Yes when `oidc` is present    | Redirect URI, must match the app's registered scheme                                                                                                         |
+   | `oidc.openId.*`                                    | No                            | Endpoint overrides (`authorizationEndpoint`, `tokenEndpoint`, `userinfoEndpoint`, `endSessionEndpoint`, `revocationEndpoint`, `deviceAuthorizationEndpoint`) |
+   | `oidc.par`                                         | No                            | Enable Pushed Authorization Requests                                                                                                                         |
+   | `oidc.acrValues`, `oidc.additionalParameters`, ... | No                            | Other optional OIDC parameters; unknown keys are ignored                                                                                                     |
 
-    ```sh
-    JOURNEY_SERVER_URL=https://your-journey-host.example.com/am
-    JOURNEY_REALM=your-journey-realm
-    JOURNEY_COOKIE=your-journey-cookie-name
-    JOURNEY_CLIENT_ID=your-journey-client-id
-    JOURNEY_DISCOVERY_ENDPOINT=https://your-journey-host.example.com/am/oauth2/your-journey-realm/.well-known/openid-configuration
-    JOURNEY_REDIRECT_URI=org.forgerock.demo://oauth2redirect
-    JOURNEY_SCOPES=openid,email,profile,address
-    ```
+   See `assets/configs/*.json` for worked examples. A file that fails validation is skipped at startup with a logged warning naming the offending field.
 
-    See `.env.example` for the full list of supported keys, including external IdP (Facebook, Google) configuration.
+4. **Redirect URI**: the app's redirect URI scheme is pre-wired to `org.forgerock.demo://oauth2redirect`. The `oidc.redirectUri` in your JSON config must match `manifestPlaceholders["appRedirectUriScheme"]` in `android/app/build.gradle` and the `oauth2redirect` entry of `CFBundleURLTypes` in `ios/PingSampleApp/Info.plist`.
 
-4. **Redirect URI**: the app's redirect URI scheme is pre-wired to `org.forgerock.demo://oauth2redirect`. If you pick a different scheme, update `JOURNEY_REDIRECT_URI` in `.env`, `manifestPlaceholders["appRedirectUriScheme"]` in `android/app/build.gradle`, and the `oauth2redirect` entry of `CFBundleURLTypes` in `ios/PingSampleApp/Info.plist`.
+5. **Optional native features**: external IdP (social login) and passkey (FIDO2) need build-time credentials that `.env` supplies at build time — see `.env.example` for the keys (`FACEBOOK_*`, `GOOGLE_IOS_*`, `ASSOCIATED_DOMAIN`; on iOS copy `ios/Config.local.example.xcconfig` to `ios/Config.local.xcconfig` instead). Without them the rest of the app works; the social login button and passkey ceremonies fail with an error naming the missing platform setup.
 
-5. **Install dependencies**:
+6. **Install dependencies**:
 
-    ```sh
-    yarn install
-    ```
+   ```sh
+   yarn install
+   ```
 
-6. **iOS only** — install CocoaPods:
+7. **iOS only** — install CocoaPods:
 
-    ```sh
-    cd ios
-    bundle install
-    bundle exec pod install
-    cd ..
-    ```
+   ```sh
+   cd ios
+   bundle install
+   bundle exec pod install
+   cd ..
+   ```
 
-7. **Android only — keystore setup**: `android/app/build.gradle` signs the debug build with `android/app/debug.keystore` using the alias `androiddebugkey`, and reads the keystore/key passwords from Gradle properties named `KEYSTORE_PASSWORD` and `KEY_PASSWORD`, which aren't set anywhere in this repo. Locate the TODO comment above `signingConfigs` in `android/app/build.gradle` and generate your own debug keystore with that filename and alias:
+8. **Android only — keystore setup**: `android/app/build.gradle` signs the debug build with `android/app/debug.keystore` using the alias `androiddebugkey`, and reads the keystore/key passwords from Gradle properties named `KEYSTORE_PASSWORD` and `KEY_PASSWORD`, which aren't set anywhere in this repo. Locate the TODO comment above `signingConfigs` in `android/app/build.gradle` and generate your own debug keystore with that filename and alias:
 
-    ```sh
-    keytool -genkeypair -v \
-      -keystore android/app/debug.keystore \
-      -alias androiddebugkey \
-      -keyalg RSA -keysize 2048 -validity 10000 \
-      -storepass <your-password> -keypass <your-password> \
-      -dname "CN=Android Debug,O=Android,C=US"
-    ```
+   ```sh
+   keytool -genkeypair -v \
+     -keystore android/app/debug.keystore \
+     -alias androiddebugkey \
+     -keyalg RSA -keysize 2048 -validity 10000 \
+     -storepass <your-password> -keypass <your-password> \
+     -dname "CN=Android Debug,O=Android,C=US"
+   ```
 
-    Then add your credentials to your global `~/.gradle/gradle.properties` (create the file if it doesn't exist):
+   Then add your credentials to your global `~/.gradle/gradle.properties` (create the file if it doesn't exist):
 
-    ```properties
-    KEYSTORE_PASSWORD=<your-password>
-    KEY_PASSWORD=<your-password>
-    ```
+   ```properties
+   KEYSTORE_PASSWORD=<your-password>
+   KEY_PASSWORD=<your-password>
+   ```
 
-    Skipping this step causes the build to fail signing, which then fails app installation.
+   Skipping this step causes the build to fail signing, which then fails app installation.
 
-8. **Run the app**:
+9. **Run the app**:
 
-    ```sh
-    yarn ios
-    # or
-    yarn android
-    ```
+   ```sh
+   yarn ios
+   # or
+   yarn android
+   ```
 
 ## Features
 
 This sample demonstrates:
+
 - Journey-based authentication with callback handling
 - Device binding and biometric authentication
 - FIDO2/WebAuthn registration and authentication
@@ -111,7 +117,7 @@ This sample demonstrates:
 
 - [Journey SDK documentation](https://developer.pingidentity.com/orchsdks/journey/index.html)
 - [Journey use case tutorials](https://developer.pingidentity.com/orchsdks/journey/use-cases.html)
-- [Ping SDK documentation](https://docs.pingidentity.com/sdks/latest/sdks/index.html)
+- [Ping SDK documentation](https://developer.pingidentity.com/orchsdks/)
 
 ## License
 

@@ -6,8 +6,11 @@
 // TODO: Copy this file to `Config.local.xcconfig` and replace the placeholder values below with your actual configuration:
 // - GOOGLE_IOS_CLIENT_ID / GOOGLE_IOS_REVERSED_CLIENT_ID: Your Google iOS client credentials (external IdP login)
 // - FACEBOOK_APP_ID / FACEBOOK_CLIENT_TOKEN / FACEBOOK_LOGIN_PROTOCOL_SCHEME: Your Facebook app credentials (external IdP login)
+// - ASSOCIATED_DOMAIN: Domain for passkey (FIDO2) webcredentials; must match the
+//   Apple Developer associated-domains capability configured for the App ID
 GOOGLE_IOS_CLIENT_ID=your-google-ios-client-id.apps.googleusercontent.com
 GOOGLE_IOS_REVERSED_CLIENT_ID=com.googleusercontent.apps.your-google-ios-client-id
 FACEBOOK_APP_ID=your-facebook-app-id
 FACEBOOK_CLIENT_TOKEN=your-facebook-client-token
 FACEBOOK_LOGIN_PROTOCOL_SCHEME=fbyour-facebook-app-id
+ASSOCIATED_DOMAIN=your-associated-domain.example.com

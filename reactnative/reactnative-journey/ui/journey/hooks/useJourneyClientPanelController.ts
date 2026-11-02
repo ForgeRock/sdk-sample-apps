@@ -433,10 +433,10 @@ export function useJourneyClientPanelController(
   const hasPollingWaitCallback =
     form.getFieldsByType('PollingWaitCallback').length > 0;
   const hasIdPCallback = form.fields.some(field =>
-    IDP_CALLBACK_TYPES.has(field.ref.type as string),
+    IDP_CALLBACK_TYPES.has(field.type as string),
   );
   const hasSelectIdpCallback = form.fields.some(
-    field => (field.ref.type as string) === SELECT_IDP_CALLBACK_TYPE,
+    field => (field.type as string) === SELECT_IDP_CALLBACK_TYPE,
   );
   const hasExternalIdpCallback = hasIdPCallback || hasSelectIdpCallback;
   const hasSuspendedCallback =
@@ -450,7 +450,7 @@ export function useJourneyClientPanelController(
   const continueNodeKey = useMemo<string>(() => {
     if (!isContinueNode || form.fields.length === 0) return '';
     return form.fields
-      .map(field => `${field.ref.type}:${field.ref.typeIndex}:${field.id}`)
+      .map(field => `${field.type}:${field.ref.typeIndex}:${field.id}`)
       .join('|');
   }, [form.fields, isContinueNode]);
 
@@ -458,7 +458,7 @@ export function useJourneyClientPanelController(
   const deviceProfileRequestKey = useMemo<string>(() => {
     if (!isContinueNode || !hasDeviceProfileCallback) return '';
     return `${continueNodeKey}:${form.fields
-      .filter(field => field.ref.type === 'DeviceProfileCallback')
+      .filter(field => field.type === 'DeviceProfileCallback')
       .map(field => `${field.ref.typeIndex}`)
       .join(',')}`;
   }, [continueNodeKey, form.fields, hasDeviceProfileCallback, isContinueNode]);
@@ -573,8 +573,8 @@ export function useJourneyClientPanelController(
     if (!isContinueNode) return;
     const deviceNameFields = form.fields.filter(
       field =>
-        field.ref.type === 'FidoRegistrationCallback' ||
-        field.ref.type === 'DeviceBindingCallback',
+        field.type === 'FidoRegistrationCallback' ||
+        field.type === 'DeviceBindingCallback',
     );
     if (deviceNameFields.length === 0) return;
 
@@ -728,12 +728,12 @@ export function useJourneyClientPanelController(
 
       const externalIdpFields = form.fields.filter(
         field =>
-          (field.ref.type as string) === SELECT_IDP_CALLBACK_TYPE ||
-          IDP_CALLBACK_TYPES.has(field.ref.type as string),
+          (field.type as string) === SELECT_IDP_CALLBACK_TYPE ||
+          IDP_CALLBACK_TYPES.has(field.type as string),
       );
 
       for (const field of externalIdpFields) {
-        if ((field.ref.type as string) === SELECT_IDP_CALLBACK_TYPE) {
+        if ((field.type as string) === SELECT_IDP_CALLBACK_TYPE) {
           const raw = form.values[field.id];
           const provider = typeof raw === 'string' ? raw.trim() : '';
           appendDebug('Journey external IdP select provider requested', {
@@ -878,7 +878,7 @@ export function useJourneyClientPanelController(
   const onSelectIdpProvider = useCallback(
     async (fieldId: string, provider: string): Promise<void> => {
       const field = form.getField(fieldId);
-      if (!field || (field.ref.type as string) !== SELECT_IDP_CALLBACK_TYPE) {
+      if (!field || (field.type as string) !== SELECT_IDP_CALLBACK_TYPE) {
         appendDebug('Journey external IdP provider selection skipped', {
           fieldId,
           reason: 'SelectIdpCallback field not found',
@@ -978,6 +978,9 @@ export function useJourneyClientPanelController(
   });
 
   const onSubmit = useCallback(async (): Promise<void> => {
+    // Marks submission intent so UI gated on form.attempted (for example
+    // validation error display) becomes visible after this attempt.
+    form.markAttempted();
     if (runner.hasUnhandledIntegrationIssue(form)) {
       appendDebug('Submit blocked: unhandled integration callback', {
         callbackTypes: form.issues
@@ -994,7 +997,7 @@ export function useJourneyClientPanelController(
 
     appendDebug('Journey submit requested', {
       callbacks: form.fields.map(field => ({
-        type: field.ref.type,
+        type: field.type,
         index: field.ref.typeIndex,
         value: form.values[field.id],
       })),

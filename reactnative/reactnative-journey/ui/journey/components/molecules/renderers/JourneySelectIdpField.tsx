@@ -10,7 +10,7 @@ import { Text, TouchableOpacity, View } from 'react-native';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import { commonStyles } from '../../../../../src/styles/common';
 import { journeyFieldRendererStyles as fieldStyles } from '../../../../../src/styles/journeyStyles';
-import { readString, resolvePromptText } from './valueReaders';
+import { readString } from './valueReaders';
 import type { JourneyFieldRendererProps } from './types';
 
 type ParsedButtonStyle = {
@@ -173,7 +173,7 @@ export default function JourneySelectIdpField(
 ): React.ReactElement {
   const { field, currentValue, setFieldValue, onSelectIdpProvider } = props;
   const selectedProvider = readString(currentValue).trim();
-  const promptText = resolvePromptText(field.prompt, field.message);
+  const promptText = field.prompt.trim() || field.message?.trim() || '';
   const options = resolveProviderOptions(field.raw);
 
   return (

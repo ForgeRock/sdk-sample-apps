@@ -32,6 +32,7 @@ type Props = NativeStackScreenProps<RootStackParamList, 'JourneyHelper'> & {
  */
 export default function JourneyHelperScreen(props: Props): React.ReactElement {
   const initialJourneyName = props.route.params?.journeyName?.trim() ?? '';
+  const verificationUri = props.route.params?.verificationUri;
   const { externalIdpRedirectUri, journeyClient } = props;
   const onAuthenticated = useCallback((): void => {
     props.navigation.reset({
@@ -45,6 +46,7 @@ export default function JourneyHelperScreen(props: Props): React.ReactElement {
         journeyClient={journeyClient}
         externalIdpRedirectUri={externalIdpRedirectUri}
         initialJourneyName={initialJourneyName}
+        startOptions={verificationUri ? { verificationUri } : undefined}
         autoStartOnMount={initialJourneyName.length > 0}
         onAuthenticated={onAuthenticated}
         requireSuccessConfirmation

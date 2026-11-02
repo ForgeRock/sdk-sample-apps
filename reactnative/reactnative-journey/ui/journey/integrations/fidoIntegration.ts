@@ -54,10 +54,10 @@ export function fidoIntegration(
     id: 'fido',
     callbackTypes: ['FidoRegistrationCallback', 'FidoAuthenticationCallback'],
     canAutoForwardField(field) {
-      return field.ref.type === 'FidoAuthenticationCallback';
+      return field.type === 'FidoAuthenticationCallback';
     },
     async run(field, journey) {
-      if (field.ref.type === 'FidoRegistrationCallback') {
+      if (field.type === 'FidoRegistrationCallback') {
         const input = options.readDeviceNameInput(field.id)?.trim();
         const deviceName =
           input && input.length > 0
@@ -70,7 +70,7 @@ export function fidoIntegration(
         return {};
       }
 
-      if (field.ref.type === 'FidoAuthenticationCallback') {
+      if (field.type === 'FidoAuthenticationCallback') {
         try {
           await fido.authenticateForJourney(journey, {
             index: field.ref.typeIndex,

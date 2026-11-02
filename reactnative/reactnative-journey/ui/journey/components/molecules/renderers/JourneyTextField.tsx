@@ -8,7 +8,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { journeyFieldRendererStyles as fieldStyles } from '../../../../../src/styles/journeyStyles';
-import { resolvePromptText, toDisplayString } from './valueReaders';
+import { toDisplayString } from './valueReaders';
 import type { JourneyFieldRendererProps } from './types';
 import PingTextInput from '../../../../components/atoms/PingTextInput';
 
@@ -22,17 +22,17 @@ export default function JourneyTextField(
   props: JourneyFieldRendererProps,
 ): React.ReactElement {
   const { field, currentValue, setFieldValue } = props;
-  const promptText = resolvePromptText(field.prompt, field.message);
+  const promptText = field.prompt.trim() || field.message?.trim() || '';
   const isPasswordField = field.kind === 'password';
   const isDeviceNameField =
-    field.ref.type === 'FidoRegistrationCallback' ||
-    field.ref.type === 'DeviceBindingCallback';
+    field.type === 'FidoRegistrationCallback' ||
+    field.type === 'DeviceBindingCallback';
   const secureTextEntry = isPasswordField;
   const label = isDeviceNameField
     ? 'Device Name'
     : promptText.length > 0
       ? promptText
-      : field.ref.type;
+      : field.type;
   const placeholder = isDeviceNameField
     ? 'Enter device name'
     : promptText.length > 0

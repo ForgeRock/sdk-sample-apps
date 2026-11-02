@@ -1953,179 +1953,192 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ping-identity/rn-binding@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@ping-identity/rn-binding@npm:1.0.0"
+"@ping-identity/rn-binding@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@ping-identity/rn-binding@npm:1.1.0"
   dependencies:
-    "@ping-identity/rn-types": ^1.0.0
+    "@ping-identity/rn-types": ^1.1.0
   peerDependencies:
-    "@ping-identity/rn-core": ^1.0.0
+    "@ping-identity/rn-core": ^1.1.0
     react: "*"
     react-native: "*"
-  checksum: acb3a171834bb5bbb226c3eaa23fe1fb1ec0f6d3dc26fffd385908dd48e02a76835dc0035a88818869af91f2060ee41b3b94ea04a84d4b5f7810ea53559e6e7d
+  checksum: aa27789a26dbb26498c64b22859de1edf37a86c25777c441d5ea86ae0aa18938a5e94d851e5cd660db8e34dc58b22fa7f3111e257f34dec911a9cd05f5d168a8
   languageName: node
   linkType: hard
 
-"@ping-identity/rn-browser@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@ping-identity/rn-browser@npm:1.0.0"
+"@ping-identity/rn-browser@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@ping-identity/rn-browser@npm:1.1.0"
   dependencies:
-    "@ping-identity/rn-types": ^1.0.0
+    "@ping-identity/rn-types": ^1.1.0
   peerDependencies:
-    "@ping-identity/rn-core": ^1.0.0
+    "@ping-identity/rn-core": ^1.1.0
     react: "*"
     react-native: "*"
-  checksum: 15c842569b2e315c43f0d78adfc5633eb9a37ef840be704d8dbafd393bdc1ad87eede29704c2c0987b3813f74196c41bf4f066a3d583418d4257cd5dece5be0b
+  checksum: be94dee10c9689b7c0198c710ba0bf1f8afb6881ee0d97e9f88cb324fab0f38d8dcc048050278bae5b884996f0853db9f90624184793b19197bbd0dbd886cc6f
   languageName: node
   linkType: hard
 
-"@ping-identity/rn-core@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@ping-identity/rn-core@npm:1.0.0"
+"@ping-identity/rn-core@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@ping-identity/rn-core@npm:1.1.0"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 2c16465348363132253cab45ea86e965d884c04523975c1a12042c0554591a5fbf49b3ad656aaae1fa8378db83345f6024bcb5d8023c1eb5d56665fc2a8b31ac
+  checksum: 00f0167c00022623e484fff8e256c435ab17e44fef75c59c5e7482b1698f392d682bb9572cda4e68c149cab9b49b4c9a96a06176a3af0be23fc6ca4f23a0a7bf
   languageName: node
   linkType: hard
 
-"@ping-identity/rn-device-client@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@ping-identity/rn-device-client@npm:1.0.0"
+"@ping-identity/rn-device-client@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@ping-identity/rn-device-client@npm:1.1.0"
   dependencies:
-    "@ping-identity/rn-types": ^1.0.0
+    "@ping-identity/rn-types": ^1.1.0
   peerDependencies:
-    "@ping-identity/rn-core": ^1.0.0
+    "@ping-identity/rn-core": ^1.1.0
     react: "*"
     react-native: "*"
-  checksum: 6fb8dc640677c92f854e366c97c3c7b903c11a8d376eaac469c09aeaf34c030c98e43a36a6151be857ceaa263334fa76d66d73f98ef020474bec1d2e0b2e334a
+  checksum: 8a20735145524762ed599a6b503cdb5744b462da14a61b3b40d8e91131dcb650961b45f29c140be2b58eaf732750a711ae72acf637e58061186a3e6fb46baa67
   languageName: node
   linkType: hard
 
-"@ping-identity/rn-device-id@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@ping-identity/rn-device-id@npm:1.0.0"
+"@ping-identity/rn-device-id@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@ping-identity/rn-device-id@npm:1.1.0"
   dependencies:
-    "@ping-identity/rn-types": ^1.0.0
+    "@ping-identity/rn-types": ^1.1.0
   peerDependencies:
-    "@ping-identity/rn-core": ^1.0.0
+    "@ping-identity/rn-core": ^1.1.0
     react: "*"
     react-native: "*"
-  checksum: df78c57971acfa6d9f5bbb9a2b4e6464b2df68f087758e5a0583578fca416ee20ad8e9b8599a96307d98781c2aaa41e8879a7992a018a77e3e062fcf3ce5a556
+  checksum: 8a6f02f5fa46a9807a5be171a08b25ba3496f969c070a4d6bf559e6e57b59ba9e94547d6d28bc2ed8d7681e3fb033e6c6f3382bef919c10615c30efe33fa3841
   languageName: node
   linkType: hard
 
-"@ping-identity/rn-device-profile@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@ping-identity/rn-device-profile@npm:1.0.0"
+"@ping-identity/rn-device-profile@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@ping-identity/rn-device-profile@npm:1.1.0"
   dependencies:
-    "@ping-identity/rn-types": ^1.0.0
+    "@ping-identity/rn-types": ^1.1.0
   peerDependencies:
-    "@ping-identity/rn-core": ^1.0.0
+    "@ping-identity/rn-core": ^1.1.0
     react: "*"
     react-native: "*"
-  checksum: 71a030fe96d042ce7e4cc09a6483d66d7f3d9d7a1b24a0455c0f5bed5202e9cbe78d9f87aa19b705972a12497cf1708312fa8ba6c7fb119c9403eaf0d5dbe06b
+  checksum: 635a9f5cdff21fed1ca5e4674ca65f17edf6ebc841d5343f05b179433c4316ffeea1e46e4a554a9e838798ff7ad2c21e9fda1e54510406faa8a605373181bf5a
   languageName: node
   linkType: hard
 
-"@ping-identity/rn-external-idp@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@ping-identity/rn-external-idp@npm:1.0.0"
+"@ping-identity/rn-external-idp@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@ping-identity/rn-external-idp@npm:1.1.0"
   dependencies:
-    "@ping-identity/rn-types": ^1.0.0
+    "@ping-identity/rn-types": ^1.1.0
   peerDependencies:
-    "@ping-identity/rn-core": ^1.0.0
+    "@ping-identity/rn-core": ^1.1.0
     react: "*"
     react-native: "*"
-  checksum: bab0bd77a2a600fa04458c46779d4b8c2fd794c7b957b68ebc648d40653eb14a0cc7199c9b2bba4e5b662fd690ac572d6877361f36a8c6507face7a815f38bae
+  checksum: e30344254beedb748b98e6d1895b6650606e16759c97f6a335b01ce7ad8b2f7ca4c21d74f74e3855b7069aad242d86a97a22514720a7c4d506219176ce530d08
   languageName: node
   linkType: hard
 
-"@ping-identity/rn-fido@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@ping-identity/rn-fido@npm:1.0.0"
+"@ping-identity/rn-fido@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@ping-identity/rn-fido@npm:1.1.0"
   dependencies:
-    "@ping-identity/rn-types": ^1.0.0
+    "@ping-identity/rn-types": ^1.1.0
   peerDependencies:
-    "@ping-identity/rn-core": ^1.0.0
+    "@ping-identity/rn-core": ^1.1.0
     react: "*"
     react-native: "*"
-  checksum: 72d901c678c6d85a9a4db6af211683536b0b19cba252ddc201fa9e7de2a140e540ea7da41309098748ef603ffe34003038b975423563e2e45713397f8451632c
+  checksum: f76d1bb5323d6b185d21db88cb07ca7569439157c975559a59e49f352a428c133650f609b4b1cc0583519cc3e7f06501e70a8daffeb295185c7e6d0a83758311
   languageName: node
   linkType: hard
 
-"@ping-identity/rn-journey@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@ping-identity/rn-journey@npm:1.0.0"
+"@ping-identity/rn-journey@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@ping-identity/rn-journey@npm:1.1.0"
   dependencies:
-    "@ping-identity/rn-types": ^1.0.0
+    "@ping-identity/rn-types": ^1.1.0
   peerDependencies:
-    "@ping-identity/rn-core": ^1.0.0
+    "@ping-identity/rn-core": ^1.1.0
     react: "*"
     react-native: "*"
-  checksum: 01bdaa2829c9443e97897eddfd518ae64ff05bd3615aff1d56020e9f29b2f06937cd92bf0d1377551e413152ec7c7bd0b1fef7d9856406bfeab85ff819218a18
+  checksum: ba0a44ab2578a6879a0b322f7641299f8cdefddc637e112379af31755249e29314f36c6124798d6fa76c3ceeeba62f188623391e559850fbdfda31a0231d3a31
   languageName: node
   linkType: hard
 
-"@ping-identity/rn-logger@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@ping-identity/rn-logger@npm:1.0.0"
+"@ping-identity/rn-logger@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@ping-identity/rn-logger@npm:1.1.0"
   dependencies:
     "@forgerock/sdk-logger": ^1.3.0
-    "@ping-identity/rn-types": ^1.0.0
+    "@ping-identity/rn-types": ^1.1.0
   peerDependencies:
-    "@ping-identity/rn-core": ^1.0.0
+    "@ping-identity/rn-core": ^1.1.0
     react: "*"
     react-native: "*"
-  checksum: 94532bf54aa2316997bd7231f87b3518347c3cbcc6acd0160f9a0c11ed8039cc83d9525398097ac459348aa090ddaa33ae4467552232f3e5d37f7be579f68f73
+  checksum: 63b6404703adff8bd035d9be4760eff083380c24d03c17d37570848e7717ed203e7029099f84a37cd431154733b44f2205145b0b1b77b8e3962a57bf66e6b2f2
   languageName: node
   linkType: hard
 
-"@ping-identity/rn-oath@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@ping-identity/rn-oath@npm:1.0.0"
+"@ping-identity/rn-oath@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@ping-identity/rn-oath@npm:1.1.0"
   dependencies:
-    "@ping-identity/rn-types": ^1.0.0
+    "@ping-identity/rn-types": ^1.1.0
   peerDependencies:
-    "@ping-identity/rn-core": ^1.0.0
+    "@ping-identity/rn-core": ^1.1.0
     react: "*"
     react-native: "*"
-  checksum: d91b43fd06895cea65f110be31c2c102a348978e30bc63673dedc05ccdf2fb505b5056f6fc8a63550c1f4c57d3e2fbc0efef64c775c6a6c4ad4a19a06b3b851f
+  checksum: 5a993b3865bc3f1829e8e1f64b185e3fe9b929b87e208dd0f41d6ab4e3673a1d8723a7200c6faf065856acad5eccf536e14ffdb9043385033b12861a7d84fbc5
   languageName: node
   linkType: hard
 
-"@ping-identity/rn-push@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@ping-identity/rn-push@npm:1.0.0"
+"@ping-identity/rn-oidc@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@ping-identity/rn-oidc@npm:1.1.0"
   dependencies:
-    "@ping-identity/rn-types": ^1.0.0
+    "@ping-identity/rn-types": ^1.1.0
   peerDependencies:
-    "@ping-identity/rn-core": ^1.0.0
+    "@ping-identity/rn-core": ^1.1.0
     react: "*"
     react-native: "*"
-  checksum: 3abe836e65c1ed36827dedd025c8908328665cc1ce6f13dccd15e3a1a9dbd12d731af8395deeee9fde7dc2f8c28bc7699d21a6345b754cc4b66e65477efb1baf
+  checksum: 65d9c6b444b899b0345402cd2c8fdae541577ce1237857c970d87f20321c6472d29bb711da987a5d5e2a4d3a27204e0fbdf2c41c8bd8434fd0899c382bf04521
   languageName: node
   linkType: hard
 
-"@ping-identity/rn-storage@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@ping-identity/rn-storage@npm:1.0.0"
+"@ping-identity/rn-push@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@ping-identity/rn-push@npm:1.1.0"
   dependencies:
-    "@ping-identity/rn-types": ^1.0.0
+    "@ping-identity/rn-types": ^1.1.0
   peerDependencies:
-    "@ping-identity/rn-core": ^1.0.0
+    "@ping-identity/rn-core": ^1.1.0
     react: "*"
     react-native: "*"
-  checksum: 973cf692645ecae494b1783dac196351f2ee23ad3c6319ddcf98ed33ea7d452c5901125054af30798581cb51372e92f9269dbd541b5f9877b4e9d1020df6be06
+  checksum: c4eb902ceae98ce321bd0bb206583d4d342e027e2a13dad78d427920e993e94d8e3ed4727680171b8291eb79a622b58480f96959ded9ef7dc37f846cd7ef2e10
   languageName: node
   linkType: hard
 
-"@ping-identity/rn-types@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@ping-identity/rn-types@npm:1.0.0"
+"@ping-identity/rn-storage@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@ping-identity/rn-storage@npm:1.1.0"
+  dependencies:
+    "@ping-identity/rn-types": ^1.1.0
+  peerDependencies:
+    "@ping-identity/rn-core": ^1.1.0
+    react: "*"
+    react-native: "*"
+  checksum: d95658e5797c3d6511a3bcc8729e0e3dfe1dd0c372c9ac59ac993894cb5ac93ef26167f53ca3d3ea1745da2f261519d4c2c8677559dc7f5e77f5e98f17c71e1a
+  languageName: node
+  linkType: hard
+
+"@ping-identity/rn-types@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@ping-identity/rn-types@npm:1.1.0"
   dependencies:
     "@forgerock/sdk-types": ^1.3.0
-  checksum: 8c0ad33ad09a146422273d4902cfa63766a01a552b543ebf05c80f89f31c3aae2e90e39f260aafb0e5355293b282dfb30148852128a71e8cfdaf5c33415c23e2
+  checksum: 1784b20c8a1b38b288b62b0e8c13ccfc9ac9c9fbc8c156de0612cb0222c1ac6c7ad798fc46f025708860bb837ad88863e7af1d2cda623ab6ea169d2d206af5b9
   languageName: node
   linkType: hard
 
@@ -4286,6 +4299,13 @@ __metadata:
   version: 29.6.3
   resolution: "diff-sequences@npm:29.6.3"
   checksum: f4914158e1f2276343d98ff5b31fc004e7304f5470bf0f1adb2ac6955d85a531a6458d33e87667f98f6ae52ebd3891bb47d420bb48a5bd8b7a27ee25b20e33aa
+  languageName: node
+  linkType: hard
+
+"dijkstrajs@npm:^1.0.1":
+  version: 1.0.3
+  resolution: "dijkstrajs@npm:1.0.3"
+  checksum: 82ff2c6633f235dd5e6bed04ec62cdfb1f327b4d7534557bd52f18991313f864ee50654543072fff4384a92b643ada4d5452f006b7098dbdfad6c8744a8c9e08
   languageName: node
   linkType: hard
 
@@ -7684,6 +7704,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"pngjs@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "pngjs@npm:5.0.0"
+  checksum: 04e912cc45fb9601564e2284efaf0c5d20d131d9b596244f8a6789fc6cdb6b18d2975a6bbf7a001858d7e159d5c5c5dd7b11592e97629b7137f7f5cef05904c8
+  languageName: node
+  linkType: hard
+
 "possible-typed-array-names@npm:^1.0.0, possible-typed-array-names@npm:^1.1.0":
   version: 1.1.0
   resolution: "possible-typed-array-names@npm:1.1.0"
@@ -7768,7 +7795,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
+"prop-types@npm:^15.7.2, prop-types@npm:^15.8.0, prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -7790,6 +7817,19 @@ __metadata:
   version: 6.1.0
   resolution: "pure-rand@npm:6.1.0"
   checksum: 8d53bc02bed99eca0b65b505090152ee7e9bd67dd74f8ff32ba1c883b87234067c5bf68d2614759fb217d82594d7a92919e6df80f97885e7b12b42af4bd3316a
+  languageName: node
+  linkType: hard
+
+"qrcode@npm:^1.5.4":
+  version: 1.5.4
+  resolution: "qrcode@npm:1.5.4"
+  dependencies:
+    dijkstrajs: ^1.0.1
+    pngjs: ^5.0.0
+    yargs: ^15.3.1
+  bin:
+    qrcode: bin/qrcode
+  checksum: 0a162822e12c02b0333315462fd4ccad22255002130f86806773be7592aec5ef295efaffa3eb148cbf00e290839c7b610f63b0d62a0c5efc5bc52a68f4189684
   languageName: node
   linkType: hard
 
@@ -7929,6 +7969,21 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: b057dc606c4717bff2447cff3efdeebf5cd7342fa11b3f51cfd420ccce1224d0b4be5999ea63c9856721520f1cbb50fba9372109f49a4c8b14202d7ab4d3b37e
+  languageName: node
+  linkType: hard
+
+"react-native-qrcode-svg@npm:^6.3.15":
+  version: 6.3.49
+  resolution: "react-native-qrcode-svg@npm:6.3.49"
+  dependencies:
+    prop-types: ^15.8.0
+    qrcode: ^1.5.4
+    text-encoding: ^0.7.0
+  peerDependencies:
+    react: "*"
+    react-native: ">=0.63.4"
+    react-native-svg: ">=14.0.0"
+  checksum: ea96aad341a5d3672c992ddc66e0fb923653bd266739281fb530ab64e4ab485c340420c5415c93281d9976e6518911c79d05426c89bc1d4c463ce899433ba521
   languageName: node
   linkType: hard
 
@@ -8091,20 +8146,21 @@ __metadata:
     "@babel/core": ^7.25.2
     "@babel/preset-env": ^7.25.3
     "@babel/runtime": ^7.25.0
-    "@ping-identity/rn-binding": ^1.0.0
-    "@ping-identity/rn-browser": ^1.0.0
-    "@ping-identity/rn-core": ^1.0.0
-    "@ping-identity/rn-device-client": ^1.0.0
-    "@ping-identity/rn-device-id": ^1.0.0
-    "@ping-identity/rn-device-profile": ^1.0.0
-    "@ping-identity/rn-external-idp": ^1.0.0
-    "@ping-identity/rn-fido": ^1.0.0
-    "@ping-identity/rn-journey": ^1.0.0
-    "@ping-identity/rn-logger": ^1.0.0
-    "@ping-identity/rn-oath": ^1.0.0
-    "@ping-identity/rn-push": ^1.0.0
-    "@ping-identity/rn-storage": ^1.0.0
-    "@ping-identity/rn-types": ^1.0.0
+    "@ping-identity/rn-binding": ^1.1.0
+    "@ping-identity/rn-browser": ^1.1.0
+    "@ping-identity/rn-core": ^1.1.0
+    "@ping-identity/rn-device-client": ^1.1.0
+    "@ping-identity/rn-device-id": ^1.1.0
+    "@ping-identity/rn-device-profile": ^1.1.0
+    "@ping-identity/rn-external-idp": ^1.1.0
+    "@ping-identity/rn-fido": ^1.1.0
+    "@ping-identity/rn-journey": ^1.1.0
+    "@ping-identity/rn-logger": ^1.1.0
+    "@ping-identity/rn-oath": ^1.1.0
+    "@ping-identity/rn-oidc": ^1.1.0
+    "@ping-identity/rn-push": ^1.1.0
+    "@ping-identity/rn-storage": ^1.1.0
+    "@ping-identity/rn-types": ^1.1.0
     "@react-native-async-storage/async-storage": ^2.2.0
     "@react-native-community/cli": 19.1.2
     "@react-native-community/cli-platform-android": 19.1.2
@@ -8127,6 +8183,7 @@ __metadata:
     react-native-config: ^1.5.9
     react-native-nitro-image: ^0.14.0
     react-native-nitro-modules: 0.35.6
+    react-native-qrcode-svg: ^6.3.15
     react-native-safe-area-context: 5.6.2
     react-native-screens: 4.18.0
     react-native-svg: ^15.15.5
@@ -9004,6 +9061,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"text-encoding@npm:^0.7.0":
+  version: 0.7.0
+  resolution: "text-encoding@npm:0.7.0"
+  checksum: b6109a843fb1b8748b32e1ecd6df74d370f46c13ac136bcb6ca15db70209bb0b8ec1f296ebb4b0dd9961150e205dcc044b89f8cf7657f6faef78c7569a2a81bc
+  languageName: node
+  linkType: hard
+
 "text-table@npm:^0.2.0":
   version: 0.2.0
   resolution: "text-table@npm:0.2.0"
@@ -9602,7 +9666,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yargs@npm:^15.1.0":
+"yargs@npm:^15.1.0, yargs@npm:^15.3.1":
   version: 15.4.1
   resolution: "yargs@npm:15.4.1"
   dependencies:

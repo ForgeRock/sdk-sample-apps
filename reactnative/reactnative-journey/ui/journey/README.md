@@ -1,15 +1,9 @@
-<!--
-Copyright (c) 2026 Ping Identity Corporation. All rights reserved.
-
-This software may be modified and distributed under the terms
-of the MIT license. See the LICENSE file for details.
--->
-
 # Journey Sample UI Documentation
 
 This folder contains the helper-only Journey sample implementation used by the sample app.
 
 The sample is intentionally UI-owned:
+
 - SDK (`@ping-identity/rn-journey`) provides Journey state/actions and helper APIs.
 - Sample app renders callbacks and controls progression.
 - Device profile is an explicit user action; polling is handled automatically by sample UI logic.
@@ -41,6 +35,7 @@ The sample is intentionally UI-owned:
 Top-level helper-driven Journey UI orchestrator.
 
 Responsibilities:
+
 - Composes focused Journey panel subcomponents.
 - Uses `useJourney(...)` and `useJourneyForm(node)` directly.
 - Owns only screen-level behavior not provided by package helpers
@@ -49,6 +44,7 @@ Responsibilities:
 ### `components/organisms/JourneyContinuePanel.tsx`
 
 Continue-node rendering section:
+
 - callback field rendering
 - integration-required/unsupported notices
 - device profile action
@@ -59,6 +55,7 @@ Continue-node rendering section:
 ### `components/organisms/JourneyStartPanel.tsx`
 
 Journey bootstrap controls:
+
 - journey name input
 - recent journey chips
 - start button
@@ -70,6 +67,7 @@ Displays sanitized callback and progression debug events.
 ### `components/molecules/renderers/JourneyFieldRenderer.tsx`
 
 Routes each normalized callback field to a specialized renderer component:
+
 - `JourneyBooleanField`
 - `JourneyChoiceField`
 - `JourneyKbaField`
@@ -82,6 +80,7 @@ Routes each normalized callback field to a specialized renderer component:
 ### `utils/clientPanel.ts`
 
 Shared Journey panel helper functions:
+
 - session display-name extraction
 - polling wait-time parsing
 

@@ -8,11 +8,7 @@
 import React from 'react';
 import { Switch, Text, View } from 'react-native';
 import { journeyFieldRendererStyles as fieldStyles } from '../../../../../src/styles/journeyStyles';
-import {
-  readBoolean,
-  resolveContentText,
-  resolvePromptText,
-} from './valueReaders';
+import { readBoolean } from './valueReaders';
 import type { JourneyFieldRendererProps } from './types';
 
 /**
@@ -25,11 +21,9 @@ export default function JourneyBooleanField(
   props: JourneyFieldRendererProps,
 ): React.ReactElement {
   const { field, currentValue, setFieldValue } = props;
-  const promptText = resolvePromptText(field.prompt, field.message);
+  const promptText = field.prompt.trim() || field.message?.trim() || '';
   const termsText =
-    field.ref.type === 'TermsAndConditionsCallback'
-      ? resolveContentText((field.raw as Record<string, unknown>).terms)
-      : '';
+    field.type === 'TermsAndConditionsCallback' ? field.terms.trim() : '';
 
   return (
     <View style={fieldStyles.card}>

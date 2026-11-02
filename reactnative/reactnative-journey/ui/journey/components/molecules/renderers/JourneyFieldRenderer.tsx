@@ -28,18 +28,17 @@ function JourneyFieldRenderer(
   props: JourneyFieldRendererProps,
 ): React.ReactElement | null {
   const { field } = props;
-  const isFidoRegistrationCallback =
-    field.ref.type === 'FidoRegistrationCallback';
+  const isFidoRegistrationCallback = field.type === 'FidoRegistrationCallback';
   const isFidoAuthenticationCallback =
-    field.ref.type === 'FidoAuthenticationCallback';
-  const isIdPCallback = IDP_CALLBACK_TYPES.has(field.ref.type as string);
+    field.type === 'FidoAuthenticationCallback';
+  const isIdPCallback = IDP_CALLBACK_TYPES.has(field.type as string);
   const isSelectIdpCallback =
-    (field.ref.type as string) === SELECT_IDP_CALLBACK_TYPE;
-  const isDeviceBindingCallback = field.ref.type === 'DeviceBindingCallback';
+    (field.type as string) === SELECT_IDP_CALLBACK_TYPE;
+  const isDeviceBindingCallback = field.type === 'DeviceBindingCallback';
   const isDeviceSigningVerifierCallback =
-    field.ref.type === 'DeviceSigningVerifierCallback';
+    field.type === 'DeviceSigningVerifierCallback';
 
-  if (field.ref.type === 'HiddenValueCallback') {
+  if (field.type === 'HiddenValueCallback') {
     return null;
   }
 

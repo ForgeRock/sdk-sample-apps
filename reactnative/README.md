@@ -30,6 +30,13 @@ We provide samples that demonstrate both methods.
   - A sample app that demonstrates the functionality of using the Ping SDK for React Native for OIDC (redirect) authentication. Can be used with PingOne Advanced Identity Cloud, PingOne and PingAM.
   (https://developer.pingidentity.com/orchsdks/oidc/index.html)
 
+### Integrate with PingOne DaVinci:
+
+- [**React Native DaVinci - `/reactnative-davinci`**](./reactnative-davinci/)
+
+  - An example React Native project demonstrating PingOne DaVinci orchestration with the Ping SDK for React Native. The sample renders the DaVinci collector matrix natively (forms, polling, QR code, social login, FIDO2 passkeys, device registration/authentication, Protect signals) and includes the OAuth 2.0 device authorization grant.
+  (https://developer.pingidentity.com/orchsdks/davinci/index.html)
+
 ## License
 
 This software may be modified and distributed under the terms of the MIT license. See the LICENSE file for details.

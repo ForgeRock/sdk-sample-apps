@@ -97,6 +97,25 @@ export const journeyFullScreenStyles = StyleSheet.create({
     color: colors.error,
     fontSize: 14,
   },
+  nodeHeader: {
+    color: colors.textDark,
+    fontSize: 17,
+    fontWeight: '700',
+    marginBottom: 4,
+  },
+  nodeDescription: {
+    color: colors.gray,
+    fontSize: 14,
+    lineHeight: 19,
+    marginBottom: 10,
+  },
+  nodeFooter: {
+    color: colors.gray,
+    fontSize: 13,
+    lineHeight: 18,
+    marginTop: 8,
+    fontStyle: 'italic',
+  },
 });
 
 /**
@@ -244,6 +263,25 @@ export const journeyClientPanelStyles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '700',
     marginBottom: 10,
+  },
+  nodeHeader: {
+    color: colors.textDark,
+    fontSize: 17,
+    fontWeight: '700',
+    marginBottom: 4,
+  },
+  nodeDescription: {
+    color: colors.gray,
+    fontSize: 14,
+    lineHeight: 19,
+    marginBottom: 10,
+  },
+  nodeFooter: {
+    color: colors.gray,
+    fontSize: 13,
+    lineHeight: 18,
+    marginTop: 8,
+    fontStyle: 'italic',
   },
   topGap: {
     marginTop: 10,

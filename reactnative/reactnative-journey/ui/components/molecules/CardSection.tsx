@@ -12,6 +12,10 @@ import { cardSectionStyles as styles } from '../../../src/styles/componentStyles
 
 type CardSectionProps = {
   /**
+   * Optional centered leading icon rendered above the title.
+   */
+  icon?: React.ReactNode;
+  /**
    * Optional card title.
    */
   title?: string;
@@ -55,6 +59,7 @@ export default function CardSection(
   props: CardSectionProps,
 ): React.ReactElement {
   const {
+    icon,
     title,
     subtitle,
     badgeText,
@@ -67,6 +72,7 @@ export default function CardSection(
 
   return (
     <View style={[commonStyles.card, style]}>
+      {icon}
       {title || badgeText || headerRight ? (
         <View style={styles.headerRow}>
           {title ? (
