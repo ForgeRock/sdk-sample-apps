@@ -22,7 +22,7 @@ import { extractUserCode } from './utils/extractUserCode';
 type Props = NativeStackScreenProps<RootStackParamList, 'ApproveDevice'>;
 
 /**
- * Mirrors the native Android ApproveDeviceScreen for browser approval.
+ * Approve device screen for browser approval.
  * DaVinci/Journey approval requires a separate configured orchestration flow
  * and is intentionally not synthesized here.
  */
