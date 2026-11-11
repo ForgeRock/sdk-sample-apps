@@ -152,9 +152,11 @@ export default function DeviceAuthorizationScreen({
     actions.cancel();
   };
 
-  const sheetUserCode =
-    extractUserCode(sheetVerificationUri) ?? authorizationResponse?.userCode;
-  const codeGateSatisfied = !sheetUserCode || codeConfirmed;
+  const sheetUrlUserCode = extractUserCode(sheetVerificationUri);
+  // The SDK extracts the approval code from the URL, so only a URL carrying
+  // user_code can approve; the own code below is a display fallback.
+  const sheetUserCode = sheetUrlUserCode ?? authorizationResponse?.userCode;
+  const codeGateSatisfied = sheetUrlUserCode !== undefined && codeConfirmed;
 
   const openVerifySheet = (): void => {
     setSheetVerificationUri(verificationUri);
@@ -350,17 +352,17 @@ export default function DeviceAuthorizationScreen({
                 testID="approve-device-uri"
               />
               {sheetUserCode ? (
-                <>
-                  <UserCodeConfirmationBanner
-                    userCode={sheetUserCode.toUpperCase()}
-                    testID="approve-device-user-code"
-                  />
-                  <LabeledSwitchRow
-                    label="I confirm this code matches the requesting device"
-                    value={codeConfirmed}
-                    onValueChange={() => setCodeConfirmed(value => !value)}
-                  />
-                </>
+                <UserCodeConfirmationBanner
+                  userCode={sheetUserCode.toUpperCase()}
+                  testID="approve-device-user-code"
+                />
+              ) : null}
+              {sheetUrlUserCode ? (
+                <LabeledSwitchRow
+                  label="I confirm this code matches the requesting device"
+                  value={codeConfirmed}
+                  onValueChange={() => setCodeConfirmed(value => !value)}
+                />
               ) : null}
               <View style={{ marginTop: 24, gap: 12 }}>
                 <AsyncActionButton
@@ -369,7 +371,7 @@ export default function DeviceAuthorizationScreen({
                   disabled={!sheetVerificationUri.trim() || !codeGateSatisfied}
                 />
                 <AsyncActionButton
-                  label="Approve in Another App"
+                  label="Approve with rn-browser"
                   onPress={() =>
                     navigation.navigate('ApproveDevice', {
                       verificationUri: sheetVerificationUri,

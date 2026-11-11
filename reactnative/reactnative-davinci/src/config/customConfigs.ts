@@ -92,7 +92,19 @@ export const CONFIG_FIELDS: Record<ConfigKind, readonly FieldDef[]> = {
     SCOPES,
     REDIRECT,
   ],
-  davinci: [NAME, CLIENT_ID, DISCOVERY, SCOPES, REDIRECT, ACR],
+  davinci: [
+    NAME,
+    CLIENT_ID,
+    DISCOVERY,
+    SCOPES,
+    REDIRECT,
+    ACR,
+    {
+      key: 'protectEnvId',
+      label: 'Protect env ID',
+      hint: 'PingOne environment ID for Protect signals',
+    },
+  ],
   web: [NAME, CLIENT_ID, DISCOVERY, SCOPES, REDIRECT, ACR],
   deviceAuth: [
     NAME,
@@ -214,6 +226,12 @@ export function toUnifiedConfig(
       acrValues: blankToUndefined(fields.acrValues),
       openId,
     },
+    protect:
+      kind === 'davinci'
+        ? {
+            envId: blankToUndefined(fields.protectEnvId),
+          }
+        : undefined,
   };
 }
 
@@ -230,7 +248,7 @@ export function toFields(
   name: string,
   config: UnifiedConfig,
 ): ConfigFields {
-  const { journey, oidc } = config;
+  const { journey, oidc, protect } = config;
   return {
     name,
     serverUrl: journey?.serverUrl ?? '',
@@ -241,6 +259,7 @@ export function toFields(
     scopes: oidc?.scopes.join(',') ?? '',
     redirectUri: kind === 'deviceAuth' ? '' : (oidc?.redirectUri ?? ''),
     acrValues: oidc?.acrValues ?? '',
+    protectEnvId: protect?.envId ?? '',
     ...Object.fromEntries(
       ENDPOINT_KEYS.map(key => [key, oidc?.openId?.[key] ?? '']),
     ),

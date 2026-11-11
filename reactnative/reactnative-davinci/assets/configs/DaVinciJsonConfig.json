@@ -4,11 +4,7 @@
   "oidc": {
     "clientId": "my-client-id",
     "discoveryEndpoint": "https://example.com/.well-known/openid-configuration",
-    "scopes": [
-      "openid",
-      "profile",
-      "email"
-    ],
+    "scopes": ["openid", "profile", "email"],
     "redirectUri": "app:/oauth2redirect",
     "signOutRedirectUri": "app:/logout",
     "refreshThreshold": 60,
@@ -23,5 +19,8 @@
       "custom_param": "custom_value",
       "max_age": "3600"
     }
+  },
+  "protect": {
+    "envId": "your-pingone-environment-id"
   }
 }

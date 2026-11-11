@@ -140,8 +140,8 @@ function disposeProfileClients(
  *    device authorization grant. Selections are restored from AsyncStorage on start; the
  *    DaVinci screens show Configuration Required until a DaVinci config is selected.
  *
- * 2. **Global SDK setup** — PingOne Protect is initialized once at startup; its readiness
- *    gates the DaVinci flow route.
+ * 2. **Global SDK setup** — PingOne Protect is initialized once, when the first
+ *    DaVinci configuration is selected; its readiness gates the DaVinci flow route.
  *
  * 3. **Context providers** — `DeviceAuthGrantProvider` and `DaVinciProvider` expose the
  *    active clients to every screen via React context so screens do not import clients
@@ -169,7 +169,7 @@ export default function App() {
   const [protectReady, setProtectReady] = useState(false);
   /** Protect startup failure message — blocks DaVinci flows until retried. */
   const [protectError, setProtectError] = useState<string | null>(null);
-  /** Guard so the mount-only Protect effect never re-runs native initialize. */
+  /** Guard so the once-per-session Protect effect never re-runs native initialize. */
   const protectStartRef = useRef(false);
 
   const customConfigs = useCustomConfigs();
@@ -217,16 +217,22 @@ export default function App() {
     [selectedDeviceAuthProfile],
   );
 
-  // Mount-only Protect startup — PingOne Protect does not guarantee idempotent
-  // client initialization, so profile changes must never re-fire native
-  // `initialize`. Readiness is consumed by the DaVinci gate below.
+  // Once-per-session Protect startup, fired when the first DaVinci profile is
+  // selected so the profile's optional `protect.envId` is available. PingOne
+  // Protect does not guarantee idempotent client initialization, so later
+  // profile changes must never re-fire native `initialize`. Readiness is
+  // consumed by the DaVinci gate below.
   useEffect(() => {
-    if (protectStartRef.current) {
+    if (protectStartRef.current || !selectedDaVinciProfile) {
       return;
     }
     protectStartRef.current = true;
     const isMounted = true;
-    void startProtect({ logger: logger({ level: 'debug' }) }).then(
+    const envId = selectedDaVinciProfile.unifiedConfig?.protect?.envId;
+    void startProtect({
+      envId,
+      logger: logger({ level: 'debug' }),
+    }).then(
       () => {
         if (isMounted) setProtectReady(true);
       },
@@ -243,7 +249,7 @@ export default function App() {
         }
       },
     );
-  }, []);
+  }, [selectedDaVinciProfile]);
 
   useEffect(() => {
     const textComponent = Text as unknown as ComponentWithDefaultStyle;
@@ -267,7 +273,7 @@ export default function App() {
   }, []);
 
   // Protect startup gates only the DaVinci flow — Auth Grant demos are
-  // unaffected. Failure keeps the gate closed (see the mount-only effect).
+  // unaffected. Failure keeps the gate closed (see the startup effect above).
   const davinciGate: React.ReactNode = protectReady ? null : (
     <View style={commonStyles.container}>
       <Text style={commonStyles.textError}>
@@ -275,6 +281,13 @@ export default function App() {
           ? `Protect failed to initialize: ${protectError}`
           : 'Initializing Protect...'}
       </Text>
+      {protectError ? (
+        <Text style={commonStyles.userProfileSubText}>
+          If your tenant requires a Protect environment ID, add protect.envId to
+          your DaVinci JSON config or set Protect env ID in the config editor,
+          then restart the app.
+        </Text>
+      ) : null}
     </View>
   );
 

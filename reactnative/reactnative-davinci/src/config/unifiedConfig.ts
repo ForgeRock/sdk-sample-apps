@@ -35,6 +35,15 @@ export type UnifiedOidcConfig = OidcCoreConfig & {
 };
 
 /**
+ * Protect section of the unified configuration, passed to Protect
+ * initialization when a DaVinci configuration is first selected.
+ */
+export type UnifiedProtectConfig = {
+  /** PingOne environment ID for the Protect SDK. */
+  envId?: string;
+};
+
+/**
  * Parsed unified SDK configuration.
  */
 export type UnifiedConfig = {
@@ -42,6 +51,7 @@ export type UnifiedConfig = {
   log?: UnifiedLogLevel;
   journey?: UnifiedJourneyConfig;
   oidc?: UnifiedOidcConfig;
+  protect?: UnifiedProtectConfig;
 };
 
 /**
@@ -274,6 +284,16 @@ function parseJourney(root: JsonObject): UnifiedJourneyConfig | undefined {
   };
 }
 
+function parseProtect(root: JsonObject): UnifiedProtectConfig | undefined {
+  const protect = optionalObject(root, 'protect', '');
+  if (!protect) {
+    return undefined;
+  }
+  return {
+    envId: optionalString(protect, 'envId', 'protect'),
+  };
+}
+
 function parseLog(root: JsonObject): UnifiedLogLevel | undefined {
   const value = optionalString(root, 'log', '');
   if (value === undefined) {
@@ -310,6 +330,7 @@ export function parseUnifiedConfig(json: unknown): UnifiedConfigParseResult {
       log: parseLog(json),
       journey: parseJourney(json),
       oidc: parseOidc(json, warnings),
+      protect: parseProtect(json),
     };
     if (!config.journey && !config.oidc) {
       throw new ConfigFieldError('oidc', 'is required when journey is absent');

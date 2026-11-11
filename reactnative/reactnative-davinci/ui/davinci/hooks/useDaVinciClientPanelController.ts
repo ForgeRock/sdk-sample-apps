@@ -262,6 +262,10 @@ export function useDaVinciClientPanelController(
       throw new Error('[DaVinci] collectProtect: no DaVinci client in context');
     }
     try {
+      // collectProtect has no collector selector and the native bridges always
+      // resolve the first PROTECT collector, so each iteration below collects
+      // the same collector. Nodes normally carry a single PROTECT collector,
+      // so this is fine in practice.
       for (let i = 0; i < protectFields.length; i++) {
         await collectProtect(davinciClient);
       }

@@ -16,7 +16,7 @@ This repository contains an example React Native project making full use of the 
 - Node.js >= 18
 - React Native CLI environment set up for [iOS](https://reactnative.dev/docs/set-up-your-environment?platform=ios) and [Android](https://reactnative.dev/docs/set-up-your-environment?platform=android)
 - Xcode: Latest version recommended (iOS 16+)
-- Android Studio: Latest version recommended with Java 17 (Android API level 29+)
+- Android Studio: Latest version recommended with Java 21 (Android API level 29+)
 - Ruby >= 3.3.6 + Bundler (iOS only)
 - Ping AIC, PingAM, or PingOne server
 

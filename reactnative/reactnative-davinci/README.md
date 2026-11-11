@@ -50,6 +50,7 @@ This repository contains an example React Native project demonstrating PingOne D
    | `oidc.par`                       | No       | Enable Pushed Authorization Requests; enable only when the discovery document advertises a PAR endpoint                                                                                                                               |
    | `oidc.acrValues`                 | No       | Authentication context class reference (your DaVinci flow's ACR value)                                                                                                                                                                |
    | `oidc.additionalParameters`, ... | No       | Other optional OIDC parameters; unknown keys are ignored                                                                                                                                                                              |
+   | `protect.envId`                  | No       | PingOne environment ID for PingOne Protect signals; required only when your tenant's Protect initialization rejects a missing environment ID                                                                                          |
 
    See `assets/configs/*.json` for worked examples. A file that fails validation is skipped at startup with a logged warning naming the offending field.
 
@@ -107,7 +108,7 @@ This repository contains an example React Native project demonstrating PingOne D
    yarn android
    ```
 
-   On first launch the app initializes PingOne Protect. If initialization fails, the DaVinci flow entry stays disabled until Protect succeeds, since Protect signals are part of the flow. The device authorization grant screens do not require Protect.
+   On first launch after a DaVinci configuration is selected, the app initializes PingOne Protect, passing the optional `protect.envId` from the selected config. If initialization fails, the DaVinci flow entry stays disabled until Protect succeeds, since Protect signals are part of the flow; the failure message explains how to supply `protect.envId` when your tenant requires it. The device authorization grant screens do not require Protect.
 
 ## Supported DaVinci Collectors
 
