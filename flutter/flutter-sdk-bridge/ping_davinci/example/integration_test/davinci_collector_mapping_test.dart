@@ -110,7 +110,7 @@ void main() {
     );
     expect(agreement.title, 'Terms of Service Agreement');
     expect(agreement.titleEnabled, isTrue);
-    expect(agreement.agreementId, '1c3de4cc-74c0-4a42-b484-4047b10122ce');
+    expect(agreement.agreementId, '00000000-0000-4000-8000-000000000009');
     expect(agreement.content, startsWith('This is example agreement text'));
     final image = collectorWithKey<ImageCollector>(form, 'image');
     expect(image.imageDescription, 'Image Collector Test');

@@ -39,19 +39,19 @@
   "enableMagicLinkAuthentication": true,
   "agreement": "useAgreementId",
   "nodeTitle": "Automation - QRCode",
-  "envId": "300c4f2a-39d4-4ba9-a18a-f6de246006f4",
-  "formId": "59e229e9-6c8f-440d-b9ce-0cefb44f168c",
+  "envId": "00000000-0000-4000-8000-000000000001",
+  "formId": "00000000-0000-4000-8000-00000000001b",
   "isResponseCompatibleWithMobileAndWebSdks": true,
   "id": "4yij5qnzl5",
-  "connectionId": "eb6a94a33f2f479eff234e8fa5049459",
+  "connectionId": "00000000000000000000000000000006",
   "capabilityName": "showForm",
   "interactionId": "scrubbed",
   "_links": {
     "next": {
-      "href": "{{baseUrl}}/300c4f2a-39d4-4ba9-a18a-f6de246006f4/davinci/connections/eb6a94a33f2f479eff234e8fa5049459/capabilities/showForm"
+      "href": "{{baseUrl}}/00000000-0000-4000-8000-000000000001/davinci/connections/00000000000000000000000000000006/capabilities/showForm"
     },
     "self": {
-      "href": "{{baseUrl}}/300c4f2a-39d4-4ba9-a18a-f6de246006f4/davinci/connections/867ed4363b2bc21c860085ad2baa817d/capabilities/customHTMLTemplate"
+      "href": "{{baseUrl}}/00000000-0000-4000-8000-000000000001/davinci/connections/00000000000000000000000000000003/capabilities/customHTMLTemplate"
     }
   },
   "skProxyApiEnvironmentId": "deprecated",

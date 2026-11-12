@@ -189,7 +189,7 @@ final class DaVinciCollectorMapperTests: XCTestCase {
         XCTAssertEqual(agreement.title, "Terms of Service Agreement")
         XCTAssertEqual(agreement.titleEnabled, true)
         XCTAssertEqual(agreement.enabled, true)
-        XCTAssertEqual(agreement.agreementId, "1c3de4cc-74c0-4a42-b484-4047b10122ce")
+        XCTAssertEqual(agreement.agreementId, "00000000-0000-4000-8000-000000000009")
         XCTAssertEqual(agreement.useDynamicAgreement, false)
         XCTAssertNil(agreement.value)
     }

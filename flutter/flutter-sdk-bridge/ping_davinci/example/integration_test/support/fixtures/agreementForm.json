@@ -14,7 +14,7 @@
           "titleEnabled": true,
           "title": "Terms of Service Agreement",
           "agreement": {
-            "id": "1c3de4cc-74c0-4a42-b484-4047b10122ce",
+            "id": "00000000-0000-4000-8000-000000000009",
             "useDynamicAgreement": false
           },
           "enabled": true
@@ -54,21 +54,21 @@
   },
   "routeClientErrorsToFalseBranch": false,
   "enableMagicLinkAuthentication": true,
-  "agreement": "1c3de4cc-74c0-4a42-b484-4047b10122ce",
+  "agreement": "00000000-0000-4000-8000-000000000009",
   "nodeTitle": "Automation - Agreement Tests",
-  "envId": "300c4f2a-39d4-4ba9-a18a-f6de246006f4",
-  "formId": "23a2f3e5-22f8-4851-98d8-42dfbd923249",
+  "envId": "00000000-0000-4000-8000-000000000001",
+  "formId": "00000000-0000-4000-8000-00000000000a",
   "isResponseCompatibleWithMobileAndWebSdks": true,
   "id": "n2201lh05w",
-  "connectionId": "eb6a94a33f2f479eff234e8fa5049459",
+  "connectionId": "00000000000000000000000000000006",
   "capabilityName": "customForm",
   "interactionId": "scrubbed",
   "_links": {
     "next": {
-      "href": "{{baseUrl}}/300c4f2a-39d4-4ba9-a18a-f6de246006f4/davinci/connections/eb6a94a33f2f479eff234e8fa5049459/capabilities/customForm"
+      "href": "{{baseUrl}}/00000000-0000-4000-8000-000000000001/davinci/connections/00000000000000000000000000000006/capabilities/customForm"
     },
     "self": {
-      "href": "{{baseUrl}}/300c4f2a-39d4-4ba9-a18a-f6de246006f4/davinci/connections/867ed4363b2bc21c860085ad2baa817d/capabilities/customHTMLTemplate"
+      "href": "{{baseUrl}}/00000000-0000-4000-8000-000000000001/davinci/connections/00000000000000000000000000000003/capabilities/customHTMLTemplate"
     }
   },
   "skProxyApiEnvironmentId": "deprecated",

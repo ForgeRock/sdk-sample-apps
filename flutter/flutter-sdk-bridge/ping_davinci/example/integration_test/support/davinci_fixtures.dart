@@ -105,16 +105,17 @@ abstract final class DaVinciFixtures {
   /// A completed sign-on: `authorizeResponse.code`, which the SDK turns into a `SuccessNode` and
   /// exchanges at the token endpoint. Not captured — an anonymous capture can't sign in — but
   /// copied from the response ping-android-sdk's own `DaVinciTest` records for the same step
-  /// (`DaVinciTest.Response.kt`, `customHTMLTemplate()`), ids replaced.
+  /// (`DaVinciTest.Response.kt`, `customHTMLTemplate()`), with the captured fixtures' synthetic
+  /// environment id.
   static Map<String, Object?> signOnSuccess() => <String, Object?>{
     'interactionId': 'scrubbed',
-    'companyId': '300c4f2a-39d4-4ba9-a18a-f6de246006f4',
+    'companyId': '00000000-0000-4000-8000-000000000001',
     'connectionId': '26146c8065741406afb0899484e361a7',
     'connectorId': 'pingOneAuthenticationConnector',
     'id': '5dtrjnrwox',
     'capabilityName': 'returnSuccessResponseRedirect',
     'environment': <String, Object?>{
-      'id': '300c4f2a-39d4-4ba9-a18a-f6de246006f4',
+      'id': '00000000-0000-4000-8000-000000000001',
     },
     'session': <String, Object?>{'id': 'mock-session'},
     'status': 'COMPLETED',

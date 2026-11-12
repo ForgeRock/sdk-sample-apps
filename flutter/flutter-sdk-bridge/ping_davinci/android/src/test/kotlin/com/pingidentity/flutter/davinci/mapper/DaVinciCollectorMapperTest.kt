@@ -193,7 +193,7 @@ class DaVinciCollectorMapperTest {
         assertEquals("Terms of Service Agreement", agreement.title)
         assertEquals(true, agreement.titleEnabled)
         assertEquals(true, agreement.enabled)
-        assertEquals("1c3de4cc-74c0-4a42-b484-4047b10122ce", agreement.agreementId)
+        assertEquals("00000000-0000-4000-8000-000000000009", agreement.agreementId)
         assertEquals(false, agreement.useDynamicAgreement)
         assertNull(agreement.value)
     }

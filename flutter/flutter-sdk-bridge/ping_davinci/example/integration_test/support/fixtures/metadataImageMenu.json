@@ -3,9 +3,9 @@
   "isResponseCompatibleWithMobileAndWebSdks": true,
   "id": "7qoajcn34f",
   "interactionId": "scrubbed",
-  "companyId": "300c4f2a-39d4-4ba9-a18a-f6de246006f4",
-  "flowId": "b3e40a32d57a9077666d2d89bc5d6f2e",
-  "connectionId": "867ed4363b2bc21c860085ad2baa817d",
+  "companyId": "00000000-0000-4000-8000-000000000001",
+  "flowId": "00000000000000000000000000000017",
+  "connectionId": "00000000000000000000000000000003",
   "capabilityName": "customHTMLTemplate",
   "form": {
     "name": "Select Test Form",
@@ -35,10 +35,10 @@
   },
   "_links": {
     "next": {
-      "href": "{{baseUrl}}/300c4f2a-39d4-4ba9-a18a-f6de246006f4/davinci/connections/867ed4363b2bc21c860085ad2baa817d/capabilities/customHTMLTemplate"
+      "href": "{{baseUrl}}/00000000-0000-4000-8000-000000000001/davinci/connections/00000000000000000000000000000003/capabilities/customHTMLTemplate"
     },
     "self": {
-      "href": "{{baseUrl}}/300c4f2a-39d4-4ba9-a18a-f6de246006f4/davinci/policy/14f7988fc922112d599a14c1016a6ec6/start"
+      "href": "{{baseUrl}}/00000000-0000-4000-8000-000000000001/davinci/policy/00000000000000000000000000000018/start"
     }
   },
   "skProxyApiEnvironmentId": "deprecated",

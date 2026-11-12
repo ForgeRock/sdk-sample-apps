@@ -1,7 +1,7 @@
 {
   "id": "k6n6yl18pu",
   "interactionId": "scrubbed",
-  "companyId": "300c4f2a-39d4-4ba9-a18a-f6de246006f4",
+  "companyId": "00000000-0000-4000-8000-000000000001",
   "capabilityName": "exchangeCustomMetadata",
   "isResponseCompatibleWithMobileAndWebSdks": true,
   "form": {
@@ -19,10 +19,10 @@
   },
   "_links": {
     "next": {
-      "href": "{{baseUrl}}/300c4f2a-39d4-4ba9-a18a-f6de246006f4/davinci/connections/16ee9ae9df33974336f8438f200599d6/capabilities/exchangeCustomMetadata"
+      "href": "{{baseUrl}}/00000000-0000-4000-8000-000000000001/davinci/connections/00000000000000000000000000000019/capabilities/exchangeCustomMetadata"
     },
     "self": {
-      "href": "{{baseUrl}}/300c4f2a-39d4-4ba9-a18a-f6de246006f4/davinci/connections/867ed4363b2bc21c860085ad2baa817d/capabilities/customHTMLTemplate"
+      "href": "{{baseUrl}}/00000000-0000-4000-8000-000000000001/davinci/connections/00000000000000000000000000000003/capabilities/customHTMLTemplate"
     }
   },
   "skProxyApiEnvironmentId": "deprecated",
