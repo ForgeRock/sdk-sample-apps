@@ -5,7 +5,7 @@
  * of the MIT license. See the LICENSE file for details.
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
@@ -24,6 +24,7 @@ type Props = NativeStackScreenProps<RootStackParamList, 'Configuration'> & {
   onSelectOidcProfile: (profileKey: string) => void;
   onAddCustomConfig: (kind: ConfigKind, fields: ConfigFields) => void;
   onDeleteCustomConfig: (id: string) => void;
+  onTransitionSettled: () => void;
 };
 
 /**
@@ -40,7 +41,18 @@ export default function ConfigurationScreen(props: Props): React.ReactElement {
     onSelectOidcProfile,
     onAddCustomConfig,
     onDeleteCustomConfig,
+    onTransitionSettled,
   } = props;
+
+  useEffect(
+    () =>
+      navigation.addListener('transitionEnd', event => {
+        if (!event.data.closing) {
+          onTransitionSettled();
+        }
+      }),
+    [navigation, onTransitionSettled],
+  );
 
   const actions = useConfigActions(
     params => navigation.navigate('ConfigEditor', params),

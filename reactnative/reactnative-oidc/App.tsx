@@ -27,6 +27,7 @@ import {
   type SampleAppClientProfile,
 } from './src/clients';
 import { useCustomConfigs } from './src/config/useCustomConfigs';
+import { useDeferredAction } from './src/config/useDeferredAction';
 import type { ConfigEditorParams } from './src/config/useConfigActions';
 import ConfigEditorScreen from './ui/ConfigEditorScreen';
 import { useStoredSelection } from './src/config/useStoredSelection';
@@ -159,6 +160,7 @@ export default function App() {
   } = useStoredSelection('selectedOidcProfileKey');
 
   const customConfigs = useCustomConfigs();
+  const deferredSave = useDeferredAction();
   const oidcProfiles = useMemo(
     () => [
       ...bundledProfiles,
@@ -279,6 +281,7 @@ export default function App() {
                 onSelectOidcProfile={setSelectedOidcProfileKey}
                 onAddCustomConfig={customConfigs.add}
                 onDeleteCustomConfig={customConfigs.remove}
+                onTransitionSettled={deferredSave.flush}
               />
             )}
           </Stack.Screen>
@@ -290,6 +293,7 @@ export default function App() {
               <ConfigEditorScreen
                 {...props}
                 onAdd={customConfigs.add}
+                onSchedule={deferredSave.schedule}
                 onUpdate={customConfigs.update}
               />
             )}

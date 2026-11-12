@@ -29,6 +29,7 @@ import { commonStyles } from '../src/styles/common';
 type Props = NativeStackScreenProps<RootStackParamList, 'ConfigEditor'> & {
   onAdd: (kind: ConfigKind, fields: ConfigFields) => void;
   onUpdate: (id: string, fields: ConfigFields) => void;
+  onSchedule: (action: () => void) => void;
 };
 
 /**
@@ -38,7 +39,7 @@ type Props = NativeStackScreenProps<RootStackParamList, 'ConfigEditor'> & {
  * @returns Config editor screen.
  */
 export default function ConfigEditorScreen(props: Props): React.ReactElement {
-  const { navigation, route, onAdd, onUpdate } = props;
+  const { navigation, route, onAdd, onUpdate, onSchedule } = props;
   const { kind, initialFields, editingId } = route.params;
   const [fields, setFields] = useState<ConfigFields>(initialFields);
   const [error, setError] = useState<string | null>(null);
@@ -49,16 +50,12 @@ export default function ConfigEditorScreen(props: Props): React.ReactElement {
       setError(message);
       return;
     }
+    // Saving can remount the providers and the navigation tree below them, so
+    // it runs once the pop has finished animating.
+    onSchedule(() =>
+      editingId ? onUpdate(editingId, fields) : onAdd(kind, fields),
+    );
     navigation.goBack();
-    // Save after the pop is recorded: saving can rebuild the providers, which
-    // restores the last recorded navigation state.
-    setTimeout(() => {
-      if (editingId) {
-        onUpdate(editingId, fields);
-      } else {
-        onAdd(kind, fields);
-      }
-    }, 0);
   };
 
   return (

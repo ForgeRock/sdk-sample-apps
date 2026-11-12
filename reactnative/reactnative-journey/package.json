@@ -5,6 +5,9 @@
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
+    "ios:build": "xcodebuild -workspace ios/PingSampleApp.xcworkspace -scheme PingSampleApp -configuration Debug -destination 'generic/platform=iOS Simulator' -derivedDataPath ios/build build",
+    "ios:install": "xcrun simctl install booted ios/build/Build/Products/Debug-iphonesimulator/PingSampleApp.app && xcrun simctl launch booted com.pingidentity.rnsampleapp",
+    "ios:build-run": "yarn ios:build && yarn ios:install",
     "lint": "ESLINT_USE_FLAT_CONFIG=false eslint \"src/**/*.{js,jsx,ts,tsx}\" \"ui/**/*.{js,jsx,ts,tsx}\" \"__tests__/**/*.{js,jsx,ts,tsx}\" \"*.{js,jsx,ts,tsx}\"",
     "start": "react-native start",
     "clean-install": "cd android && rm -rf .gradle app/build && cd .. && cd ios && rm -rf Pods build && cd .. && rm -rf build && bundle config set path 'vendor/bundle' && bundle install && bundle exec pod install --repo-update --project-directory=ios",

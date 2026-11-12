@@ -101,6 +101,32 @@ This repository contains an example React Native project making full use of the 
    yarn android
    ```
 
+   > [!IMPORTANT]
+   > **Xcode 27 note**: `yarn ios` fails on Xcode 27 because React Native CLI 19.x opens `Simulator.app`, which Xcode 27 replaced with `DeviceHub.app`. The CLI fix ships in `@react-native-community/cli` 21, which is not paired with React Native 0.80. Xcode 27 also does not match concrete simulators against this project's scheme, so build for the generic simulator destination and install with `simctl`. Keep Metro running with `yarn start` in another terminal, then pick and boot a simulator:
+   >
+   > 1. List the available iPhone simulators. The device UDID is the value in parentheses, and running devices are marked `Booted`:
+   >
+   >    ```sh
+   >    xcrun simctl list devices available | grep iPhone
+   >    ```
+   >
+   > 2. Choose an iPhone running iOS 16.6 or later. The app's deployment target is 16.6, so simulators on iOS 16.0 are not compatible. Pick the newest iOS version you have installed unless you need to test an older one.
+   > 3. Boot it and make it the only booted simulator, because `ios:install` targets the `booted` device and is ambiguous when several are running:
+   >
+   >    ```sh
+   >    xcrun simctl list devices booted
+   >    xcrun simctl shutdown <other-device-udid>
+   >    xcrun simctl boot <device-udid>
+   >    ```
+   >
+   > 4. Build, install, and launch:
+   >
+   >    ```sh
+   >    yarn ios:build-run
+   >    ```
+   >
+   > `ios:manual` runs `ios:build` (`xcodebuild`) followed by `ios:install` (`xcrun simctl install` and `launch` on the booted simulator).
+
 ## Features
 
 This sample demonstrates:

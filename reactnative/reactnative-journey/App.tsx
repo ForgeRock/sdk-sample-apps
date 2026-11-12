@@ -46,6 +46,7 @@ import {
 } from './src/clients';
 import { useStoredSelection } from './src/config/useStoredSelection';
 import { useCustomConfigs } from './src/config/useCustomConfigs';
+import { useDeferredAction } from './src/config/useDeferredAction';
 import ConfigEditorScreen from './ui/ConfigEditorScreen';
 import type { ConfigEditorParams } from './src/config/useConfigActions';
 import { configureBrowser } from '@ping-identity/rn-browser';
@@ -202,6 +203,7 @@ export default function App() {
   } = useStoredSelection('selectedDeviceAuthProfileKey');
 
   const customConfigs = useCustomConfigs();
+  const deferredSave = useDeferredAction();
   const sampleAppClientProfiles = useMemo(
     () => [
       ...bundledProfiles,
@@ -408,6 +410,7 @@ export default function App() {
                     onSelectDeviceAuthProfile={setSelectedDeviceAuthProfileKey}
                     onAddCustomConfig={customConfigs.add}
                     onDeleteCustomConfig={customConfigs.remove}
+                    onTransitionSettled={deferredSave.flush}
                   />
                 )}
               </Stack.Screen>
@@ -419,6 +422,7 @@ export default function App() {
                   <ConfigEditorScreen
                     {...props}
                     onAdd={customConfigs.add}
+                    onSchedule={deferredSave.schedule}
                     onUpdate={customConfigs.update}
                   />
                 )}
