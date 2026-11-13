@@ -141,7 +141,10 @@ struct RarLoginView: View {
             Text("authorization_details (JSON array)")
                 .pingSectionHeader()
 
-            TextEditor(text: $viewModel.jsonText)
+            TextEditor(text: Binding(
+                get: { viewModel.jsonText },
+                set: { viewModel.updateJsonText($0) }
+            ))
                 .font(PingTheme.Typography.monospacedCaption)
                 .frame(minHeight: 180)
                 .scrollContentBackground(.hidden)
@@ -160,9 +163,6 @@ struct RarLoginView: View {
                     .font(PingTheme.Typography.supporting)
                     .foregroundStyle(PingTheme.Color.statusSuccess)
             }
-        }
-        .onChange(of: viewModel.jsonText) { _, _ in
-            _ = viewModel.validate()
         }
     }
 

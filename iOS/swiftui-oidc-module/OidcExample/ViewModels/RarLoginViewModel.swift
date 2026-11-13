@@ -65,7 +65,13 @@ class RarLoginViewModel: ObservableObject {
     /// - Parameter preset: The preset the user picked.
     func selectPreset(_ preset: RarPreset) {
         self.preset = preset
-        jsonText = preset.json
+        updateJsonText(preset.json)
+    }
+
+    /// Replaces the editor text and revalidates it.
+    /// - Parameter text: The new editor text.
+    func updateJsonText(_ text: String) {
+        jsonText = text
         _ = validate()
     }
 
