@@ -26,7 +26,22 @@ import express from "express";
 import { SignJWT } from "jose";
 import { loadSigningKeys, getJwkSet, toJoseKey } from "./keys.js";
 
-const PORT = process.env.PORT || 8081;
+// The port comes from --port (or -p) on the command line, then the PORT
+// environment variable, then 8081. The flag form works in every shell:
+// npm start -- --port 8082
+function portFromArgs(args) {
+  const index = args.indexOf("--port") >= 0 ? args.indexOf("--port") : args.indexOf("-p");
+  if (index >= 0) {
+    const value = Number.parseInt(args[index + 1], 10);
+    if (Number.isInteger(value) && value > 0 && value < 65536) {
+      return value;
+    }
+    console.error(`Invalid port "${args[index + 1]}". Using the default instead.`);
+  }
+  return undefined;
+}
+
+const PORT = portFromArgs(process.argv) ?? Number.parseInt(process.env.PORT, 10) ?? 8081;
 const HOST = "0.0.0.0";
 
 // The authorization detail types this RCS supports. Requests for other types

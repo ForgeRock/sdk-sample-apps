@@ -85,7 +85,7 @@ npm install
 npm start
 ```
 
-The app listens on port `8081` on all interfaces. On startup it prints the public JWK set, which you can paste into the agent configuration:
+The app listens on port `8081` on all interfaces unless you pass another port with `--port` (or `-p`). On startup it prints the public JWK set, which you can paste into the agent configuration:
 
 ```text
 --- Paste into the RCS agent's Json Web Key field: ---
@@ -96,8 +96,8 @@ RCS demo listening on http://0.0.0.0:8081
 
 | Setting | Description |
 |---|---|
-| `PORT` | Port to listen on. Defaults to `8081` (for example `PORT=8082 npm start` in a macOS or Linux shell) |
-| `npm run debug` (or `RCS_DEBUG=1`) | Logs every request, the decision, the granted details, and the signed response JWT |
+| `--port <n>` (or `-p`) | Port to listen on. Highest precedence: `npm start -- --port 8082`. Without it, the `PORT` environment variable, then `8081` |
+| `npm run debug` (or `RCS_DEBUG=1`) | Logs every request, the decision, the granted details, and the signed response JWT. Combine with a port: `npm run debug -- --port 8082` |
 
 ### Signing keys
 
