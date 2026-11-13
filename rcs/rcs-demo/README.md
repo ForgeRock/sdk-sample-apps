@@ -117,9 +117,12 @@ For a **valid, trusted** certificate, create the `.certs/` files with [mkcert](h
 ```sh
 brew install mkcert
 mkcert -install
+npm start                       # creates .certs/ if it does not exist, then stops on plain HTTP; Ctrl-C
 mkcert -cert-file .certs/cert.pem -key-file .certs/key.pem localhost 127.0.0.1 <your-local-ip>
-npm start
+npm start                       # now serves HTTPS automatically
 ```
+
+The `.certs/` directory is created by the app on startup, so mkcert has somewhere to write; run the app once (or `mkdir -p .certs`) if you generate the certificate before ever starting the server.
 
 `<your-local-ip>` is the address other devices use to reach your Mac; find it with `ipconfig getifaddr en0` (or `en1`). **Every address or hostname in the agent URLs must be in this list** — a URL whose host is not covered by the certificate fails TLS validation in the browser and in the iOS sample, even though the server is up. `localhost` is already covered above.
 

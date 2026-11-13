@@ -96,6 +96,11 @@ function readCertificate(args) {
   const certDir = path.join(path.dirname(fileURLToPath(import.meta.url)), ".certs");
   const defaultCert = path.join(certDir, "cert.pem");
   const defaultKey = path.join(certDir, "key.pem");
+  if (!fs.existsSync(certDir)) {
+    // mkcert and openssl refuse to create the directory themselves, so make
+    // sure it exists before the certificate is generated into it.
+    fs.mkdirSync(certDir, { recursive: true });
+  }
   if (fs.existsSync(defaultCert) && fs.existsSync(defaultKey)) {
     try {
       return { key: fs.readFileSync(defaultKey), cert: fs.readFileSync(defaultCert) };
