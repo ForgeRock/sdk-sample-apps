@@ -36,6 +36,13 @@ struct ContentView: View {
                                      subtitle: "Details about the authenticated user", destination: "User"),
                         ])
 
+                        sectionCard("Rich Authorization Requests", items: [
+                            MenuItem(icon: "checkmark.shield", title: "Launch RAR Login",
+                                     subtitle: "Start a login with authorization_details", destination: "RarLogin"),
+                            MenuItem(icon: "checkmark.shield.fill", title: "RAR Access Token",
+                                     subtitle: "Inspect the RAR token and its granted details", destination: "RarToken"),
+                        ])
+
                         sectionCard("Session Management", items: [
                             MenuItem(icon: "rectangle.portrait.and.arrow.right", title: "Logout",
                                      subtitle: "Sign out of the current session", destination: "Logout"),
@@ -55,6 +62,10 @@ struct ContentView: View {
                     AccessTokenView()
                 case "User":
                     UserInfoView()
+                case "RarLogin":
+                    RarLoginView(path: $path)
+                case "RarToken":
+                    AccessTokenView(source: .rar)
                 case "Logout":
                     LogoutView(path: $path)
                 default:

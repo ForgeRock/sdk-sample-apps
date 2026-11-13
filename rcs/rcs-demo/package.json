@@ -1,0 +1,21 @@
+{
+  "name": "rcs-demo",
+  "version": "1.0.0",
+  "description": "Demonstration Remote Consent Service (RCS) for Rich Authorization Requests (RFC 9396) with PingAM and PingOne Advanced Identity Cloud. For testing only.",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "debug": "node server.js --debug",
+    "ssl": "node server.js --ssl",
+    "ssl-debug": "node server.js --ssl --debug"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "jose": "^5.9.6"
+  },
+  "license": "MIT"
+}
