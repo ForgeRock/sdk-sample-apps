@@ -149,7 +149,7 @@ npm start                       # now serves HTTPS automatically
 
 `<your-local-ip>` is the address other devices use to reach your Mac; find it with `ipconfig getifaddr en0` (or `en1`). **Every address or hostname in the agent URLs must be in this list** — a URL whose host is not covered by the certificate fails TLS validation in the browser and in the iOS sample, even though the server is up. `localhost` is already covered above.
 
-With the certificate in place, the endpoints all use the same host. For example, with a Mac at `192.168.2.104`:
+With the certificate in place, the endpoints all use the same host. For example, with a Mac at `192.168.2.104` (replace with your own `ipconfig getifaddr en0` result):
 
 | Endpoint | URL |
 |---|---|
