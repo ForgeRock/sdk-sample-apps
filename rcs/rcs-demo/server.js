@@ -26,22 +26,37 @@ import express from "express";
 import { SignJWT } from "jose";
 import { loadSigningKeys, getJwkSet, toJoseKey } from "./keys.js";
 
-// The port comes from --port (or -p) on the command line, then the PORT
-// environment variable, then 8081. The flag form works in every shell:
+// The port comes from --port (or -p) with a value, then from the PORT
+// environment variable, then 8081. A bare numeric argument is also accepted
+// as the port, so "npm run debug --port 8082" — where npm drops the flag
+// itself and passes only "8082" through — still does what was meant:
 // npm start -- --port 8082
-function portFromArgs(args) {
-  const index = args.indexOf("--port") >= 0 ? args.indexOf("--port") : args.indexOf("-p");
-  if (index >= 0) {
-    const value = Number.parseInt(args[index + 1], 10);
-    if (Number.isInteger(value) && value > 0 && value < 65536) {
-      return value;
+function parsePort(value) {
+  const port = Number.parseInt(value, 10);
+  if (Number.isInteger(port) && port > 0 && port < 65536) {
+    return port;
+  }
+  console.error(`Invalid port "${value}". Using the default instead.`);
+  return undefined;
+}
+
+function portFrom(args) {
+  const index = args.findIndex((arg) => arg === "--port" || arg === "-p");
+  if (index >= 0 && index + 1 < args.length) {
+    const port = parsePort(args[index + 1]);
+    if (port !== undefined) {
+      return port;
     }
-    console.error(`Invalid port "${args[index + 1]}". Using the default instead.`);
+  }
+  const barePort = args.map(parsePort).find((port) => port !== undefined);
+  if (barePort !== undefined) {
+    return barePort;
   }
   return undefined;
 }
 
-const PORT = portFromArgs(process.argv) ?? Number.parseInt(process.env.PORT, 10) ?? 8081;
+const envPort = process.env.PORT === undefined || process.env.PORT === "" ? undefined : parsePort(process.env.PORT);
+const PORT = portFrom(process.argv.slice(2)) ?? envPort ?? 8081;
 const HOST = "0.0.0.0";
 
 // The authorization detail types this RCS supports. Requests for other types
