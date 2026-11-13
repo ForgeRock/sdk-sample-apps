@@ -162,7 +162,7 @@ To see the other outcomes:
 **Solution**: The authorization server did not treat the request as a Rich Authorization Request. Check the OAuth 2.0 provider and client settings in [Configure the Authorization Server](#configure-the-authorization-server).
 
 **Issue**: Port `8081` is already in use.  
-**Solution**: Start the app on another port with `PORT=8082 npm start` and update the agent URLs to match.
+**Solution**: Start the app on another port with `npm start -- --port 8082` and update the agent URLs to match.
 
 ## Project Structure
 
