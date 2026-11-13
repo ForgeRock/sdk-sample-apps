@@ -8,7 +8,7 @@ A small Node.js server that acts as a **Remote Consent Service** so you can test
 
 This sample code is provided "as is" and is not a supported product of Ping. It is a **testing and demonstration tool only**:
 
-- It runs over plain HTTP and listens on all network interfaces.
+- It listens on all network interfaces, and over plain HTTP until you configure HTTPS (see [HTTPS](#https)).
 - It does **not** verify the signature, issuer or audience of the consent requests it receives, and it has no CSRF protection.
 - It approves whatever authorization details of a supported type it is asked to approve, without any business rules.
 
@@ -98,8 +98,36 @@ RCS demo listening on http://0.0.0.0:8081
 |---|---|
 | `--port <n>` (or `-p`) | Port to listen on: `npm start -- --port 8082`. A bare number is also accepted (`npm start -- 8082`), so the flag still works if npm drops it (see the note below). Without any, the `PORT` environment variable, then `8081` |
 | `npm run debug` (or `RCS_DEBUG=1`) | Logs every request, the decision, the granted details, and the signed response JWT. Combine with a port: `npm run debug -- --port 8082` |
+| `npm run ssl` (or `--ssl`) | Serve HTTPS instead of HTTP. See [HTTPS](#https) |
+| `--cert <file> --key <file>` | Use these certificate files with `--ssl` (they also enable HTTPS on their own) |
 
 > **The `--` separator matters**: `npm run debug --port 8082` (without `--`) makes npm try to parse `--port` itself. It warns, drops the flag, and passes only `8082` to the app — the app recognizes a bare port number, so the port still applies. Keep the `--` in scripts and docs to avoid the npm warnings.
+
+### HTTPS
+
+HTTPS matters here: ASWebAuthenticationSession, which the iOS sample uses for the login browser, and many browsers reject or warn on plain-HTTP pages embedded in an OAuth flow, and a hosted authorization server can only fetch JWK or metadata URLs it can reach over HTTPS.
+
+The app serves HTTPS when either:
+
+1. It is started with `npm run ssl` (or `--ssl`) and certificate files exist, or
+2. `.certs/cert.pem` and `.certs/key.pem` exist next to `server.js` — HTTPS is then automatic, no flag needed.
+
+For a **valid, trusted** certificate, create the `.certs/` files with [mkcert](https://github.com/FiloSottile/mkcert), which installs a local CA that your Mac and iOS Simulator already trust:
+
+```sh
+brew install mkcert
+mkcert -install
+mkcert -cert-file .certs/cert.pem -key-file .certs/key.pem localhost 127.0.0.1 <your-local-ip>
+npm start
+```
+
+`<your-local-ip>` is the address physical devices use to reach your Mac (find it with `ipconfig getifaddr en0`). Include it so the certificate is valid for the device as well as the simulator. The `.certs/` directory is git-ignored; delete it and re-run `mkcert` if the machine's addresses change.
+
+To use an existing certificate instead, pass it explicitly: `npm run ssl -- --cert server.pem --key server.key`.
+
+With a self-signed certificate that the machine does not trust (for example a quick `openssl req` one), the server still runs, but browsers and the iOS sample show certificate warnings and may refuse the flow — the trusted-mkcert route above avoids that. `npm run ssl` without any certificate available prints an error and exits instead of silently serving HTTP.
+
+> **Tunnels**: exposing the app through an HTTPS tunnel makes this unauthenticated app reachable from the internet — anyone who can reach it can request a signed consent response. Keep it up only for the length of your test session.
 
 ### Signing keys
 
@@ -115,15 +143,15 @@ Rich Authorization Requests with a Remote Consent Service need three pieces of c
 
 | Property | Value |
 |---|---|
-| Redirect URL | `http://<your-local-ip>:8081/consent` |
-| Json Web Key URI | `http://<your-local-ip>:8081/keys` (or paste the JWK set printed at startup into **Json Web Key**, with the public key selector set to JWKs) |
-| Metadata URL | `http://<your-local-ip>:8081/metadata` |
+| Redirect URL | `https://<your-host>:8081/consent` (or `http://` when serving plain HTTP) |
+| Json Web Key URI | `https://<your-host>:8081/keys` (or paste the JWK set printed at startup into **Json Web Key**, with the public key selector set to JWKs) |
+| Metadata URL | `https://<your-host>:8081/metadata` |
 | Enable Consent Request Encryption | Off |
 | Consent Response Signing Algorithm | RS256 (the default) |
 
 The agent ID you choose does not need to be configured here: the app reads it from the consent request and uses it as the issuer of the response.
 
-> **Reachability:** The **Redirect URL** is followed by the user's *browser*, so it only has to be reachable from the device running the sample app. Use `localhost` for the iOS Simulator, which shares the Mac's network, or the Mac's local IP address for a physical device on the same network. The **Json Web Key URI** and **Metadata URL** are fetched by the *authorization server*, and a hosted AIC tenant cannot reach a private network address. For a hosted tenant, publish this app through an HTTPS tunnel and use the tunnel's address for those URLs. If your agent configuration allows it, you can instead paste the JWK set into the agent's **Json Web Key** field, so the tenant does not need to fetch `/keys`. A tunnel makes this unauthenticated app reachable from the internet, because anyone who can reach it can request a signed consent response. Keep it up only for the length of your test session.
+> **Reachability and trust:** The **Redirect URL** is followed by the user's *browser*, so it only has to be reachable from the device running the sample app — use `https://localhost:8081/consent` for the iOS Simulator, which shares the Mac's network and its trust store, or `https://<your-local-ip>:8081/consent` for a physical device (generate the certificate for that address too). The **Json Web Key URI** and **Metadata URL** are fetched by the *authorization server*, and a hosted AIC tenant cannot reach a private network address. For a hosted tenant, publish this app through an HTTPS tunnel and use the tunnel's address for those URLs — a tunnel makes this unauthenticated app reachable from the internet, so keep it up only for the length of your test session. If your agent configuration allows it, you can instead paste the JWK set into the agent's **Json Web Key** field, so the tenant does not need to fetch `/keys`.
 
 ## Try It With the iOS Sample
 
@@ -181,7 +209,7 @@ rcs-demo/
 This app trades safety for simplicity so that it is easy to read and run locally. A production Remote Consent Service must do the following, none of which this demo does:
 
 - Verify the signature of the consent request against the authorization server's keys, and check its issuer and audience
-- Serve over HTTPS, and enable consent request encryption
+- Serve over HTTPS with a certificate from a CA the client devices and the authorization server trust, and enable consent request encryption
 - Protect the consent form against CSRF
 - Authenticate the user and apply real grant rules to the requested details
 - Bind to specific interfaces instead of all of them

@@ -6,7 +6,9 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "debug": "node server.js --debug"
+    "debug": "node server.js --debug",
+    "ssl": "node server.js --ssl",
+    "ssl-debug": "node server.js --ssl --debug"
   },
   "engines": {
     "node": ">=18"

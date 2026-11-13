@@ -9,9 +9,10 @@
 // Demonstration Remote Consent Service (RCS) for Rich Authorization Requests
 // (RFC 9396) with PingAM and PingOne Advanced Identity Cloud.
 //
-// FOR TESTING AND DEMONSTRATION ONLY. Do not use in production: the app runs
-// over plain HTTP, serves no CSRF protection, and accepts any consent request
-// it is given without verifying its signature.
+// FOR TESTING AND DEMONSTRATION ONLY. Do not use in production: the app accepts
+// any consent request it is given without verifying its signature and serves no
+// CSRF protection. HTTPS is supported (see the README) but the trust of the
+// certificate is the operator's responsibility.
 //
 // Flow:
 // 1. The authorization server redirects the user's browser to
@@ -23,6 +24,10 @@
 //    POSTs it back to the authorization server.
 
 import express from "express";
+import https from "node:https";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { SignJWT } from "jose";
 import { loadSigningKeys, getJwkSet, toJoseKey } from "./keys.js";
 
@@ -36,10 +41,11 @@ function parsePort(value) {
   if (Number.isInteger(port) && port > 0 && port < 65536) {
     return port;
   }
-  console.error(`Invalid port "${value}". Using the default instead.`);
   return undefined;
 }
 
+// A non-numeric argument (for example --debug) is not a port; reporting it
+// only matters when it was explicitly given to a port flag.
 function portFrom(args) {
   const index = args.findIndex((arg) => arg === "--port" || arg === "-p");
   if (index >= 0 && index + 1 < args.length) {
@@ -47,6 +53,8 @@ function portFrom(args) {
     if (port !== undefined) {
       return port;
     }
+    console.error(`Invalid port "${args[index + 1]}". Using the default instead.`);
+    return undefined;
   }
   const barePort = args.map(parsePort).find((port) => port !== undefined);
   if (barePort !== undefined) {
@@ -55,8 +63,54 @@ function portFrom(args) {
   return undefined;
 }
 
+// HTTPS is enabled with --ssl, or automatically when certificate files exist
+// in .certs/ next to server.js. Certificates, in order of precedence:
+// 1. --cert <file> --key <file> (with --ssl, or implied by both being given)
+// 2. .certs/cert.pem + .certs/key.pem, typically created with mkcert so the
+//    certificate is trusted by the browser and the sample app without warnings:
+//    brew install mkcert && mkcert -install
+//    mkcert -cert-file .certs/cert.pem -key-file .certs/key.pem localhost <your-local-ip>
+// Without HTTPS the app serves plain HTTP, which some browsers and
+// ASWebAuthenticationSession reject for third-party contexts.
+function readCertificate(args) {
+  const valueAfter = (flag) => {
+    const index = args.indexOf(flag);
+    if (index >= 0 && index + 1 < args.length) {
+      return args[index + 1];
+    }
+    return undefined;
+  };
+
+  const certFile = valueAfter("--cert");
+  const keyFile = valueAfter("--key");
+  if ((certFile && !keyFile) || (keyFile && !certFile)) {
+    console.error("--cert and --key must be given together. Falling back to auto-detection.");
+  } else if (certFile && keyFile) {
+    try {
+      return { key: fs.readFileSync(keyFile), cert: fs.readFileSync(certFile) };
+    } catch (err) {
+      console.error(`Cannot read the certificate files: ${err.message}. Falling back to auto-detection.`);
+    }
+  }
+
+  const certDir = path.join(path.dirname(fileURLToPath(import.meta.url)), ".certs");
+  const defaultCert = path.join(certDir, "cert.pem");
+  const defaultKey = path.join(certDir, "key.pem");
+  if (fs.existsSync(defaultCert) && fs.existsSync(defaultKey)) {
+    try {
+      return { key: fs.readFileSync(defaultKey), cert: fs.readFileSync(defaultCert) };
+    } catch (err) {
+      console.error(`Cannot read ${defaultCert} or ${defaultKey}: ${err.message}. Falling back to HTTP.`);
+    }
+  }
+  return undefined;
+}
+
+const args = process.argv.slice(2);
+const httpsOptions = readCertificate(args);
+const useHttps = args.includes("--ssl") || args.includes("-s") || httpsOptions !== undefined;
 const envPort = process.env.PORT === undefined || process.env.PORT === "" ? undefined : parsePort(process.env.PORT);
-const PORT = portFrom(process.argv.slice(2)) ?? envPort ?? 8081;
+const PORT = portFrom(args) ?? envPort ?? 8081;
 const HOST = "0.0.0.0";
 
 // The authorization detail types this RCS supports. Requests for other types
@@ -339,9 +393,24 @@ ${requestedDetails.length !== supportedDetails.length ? "<p><em>Some requested d
 </body></html>`;
 }
 
-app.listen(PORT, HOST, () => {
-  console.log(`RCS demo listening on http://${HOST}:${PORT}`);
-  console.log(`Metadata:  http://localhost:${PORT}/metadata`);
-  console.log(`JWK set:   http://localhost:${PORT}/keys`);
-  console.log(`Supported types: ${SUPPORTED_TYPES.join(", ")}`);
-});
+const scheme = useHttps ? "https" : "http";
+if (useHttps) {
+  if (httpsOptions) {
+    https.createServer(httpsOptions, app).listen(PORT, HOST, () => {
+      console.log(`RCS demo listening on https://${HOST}:${PORT}`);
+      console.log(`Metadata:  ${scheme}://localhost:${PORT}/metadata`);
+      console.log(`JWK set:   ${scheme}://localhost:${PORT}/keys`);
+      console.log(`Supported types: ${SUPPORTED_TYPES.join(", ")}`);
+    });
+  } else {
+    console.error("--ssl was requested but no certificate is available. Provide --cert and --key, or create .certs/cert.pem and .certs/key.pem (see the README).");
+    process.exit(1);
+  }
+} else {
+  app.listen(PORT, HOST, () => {
+    console.log(`RCS demo listening on http://${HOST}:${PORT}`);
+    console.log(`Metadata:  ${scheme}://localhost:${PORT}/metadata`);
+    console.log(`JWK set:   ${scheme}://localhost:${PORT}/keys`);
+    console.log(`Supported types: ${SUPPORTED_TYPES.join(", ")}`);
+  });
+}
