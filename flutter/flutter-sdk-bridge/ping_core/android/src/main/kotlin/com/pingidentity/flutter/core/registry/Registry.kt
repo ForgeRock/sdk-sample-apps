@@ -29,4 +29,7 @@ interface Registry {
      * Remove a registered instance by id. Safe to call with unknown ids.
      */
     fun remove(id: String)
+
+    /** The number of registered instances. A diagnostic, for leak checks. */
+    val size: Int
 }

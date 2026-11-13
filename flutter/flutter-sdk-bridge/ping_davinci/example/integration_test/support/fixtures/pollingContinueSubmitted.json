@@ -1,0 +1,17 @@
+{
+  "eventName": "rewindStateToLastRenderedUI",
+  "success": true,
+  "id": "fxopi4maps",
+  "interactionId": "scrubbed",
+  "companyId": "00000000-0000-4000-8000-000000000001",
+  "connectionId": "00000000000000000000000000000003",
+  "connectorId": "httpConnector",
+  "capabilityName": "continuePolling",
+  "skProxyApiEnvironmentId": "deprecated",
+  "interactionToken": "scrubbed",
+  "_links": {
+    "self": {
+      "href": "{{baseUrl}}/00000000-0000-4000-8000-000000000001/davinci/connections/00000000000000000000000000000006/capabilities/customForm"
+    }
+  }
+}

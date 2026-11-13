@@ -1,0 +1,58 @@
+{
+  "enablePolling": false,
+  "pollInterval": "2000",
+  "pollRetries": "60",
+  "pollChallengeStatus": true,
+  "form": {
+    "components": {
+      "fields": [
+        {
+          "type": "LABEL",
+          "content": "Image Collector Test\n\n",
+          "key": "title-text",
+          "richContent": {
+            "content": "Image Collector Test"
+          }
+        },
+        {
+          "type": "ERROR_DISPLAY"
+        },
+        {
+          "type": "IMAGE",
+          "key": "image",
+          "description": "Image Collector Test",
+          "imageUrl": "https://img.magnific.com/free-photo/closeup-shot-beautiful-butterfly-with-interesting-textures-orange-petaled-flower_181624-7640.jpg",
+          "hyperlinkUrl": "https://www.pingidentity.com/en.html"
+        },
+        {
+          "type": "SUBMIT_BUTTON",
+          "label": "Continue",
+          "key": "submit"
+        }
+      ]
+    },
+    "name": "Automation - Image",
+    "category": "CUSTOM_FORM"
+  },
+  "routeClientErrorsToFalseBranch": false,
+  "enableMagicLinkAuthentication": true,
+  "agreement": "useAgreementId",
+  "nodeTitle": "Image",
+  "envId": "00000000-0000-4000-8000-000000000001",
+  "formId": "00000000-0000-4000-8000-00000000000b",
+  "isResponseCompatibleWithMobileAndWebSdks": true,
+  "id": "huhhb650sb",
+  "connectionId": "00000000000000000000000000000006",
+  "capabilityName": "showForm",
+  "interactionId": "scrubbed",
+  "_links": {
+    "next": {
+      "href": "{{baseUrl}}/00000000-0000-4000-8000-000000000001/davinci/connections/00000000000000000000000000000006/capabilities/showForm"
+    },
+    "self": {
+      "href": "{{baseUrl}}/00000000-0000-4000-8000-000000000001/davinci/connections/00000000000000000000000000000003/capabilities/customHTMLTemplate"
+    }
+  },
+  "skProxyApiEnvironmentId": "deprecated",
+  "interactionToken": "scrubbed"
+}

@@ -1,0 +1,34 @@
+{
+  "eventName": "continue",
+  "isResponseCompatibleWithMobileAndWebSdks": true,
+  "id": "pntgt5vbhu",
+  "interactionId": "scrubbed",
+  "companyId": "00000000-0000-4000-8000-000000000001",
+  "flowId": "00000000000000000000000000000002",
+  "connectionId": "00000000000000000000000000000003",
+  "capabilityName": "customHTMLTemplate",
+  "form": {
+    "name": "Success",
+    "description": "Successfully submitted form",
+    "category": "CUSTOM_HTML",
+    "components": {
+      "fields": [
+        {
+          "type": "SUBMIT_BUTTON",
+          "label": "Continue",
+          "key": "CONTINUE"
+        }
+      ]
+    }
+  },
+  "_links": {
+    "next": {
+      "href": "{{baseUrl}}/00000000-0000-4000-8000-000000000001/davinci/connections/00000000000000000000000000000003/capabilities/customHTMLTemplate"
+    },
+    "self": {
+      "href": "{{baseUrl}}/00000000-0000-4000-8000-000000000001/davinci/connections/00000000000000000000000000000006/capabilities/customForm"
+    }
+  },
+  "skProxyApiEnvironmentId": "deprecated",
+  "interactionToken": "scrubbed"
+}

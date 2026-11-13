@@ -1,0 +1,30 @@
+{
+  "id": "k6n6yl18pu",
+  "interactionId": "scrubbed",
+  "companyId": "00000000-0000-4000-8000-000000000001",
+  "capabilityName": "exchangeCustomMetadata",
+  "isResponseCompatibleWithMobileAndWebSdks": true,
+  "form": {
+    "components": {
+      "fields": [
+        {
+          "type": "METADATA",
+          "key": "sdkMetadata",
+          "payload": {
+            "testkey": "testValue"
+          }
+        }
+      ]
+    }
+  },
+  "_links": {
+    "next": {
+      "href": "{{baseUrl}}/00000000-0000-4000-8000-000000000001/davinci/connections/00000000000000000000000000000019/capabilities/exchangeCustomMetadata"
+    },
+    "self": {
+      "href": "{{baseUrl}}/00000000-0000-4000-8000-000000000001/davinci/connections/00000000000000000000000000000003/capabilities/customHTMLTemplate"
+    }
+  },
+  "skProxyApiEnvironmentId": "deprecated",
+  "interactionToken": "scrubbed"
+}

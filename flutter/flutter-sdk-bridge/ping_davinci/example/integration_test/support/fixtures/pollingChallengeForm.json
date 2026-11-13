@@ -1,0 +1,75 @@
+{
+  "enablePolling": true,
+  "pollInterval": "2000",
+  "pollRetries": "3",
+  "pollChallengeStatus": true,
+  "challenge": "yMU_xKQ2MkRAff-rPHlrOEYcSW_533tJjyQQkJziS1s",
+  "form": {
+    "components": {
+      "fields": [
+        {
+          "type": "LABEL",
+          "content": "Authenticator App",
+          "key": "title-text",
+          "richContent": {
+            "content": "Authenticator App"
+          }
+        },
+        {
+          "type": "ERROR_DISPLAY"
+        },
+        {
+          "type": "POLLING",
+          "key": "polling-field",
+          "pollInterval": "2000",
+          "pollRetries": "3",
+          "pollChallengeStatus": true,
+          "challenge": "yMU_xKQ2MkRAff-rPHlrOEYcSW_533tJjyQQkJziS1s"
+        },
+        {
+          "type": "LABEL",
+          "content": "Number Challenge {{baseUrl}}/00000000-0000-4000-8000-000000000001/davinci/connections/00000000000000000000000000000015/callback/oobContinue?challenge=yFOgq_jauU5dLPQHaEvfLM_qXwJg_pdzxiUbYNiEzR4-scrubbed",
+          "key": "rich-text",
+          "richContent": {
+            "content": "Number Challenge {{baseUrl}}/00000000-0000-4000-8000-000000000001/davinci/connections/00000000000000000000000000000015/callback/oobContinue?challenge=yFOgq_jauU5dLPQHaEvfLM_qXwJg_pdzxiUbYNiEzR4-scrubbed"
+          }
+        },
+        {
+          "type": "FLOW_BUTTON",
+          "key": "Finish",
+          "label": "Finish",
+          "inputType": "ACTION"
+        }
+      ]
+    },
+    "name": "Automation - Polling",
+    "description": "Used by E2E Automation Tests",
+    "category": "CUSTOM_FORM"
+  },
+  "routeClientErrorsToFalseBranch": false,
+  "dynamicText": [
+    {
+      "key": "challenge",
+      "value": "{{baseUrl}}/00000000-0000-4000-8000-000000000001/davinci/connections/00000000000000000000000000000015/callback/oobContinue?challenge=yFOgq_jauU5dLPQHaEvfLM_qXwJg_pdzxiUbYNiEzR4-scrubbed"
+    }
+  ],
+  "enableMagicLinkAuthentication": true,
+  "agreement": "useAgreementId",
+  "envId": "00000000-0000-4000-8000-000000000001",
+  "formId": "00000000-0000-4000-8000-000000000013",
+  "isResponseCompatibleWithMobileAndWebSdks": true,
+  "id": "1zibef6q58",
+  "connectionId": "00000000000000000000000000000006",
+  "capabilityName": "customForm",
+  "interactionId": "scrubbed",
+  "_links": {
+    "next": {
+      "href": "{{baseUrl}}/00000000-0000-4000-8000-000000000001/davinci/connections/00000000000000000000000000000006/capabilities/customForm"
+    },
+    "self": {
+      "href": "{{baseUrl}}/00000000-0000-4000-8000-000000000001/davinci/connections/00000000000000000000000000000003/capabilities/customHTMLTemplate"
+    }
+  },
+  "skProxyApiEnvironmentId": "deprecated",
+  "interactionToken": "scrubbed"
+}

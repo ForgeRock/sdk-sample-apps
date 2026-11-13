@@ -1,0 +1,46 @@
+{
+  "eventName": "continue",
+  "isResponseCompatibleWithMobileAndWebSdks": true,
+  "id": "uc4fp6815q",
+  "interactionId": "scrubbed",
+  "companyId": "00000000-0000-4000-8000-000000000001",
+  "flowId": "00000000000000000000000000000011",
+  "connectionId": "00000000000000000000000000000003",
+  "capabilityName": "customHTMLTemplate",
+  "form": {
+    "name": "Select Test Form",
+    "description": "Select form for testing",
+    "category": "CUSTOM_HTML",
+    "components": {
+      "fields": [
+        {
+          "type": "SUBMIT_BUTTON",
+          "label": "Continue Polling",
+          "key": "Continue Polling"
+        },
+        {
+          "type": "FLOW_BUTTON",
+          "label": "Challenge Polling",
+          "key": "Challenge Polling",
+          "inputType": "ACTION"
+        },
+        {
+          "type": "FLOW_BUTTON",
+          "label": "Challenge Polling QRCode",
+          "key": "Challenge Polling QRCode",
+          "inputType": "ACTION"
+        }
+      ]
+    }
+  },
+  "_links": {
+    "next": {
+      "href": "{{baseUrl}}/00000000-0000-4000-8000-000000000001/davinci/connections/00000000000000000000000000000003/capabilities/customHTMLTemplate"
+    },
+    "self": {
+      "href": "{{baseUrl}}/00000000-0000-4000-8000-000000000001/davinci/policy/00000000000000000000000000000012/start"
+    }
+  },
+  "skProxyApiEnvironmentId": "deprecated",
+  "interactionToken": "scrubbed"
+}

@@ -1,0 +1,75 @@
+{
+  "eventName": "continue",
+  "isResponseCompatibleWithMobileAndWebSdks": true,
+  "id": "1k5y98i1v1",
+  "interactionId": "scrubbed",
+  "companyId": "00000000-0000-4000-8000-000000000001",
+  "flowId": "0000000000000000000000000000000c",
+  "connectionId": "00000000000000000000000000000003",
+  "capabilityName": "customHTMLTemplate",
+  "form": {
+    "name": "Create Profile",
+    "description": "Enter name, email, and password to create a new account",
+    "category": "CUSTOM_HTML",
+    "components": {
+      "fields": [
+        {
+          "type": "TEXT",
+          "key": "email",
+          "label": "Email"
+        },
+        {
+          "type": "PASSWORD",
+          "key": "password",
+          "label": "Password"
+        },
+        {
+          "type": "TEXT",
+          "key": "givenName",
+          "label": "Given Name"
+        },
+        {
+          "type": "TEXT",
+          "key": "familyName",
+          "label": "Family Name"
+        },
+        {
+          "type": "SUBMIT_BUTTON",
+          "label": "Continue",
+          "key": "REGISTER"
+        },
+        {
+          "type": "FLOW_BUTTON",
+          "label": "Already have an account? Sign On",
+          "key": "CANCEL",
+          "inputType": "ACTION"
+        }
+      ],
+      "inputs": [
+        {
+          "key": "title",
+          "type": "string",
+          "value": "Create Your Profile"
+        },
+        {
+          "key": "textOne",
+          "type": "string"
+        },
+        {
+          "key": "textTwo",
+          "type": "string"
+        }
+      ]
+    }
+  },
+  "_links": {
+    "next": {
+      "href": "{{baseUrl}}/00000000-0000-4000-8000-000000000001/davinci/connections/00000000000000000000000000000003/capabilities/customHTMLTemplate"
+    },
+    "self": {
+      "href": "{{baseUrl}}/00000000-0000-4000-8000-000000000001/davinci/connections/00000000000000000000000000000003/capabilities/customHTMLTemplate"
+    }
+  },
+  "skProxyApiEnvironmentId": "deprecated",
+  "interactionToken": "scrubbed"
+}

@@ -1,0 +1,72 @@
+{
+  "eventName": "continue",
+  "isResponseCompatibleWithMobileAndWebSdks": true,
+  "id": "65u7m8cm28",
+  "interactionId": "scrubbed",
+  "companyId": "00000000-0000-4000-8000-000000000001",
+  "flowId": "0000000000000000000000000000000c",
+  "connectionId": "00000000000000000000000000000003",
+  "capabilityName": "customHTMLTemplate",
+  "form": {
+    "name": "Sign On",
+    "description": "Enter username and password",
+    "category": "CUSTOM_HTML",
+    "components": {
+      "fields": [
+        {
+          "type": "TEXT",
+          "key": "username",
+          "label": "Username"
+        },
+        {
+          "type": "PASSWORD",
+          "key": "password",
+          "label": "Password"
+        },
+        {
+          "type": "SUBMIT_BUTTON",
+          "label": "Sign On",
+          "key": "SIGNON"
+        },
+        {
+          "type": "FLOW_BUTTON",
+          "label": "No account? Register now!",
+          "key": "REGISTER",
+          "inputType": "ACTION"
+        },
+        {
+          "type": "FLOW_BUTTON",
+          "label": "Having trouble signing on?",
+          "key": "TROUBLE",
+          "inputType": "ACTION"
+        }
+      ],
+      "inputs": [
+        {
+          "key": "title",
+          "type": "string",
+          "value": "Sign On"
+        },
+        {
+          "key": "textOne",
+          "type": "string",
+          "value": "Welcome to Ping Identity"
+        },
+        {
+          "key": "textTwo",
+          "type": "string"
+        }
+      ]
+    }
+  },
+  "_links": {
+    "next": {
+      "href": "{{baseUrl}}/00000000-0000-4000-8000-000000000001/davinci/connections/00000000000000000000000000000003/capabilities/customHTMLTemplate"
+    },
+    "self": {
+      "href": "{{baseUrl}}/00000000-0000-4000-8000-000000000001/davinci/policy/0000000000000000000000000000000d/start"
+    }
+  },
+  "startUiSubFlow": true,
+  "resetCookie": true
+}

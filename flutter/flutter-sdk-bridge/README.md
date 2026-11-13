@@ -8,6 +8,7 @@ A native-wrapper bridge exposing the Ping Orchestration SDKs to Flutter, built w
 
 - **`ping_core`** — a federated native plugin carrying the shared, process-wide `CoreRuntime` registry (keyed native handles for live SDK objects that never cross the platform channel) plus small shared helpers (`PingException`, JSON codec). It exposes **no Pigeon `HostApi`** — it exists purely so multiple SDK modules can share one native registry singleton. It also carries the **OIDC seam** (`OidcConfigHandle`, `OidcOpenIdConfig`, and the `oidcClientRegistry`/`oidcWebClientRegistry` slots) described below, so any module can consume a configured OIDC client without depending on `ping_oidc` directly.
 - **`ping_journey`** — a federated plugin carrying the Pigeon schema, the generated Dart/Kotlin/Swift code, and the native Journey orchestration logic (`JourneyClientFactory`, `JourneyConfigParser`, `JourneyHostApiImpl`, node/callback mappers, error mapper). Depends on `ping_core` at both the Dart and native levels, and on the native Ping Journey SDK (Android `com.pingidentity.sdks:journey`, iOS SPM `PingJourney`).
+- **`ping_davinci`** — a federated plugin over the native Ping DaVinci SDK: configure → start → next (with local `validate` and server-side per-field errors) → session/token/userInfo → signOff, plus streamed polling. Carries its own Pigeon schema and native `DaVinciFactory`/`DaVinciConfigParser`/`DaVinciHostApiImpl`/node, collector and validation mappers/error mapper. Depends on `ping_core` (the shared `davinciRegistry`, and the OIDC seam: a DaVinci workflow can take its OIDC configuration from a `ping_oidc` client handle), and on the native Ping DaVinci SDK (Android `com.pingidentity.sdks:davinci`, iOS SPM `PingDavinci`).
 - **`ping_oidc`** — a federated plugin for standalone, browser-based centralized OIDC login (configure → authorize → token/refresh/userInfo/revoke/signOff). Carries its own Pigeon schema and native `OidcClientFactory`/`OidcWebClientFactory`/`OidcConfigParser`/`OidcHostApiImpl`/error mapper. Depends on `ping_core` (both for the shared registry and to *implement* `OidcConfigHandle`, so `ping_journey` can resolve a `ping_oidc`-configured client with no compile-time dependency on this package), and on the native Ping OIDC SDK (Android `com.pingidentity.sdks:oidc`, iOS SPM `PingOidc`) plus the native browser module (Android `com.pingidentity.sdks:browser`, iOS SPM `PingBrowser`).
 
 ## Architecture
@@ -16,7 +17,7 @@ The bridge is a **native-wrapper**, not a pure-Dart reimplementation: the publis
 
 Two things make this different from a typical single-package Flutter plugin:
 
-- **Federated split** — `ping_core` carries a shared native registry with no Pigeon API of its own; `ping_journey` (and future `ping_davinci`, `ping_oidc`, ...) each carry their own Pigeon `HostApi` and depend on `ping_core` for the shared registry.
+- **Federated split** — `ping_core` carries a shared native registry with no Pigeon API of its own; `ping_journey`, `ping_oidc` and `ping_davinci` each carry their own Pigeon `HostApi` and depend on `ping_core` for the shared registry.
 - **Native handle registry** — live native SDK objects (a `Journey`, a `ContinueNode`) never cross the platform channel. They stay in a process-wide native singleton (`CoreRuntime`), keyed by a UUID. Only that id, plus a flat serialized snapshot of the node, crosses to Dart.
 
 ```mermaid
@@ -116,6 +117,33 @@ This is why `ping_journey`'s own build files declare no dependency on `ping_oidc
 `ping_journey/example` — which has zero `ping_oidc` in its dependency graph — is the thing that proves the
 independence actually holds, not just a doc claim.
 
+### DaVinci collectors vs. Journey callbacks (`ping_davinci`)
+
+DaVinci and Journey share the orchestration model (a `ContinueNode`/`SuccessNode`/`ErrorNode`/`FailureNode`
+state machine driven by `start`/`next`, with the live native node cached per handle and re-resolved by
+`{type, index}`), but they differ in what fills a node:
+
+- **Journey `Callback`s** come from AM's `callbacks` array and are filled in place. **DaVinci `Collector`s**
+  come from a DaVinci form's `fields`, and buttons are collectors too: pressing one (`select()`) is how the
+  app picks the action `next()` submits.
+- **The Dart subtype follows the native class**, not the server `type` string: `PASSWORD` and
+  `PASSWORD_VERIFY` are both `PasswordCollector`, `DROPDOWN` and `RADIO` both `SingleSelectCollector`. The
+  server `type` is kept so an app can still render them differently.
+- **`Collector` is a `sealed` hierarchy and the package's main public surface.** A form builder that
+  `switch`es over it is checked for exhaustiveness: `FieldCollector<T>`s carry a `value` (text, password,
+  single/multi select, boolean, phone number, device, metadata), `ButtonCollector`s are submitted with
+  `select()`, display-only collectors (label, agreement text, image, QR code) carry no value, the
+  `PollingCollector` is filled by `DaVinciClient.poll`, and `AddOnCollector` is the one open branch for
+  add-on packages. The full table is in [`ping_davinci/README.md`](ping_davinci/README.md#collectors).
+- **A field nothing can type never breaks the form.** One that neither native factory knows, or that native
+  maps but Dart has no type for, is listed in `ContinueNode.unsupportedFields` with a reason, and the rest of
+  the node renders and submits.
+- **The session is an authorization code, not tokens.** A DaVinci `SuccessNode` carries the code; tokens and
+  userinfo come from the native OIDC user (`getToken`, `getUserInfo`), which owns and stores them.
+- **An `ErrorNode` is usually recoverable.** It carries a flat `fieldErrors` map (server target → message)
+  the bridge builds from the server's `details`, and, unless the error can't be retried, the `continueNode`
+  to correct and resubmit.
+
 ## Native SDK version
 
 Both platforms pin the native Ping SDKs to **2.2.0** — Android via Maven
@@ -148,20 +176,22 @@ this repository.
 cd flutter && flutter test flutter-sdk-bridge/*/test              # all unit tests
 cd flutter-sdk-bridge/ping_journey/example && flutter test integration_test/   # hermetic, needs a device
 cd flutter-sdk-bridge/ping_oidc/example && flutter test integration_test/      # hermetic, needs a device
+cd flutter-sdk-bridge/ping_davinci/example && flutter test integration_test/   # hermetic, needs a device
 ```
 
-See [`ping_journey/example/README.md`](ping_journey/example/README.md) and
-[`ping_oidc/example/README.md`](ping_oidc/example/README.md) for each module's mock server, its full
+See [`ping_journey/example/README.md`](ping_journey/example/README.md),
+[`ping_oidc/example/README.md`](ping_oidc/example/README.md) and
+[`ping_davinci/example/README.md`](ping_davinci/example/README.md) for each module's mock server, its full
 `--dart-define` list, which scenarios skip in which mode, and the platform permissions its test host needs —
 the two hosts are *not* scaled copies of one another; `ping_oidc`'s browser-authorize step can't be scripted,
 so its hermetic scenarios cover different ground (pre-login behavior, cross-platform "no session" divergence)
 than `ping_journey`'s do.
 
-## Adding new modules (e.g. `ping_davinci`)
+## Adding new modules
 
-`ping_journey` and `ping_oidc` are the two working precedents to copy from — read whichever is the closer
-shape for the new module (a state machine vs. a credential store, see the OIDC seam section above) before
-starting.
+`ping_journey`, `ping_davinci` and `ping_oidc` are the working precedents to copy from — read whichever is
+the closest shape for the new module (a state machine like `ping_journey`/`ping_davinci` vs. a credential
+store like `ping_oidc`, see the OIDC seam section above) before starting.
 
 1. Scaffold a new federated plugin (`flutter create --template=plugin ...`) alongside `ping_journey`/`ping_oidc`, named `ping_<module>`.
 2. Depend on `ping_core` at both levels — Dart (`pubspec.yaml` path dependency), Android (`implementation project(':ping_core')`), iOS SPM (a local `Package.swift` path dependency).

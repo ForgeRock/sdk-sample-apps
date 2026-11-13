@@ -1,0 +1,19 @@
+{
+  "eventId": "yMU_xKQ2MkRAff-rPHlrOEYcSW_533tJjyQQkJziS1s",
+  "challengeExpiry": 300,
+  "companyId": "00000000-0000-4000-8000-000000000001",
+  "connectionId": "00000000000000000000000000000015",
+  "connectorId": "flowConnector",
+  "createdDate": 1794497314415,
+  "interactionId": "scrubbed",
+  "isChallengeComplete": false,
+  "status": "started",
+  "statusUpdatedDate": 1794497314415,
+  "updateByFlowId": "",
+  "_id": "yMU_xKQ2MkRAff-rPHlrOEYcSW_533tJjyQQkJziS1s",
+  "_links": {
+    "self": {
+      "href": "{{baseUrl}}/00000000-0000-4000-8000-000000000001/davinci/user/credentials/challenge/yMU_xKQ2MkRAff-rPHlrOEYcSW_533tJjyQQkJziS1s/status"
+    }
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "enablePolling": true,
+  "pollInterval": "2000",
+  "pollRetries": "3",
+  "pollChallengeStatus": false,
+  "form": {
+    "components": {
+      "fields": [
+        {
+          "type": "LABEL",
+          "content": "Authenticator App",
+          "key": "title-text",
+          "richContent": {
+            "content": "Authenticator App"
+          }
+        },
+        {
+          "type": "ERROR_DISPLAY"
+        },
+        {
+          "type": "POLLING",
+          "key": "polling-field",
+          "pollInterval": "2000",
+          "pollRetries": "3"
+        },
+        {
+          "type": "LABEL",
+          "content": "Number Challenge {{challenge}}",
+          "key": "rich-text",
+          "richContent": {
+            "content": "Number Challenge {{challenge}}"
+          }
+        },
+        {
+          "type": "FLOW_BUTTON",
+          "key": "Finish",
+          "label": "Finish",
+          "inputType": "ACTION"
+        }
+      ]
+    },
+    "name": "Automation - Polling",
+    "description": "Used by E2E Automation Tests",
+    "category": "CUSTOM_FORM"
+  },
+  "routeClientErrorsToFalseBranch": false,
+  "dynamicText": [
+    {
+      "key": "challenge"
+    }
+  ],
+  "enableMagicLinkAuthentication": true,
+  "agreement": "useAgreementId",
+  "nodeTitle": "Automation - Polling",
+  "envId": "00000000-0000-4000-8000-000000000001",
+  "formId": "00000000-0000-4000-8000-000000000013",
+  "isResponseCompatibleWithMobileAndWebSdks": true,
+  "id": "czys1qteu6",
+  "connectionId": "00000000000000000000000000000006",
+  "capabilityName": "customForm",
+  "interactionId": "scrubbed",
+  "_links": {
+    "next": {
+      "href": "{{baseUrl}}/00000000-0000-4000-8000-000000000001/davinci/connections/00000000000000000000000000000006/capabilities/customForm"
+    },
+    "self": {
+      "href": "{{baseUrl}}/00000000-0000-4000-8000-000000000001/davinci/connections/00000000000000000000000000000003/capabilities/customHTMLTemplate"
+    }
+  },
+  "skProxyApiEnvironmentId": "deprecated",
+  "interactionToken": "scrubbed"
+}

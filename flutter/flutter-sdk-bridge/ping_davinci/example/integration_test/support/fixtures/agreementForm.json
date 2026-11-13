@@ -1,0 +1,76 @@
+{
+  "enablePolling": false,
+  "pollInterval": "2000",
+  "pollRetries": "60",
+  "pollChallengeStatus": true,
+  "form": {
+    "components": {
+      "fields": [
+        {
+          "type": "AGREEMENT",
+          "inputType": "READ_ONLY_TEXT",
+          "key": "agreement",
+          "content": "This is example agreement text, you can edit this text in the agreements section.",
+          "titleEnabled": true,
+          "title": "Terms of Service Agreement",
+          "agreement": {
+            "id": "00000000-0000-4000-8000-000000000009",
+            "useDynamicAgreement": false
+          },
+          "enabled": true
+        },
+        {
+          "type": "ERROR_DISPLAY"
+        },
+        {
+          "type": "SINGLE_CHECKBOX",
+          "key": "agreement-checkbox",
+          "label": "I have read and agree to terms",
+          "required": true,
+          "inputType": "BOOLEAN",
+          "appearance": "CHECKBOX",
+          "errorMessage": "You must agree to the terms to continue.",
+          "richContent": {
+            "content": "I have read and agree to {{link1}}",
+            "replacements": {
+              "link1": {
+                "value": "terms",
+                "href": "https://www.pingidentity.com/en/legal/product-terms.html",
+                "type": "link",
+                "target": "_self"
+              }
+            }
+          }
+        },
+        {
+          "type": "SUBMIT_BUTTON",
+          "label": "Accept",
+          "key": "submit"
+        }
+      ]
+    },
+    "name": "Automation - Agreement Tests",
+    "category": "CUSTOM_FORM"
+  },
+  "routeClientErrorsToFalseBranch": false,
+  "enableMagicLinkAuthentication": true,
+  "agreement": "00000000-0000-4000-8000-000000000009",
+  "nodeTitle": "Automation - Agreement Tests",
+  "envId": "00000000-0000-4000-8000-000000000001",
+  "formId": "00000000-0000-4000-8000-00000000000a",
+  "isResponseCompatibleWithMobileAndWebSdks": true,
+  "id": "n2201lh05w",
+  "connectionId": "00000000000000000000000000000006",
+  "capabilityName": "customForm",
+  "interactionId": "scrubbed",
+  "_links": {
+    "next": {
+      "href": "{{baseUrl}}/00000000-0000-4000-8000-000000000001/davinci/connections/00000000000000000000000000000006/capabilities/customForm"
+    },
+    "self": {
+      "href": "{{baseUrl}}/00000000-0000-4000-8000-000000000001/davinci/connections/00000000000000000000000000000003/capabilities/customHTMLTemplate"
+    }
+  },
+  "skProxyApiEnvironmentId": "deprecated",
+  "interactionToken": "scrubbed"
+}

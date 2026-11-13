@@ -20,4 +20,7 @@ public protocol Registry: Sendable {
 
     /// Remove a registered instance by id. Safe to call with unknown ids.
     func remove(_ id: String) async
+
+    /// The number of registered instances. A diagnostic, for leak checks.
+    func count() async -> Int
 }

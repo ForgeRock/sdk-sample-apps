@@ -1,0 +1,59 @@
+{
+  "enablePolling": false,
+  "pollInterval": "2000",
+  "pollRetries": "60",
+  "pollChallengeStatus": true,
+  "form": {
+    "components": {
+      "fields": [
+        {
+          "type": "LABEL",
+          "content": "Enter Email",
+          "key": "rich-text",
+          "richContent": {
+            "content": "Enter Email"
+          }
+        },
+        {
+          "type": "ERROR_DISPLAY"
+        },
+        {
+          "type": "TEXT",
+          "key": "email",
+          "label": "Email Address",
+          "required": true
+        },
+        {
+          "type": "SUBMIT_BUTTON",
+          "label": "Submit",
+          "key": "submit"
+        }
+      ]
+    },
+    "name": "Automation - Enter Email",
+    "description": "Enter email for registration",
+    "category": "CUSTOM_FORM"
+  },
+  "routeClientErrorsToFalseBranch": false,
+  "enableMagicLinkAuthentication": true,
+  "agreement": "useAgreementId",
+  "nodeTitle": "Enter Email to Register",
+  "nodeDescription": "Enter Email to Register EMAIL MFA device",
+  "envId": "00000000-0000-4000-8000-000000000001",
+  "formId": "00000000-0000-4000-8000-000000000020",
+  "isResponseCompatibleWithMobileAndWebSdks": true,
+  "id": "o0liifk6mu",
+  "connectionId": "00000000000000000000000000000006",
+  "capabilityName": "customForm",
+  "interactionId": "scrubbed",
+  "_links": {
+    "next": {
+      "href": "{{baseUrl}}/00000000-0000-4000-8000-000000000001/davinci/connections/00000000000000000000000000000006/capabilities/customForm"
+    },
+    "self": {
+      "href": "{{baseUrl}}/00000000-0000-4000-8000-000000000001/davinci/connections/00000000000000000000000000000006/capabilities/customForm"
+    }
+  },
+  "skProxyApiEnvironmentId": "deprecated",
+  "interactionToken": "scrubbed"
+}

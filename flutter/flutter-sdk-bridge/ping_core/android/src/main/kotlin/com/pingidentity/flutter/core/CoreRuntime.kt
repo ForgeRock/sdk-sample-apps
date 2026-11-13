@@ -26,4 +26,7 @@ object CoreRuntime {
 
     /** Registry for OIDC web client instances. */
     val oidcWebClientRegistry: Registry = SimpleRegistry()
+
+    /** Registry for DaVinci client instances. */
+    val davinciRegistry: Registry = SimpleRegistry()
 }

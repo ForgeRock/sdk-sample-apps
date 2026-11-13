@@ -1,0 +1,53 @@
+{
+  "message": "Done",
+  "enablePolling": false,
+  "pollInterval": "2000",
+  "pollRetries": "60",
+  "pollChallengeStatus": true,
+  "form": {
+    "components": {
+      "fields": [
+        {
+          "type": "ERROR_DISPLAY"
+        },
+        {
+          "type": "LABEL",
+          "content": "Message: Done",
+          "key": "rich-text",
+          "richContent": {
+            "content": "Message: Done"
+          }
+        }
+      ]
+    },
+    "name": "Automation - Polling Message",
+    "description": "Used by E2E Automation Tests",
+    "category": "CUSTOM_FORM"
+  },
+  "routeClientErrorsToFalseBranch": false,
+  "dynamicText": [
+    {
+      "key": "message",
+      "value": "Done"
+    }
+  ],
+  "enableMagicLinkAuthentication": true,
+  "agreement": "useAgreementId",
+  "envId": "00000000-0000-4000-8000-000000000001",
+  "formId": "00000000-0000-4000-8000-000000000014",
+  "isResponseCompatibleWithMobileAndWebSdks": true,
+  "id": "i1rmuzlx6t",
+  "connectionId": "00000000000000000000000000000006",
+  "capabilityName": "customForm",
+  "interactionId": "scrubbed",
+  "_links": {
+    "next": {
+      "href": "{{baseUrl}}/00000000-0000-4000-8000-000000000001/davinci/connections/00000000000000000000000000000006/capabilities/customForm"
+    },
+    "self": {
+      "href": "{{baseUrl}}/00000000-0000-4000-8000-000000000001/davinci/connections/00000000000000000000000000000006/capabilities/customForm"
+    }
+  },
+  "skProxyApiEnvironmentId": "deprecated",
+  "interactionToken": "scrubbed"
+}

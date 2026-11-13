@@ -61,9 +61,9 @@ enum OidcErrorMapper {
         return PigeonError(code: code, message: error.errorMessage, details: type)
     }
 
-    /// A stub error for a method not yet implemented in this phase.
+    /// A stub error for a method not yet implemented.
     static func notImplemented(_ code: String) -> PigeonError {
-        PigeonError(code: code, message: "Not implemented until a later phase", details: "not_implemented")
+        PigeonError(code: code, message: "Not implemented yet", details: "not_implemented")
     }
 }
 

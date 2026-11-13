@@ -28,7 +28,7 @@ jobs:
         # `flutter test` isn't workspace-aware — it only looks for a `test/` directory in the
         # working directory it's run from — so each workspace member needs its own invocation.
         run: |
-          for pkg in flutter-sdk-bridge/ping_core flutter-sdk-bridge/ping_journey flutter-sdk-bridge/ping_oidc flutter-journey; do
+          for pkg in flutter-sdk-bridge/ping_core flutter-sdk-bridge/ping_journey flutter-sdk-bridge/ping_oidc flutter-sdk-bridge/ping_davinci flutter-journey; do
             echo "::group::flutter test ($pkg)"
             (cd "$pkg" && flutter test)
             echo "::endgroup::"
@@ -46,3 +46,10 @@ jobs:
         run: |
           flutter build apk --config-only
           cd android && ./gradlew :ping_core:testDebugUnitTest :ping_journey:testDebugUnitTest :ping_oidc:testDebugUnitTest
+
+      - name: Android unit tests (ping_davinci)
+        # ping_davinci isn't a dependency of flutter-journey, so it runs from its own example app's build.
+        working-directory: flutter/flutter-sdk-bridge/ping_davinci/example
+        run: |
+          flutter build apk --config-only
+          cd android && ./gradlew :ping_davinci:testDebugUnitTest

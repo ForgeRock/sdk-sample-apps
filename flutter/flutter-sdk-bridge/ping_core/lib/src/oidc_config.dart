@@ -88,19 +88,27 @@ class OidcConfig {
   factory OidcConfig.fromJson(Map<String, Object?> json) {
     final clientId = json['clientId'];
     if (clientId is! String || clientId.isEmpty) {
-      throw const FormatException('OidcConfig.clientId must be a non-empty string');
+      throw const FormatException(
+        'OidcConfig.clientId must be a non-empty string',
+      );
     }
     final openIdJson = json['openId'];
     if (openIdJson != null && openIdJson is! Map) {
-      throw const FormatException('OidcConfig.openId must be a map when present');
+      throw const FormatException(
+        'OidcConfig.openId must be a map when present',
+      );
     }
     final scopesJson = json['scopes'];
     if (scopesJson != null && scopesJson is! List) {
-      throw const FormatException('OidcConfig.scopes must be a list when present');
+      throw const FormatException(
+        'OidcConfig.scopes must be a list when present',
+      );
     }
     final refreshThreshold = json['refreshThreshold'];
     if (refreshThreshold != null && refreshThreshold is! int) {
-      throw const FormatException('OidcConfig.refreshThreshold must be an int when present');
+      throw const FormatException(
+        'OidcConfig.refreshThreshold must be an int when present',
+      );
     }
     final additionalParametersJson = json['additionalParameters'];
     if (additionalParametersJson != null && additionalParametersJson is! Map) {
@@ -117,7 +125,9 @@ class OidcConfig {
       discoveryEndpoint: json['discoveryEndpoint'] as String?,
       openId: openIdJson == null
           ? null
-          : OidcOpenIdConfig.fromJson((openIdJson as Map).cast<String, Object?>()),
+          : OidcOpenIdConfig.fromJson(
+              (openIdJson as Map).cast<String, Object?>(),
+            ),
       redirectUri: json['redirectUri'] as String?,
       scopes: (scopesJson as List?)?.cast<String>() ?? const [],
       acrValues: json['acrValues'] as String?,
@@ -130,7 +140,8 @@ class OidcConfig {
       display: json['display'] as String?,
       prompt: json['prompt'] as String?,
       additionalParameters:
-          (additionalParametersJson as Map?)?.cast<String, String>() ?? const {},
+          (additionalParametersJson as Map?)?.cast<String, String>() ??
+          const {},
       par: par as bool? ?? false,
     );
   }

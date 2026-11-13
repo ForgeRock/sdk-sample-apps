@@ -32,4 +32,9 @@ public actor SimpleRegistry: Registry {
     public func remove(_ id: String) async {
         map.removeValue(forKey: id)
     }
+
+    /// The number of stored handles.
+    public func count() async -> Int {
+        map.count
+    }
 }

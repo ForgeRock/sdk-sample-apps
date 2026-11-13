@@ -1,0 +1,57 @@
+{
+  "enablePolling": false,
+  "pollInterval": "2000",
+  "pollRetries": "60",
+  "pollChallengeStatus": true,
+  "form": {
+    "components": {
+      "fields": [
+        {
+          "type": "ERROR_DISPLAY"
+        },
+        {
+          "type": "LABEL",
+          "content": "{\"flutter\":\"fixture\"}",
+          "key": "rich-text",
+          "richContent": {
+            "content": "{\"flutter\":\"fixture\"}"
+          }
+        },
+        {
+          "type": "SUBMIT_BUTTON",
+          "label": "Continue",
+          "key": "submit"
+        }
+      ]
+    },
+    "name": "Automation - Message",
+    "category": "CUSTOM_FORM"
+  },
+  "routeClientErrorsToFalseBranch": false,
+  "dynamicText": [
+    {
+      "key": "message",
+      "value": "{\"flutter\":\"fixture\"}"
+    }
+  ],
+  "enableMagicLinkAuthentication": true,
+  "agreement": "useAgreementId",
+  "nodeTitle": "Automation - Message",
+  "envId": "00000000-0000-4000-8000-000000000001",
+  "formId": "00000000-0000-4000-8000-00000000001a",
+  "isResponseCompatibleWithMobileAndWebSdks": true,
+  "id": "ewl6og3emv",
+  "connectionId": "00000000000000000000000000000006",
+  "capabilityName": "showForm",
+  "interactionId": "scrubbed",
+  "_links": {
+    "next": {
+      "href": "{{baseUrl}}/00000000-0000-4000-8000-000000000001/davinci/connections/00000000000000000000000000000006/capabilities/showForm"
+    },
+    "self": {
+      "href": "{{baseUrl}}/00000000-0000-4000-8000-000000000001/davinci/connections/00000000000000000000000000000019/capabilities/exchangeCustomMetadata"
+    }
+  },
+  "skProxyApiEnvironmentId": "deprecated",
+  "interactionToken": "scrubbed"
+}

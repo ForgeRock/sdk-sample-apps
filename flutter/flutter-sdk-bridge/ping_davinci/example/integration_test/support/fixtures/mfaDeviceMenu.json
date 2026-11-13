@@ -1,0 +1,64 @@
+{
+  "eventName": "continue",
+  "isResponseCompatibleWithMobileAndWebSdks": true,
+  "id": "9sq46sbnox",
+  "interactionId": "scrubbed",
+  "companyId": "00000000-0000-4000-8000-000000000001",
+  "flowId": "0000000000000000000000000000001c",
+  "connectionId": "00000000000000000000000000000003",
+  "capabilityName": "customHTMLTemplate",
+  "form": {
+    "name": "Select Test Form",
+    "description": "Select form for testing",
+    "category": "CUSTOM_HTML",
+    "components": {
+      "fields": [
+        {
+          "type": "SUBMIT_BUTTON",
+          "label": "DEVICE_REGISTRATION",
+          "key": "DEVICE_REGISTRATION"
+        },
+        {
+          "type": "FLOW_BUTTON",
+          "label": "DEVICE_AUTHENTICATION",
+          "key": "DEVICE_AUTHENTICATION",
+          "inputType": "ACTION"
+        },
+        {
+          "type": "FLOW_BUTTON",
+          "label": "USER_REGISTRATION",
+          "key": "USER_REGISTRATION",
+          "inputType": "ACTION"
+        },
+        {
+          "type": "FLOW_BUTTON",
+          "label": "USER_LOGIN",
+          "key": "USER_LOGIN",
+          "inputType": "ACTION"
+        },
+        {
+          "type": "FLOW_BUTTON",
+          "label": "USER_DELETE",
+          "key": "USER_DELETE",
+          "inputType": "ACTION"
+        },
+        {
+          "type": "FLOW_BUTTON",
+          "label": "USER_NAMELESS",
+          "key": "USER_NAMELESS",
+          "inputType": "ACTION"
+        }
+      ]
+    }
+  },
+  "_links": {
+    "next": {
+      "href": "{{baseUrl}}/00000000-0000-4000-8000-000000000001/davinci/connections/00000000000000000000000000000003/capabilities/customHTMLTemplate"
+    },
+    "self": {
+      "href": "{{baseUrl}}/00000000-0000-4000-8000-000000000001/davinci/policy/0000000000000000000000000000001d/start"
+    }
+  },
+  "skProxyApiEnvironmentId": "deprecated",
+  "interactionToken": "scrubbed"
+}

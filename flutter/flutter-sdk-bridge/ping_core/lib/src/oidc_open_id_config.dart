@@ -66,7 +66,9 @@ class OidcOpenIdConfig {
     ]) {
       final value = json[key];
       if (value != null && value is! String) {
-        throw FormatException('OidcOpenIdConfig.$key must be a string when present');
+        throw FormatException(
+          'OidcOpenIdConfig.$key must be a string when present',
+        );
       }
     }
     return OidcOpenIdConfig(
