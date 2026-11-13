@@ -112,7 +112,7 @@ The app serves HTTPS when either:
 1. It is started with `npm run ssl` (or `--ssl`) and certificate files exist, or
 2. `.certs/cert.pem` and `.certs/key.pem` exist next to `server.js` — HTTPS is then automatic, no flag needed.
 
-For a **valid, trusted** certificate, create the `.certs/` files with [mkcert](https://github.com/FiloSottile/mkcert), which installs a local CA that your Mac and iOS Simulator already trust:
+For a **valid, trusted** certificate, create the `.certs/` files with [mkcert](https://github.com/FiloSottile/mkcert), which installs a local CA that your Mac and iOS Simulator already trust. Generate it for every name and address you will use in the agent configuration — typically your Mac's local IP, so the endpoints work from a physical device as well:
 
 ```sh
 brew install mkcert
@@ -121,11 +121,26 @@ mkcert -cert-file .certs/cert.pem -key-file .certs/key.pem localhost 127.0.0.1 <
 npm start
 ```
 
-`<your-local-ip>` is the address physical devices use to reach your Mac (find it with `ipconfig getifaddr en0`). Include it so the certificate is valid for the device as well as the simulator. The `.certs/` directory is git-ignored; delete it and re-run `mkcert` if the machine's addresses change.
+`<your-local-ip>` is the address other devices use to reach your Mac; find it with `ipconfig getifaddr en0` (or `en1`). **Every address or hostname in the agent URLs must be in this list** — a URL whose host is not covered by the certificate fails TLS validation in the browser and in the iOS sample, even though the server is up. `localhost` is already covered above.
 
-To use an existing certificate instead, pass it explicitly: `npm run ssl -- --cert server.pem --key server.key`.
+With the certificate in place, the endpoints all use the same host. For example, with a Mac at `192.168.2.104`:
 
-With a self-signed certificate that the machine does not trust (for example a quick `openssl req` one), the server still runs, but browsers and the iOS sample show certificate warnings and may refuse the flow — the trusted-mkcert route above avoids that. `npm run ssl` without any certificate available prints an error and exits instead of silently serving HTTP.
+| Endpoint | URL |
+|---|---|
+| Consent page (Redirect URL) | `https://192.168.2.104:8081/consent` |
+| JWK set (Json Web Key URI) | `https://192.168.2.104:8081/keys` |
+| Metadata | `https://192.168.2.104:8081/metadata` |
+
+Use the IP form everywhere — the agent's Redirect URL and, when your tenant can route to your network, the Json Web Key and Metadata URLs. The server already listens on all interfaces, so no host flag is needed; the URLs decide the reachability.
+
+**Verify before configuring anything else**: open `https://<your-local-ip>:8081/metadata` in your Mac's browser. If it loads with no certificate warning, devices and the sample app will accept it too; a warning means the certificate does not cover that address — regenerate with it included.
+
+Two caveats:
+
+- **Changing addresses**: the certificate is bound to the names and addresses it was generated for. If your Mac's IP changes (DHCP), regenerate the certificate with the new address and update the agent URLs. A DHCP reservation for your Mac keeps the setup stable. The `.certs/` directory is git-ignored.
+- **Hosted tenant**: a hosted AIC tenant cannot reach a private network address, so the Json Web Key and Metadata URLs need a tunnel (see the reachability note under [Configure the Authorization Server](#configure-the-authorization-server)) or a pasted JWK set, regardless of the certificate.
+
+To use an existing certificate instead of mkcert, pass it explicitly: `npm run ssl -- --cert server.pem --key server.key`. With a self-signed certificate that the machine does not trust (for example a quick `openssl req` one), the server still runs, but browsers and the iOS sample show certificate warnings and may refuse the flow — the trusted-mkcert route above avoids that. `npm run ssl` without any certificate available prints an error and exits instead of silently serving HTTP.
 
 > **Tunnels**: exposing the app through an HTTPS tunnel makes this unauthenticated app reachable from the internet — anyone who can reach it can request a signed consent response. Keep it up only for the length of your test session.
 
