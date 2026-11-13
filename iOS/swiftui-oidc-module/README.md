@@ -528,7 +528,7 @@ The RAR login in this sample runs against PingAM/Advanced Identity Cloud with th
    - Grant type **Authorization Code** with PKCE (as for the standard login above)
    - List every `type` you will request under **Authorization Detail Type(s)** — a request for an unlisted type is rejected with `invalid_authorization_details`
    - Turn **Implied Consent** off — implied consent with `authorization_details` is rejected with `invalid_request`
-3. **Remote Consent Service**: Enable remote consent for the flow and configure a Remote Consent Service that returns the granted `authorization_details`. The built-in example consent service does not return `authorization_details`, so a login against it completes with an empty array on the token — use a custom consent service to see populated cards on the RAR Access Token screen.
+3. **Remote Consent Service**: Enable remote consent for the flow and configure a Remote Consent Service that returns the granted `authorization_details`. The built-in example consent service does not return `authorization_details`, so a login against it completes with an empty array on the token — use a custom consent service to see populated cards on the RAR Access Token screen. The [RCS demo](../../rcs/rcs-demo/README.md) in this repository is a ready-made consent service for this purpose.
 
 ## Security Considerations
 
