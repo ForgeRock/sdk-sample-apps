@@ -52,19 +52,19 @@
   "enableMagicLinkAuthentication": true,
   "agreement": "useAgreementId",
   "nodeTitle": "Automation - Polling",
-  "envId": "300c4f2a-39d4-4ba9-a18a-f6de246006f4",
-  "formId": "658b150f-da19-461e-afcb-79ea7bb52076",
+  "envId": "00000000-0000-4000-8000-000000000001",
+  "formId": "00000000-0000-4000-8000-000000000013",
   "isResponseCompatibleWithMobileAndWebSdks": true,
   "id": "czys1qteu6",
-  "connectionId": "eb6a94a33f2f479eff234e8fa5049459",
+  "connectionId": "00000000000000000000000000000006",
   "capabilityName": "customForm",
   "interactionId": "scrubbed",
   "_links": {
     "next": {
-      "href": "{{baseUrl}}/300c4f2a-39d4-4ba9-a18a-f6de246006f4/davinci/connections/eb6a94a33f2f479eff234e8fa5049459/capabilities/customForm"
+      "href": "{{baseUrl}}/00000000-0000-4000-8000-000000000001/davinci/connections/00000000000000000000000000000006/capabilities/customForm"
     },
     "self": {
-      "href": "{{baseUrl}}/300c4f2a-39d4-4ba9-a18a-f6de246006f4/davinci/connections/867ed4363b2bc21c860085ad2baa817d/capabilities/customHTMLTemplate"
+      "href": "{{baseUrl}}/00000000-0000-4000-8000-000000000001/davinci/connections/00000000000000000000000000000003/capabilities/customHTMLTemplate"
     }
   },
   "skProxyApiEnvironmentId": "deprecated",

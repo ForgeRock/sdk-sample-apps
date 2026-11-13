@@ -203,19 +203,19 @@
   "agreement": "useAgreementId",
   "nodeTitle": "Form Fields Tests",
   "nodeDescription": "Display the Test Supported Fields Form",
-  "envId": "300c4f2a-39d4-4ba9-a18a-f6de246006f4",
-  "formId": "93802e47-ff66-43b7-98c3-3eccaed7679c",
+  "envId": "00000000-0000-4000-8000-000000000001",
+  "formId": "00000000-0000-4000-8000-000000000005",
   "isResponseCompatibleWithMobileAndWebSdks": true,
   "id": "xv07ni4t9c",
-  "connectionId": "eb6a94a33f2f479eff234e8fa5049459",
+  "connectionId": "00000000000000000000000000000006",
   "capabilityName": "customForm",
   "interactionId": "scrubbed",
   "_links": {
     "next": {
-      "href": "{{baseUrl}}/300c4f2a-39d4-4ba9-a18a-f6de246006f4/davinci/connections/eb6a94a33f2f479eff234e8fa5049459/capabilities/customForm"
+      "href": "{{baseUrl}}/00000000-0000-4000-8000-000000000001/davinci/connections/00000000000000000000000000000006/capabilities/customForm"
     },
     "self": {
-      "href": "{{baseUrl}}/300c4f2a-39d4-4ba9-a18a-f6de246006f4/davinci/connections/867ed4363b2bc21c860085ad2baa817d/capabilities/customHTMLTemplate"
+      "href": "{{baseUrl}}/00000000-0000-4000-8000-000000000001/davinci/connections/00000000000000000000000000000003/capabilities/customHTMLTemplate"
     }
   },
   "skProxyApiEnvironmentId": "deprecated",

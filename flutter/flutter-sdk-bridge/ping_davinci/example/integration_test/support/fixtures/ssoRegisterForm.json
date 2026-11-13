@@ -3,9 +3,9 @@
   "isResponseCompatibleWithMobileAndWebSdks": true,
   "id": "1k5y98i1v1",
   "interactionId": "scrubbed",
-  "companyId": "300c4f2a-39d4-4ba9-a18a-f6de246006f4",
-  "flowId": "59525b0db13d25376b910e5fb852ad5a",
-  "connectionId": "867ed4363b2bc21c860085ad2baa817d",
+  "companyId": "00000000-0000-4000-8000-000000000001",
+  "flowId": "0000000000000000000000000000000c",
+  "connectionId": "00000000000000000000000000000003",
   "capabilityName": "customHTMLTemplate",
   "form": {
     "name": "Create Profile",
@@ -64,10 +64,10 @@
   },
   "_links": {
     "next": {
-      "href": "{{baseUrl}}/300c4f2a-39d4-4ba9-a18a-f6de246006f4/davinci/connections/867ed4363b2bc21c860085ad2baa817d/capabilities/customHTMLTemplate"
+      "href": "{{baseUrl}}/00000000-0000-4000-8000-000000000001/davinci/connections/00000000000000000000000000000003/capabilities/customHTMLTemplate"
     },
     "self": {
-      "href": "{{baseUrl}}/300c4f2a-39d4-4ba9-a18a-f6de246006f4/davinci/connections/867ed4363b2bc21c860085ad2baa817d/capabilities/customHTMLTemplate"
+      "href": "{{baseUrl}}/00000000-0000-4000-8000-000000000001/davinci/connections/00000000000000000000000000000003/capabilities/customHTMLTemplate"
     }
   },
   "skProxyApiEnvironmentId": "deprecated",

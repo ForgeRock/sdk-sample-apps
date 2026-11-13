@@ -33,19 +33,19 @@
   ],
   "enableMagicLinkAuthentication": true,
   "agreement": "useAgreementId",
-  "envId": "300c4f2a-39d4-4ba9-a18a-f6de246006f4",
-  "formId": "854c055c-cc80-4c17-9c15-7804c7214132",
+  "envId": "00000000-0000-4000-8000-000000000001",
+  "formId": "00000000-0000-4000-8000-000000000014",
   "isResponseCompatibleWithMobileAndWebSdks": true,
   "id": "i1rmuzlx6t",
-  "connectionId": "eb6a94a33f2f479eff234e8fa5049459",
+  "connectionId": "00000000000000000000000000000006",
   "capabilityName": "customForm",
   "interactionId": "scrubbed",
   "_links": {
     "next": {
-      "href": "{{baseUrl}}/300c4f2a-39d4-4ba9-a18a-f6de246006f4/davinci/connections/eb6a94a33f2f479eff234e8fa5049459/capabilities/customForm"
+      "href": "{{baseUrl}}/00000000-0000-4000-8000-000000000001/davinci/connections/00000000000000000000000000000006/capabilities/customForm"
     },
     "self": {
-      "href": "{{baseUrl}}/300c4f2a-39d4-4ba9-a18a-f6de246006f4/davinci/connections/eb6a94a33f2f479eff234e8fa5049459/capabilities/customForm"
+      "href": "{{baseUrl}}/00000000-0000-4000-8000-000000000001/davinci/connections/00000000000000000000000000000006/capabilities/customForm"
     }
   },
   "skProxyApiEnvironmentId": "deprecated",

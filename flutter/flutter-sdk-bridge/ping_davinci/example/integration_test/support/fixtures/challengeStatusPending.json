@@ -1,19 +1,19 @@
 {
-  "eventId": "0tlWPR7s41CvLAc1M3Gw0vW_q9Nby9ha83aHkgX5Pgw",
+  "eventId": "yMU_xKQ2MkRAff-rPHlrOEYcSW_533tJjyQQkJziS1s",
   "challengeExpiry": 300,
-  "companyId": "300c4f2a-39d4-4ba9-a18a-f6de246006f4",
-  "connectionId": "2581eb287bb1d9bd29ae9886d675f89f",
+  "companyId": "00000000-0000-4000-8000-000000000001",
+  "connectionId": "00000000000000000000000000000015",
   "connectorId": "flowConnector",
-  "createdDate": 1793118357906,
+  "createdDate": 1794497314415,
   "interactionId": "scrubbed",
   "isChallengeComplete": false,
   "status": "started",
-  "statusUpdatedDate": 1793118357906,
+  "statusUpdatedDate": 1794497314415,
   "updateByFlowId": "",
-  "_id": "0tlWPR7s41CvLAc1M3Gw0vW_q9Nby9ha83aHkgX5Pgw",
+  "_id": "yMU_xKQ2MkRAff-rPHlrOEYcSW_533tJjyQQkJziS1s",
   "_links": {
     "self": {
-      "href": "{{baseUrl}}/300c4f2a-39d4-4ba9-a18a-f6de246006f4/davinci/user/credentials/challenge/0tlWPR7s41CvLAc1M3Gw0vW_q9Nby9ha83aHkgX5Pgw/status"
+      "href": "{{baseUrl}}/00000000-0000-4000-8000-000000000001/davinci/user/credentials/challenge/yMU_xKQ2MkRAff-rPHlrOEYcSW_533tJjyQQkJziS1s/status"
     }
   }
 }

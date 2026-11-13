@@ -14,8 +14,9 @@ import PingOrchestrate
 /// extension properties (`id`, `name`, `description`, `category`) as real fields.
 ///
 /// An `ErrorNode` carries its decoded `details` and, when it is retryable, the page fields and
-/// collectors of the `ContinueNode` it can be retried from. Session and user data are added by
-/// later phases; a `SuccessNode` carries only its type for now. Mirrors the Android mapper.
+/// collectors of the `ContinueNode` it can be retried from. A `SuccessNode` carries only its type;
+/// the session is surfaced separately via `getSession` / `DaVinciSessionMapper`. Mirrors the
+/// Android mapper.
 enum DaVinciNodeMapper {
     /// Maps `node`, asking `daVinci`'s collector factory which of the form fields it dropped (see
     /// `unsupportedFields(input:isRegistered:)`): a `ContinueNode`'s own, or an `ErrorNode`'s
