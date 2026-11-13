@@ -17,7 +17,7 @@ cd flutter-sdk-bridge/ping_davinci/example
 flutter test integration_test/
 ```
 
-This is what CI runs. A device or emulator must be attached, because the tests exercise the native
+CI does not run these yet (no device or emulator job), so run them locally. A device or emulator must be attached, because the tests exercise the native
 SDK through the platform channel.
 
 Against the live DaVinci test tenant, using the non-secret values in the gitignored `flutter/.env`:

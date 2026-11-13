@@ -25,7 +25,7 @@ than a pure-Dart reimplementation.
 
 - Flutter 3.44.x stable / Dart 3.12.x
 - A PingAM/PingOne Advanced Identity Cloud server with a configured authentication Journey
-- Android: API level 29+, Java 17
+- Android: API level 29+, Java 21
 - iOS: 16.0+, Xcode with Swift Package Manager support
 
 ## Getting Started

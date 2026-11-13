@@ -29,7 +29,7 @@ either direction.
 - Flutter 3.44.x stable / Dart 3.12.x
 - An OAuth 2.0/OIDC client registered on a PingAM/PingOne Advanced Identity Cloud server (or any
   standard OIDC provider) that supports a native/mobile redirect URI
-- Android: API level 29+, Java 17
+- Android: API level 29+, Java 21
 - iOS: 16.0+, Xcode with Swift Package Manager support
 
 ## Getting Started
@@ -109,7 +109,7 @@ Swift, React Native, and Journey Flutter samples follow.
 Test coverage for the behaviour this app demonstrates lives in the bridge package instead:
 
 - **Unit tests** — `../flutter-sdk-bridge/ping_oidc/test/` (config/token mapping, error
-  translation). Run with `flutter test` from the `flutter/` workspace root.
+  translation). Run with `flutter test` from `flutter-sdk-bridge/ping_oidc/`.
 - **Integration tests** — `../flutter-sdk-bridge/ping_oidc/example/integration_test/`, which drive
   the real `OidcClient` API against a hermetic mock discovery server, with no UI in the loop (the
   browser-authorize step itself can't be scripted — see

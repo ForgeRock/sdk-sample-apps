@@ -30,7 +30,7 @@ browser: every step is a form your app renders from the node the SDK returns.
 
 - Flutter 3.44.x stable / Dart 3.12.x
 - A PingOne environment with a DaVinci flow, and a PingOne OIDC application whose policy runs it
-- Android: API level 29+, Java 17
+- Android: API level 29+, Java 21
 - iOS: 16.0+, Xcode with Swift Package Manager support
 
 ## Getting Started
@@ -90,7 +90,7 @@ Swift, React Native, Journey and OIDC Flutter samples follow.
 Test coverage for the behaviour this app demonstrates lives in the bridge package instead:
 
 - **Unit tests** — `../flutter-sdk-bridge/ping_davinci/test/` (collector and node mapping,
-  validation, error translation). Run with `flutter test` from the `flutter/` workspace root.
+  validation, error translation). Run with `flutter test` from `flutter-sdk-bridge/ping_davinci/`.
 - **Integration tests** — `../flutter-sdk-bridge/ping_davinci/example/integration_test/`, which
   drive the real `DaVinciClient` API against a hermetic mock DaVinci server, with no UI in the
   loop. See [that package's README](../flutter-sdk-bridge/ping_davinci/README.md) for how to run
