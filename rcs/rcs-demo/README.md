@@ -77,6 +77,31 @@ Requested details of a type that is not supported are left out of the response, 
 
 ## Setup
 
+The fastest path for testing from this Mac with the iOS Simulator: install mkcert once, generate a certificate for `localhost` and your Mac's IP, start the demo, trust the CA in each simulator you use, and configure the agent. Each step is explained below; this is the whole thing:
+
+```sh
+cd rcs/rcs-demo
+
+# 1. Tools and trusted certificate (once per machine)
+brew install mkcert
+mkcert -install
+mkdir -p .certs
+mkcert -cert-file .certs/cert.pem -key-file .certs/key.pem \
+    localhost 127.0.0.1 "$(ipconfig getifaddr en0)"
+
+# 2. Start the demo (HTTPS turns on automatically because .certs/ exists)
+npm install
+npm start
+
+# 3. Trust the CA in every iOS Simulator you will test on (once per simulator)
+xcrun simctl keychain booted add-root-cert "$(mkcert -CAROOT)/rootCA.pem"
+
+# 4. Check: no certificate warning, JSON metadata
+open "https://localhost:8081/metadata"
+```
+
+Then configure the RCS agent on your authorization server (see [Configure the Authorization Server](#configure-the-authorization-server)) and run the sample app. The sections below explain each step, the settings, and what to do when your tenant is hosted or you test on a physical device.
+
 ### Run the demo
 
 ```sh
@@ -112,17 +137,15 @@ The app serves HTTPS when either:
 1. It is started with `npm run ssl` (or `--ssl`) and certificate files exist, or
 2. `.certs/cert.pem` and `.certs/key.pem` exist next to `server.js` — HTTPS is then automatic, no flag needed.
 
-For a **valid, trusted** certificate, create the `.certs/` files with [mkcert](https://github.com/FiloSottile/mkcert), which installs a local CA that your Mac and iOS Simulator already trust. Generate it for every name and address you will use in the agent configuration — typically your Mac's local IP, so the endpoints work from a physical device as well:
+For a **valid, trusted** certificate, create the `.certs/` files with [mkcert](https://github.com/FiloSottile/mkcert), which installs a local CA that your Mac trusts. Generate it for every name and address you will use in the agent configuration — typically `localhost` and your Mac's local IP, so the endpoints work in the simulator and from a physical device:
 
 ```sh
 brew install mkcert
 mkcert -install
-npm start                       # creates .certs/ if it does not exist, then stops on plain HTTP; Ctrl-C
+mkdir -p .certs
 mkcert -cert-file .certs/cert.pem -key-file .certs/key.pem localhost 127.0.0.1 <your-local-ip>
 npm start                       # now serves HTTPS automatically
 ```
-
-The `.certs/` directory is created by the app on startup, so mkcert has somewhere to write; run the app once (or `mkdir -p .certs`) if you generate the certificate before ever starting the server.
 
 `<your-local-ip>` is the address other devices use to reach your Mac; find it with `ipconfig getifaddr en0` (or `en1`). **Every address or hostname in the agent URLs must be in this list** — a URL whose host is not covered by the certificate fails TLS validation in the browser and in the iOS sample, even though the server is up. `localhost` is already covered above.
 
@@ -136,7 +159,21 @@ With the certificate in place, the endpoints all use the same host. For example,
 
 Use the IP form everywhere — the agent's Redirect URL and, when your tenant can route to your network, the Json Web Key and Metadata URLs. The server already listens on all interfaces, so no host flag is needed; the URLs decide the reachability.
 
-**Verify before configuring anything else**: open `https://<your-local-ip>:8081/metadata` in your Mac's browser. If it loads with no certificate warning, devices and the sample app will accept it too; a warning means the certificate does not cover that address — regenerate with it included.
+**Verify before configuring anything else**: open `https://<your-local-ip>:8081/metadata` in your Mac's browser. If it loads with no certificate warning, the Mac side is done; a warning means the certificate does not cover that address — regenerate with it included.
+
+### Trust in the iOS Simulator
+
+The iOS Simulator does **not** inherit the Mac's trust settings: even with `mkcert -install`, the simulator's Safari and `ASWebAuthenticationSession` (which the sample app's login browser uses) reject the certificate until the mkcert root CA is installed into the simulator's own trust store. The symptom is the consent page failing with **"This Connection Is Not Private"** in the simulator while the same URL loads fine in the Mac's browser.
+
+Install the CA into every simulator you test on (repeat after creating a new simulator, erasing one, or installing a new Xcode runtime):
+
+```sh
+xcrun simctl keychain booted add-root-cert "$(mkcert -CAROOT)/rootCA.pem"
+```
+
+Replace `booted` with a simulator UDID to target a specific one. Verify by opening `https://localhost:<port>/metadata` in the simulator's Safari — it should render the JSON with no warning.
+
+Physical devices use the system trust store, so mkcert's CA does not apply to them; a physical device needs a certificate from a CA it trusts (a corporate CA, or a public one via a tunnel).
 
 Two caveats:
 
@@ -169,7 +206,7 @@ Rich Authorization Requests with a Remote Consent Service need three pieces of c
 
 The agent ID you choose does not need to be configured here: the app reads it from the consent request and uses it as the issuer of the response.
 
-> **Reachability and trust:** The **Redirect URL** is followed by the user's *browser*, so it only has to be reachable from the device running the sample app — use `https://localhost:8081/consent` for the iOS Simulator, which shares the Mac's network and its trust store, or `https://<your-local-ip>:8081/consent` for a physical device (generate the certificate for that address too). The **Json Web Key URI** and **Metadata URL** are fetched by the *authorization server*, and a hosted AIC tenant cannot reach a private network address. For a hosted tenant, publish this app through an HTTPS tunnel and use the tunnel's address for those URLs — a tunnel makes this unauthenticated app reachable from the internet, so keep it up only for the length of your test session. If your agent configuration allows it, you can instead paste the JWK set into the agent's **Json Web Key** field, so the tenant does not need to fetch `/keys`.
+> **Reachability and trust:** The **Redirect URL** is followed by the user's *browser*, so it only has to be reachable from the device running the sample app — use `https://localhost:8081/consent` for the iOS Simulator (the simulator's network is the Mac's, and its Safari accepts `localhost` once the CA is trusted per [Trust in the iOS Simulator](#trust-in-the-ios-simulator)), or `https://<your-local-ip>:8081/consent` for a physical device (generate the certificate for that address too). The **Json Web Key URI** and **Metadata URL** are fetched by the *authorization server*, and a hosted AIC tenant cannot reach a private network address. For a hosted tenant, publish this app through an HTTPS tunnel and use the tunnel's address for those URLs — a tunnel makes this unauthenticated app reachable from the internet, so keep it up only for the length of your test session. If your agent configuration allows it, you can instead paste the JWK set into the agent's **Json Web Key** field, so the tenant does not need to fetch `/keys`.
 
 ## Try It With the iOS Sample
 
@@ -193,6 +230,18 @@ To see the other outcomes:
 - **Grant rules**: the demo grants every requested detail of a supported type exactly as requested. A real consent service would apply its own rules here, for example capping an amount or removing a location, and return the reduced details in the response.
 
 ## Troubleshooting
+
+**Issue**: `mkcert` fails with `failed to save certificate: open .certs/cert.pem: no such file or directory`.  
+**Solution**: The directory does not exist yet. Run `mkdir -p .certs` (or start the app once), then re-run the `mkcert` command.
+
+**Issue**: `https://localhost:<port>` works, but `https://<your-local-ip>:<port>` fails with `ERR_CONNECTION_CLOSED` or `SSL_ERROR_SYSCALL`.  
+**Solution**: The machine's firewall is blocking inbound connections to Node. On macOS, check System Settings → Network → Firewall → Options for a **node** entry set to *Block incoming connections* and change it to *Allow*. On managed Macs the setting may be locked by policy — ask IT to allow the Node binary (`sudo /usr/libexec/ApplicationFirewall/socketfilterfw --unblockapp <path-to-node>`), or test through the iOS Simulator, which reaches the server over loopback and is unaffected.
+
+**Issue**: The simulator's browser shows **"This Connection Is Not Private"** for the consent page while the same URL works in the Mac's browser.  
+**Solution**: The simulator does not inherit the Mac's trust settings. Install the mkcert root CA into it: `xcrun simctl keychain booted add-root-cert "$(mkcert -CAROOT)/rootCA.pem"` (see [Trust in the iOS Simulator](#trust-in-the-ios-simulator)).
+
+**Issue**: The login fails with a 500 "error retrieving consent metadata" from the authorization server.  
+**Solution**: The authorization server could not fetch or validate the agent's metadata or keys. Check that the agent's **Metadata URL** and **Json Web Key URI** point at an address the *server* can reach (a hosted tenant cannot reach `localhost` or a private IP — see the reachability note under [Configure the Authorization Server](#configure-the-authorization-server)) and that the URLs use `https` when the agent requires it.
 
 **Issue**: The browser cannot open the consent page.  
 **Solution**: The device must be able to reach the **Redirect URL**. Check that the app is running, that the device is on the same network as your machine, and that a firewall is not blocking the port. Use the machine's IP address, not `localhost`, for a physical device.
