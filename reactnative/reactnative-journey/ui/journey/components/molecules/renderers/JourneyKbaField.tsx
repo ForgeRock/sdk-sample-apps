@@ -8,12 +8,7 @@
 import React, { useMemo, useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { journeyFieldRendererStyles as fieldStyles } from '../../../../../src/styles/journeyStyles';
-import {
-  readBoolean,
-  readString,
-  resolveOptionLabel,
-  resolvePromptText,
-} from './valueReaders';
+import { readBoolean, readString, resolveOptionLabel } from './valueReaders';
 import type { JourneyFieldRendererProps } from './types';
 import PingTextInput from '../../../../components/atoms/PingTextInput';
 
@@ -33,7 +28,7 @@ export default function JourneyKbaField(
   props: JourneyFieldRendererProps,
 ): React.ReactElement {
   const { field, currentValue, setFieldValue } = props;
-  const promptText = resolvePromptText(field.prompt, field.message);
+  const promptText = field.prompt.trim() || field.message?.trim() || '';
   const [isQuestionDropdownOpen, setQuestionDropdownOpen] =
     useState<boolean>(false);
 

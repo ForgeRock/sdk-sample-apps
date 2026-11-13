@@ -8,6 +8,13 @@
 module.exports = {
   root: true,
   extends: '@react-native',
+  parserOptions: {
+    babelOptions: {
+      // @babel/eslint-parser resolves the root babel.config.js from
+      // process.cwd() by default, which breaks linting from the repo root.
+      cwd: __dirname,
+    },
+  },
   rules: {
     'no-void': ['warn', { allowAsStatement: true }],
   },

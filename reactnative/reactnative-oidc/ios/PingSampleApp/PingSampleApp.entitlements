@@ -8,9 +8,5 @@
 	<array>
 		<string>Default</string>
 	</array>
-	<key>com.apple.developer.associated-domains</key>
-	<array>
-		<string>webcredentials:idc.petrov.ca</string>
-	</array>
 </dict>
 </plist>

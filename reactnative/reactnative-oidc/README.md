@@ -26,63 +26,88 @@ This repository contains an example React Native project demonstrating OIDC (red
 
 2. **Clone the repository**:
 
-    ```sh
-    git clone https://github.com/ForgeRock/sdk-sample-apps.git
-    cd sdk-sample-apps/reactnative/reactnative-oidc
-    ```
+   ```sh
+   git clone https://github.com/ForgeRock/sdk-sample-apps.git
+   cd sdk-sample-apps/reactnative/reactnative-oidc
+   ```
 
-3. **Configure the app**: Copy the example env file and fill in your server details.
+3. **Configure the app**: SDK runtime configuration is selected in the app, not from `.env`. This sample has no build-time native settings and needs no `.env` file. Two sources are supported:
+   - **JSON presets**: add a JSON file to `assets/configs/`. The file name without `.json` becomes the preset name in the Configuration screen. Copy `openIdJsonConfig.json` as a starting point.
+   - **Custom configs**: create, edit, and delete configs directly on the app's Configuration screen. Custom configs persist on the device; they are not committed to the repo.
 
-    ```sh
-    cp .env.example .env
-    ```
+   The files use the unified SDK configuration schema shared with the native Android and iOS sample apps. Top-level `timeout` (request timeout in milliseconds) and `log` (`NONE`, `WARN`, or `DEBUG`) are optional. Required keys inside the `oidc` block are `clientId`, `discoveryEndpoint`, `scopes` (array), and `redirectUri`; optional keys include `openId.*` endpoint overrides (`authorizationEndpoint`, `tokenEndpoint`, `userinfoEndpoint`, `endSessionEndpoint`, `revocationEndpoint`), `par`, `acrValues`, and `additionalParameters`. Unknown keys are ignored; a file that fails validation is skipped at startup with a logged warning naming the offending field. See `assets/configs/openIdJsonConfig.json` for a worked example.
 
-    Locate the TODO comment in `.env.example` and replace the placeholder values in `.env` with your configuration.
-
-4. **Redirect URI**: the app's redirect URI scheme is pre-wired to `org.forgerock.oidc://oauth2redirect`. If you pick a different scheme, update the redirect URI values in `.env`, `manifestPlaceholders["appRedirectUriScheme"]` in `android/app/build.gradle`, and the `oauth2redirect` entry of `CFBundleURLTypes` in `ios/PingSampleApp/Info.plist`.
+4. **Redirect URI**: the app's redirect URI scheme is pre-wired to `org.forgerock.oidc://oauth2redirect`. The `oidc.redirectUri` in your JSON config must match `manifestPlaceholders["appRedirectUriScheme"]` in `android/app/build.gradle` and the `oauth2redirect` entry of `CFBundleURLTypes` in `ios/PingSampleApp/Info.plist`.
 
 5. **Install dependencies**:
 
-    ```sh
-    yarn install
-    ```
+   ```sh
+   yarn install
+   ```
 
 6. **iOS only** — install CocoaPods:
 
-    ```sh
-    cd ios
-    bundle install
-    bundle exec pod install
-    cd ..
-    ```
+   ```sh
+   cd ios
+   bundle install
+   bundle exec pod install
+   cd ..
+   ```
 
 7. **Android only — keystore setup**: `android/app/build.gradle` signs the debug build with `android/app/debug.keystore` using the alias `androiddebugkey`, and reads the keystore/key passwords from Gradle properties named `KEYSTORE_PASSWORD` and `KEY_PASSWORD`, which aren't set anywhere in this repo. Generate your own debug keystore with that filename and alias:
 
-    ```sh
-    keytool -genkeypair -v \
-      -keystore android/app/debug.keystore \
-      -alias androiddebugkey \
-      -keyalg RSA -keysize 2048 -validity 10000 \
-      -storepass <your-password> -keypass <your-password> \
-      -dname "CN=Android Debug,O=Android,C=US"
-    ```
+   ```sh
+   keytool -genkeypair -v \
+     -keystore android/app/debug.keystore \
+     -alias androiddebugkey \
+     -keyalg RSA -keysize 2048 -validity 10000 \
+     -storepass <your-password> -keypass <your-password> \
+     -dname "CN=Android Debug,O=Android,C=US"
+   ```
 
-    Then add your credentials to your global `~/.gradle/gradle.properties` (create the file if it doesn't exist):
+   Then add your credentials to your global `~/.gradle/gradle.properties` (create the file if it doesn't exist):
 
-    ```properties
-    KEYSTORE_PASSWORD=<your-password>
-    KEY_PASSWORD=<your-password>
-    ```
+   ```properties
+   KEYSTORE_PASSWORD=<your-password>
+   KEY_PASSWORD=<your-password>
+   ```
 
-    Skipping this step causes the build to fail signing, which then fails app installation.
+   Skipping this step causes the build to fail signing, which then fails app installation.
 
 8. **Run the app**:
 
-    ```sh
-    yarn ios
-    # or
-    yarn android
-    ```
+   ```sh
+   yarn ios
+   # or
+   yarn android
+   ```
+
+   > [!NOTE]
+   >
+   > **Xcode 27 note**: `yarn ios` fails on Xcode 27 because React Native CLI 19.x opens `Simulator.app`, which Xcode 27 replaced with `DeviceHub.app`. The CLI fix ships in `@react-native-community/cli` 21, which is not paired with React Native 0.80. Xcode 27 also does not match concrete simulators against this project's scheme, so build for the generic simulator destination and install with `simctl`. Keep Metro running with `yarn start` in another terminal, then pick and boot a simulator:
+   >
+   > 1. List the available iPhone simulators. The device UDID is the value in parentheses, and running devices are marked `Booted`:
+   >
+   >    ```sh
+   >    xcrun simctl list devices available | grep iPhone
+   >    ```
+   >
+   > 2. Choose an iPhone running iOS 16.6 or later. The app's deployment target is 16.6, so simulators on iOS 16.0 are not compatible. Pick the newest iOS version you have installed unless you need to test an older one.
+   > 3. Boot it and make it the only booted simulator, because `ios:install` targets the `booted` device and is ambiguous when several are running:
+   >
+   >    ```sh
+   >    xcrun simctl list devices booted
+   >    xcrun simctl shutdown <other-device-udid>
+   >    xcrun simctl boot <device-udid>
+   >    ```
+   >
+   > 4. Build, install, and launch:
+   >
+   >    ```sh
+   >    yarn ios:build-run
+   >    ```
+   >
+   > `ios:manual` runs `ios:build` (`xcodebuild`) followed by `ios:install` (`xcrun simctl install` and `launch` on the booted simulator).
 
 ## Additional Resources
 

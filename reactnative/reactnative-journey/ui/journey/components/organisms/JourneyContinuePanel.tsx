@@ -30,6 +30,24 @@ export type JourneyContinuePanelProps = {
    */
   form: JourneyFormResult;
   /**
+   * Optional page header text from the active `ContinueNode` payload.
+   */
+  header?: string;
+  /**
+   * Optional page description text from the active `ContinueNode` payload.
+   */
+  description?: string;
+  /**
+   * Optional locale-resolved submit button text from the active
+   * `ContinueNode` payload. Falls back to "Continue" when absent.
+   */
+  submitButtonText?: string;
+  /**
+   * Optional locale-resolved page footer text from the active `ContinueNode`
+   * payload.
+   */
+  pageFooter?: string;
+  /**
    * True while a Journey action is currently in-flight.
    */
   loading: boolean;
@@ -81,6 +99,10 @@ export default function JourneyContinuePanel(
 ): React.ReactElement {
   const {
     form,
+    header,
+    description,
+    submitButtonText,
+    pageFooter,
     loading,
     pollingWaitMs,
     resumeUrl,
@@ -92,7 +114,7 @@ export default function JourneyContinuePanel(
   const { fields, values, meta, setValue } = form;
 
   const callbackTypes = useMemo<Set<JourneyCallbackType>>(
-    () => new Set(fields.map(field => field.ref.type)),
+    () => new Set(fields.map(field => field.type)),
     [fields],
   );
 
@@ -114,7 +136,7 @@ export default function JourneyContinuePanel(
     callbackType.DeviceProfileCallback,
   );
   const hasSelectIdpCallback = fields.some(
-    field => field.ref.type === nativeExtensionCallbackType.SelectIdpCallback,
+    field => field.type === nativeExtensionCallbackType.SelectIdpCallback,
   );
   const hasSuspendedCallback = callbackTypes.has(
     callbackType.SuspendedTextOutputCallback,
@@ -125,7 +147,7 @@ export default function JourneyContinuePanel(
   const hasManualSubmit = fields.some(
     field =>
       field.requiresUserInput &&
-      !(hasPollingWaitCallback && field.ref.type === 'ConfirmationCallback'),
+      !(hasPollingWaitCallback && field.type === 'ConfirmationCallback'),
   );
 
   // Derive blocking state and display info from form.issues — single source of truth.
@@ -133,14 +155,13 @@ export default function JourneyContinuePanel(
     () =>
       Array.from(
         new Set(
-          form.issues
-            .filter(
-              issue =>
-                issue.code === 'INTEGRATION_REQUIRED' &&
-                issue.callbackType != null &&
-                !isAutoHandledIntegrationCallback(issue.callbackType),
-            )
-            .map(issue => issue.callbackType as JourneyCallbackType),
+          form.issues.flatMap(issue =>
+            issue.code === 'INTEGRATION_REQUIRED' &&
+            issue.callbackType != null &&
+            !isAutoHandledIntegrationCallback(issue.callbackType)
+              ? [issue.callbackType]
+              : [],
+          ),
         ),
       ),
     [form.issues, isAutoHandledIntegrationCallback],
@@ -178,6 +199,22 @@ export default function JourneyContinuePanel(
     [form.issues, isAutoHandledIntegrationCallback],
   );
 
+  // Validation issues (missing consent, invalid values) only render after the
+  // user has attempted submission — form.attempted gates premature errors.
+  const validationIssueMessages = useMemo<string[]>(
+    () =>
+      form.attempted
+        ? form.issues
+            .filter(
+              issue =>
+                issue.code === 'REQUIRED_CONSENT_MISSING' ||
+                issue.code === 'INVALID_VALUE',
+            )
+            .map(issue => issue.message)
+        : [],
+    [form.attempted, form.issues],
+  );
+
   // True when every field is silently handled by a registered integration —
   // the auto-forwarder owns submission, so a Continue button would be redundant.
   // FIDO registration and device binding render a device-name field so they
@@ -187,9 +224,9 @@ export default function JourneyContinuePanel(
     fields.every(
       field =>
         field.executionMode === 'integration_required' &&
-        isAutoHandledIntegrationCallback(field.ref.type) &&
-        field.ref.type !== 'FidoRegistrationCallback' &&
-        field.ref.type !== 'DeviceBindingCallback',
+        isAutoHandledIntegrationCallback(field.type) &&
+        field.type !== 'FidoRegistrationCallback' &&
+        field.type !== 'DeviceBindingCallback',
     );
 
   const canAutoAdvanceWithContinueButton =
@@ -216,6 +253,11 @@ export default function JourneyContinuePanel(
 
   return (
     <>
+      {header ? <Text style={styles.nodeHeader}>{header}</Text> : null}
+      {description ? (
+        <Text style={styles.nodeDescription}>{description}</Text>
+      ) : null}
+
       {/* `setFieldValue` writes into `useJourneyForm` state, consumed as `form.input` on submit. */}
       {fields.map(field => (
         <JourneyFieldRenderer
@@ -244,6 +286,12 @@ export default function JourneyContinuePanel(
       {blockingIssueMessages.length > 0 ? (
         <Text style={styles.blockingNote}>
           Blocking reasons: {blockingIssueMessages.join(' | ')}
+        </Text>
+      ) : null}
+
+      {validationIssueMessages.length > 0 ? (
+        <Text style={styles.blockingNote}>
+          {validationIssueMessages.join(' | ')}
         </Text>
       ) : null}
 
@@ -298,7 +346,9 @@ export default function JourneyContinuePanel(
           onPress={onSubmit}
           disabled={submitDisabled}
         >
-          <Text style={commonStyles.buttonText}>Continue</Text>
+          <Text style={commonStyles.buttonText}>
+            {submitButtonText || 'Continue'}
+          </Text>
         </TouchableOpacity>
       ) : null}
 
@@ -308,6 +358,8 @@ export default function JourneyContinuePanel(
           {pollingWaitSeconds}s.
         </Text>
       ) : null}
+
+      {pageFooter ? <Text style={styles.nodeFooter}>{pageFooter}</Text> : null}
     </>
   );
 }

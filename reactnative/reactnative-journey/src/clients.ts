@@ -6,52 +6,32 @@
  */
 
 import { createJourneyClient } from '@ping-identity/rn-journey';
+import { createOidcDeviceClient } from '@ping-identity/rn-oidc';
+import type {
+  OidcDeviceClient,
+  OidcOpenIdConfiguration,
+} from '@ping-identity/rn-oidc';
 import type { JourneyClient } from '@ping-identity/rn-journey';
-import Config from 'react-native-config';
 
 import { logger } from '@ping-identity/rn-logger';
 import {
   CacheStrategy,
+  configureOidcStorage,
   configureSessionStorage,
 } from '@ping-identity/rn-storage';
-
-/**
- * Normalized Journey OAuth scopes sourced from `JOURNEY_SCOPES`.
- */
-const journeyScopes = (Config.JOURNEY_SCOPES ?? '')
-  .split(',')
-  .map(item => item.trim())
-  .filter(Boolean);
-
-/**
- * Base Journey module configuration resolved directly from environment
- * variables.
- */
-export const journeyConfig = {
-  serverUrl: Config.JOURNEY_SERVER_URL!,
-  realm: Config.JOURNEY_REALM!,
-  cookie: Config.JOURNEY_COOKIE!,
-  clientId: Config.JOURNEY_CLIENT_ID!,
-  discoveryEndpoint: Config.JOURNEY_DISCOVERY_ENDPOINT!,
-  redirectUri: Config.JOURNEY_REDIRECT_URI!,
-  scopes: journeyScopes,
-};
-
-/**
- * Session storage handle used by the Journey client module.
- */
-const journeySessionStorageClient1 = configureSessionStorage({
-  android: {
-    fileName: 'journey_client_one_session_store',
-    keyAlias: 'journey.client.one.session',
-    cacheStrategy: CacheStrategy.NO_CACHE,
-  },
-  ios: {
-    account: 'com.pingidentity.rnsampleapp.journey.client.one',
-    encryptor: true,
-    cacheable: false,
-  },
-});
+import { lazyResource } from './config/lazyResource';
+import { loadJsonConfigPresets } from './config/loadConfigs';
+import {
+  bundledPreset,
+  type ConfigKind,
+  type ConfigPreset,
+} from './config/customConfigs';
+import {
+  toLogLevel,
+  type UnifiedConfig,
+  type UnifiedJourneyConfig,
+  type UnifiedOidcConfig,
+} from './config/unifiedConfig';
 
 /**
  * Shared logger instance used by sample clients.
@@ -59,39 +39,54 @@ const journeySessionStorageClient1 = configureSessionStorage({
 const appLogger = logger({ level: 'debug' });
 
 /**
- * Journey-only client for validating flows without OIDC module composition.
- *
- * This mirrors native Journey setup where only `serverUrl` is configured.
+ * Device Authorization Grant configuration shape displayed by the Auth Grant
+ * section of the Configuration screen.
  */
-export const journeyOnlyClient = createJourneyClient({
-  serverUrl: journeyConfig.serverUrl,
-});
+export type DeviceAuthConfig = {
+  clientId: string;
+  discoveryEndpoint: string;
+  scopes: string[];
+  display: string;
+  acrValues: string;
+  /**
+   * Optional OpenID endpoint overrides.
+   *
+   * @remarks
+   * Needed when the provider's discovery document omits an endpoint the
+   * device authorization flow requires (for example, Advanced Identity
+   * Cloud's discovery document has no `device_authorization_endpoint`).
+   */
+  openId?: OidcOpenIdConfiguration;
+};
 
 /**
- * Primary Journey client used by the sample app login flows.
- *
- * The client is configured with OIDC and session modules so it can handle
- * end-to-end Journey interactions, including token exchange and persisted
- * session continuity across app restarts.
+ * Device client used while no Auth Grant configuration is selected, so the
+ * provider tree stays mounted. It restores no user and rejects authorization
+ * with an actionable message.
  */
-export const loginClient = createJourneyClient({
-  timeout: 10000,
-  serverUrl: journeyConfig.serverUrl,
-  realm: journeyConfig.realm,
-  cookie: journeyConfig.cookie,
-  logger: appLogger,
-  modules: {
-    oidc: {
-      clientId: journeyConfig.clientId,
-      discoveryEndpoint: journeyConfig.discoveryEndpoint,
-      redirectUri: journeyConfig.redirectUri,
-      scopes: journeyConfig.scopes,
-    },
-    session: {
-      storage: journeySessionStorageClient1,
-    },
+export const unconfiguredDeviceAuthClient: OidcDeviceClient = {
+  id: 'unconfigured-device-auth-client',
+  async authorize() {
+    throw new Error('Select an Auth Grant configuration first.');
   },
-});
+  async user() {
+    return null;
+  },
+  async dispose() {},
+};
+
+/**
+ * Journey server address and session cookie name for the selected profile.
+ */
+export type JourneyConnection = {
+  serverUrl: string;
+  cookie?: string;
+};
+
+/**
+ * Supported sample app configuration groups.
+ */
+export type SampleConfigGroup = 'Journey' | 'Auth Grant';
 
 /**
  * Runtime-selectable sample app client profile.
@@ -101,6 +96,10 @@ export type SampleAppClientProfile = {
    * Stable profile key used by the configuration selector.
    */
   key: string;
+  /**
+   * UI group heading for this profile.
+   */
+  group: SampleConfigGroup;
   /**
    * Human readable profile name.
    */
@@ -114,13 +113,49 @@ export type SampleAppClientProfile = {
    */
   environment: string;
   /**
-   * Journey client bound to the profile.
+   * Journey client bound to the profile. Present only for `Journey` group
+   * profiles.
    */
-  journeyClient: JourneyClient;
+  journeyClient?: JourneyClient;
+  /**
+   * Where the profile's configuration came from: a bundled
+   * `assets/configs/*.json` file or a custom config created in the app.
+   */
+  source: 'json' | 'custom';
+  /**
+   * Configuration kind and the config it was built from, for JSON and custom
+   * profiles. Used to duplicate or edit the profile.
+   */
+  kind?: ConfigKind;
+  unifiedConfig?: UnifiedConfig;
+  /**
+   * Custom entry id (custom profiles) or file name (JSON profiles).
+   */
+  presetId?: string;
+  /**
+   * Server address and session cookie used by device management calls.
+   * Present only for `Journey` group profiles.
+   */
+  connection?: JourneyConnection;
+  /**
+   * Releases clients built lazily for the profile; they are rebuilt on next
+   * use.
+   */
+  dispose?: () => Promise<void>;
   /**
    * Redirect URI used by Journey external IdP integrations.
    */
   externalIdpRedirectUri: string;
+  /**
+   * Device authorization client bound to this profile. Present only for
+   * `Auth Grant` group profiles.
+   */
+  deviceAuthClient?: OidcDeviceClient;
+  /**
+   * Device authorization configuration displayed by the Auth Grant section.
+   * Present only for `Auth Grant` group profiles.
+   */
+  deviceAuthConfig?: DeviceAuthConfig;
 };
 
 /**
@@ -134,30 +169,201 @@ function hostnameFrom(value: string): string {
   return normalized.split('/')[0] ?? value;
 }
 
-/**
- * Runtime-selectable sample app configurations shown in the Configuration screen.
- */
-export const sampleAppClientProfiles: readonly SampleAppClientProfile[] = [
-  {
-    key: 'journey-default',
-    name: 'Journey Test Config',
-    host: hostnameFrom(journeyConfig.serverUrl),
-    environment: journeyConfig.realm,
-    journeyClient: loginClient,
-    externalIdpRedirectUri: journeyConfig.redirectUri,
-  },
-  {
-    key: 'journey-only',
-    name: 'Journey Only',
-    host: hostnameFrom(journeyConfig.serverUrl),
-    environment: journeyConfig.realm,
-    journeyClient: journeyOnlyClient,
-    externalIdpRedirectUri: journeyConfig.redirectUri,
-  },
-];
+let activeJourneyConnection: JourneyConnection | undefined;
 
 /**
- * Default selected profile key for sample app boot.
+ * Records the connection of the selected Journey profile for device calls.
+ *
+ * @param connection Server address and cookie name of the selected profile.
  */
-export const DEFAULT_SAMPLE_APP_CLIENT_PROFILE_KEY =
-  sampleAppClientProfiles[0].key;
+export function setActiveJourneyConnection(
+  connection: JourneyConnection | undefined,
+): void {
+  activeJourneyConnection = connection;
+}
+
+/**
+ * Connection of the selected Journey profile.
+ *
+ * @returns Server address and cookie name, or `undefined` when no Journey
+ * configuration is selected.
+ */
+export function getActiveJourneyConnection(): JourneyConnection | undefined {
+  return activeJourneyConnection;
+}
+
+const DEFAULT_REDIRECT_URI = 'org.forgerock.demo://oauth2redirect';
+
+const storageIdFor = (presetName: string): string =>
+  presetName.replace(/[^A-Za-z0-9]/g, '_');
+
+const loggerFor = (config: UnifiedConfig) => {
+  const level = toLogLevel(config.log);
+  return level ? logger({ level }) : appLogger;
+};
+
+const createJourneyClientFromPreset = (
+  presetName: string,
+  config: UnifiedConfig,
+  journey: UnifiedJourneyConfig,
+): JourneyClient => {
+  const storageId = storageIdFor(presetName);
+  return createJourneyClient({
+    timeout: config.timeout,
+    serverUrl: journey.serverUrl,
+    realm: journey.realm,
+    cookie: journey.cookie,
+    logger: loggerFor(config),
+    modules: {
+      oidc: config.oidc,
+      session: {
+        storage: configureSessionStorage({
+          android: {
+            fileName: `journey_json_${storageId}_session_store`,
+            keyAlias: `journey.json.${storageId}.session`,
+            cacheStrategy: CacheStrategy.NO_CACHE,
+          },
+          ios: {
+            account: `com.pingidentity.rnsampleapp.journey.json.${storageId}`,
+            encryptor: true,
+            cacheable: false,
+          },
+        }),
+      },
+    },
+  });
+};
+
+const createDeviceClientFromPreset = (
+  presetName: string,
+  config: UnifiedConfig,
+  oidc: UnifiedOidcConfig,
+): OidcDeviceClient => {
+  const storageId = storageIdFor(presetName);
+  return createOidcDeviceClient({
+    ...oidc,
+    storage: configureOidcStorage({
+      android: {
+        fileName: `json-${storageId}-device-auth`,
+        keyAlias: `json.${storageId}.device.auth`,
+        strongBoxPreferred: true,
+        cacheStrategy: CacheStrategy.NO_CACHE,
+      },
+      ios: {
+        account: `com.pingidentity.rnsampleapp.json.${storageId}.device.auth`,
+        encryptor: true,
+        cacheable: false,
+      },
+    }),
+    logger: loggerFor(config),
+  });
+};
+
+const profileCache = new WeakMap<ConfigPreset, SampleAppClientProfile[]>();
+
+const createJourneyProfile = (
+  preset: ConfigPreset,
+): SampleAppClientProfile | undefined => {
+  const { journey, oidc } = preset.config;
+  if (!journey) {
+    return undefined;
+  }
+  const storageKey = `${preset.source}-${preset.id}`;
+  const client = lazyResource(
+    () => createJourneyClientFromPreset(storageKey, preset.config, journey),
+    value => value.dispose(),
+  );
+  return {
+    key: `${preset.source}-journey-${preset.id}`,
+    group: 'Journey',
+    name: preset.name,
+    host: hostnameFrom(journey.serverUrl),
+    environment: journey.realm ?? 'default',
+    get journeyClient() {
+      return client.get();
+    },
+    source: preset.source,
+    kind: 'journey',
+    presetId: preset.id,
+    unifiedConfig: preset.config,
+    connection: { serverUrl: journey.serverUrl, cookie: journey.cookie },
+    dispose: () => client.dispose(),
+    externalIdpRedirectUri: oidc?.redirectUri ?? DEFAULT_REDIRECT_URI,
+  };
+};
+
+const createDeviceAuthProfile = (
+  preset: ConfigPreset,
+): SampleAppClientProfile | undefined => {
+  const { journey, oidc } = preset.config;
+  if (!oidc) {
+    return undefined;
+  }
+  const storageKey = `${preset.source}-${preset.id}`;
+  const deviceAuthConfig: DeviceAuthConfig = {
+    clientId: oidc.clientId,
+    discoveryEndpoint: oidc.discoveryEndpoint,
+    scopes: oidc.scopes,
+    display: preset.name,
+    acrValues: oidc.acrValues ?? '',
+    openId: oidc.openId,
+  };
+  const client = lazyResource(
+    () => createDeviceClientFromPreset(storageKey, preset.config, oidc),
+    value => value.dispose(),
+  );
+  return {
+    key: `${preset.source}-dag-${preset.id}`,
+    group: 'Auth Grant',
+    name: preset.name,
+    host: hostnameFrom(oidc.discoveryEndpoint),
+    environment: journey?.realm ?? 'default',
+    source: preset.source,
+    kind: 'deviceAuth',
+    presetId: preset.id,
+    unifiedConfig: preset.config,
+    dispose: () => client.dispose(),
+    externalIdpRedirectUri: oidc.redirectUri,
+    get deviceAuthClient() {
+      return client.get();
+    },
+    deviceAuthConfig,
+  };
+};
+
+/**
+ * Builds the Journey and Auth Grant profiles a preset applies to. Clients are
+ * created on first use, and the result is cached per preset object.
+ *
+ * @param preset Bundled or custom preset.
+ * @returns Profiles for the kinds this sample supports.
+ */
+export function createPresetProfiles(
+  preset: ConfigPreset,
+): readonly SampleAppClientProfile[] {
+  const cached = profileCache.get(preset);
+  if (cached) {
+    return cached;
+  }
+  const profiles = preset.kinds
+    .map(kind =>
+      kind === 'journey'
+        ? createJourneyProfile(preset)
+        : kind === 'deviceAuth'
+          ? createDeviceAuthProfile(preset)
+          : undefined,
+    )
+    .filter((profile): profile is SampleAppClientProfile => !!profile);
+  profileCache.set(preset, profiles);
+  return profiles;
+}
+
+/**
+ * Selectable sample app configurations shown in the Configuration screen: the
+ * bundled JSON presets. Custom configs are added at runtime through
+ * {@link createPresetProfiles}.
+ */
+export const sampleAppClientProfiles: readonly SampleAppClientProfile[] =
+  loadJsonConfigPresets(message => appLogger.warn(message)).flatMap(preset =>
+    createPresetProfiles(bundledPreset(preset)),
+  );

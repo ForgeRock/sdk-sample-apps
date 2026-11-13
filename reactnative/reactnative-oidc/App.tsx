@@ -5,8 +5,12 @@
  * of the MIT license. See the LICENSE file for details.
  */
 
-import React, { useEffect, useMemo, useState } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import React, { useEffect, useMemo, useRef } from 'react';
+import {
+  NavigationContainer,
+  type NavigationState,
+  type PartialState,
+} from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Pressable, Text, TextInput, View } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -17,7 +21,16 @@ import UserProfileScreen from './ui/UserProfileScreen';
 import TokenScreen from './ui/TokenScreen';
 import LogoutScreen from './ui/LogoutScreen';
 import { OidcProvider } from '@ping-identity/rn-oidc';
-import { sampleAppClientProfiles } from './src/clients';
+import {
+  createPresetProfiles,
+  sampleAppClientProfiles as bundledProfiles,
+  type SampleAppClientProfile,
+} from './src/clients';
+import { useCustomConfigs } from './src/config/useCustomConfigs';
+import { useDeferredAction } from './src/config/useDeferredAction';
+import type { ConfigEditorParams } from './src/config/useConfigActions';
+import ConfigEditorScreen from './ui/ConfigEditorScreen';
+import { useStoredSelection } from './src/config/useStoredSelection';
 import { configureBrowser } from '@ping-identity/rn-browser';
 import { logger } from '@ping-identity/rn-logger';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
@@ -41,6 +54,7 @@ type ComponentWithDefaultStyle = {
 export type RootStackParamList = {
   Home: undefined;
   Configuration: undefined;
+  ConfigEditor: ConfigEditorParams;
   Oidc: undefined;
   UserProfile: undefined;
   Token: undefined;
@@ -81,13 +95,46 @@ function ConfigurationRequiredScreen(
 }
 
 /**
+ * Provider key that changes when a custom config is edited, so the provider
+ * rebuilds against the updated client.
+ *
+ * @param profile Selected profile, if any.
+ * @returns Stable key for the profile's current configuration.
+ */
+function profileRevision(
+  profile: SampleAppClientProfile | null | undefined,
+): string {
+  return profile
+    ? `${profile.key}:${JSON.stringify(profile.unifiedConfig ?? '')}`
+    : 'none';
+}
+
+/**
+ * Releases the lazily built clients of a preset profile when it is deselected.
+ *
+ * @param profile Profile that was just deselected.
+ */
+function disposeProfileClients(
+  profile: SampleAppClientProfile | null | undefined,
+): void {
+  if (!profile?.dispose) {
+    return;
+  }
+  profile.dispose().catch((error: unknown) => {
+    console.warn(`Failed to dispose profile '${profile.key}'`, error);
+  });
+}
+
+/**
  * Root sample app component that wires navigation and initializes demo clients.
  *
  * ## Structure
  *
  * 1. **Profile selection** — `sampleAppClientProfiles` (defined in `src/clients.ts`) lists
- *    pre-built OIDC client configurations. The active profile is stored as
- *    `selectedOidcProfileKey` and defaults to `DEFAULT_SAMPLE_APP_CLIENT_PROFILE_KEY`.
+ *    OIDC client configurations: the bundled
+ *    `assets/configs/*.json` presets plus custom configs. The active profile is stored as `selectedOidcProfileKey`
+ *    and restored from AsyncStorage on start; with no stored selection the OIDC route shows
+ *    Configuration Required.
  *
  * 2. **Context providers** — `OidcProvider` exposes the active client to every screen via
  *    React context so screens do not import clients directly.
@@ -99,13 +146,28 @@ function ConfigurationRequiredScreen(
  *    so browser diagnostics can be filtered independently.
  */
 export default function App() {
+  // Providers below are re-keyed when the selected config changes; keeping the
+  // navigation state here restores the user's position after the remount.
+  const navigationState = useRef<
+    NavigationState | PartialState<NavigationState> | undefined
+  >(undefined);
   // Dedicated browser logger keeps browser diagnostics separate from global SDK logging.
   const browserLogger = useMemo(() => logger({ level: 'debug' }), []);
-  const [selectedOidcProfileKey, setSelectedOidcProfileKey] = useState<
-    string | null
-  >(null);
+  const {
+    key: selectedOidcProfileKey,
+    select: setSelectedOidcProfileKey,
+    restored: oidcSelectionRestored,
+  } = useStoredSelection('selectedOidcProfileKey');
 
-  const oidcProfiles = useMemo(() => sampleAppClientProfiles, []);
+  const customConfigs = useCustomConfigs();
+  const deferredSave = useDeferredAction();
+  const oidcProfiles = useMemo(
+    () => [
+      ...bundledProfiles,
+      ...customConfigs.presets.flatMap(createPresetProfiles),
+    ],
+    [customConfigs.presets],
+  );
 
   const selectedOidcProfile = useMemo(
     () =>
@@ -116,6 +178,11 @@ export default function App() {
 
   const oidcProviderClient =
     selectedOidcProfile?.oidcClient ?? oidcProfiles[0]?.oidcClient;
+
+  useEffect(
+    () => () => disposeProfileClients(selectedOidcProfile),
+    [selectedOidcProfile],
+  );
 
   useEffect(() => {
     const textComponent = Text as unknown as ComponentWithDefaultStyle;
@@ -160,16 +227,32 @@ export default function App() {
     );
   }, [browserLogger]);
 
+  if (!oidcSelectionRestored || !customConfigs.restored) {
+    return null;
+  }
+
   const selectedConfigName = `OIDC: ${selectedOidcProfile?.name ?? 'None'}`;
 
   if (!oidcProviderClient) {
-    return <Text>Client profiles are not configured.</Text>;
+    return (
+      <Text>
+        No OIDC configuration is available. Add a JSON file to assets/configs.
+      </Text>
+    );
   }
 
   return (
     // OIDC hooks resolve the client from this context.
-    <OidcProvider client={oidcProviderClient}>
-      <NavigationContainer>
+    <OidcProvider
+      key={profileRevision(selectedOidcProfile)}
+      client={oidcProviderClient}
+    >
+      <NavigationContainer
+        initialState={navigationState.current}
+        onStateChange={state => {
+          navigationState.current = state;
+        }}
+      >
         <Stack.Navigator
           initialRouteName="Home"
           screenOptions={{
@@ -193,9 +276,25 @@ export default function App() {
             {props => (
               <ConfigurationScreen
                 {...props}
-                profiles={sampleAppClientProfiles}
+                profiles={oidcProfiles}
                 selectedOidcProfileKey={selectedOidcProfileKey}
                 onSelectOidcProfile={setSelectedOidcProfileKey}
+                onAddCustomConfig={customConfigs.add}
+                onDeleteCustomConfig={customConfigs.remove}
+                onTransitionSettled={deferredSave.flush}
+              />
+            )}
+          </Stack.Screen>
+          <Stack.Screen
+            name="ConfigEditor"
+            options={{ title: 'Configuration' }}
+          >
+            {props => (
+              <ConfigEditorScreen
+                {...props}
+                onAdd={customConfigs.add}
+                onSchedule={deferredSave.schedule}
+                onUpdate={customConfigs.update}
               />
             )}
           </Stack.Screen>

@@ -23,7 +23,7 @@ type Props = {
   selectedConfigName: string;
 };
 type HomeScreenMenuItem = Omit<HomeMenuItem, 'onPress' | 'disabled'> & {
-  screen?: keyof RootStackParamList;
+  screen?: Exclude<keyof RootStackParamList, 'ConfigEditor'>;
 };
 
 /**
@@ -64,6 +64,12 @@ export default function HomeScreen({
       subtitle: 'Test Journey Authentication',
       icon: 'map',
       screen: 'JourneyRoute',
+    },
+    {
+      title: 'Device Authorization Grant',
+      subtitle: 'Start or verify Device Auth',
+      icon: 'phonelink-lock',
+      screen: 'DeviceAuthorization',
     },
   ];
 
@@ -166,7 +172,9 @@ export default function HomeScreen({
         comingSoon={item.comingSoon}
         disabled={isDisabled}
         onPress={() =>
-          navigation.navigate(item.screen as keyof RootStackParamList)
+          navigation.navigate(
+            item.screen as Exclude<keyof RootStackParamList, 'ConfigEditor'>,
+          )
         }
       />
     );

@@ -72,27 +72,6 @@ export function toDisplayString(value: unknown): string {
 }
 
 /**
- * Resolves the display prompt for sample UI rendering.
- *
- * @param prompt - Native callback prompt value.
- * @param message - Native callback message value.
- * @returns Display-ready prompt text.
- */
-export function resolvePromptText(prompt: unknown, message: unknown): string {
-  const promptText = readString(prompt, '').trim();
-  if (promptText.length > 0) {
-    return promptText;
-  }
-
-  const messageText = readString(message, '').trim();
-  if (messageText.length > 0) {
-    return messageText;
-  }
-
-  return '';
-}
-
-/**
  * Resolves option label for sample rendering.
  *
  * @param label - Option label from normalized callback field.
@@ -116,30 +95,4 @@ export function resolveOptionLabel(
   }
 
   return `Option ${index + 1}`;
-}
-
-/**
- * Converts rich/unknown callback content into displayable text for sample UI.
- *
- * @param value - Raw callback payload value.
- * @returns Display-safe multiline text.
- */
-export function resolveContentText(value: unknown): string {
-  if (value === null || value === undefined) {
-    return '';
-  }
-
-  if (typeof value === 'string') {
-    return value.trim();
-  }
-
-  if (typeof value === 'number' || typeof value === 'boolean') {
-    return String(value);
-  }
-
-  try {
-    return JSON.stringify(value, null, 2);
-  } catch {
-    return '';
-  }
 }

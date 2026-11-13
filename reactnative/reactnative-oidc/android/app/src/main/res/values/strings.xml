@@ -6,7 +6,7 @@
   -->
 
 <resources>
-    <string name="app_name">RN Sample App</string>
-    <string name="splash_title">React Native Sample App</string>
+    <string name="app_name">RN OIDC App</string>
+    <string name="splash_title">React Native OIDC Sample App</string>
     <string name="ping_logo_description">Ping logo</string>
 </resources>

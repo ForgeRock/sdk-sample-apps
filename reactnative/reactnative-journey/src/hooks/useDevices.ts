@@ -14,7 +14,7 @@ import {
   type DeviceKind,
   type DeviceOf,
 } from '@ping-identity/rn-device-client';
-import { journeyConfig } from '../clients';
+import { getActiveJourneyConnection } from '../clients';
 import { logger } from '@ping-identity/rn-logger';
 
 /**
@@ -78,7 +78,7 @@ interface UseDevicesActions {
  *    for why this ordering matters).
  * 3. Call `journeyActions.ssoToken()` to read the validated SSO token.
  * 4. Pass `{ serverUrl, ssoToken: token.value, realm: token.realm,
- *    cookieName: journeyConfig.cookie }` into `createDeviceClient(...)`.
+ *    cookieName: connection.cookie }` into `createDeviceClient(...)`.
  * 5. Call repository methods (`client.oath.get()`, `client.push.delete(...)`,
  *    etc.) and reflect results in local state.
  *
@@ -156,11 +156,20 @@ export function useDevices(
       throw new Error('No active Journey session. Please sign in first.');
     }
 
+    const connection = getActiveJourneyConnection();
+    if (!connection) {
+      throw new Error('Select a Journey configuration first.');
+    }
+    if (!connection.cookie) {
+      throw new Error(
+        'The selected configuration has no journey cookie name. Set journey.cookieName to use device management.',
+      );
+    }
     const client = createDeviceClient({
-      serverUrl: journeyConfig.serverUrl,
+      serverUrl: connection.serverUrl,
       ssoToken: token.value,
       realm: token.realm,
-      cookieName: journeyConfig.cookie,
+      cookieName: connection.cookie,
       logger: logger({ level: 'debug' }),
     });
     clientRef.current = client;

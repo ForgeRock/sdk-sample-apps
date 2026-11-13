@@ -8,6 +8,11 @@
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
 
-const config = {};
+const config = {
+  transformer: {
+    // Lets src/config/loadConfigs.ts discover assets/configs/*.json.
+    unstable_allowRequireContext: true,
+  },
+};
 
 module.exports = mergeConfig(getDefaultConfig(__dirname), config);

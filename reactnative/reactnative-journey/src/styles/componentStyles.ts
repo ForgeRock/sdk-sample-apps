@@ -94,6 +94,14 @@ export const pingTextInputStyles = StyleSheet.create({
     minHeight: 22,
     textAlignVertical: 'center',
   },
+  inputMultiline: {
+    minHeight: 80,
+    textAlignVertical: 'top',
+    paddingTop: 4,
+  },
+  inputWrapperMultiline: {
+    alignItems: 'flex-start',
+  },
   passwordToggle: {
     marginLeft: 8,
     paddingVertical: 6,

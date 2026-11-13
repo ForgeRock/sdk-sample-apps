@@ -55,7 +55,9 @@ export default function EmptyStateCard(
         <AsyncActionButton label={ctaLabel} onPress={onCtaPress} />
       ) : null}
       {errorMessage ? (
-        <Text style={commonStyles.userProfileErrorText}>{errorMessage}</Text>
+        <Text style={commonStyles.userProfileErrorText} selectable>
+          {errorMessage}
+        </Text>
       ) : null}
     </View>
   );

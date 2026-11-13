@@ -96,9 +96,13 @@ export default function JourneyClientPanel(
       <JourneyBindingUserKeyModal request={userKeyRequest} />
       <JourneyBindingPinModal request={pinRequest} />
       <View style={commonStyles.card}>
-        {showCallbackScreen ? (
+        {showCallbackScreen && node?.type === 'ContinueNode' ? (
           <JourneyContinuePanel
             form={form}
+            header={node.header}
+            description={node.description}
+            submitButtonText={node.submitButtonText}
+            pageFooter={node.pageFooter}
             loading={loading}
             pollingWaitMs={pollingWaitMs}
             resumeUrl={resumeUrl}
@@ -129,7 +133,7 @@ export default function JourneyClientPanel(
         ) : null}
 
         {node?.type === 'ErrorNode' ? (
-          <Text style={commonStyles.textError}>
+          <Text style={commonStyles.textError} selectable>
             {typeof node.message === 'string'
               ? node.message
               : 'A server-side validation error occurred.'}
@@ -137,7 +141,7 @@ export default function JourneyClientPanel(
         ) : null}
 
         {node?.type === 'FailureNode' ? (
-          <Text style={commonStyles.textError}>
+          <Text style={commonStyles.textError} selectable>
             {typeof node.cause === 'string'
               ? node.cause
               : typeof node.message === 'string'
@@ -147,13 +151,15 @@ export default function JourneyClientPanel(
         ) : null}
 
         {error ? (
-          <Text style={commonStyles.textError}>
+          <Text style={commonStyles.textError} selectable>
             {`[${error.code}] ${error.message}`}
           </Text>
         ) : null}
 
         {externalIdpBrowserError ? (
-          <Text style={commonStyles.textError}>{externalIdpBrowserError}</Text>
+          <Text style={commonStyles.textError} selectable>
+            {externalIdpBrowserError}
+          </Text>
         ) : null}
 
         {!showCallbackScreen &&
