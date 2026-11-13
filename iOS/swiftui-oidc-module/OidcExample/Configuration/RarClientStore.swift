@@ -43,6 +43,15 @@ final class RarClientStore {
     /// Declared `nonisolated` so it can be read from the `@Sendable` closure that configures the client.
     nonisolated static let storageAccount = "ACCESS_TOKEN_STORAGE_RAR"
 
+    /// The OAuth 2.0 client the RAR client authenticates as.
+    ///
+    /// Consent handling is a per-client setting on the authorization server, and the two flows
+    /// need different settings: Implied Consent on a client rejects `authorization_details` with
+    /// `invalid_request`, while a standard login usually wants no consent prompt. Point this at a
+    /// second client that has Implied Consent off, the requested Authorization Detail Type(s)
+    /// listed, and remote consent with the agent enabled.
+    nonisolated static let clientId = <#"RAR Client ID"#>
+
     /// The client for the current `options`.
     private(set) var client: OidcWebClient
     /// The options the current `client` was built with.
@@ -64,11 +73,13 @@ final class RarClientStore {
 
     // MARK: - Private
 
-    /// Builds a client that keeps its token in `storageAccount` and applies `options`.
+    /// Builds a client that authenticates as the RAR client, keeps its token in `storageAccount`,
+    /// and applies `options`.
     ///
     /// Takes `options` by value so the configuring closure captures no main-actor state.
     private nonisolated static func makeClient(options: RarClientOptions) -> OidcWebClient {
         makeOidcWebClient { oidcValue in
+            oidcValue.clientId = RarClientStore.clientId
             oidcValue.storage = KeychainStorage<Token>(
                 account: RarClientStore.storageAccount,
                 encryptor: SecuredKeyEncryptor() ?? NoEncryptor(),

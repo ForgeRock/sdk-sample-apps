@@ -92,7 +92,7 @@ public let oidcLogin = makeOidcWebClient()
 - `discoveryEndpoint`: OIDC discovery URL (e.g., `https://auth.pingone.com/{envId}/as/.well-known/openid-configuration`)
 
 #### RarClientStore.swift
-The client used for Rich Authorization Requests. `RarClientStore` builds it through the same factory with a `KeychainStorage` under the dedicated `ACCESS_TOKEN_STORAGE_RAR` account, and `apply(_:)` rebuilds it when `par` or the config-level `authorizationDetails` change. See [Rich Authorization Requests (RFC 9396)](#rich-authorization-requests-rfc-9396).
+The client used for Rich Authorization Requests. It authenticates as a **second OAuth 2.0 client** (`RarClientStore.clientId`, a placeholder next to the shared ones), because consent handling is a per-client setting on the authorization server: Implied Consent on a client rejects `authorization_details` with `invalid_request`, while the standard login typically wants no consent prompt. The RAR client is built through the same factory, overrides the client ID, and keeps its token in a `KeychainStorage` under the dedicated `ACCESS_TOKEN_STORAGE_RAR` account; `apply(_:)` rebuilds it when `par` or the config-level `authorizationDetails` change. See [Rich Authorization Requests (RFC 9396)](#rich-authorization-requests-rfc-9396).
 
 #### Navigation Flow
 
@@ -523,11 +523,10 @@ oidcValue.scopes = Set(["openid", "profile"])
 The RAR login in this sample runs against PingAM/Advanced Identity Cloud with the following configuration. On Advanced Identity Cloud, release 23604.0 or later is required for the granted details to be issued.
 
 1. **OAuth 2.0 provider**: Enable **Remote Consent** and **Enable Rich Authorization Requests with Remote Consent Service**. With either setting off, the provider silently ignores `authorization_details`.
-2. **OAuth 2.0 client**:
-   - Grant type **Authorization Code** with PKCE (as for the standard login above)
-   - List every `type` you will request under **Authorization Detail Type(s)** — a request for an unlisted type is rejected with `invalid_authorization_details`
-   - Turn **Implied Consent** off — implied consent with `authorization_details` is rejected with `invalid_request`
-3. **Remote Consent Service**: Enable remote consent for the flow and configure a Remote Consent Service that returns the granted `authorization_details`. The built-in example consent service does not return `authorization_details`, so a login against it completes with an empty array on the token — use a custom consent service to see populated cards on the RAR Access Token screen. The [RCS demo](../../rcs/rcs-demo/README.md) in this repository is a ready-made consent service for this purpose.
+2. **Two OAuth 2.0 clients** — the sample authenticates as two clients, because consent handling is a per-client setting:
+   - **Standard client** (the `clientId` placeholder in `OidcLoginViewModel.swift`): grant type **Authorization Code** with PKCE, and **Implied Consent** on so the plain login does not stop at a consent prompt.
+   - **RAR client** (the `RAR Client ID` placeholder in `RarClientStore.swift`): grant type **Authorization Code** with PKCE, **Implied Consent off** — implied consent with `authorization_details` is rejected with `invalid_request` — and every `type` you will request listed under **Authorization Detail Type(s)**, since a request for an unlisted type is rejected with `invalid_authorization_details`.
+3. **Remote Consent Service**: Enable remote consent for the RAR client's flow and configure a Remote Consent Service that returns the granted `authorization_details`. The built-in example consent service does not return `authorization_details`, so a login against it completes with an empty array on the token — use a custom consent service to see populated cards on the RAR Access Token screen. The [RCS demo](../../rcs/rcs-demo/README.md) in this repository is a ready-made consent service for this purpose.
 
 ## Security Considerations
 
