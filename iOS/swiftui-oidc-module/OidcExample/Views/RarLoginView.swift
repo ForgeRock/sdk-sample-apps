@@ -35,12 +35,21 @@ struct RarLoginView: View {
                         title: "Authorization Successful!",
                         message: "The login completed with the configured authorization_details. The granted details are on the RAR token."
                     ) {
-                        Button {
-                            path.append("RarToken")
-                        } label: {
-                            Label("View RAR Access Token", systemImage: "checkmark.shield.fill")
+                        VStack(spacing: PingTheme.Spacing.medium) {
+                            Button {
+                                path.append("RarToken")
+                            } label: {
+                                Label("View RAR Access Token", systemImage: "checkmark.shield.fill")
+                            }
+                            .buttonStyle(.pingPrimary)
+
+                            Button {
+                                viewModel.resetState()
+                            } label: {
+                                Label("Edit Request", systemImage: "slider.horizontal.3")
+                            }
+                            .buttonStyle(.pingSecondary)
                         }
-                        .buttonStyle(.pingPrimary)
                     }
 
                 case .failure(let error):
@@ -50,12 +59,21 @@ struct RarLoginView: View {
                         title: "Authorization Failed",
                         message: error.displayMessage
                     ) {
-                        Button {
-                            Task { await viewModel.login() }
-                        } label: {
-                            Label("Try Again", systemImage: "arrow.clockwise")
+                        VStack(spacing: PingTheme.Spacing.medium) {
+                            Button {
+                                Task { await viewModel.login() }
+                            } label: {
+                                Label("Try Again", systemImage: "arrow.clockwise")
+                            }
+                            .buttonStyle(.pingPrimary)
+
+                            Button {
+                                viewModel.resetState()
+                            } label: {
+                                Label("Edit Request", systemImage: "slider.horizontal.3")
+                            }
+                            .buttonStyle(.pingSecondary)
                         }
-                        .buttonStyle(.pingPrimary)
                     }
                 }
             } else {

@@ -109,7 +109,7 @@ The client used for Rich Authorization Requests. `RarClientStore` builds it thro
    }
    ```
 
-3. **RarLoginView**: Edits the `authorization_details` JSON, picks a preset, the delivery path, and PAR, then logs in through the dedicated RAR client. On success it navigates to the RAR Access Token screen.
+3. **RarLoginView**: Edits the `authorization_details` JSON, picks a preset, the delivery path, and PAR, then logs in through the dedicated RAR client. On success it shows a confirmation with a button that opens the RAR Access Token screen.
 
 4. **Post-Authentication Views**:
    - **AccessTokenView**: Displays the OAuth access token; the RAR variant adds the "Granted Authorization Details" card and a "Revoke RAR Token" button
@@ -133,9 +133,8 @@ Dependencies are managed via Swift Package Manager. The exact `ping-ios-sdk` rev
 
 ### Prerequisites
 
-- Xcode 15.0 or later
+- Xcode 26 or later (the sample uses Swift language features that need the Swift 6.1 compiler bundled with recent Xcode releases)
 - iOS 16.0 or later
-- Swift 5.9 or later
 - A configured OAuth 2.0 client in PingOne, PingFederate, or PingAM
 
 ### OAuth 2.0 Client Configuration
@@ -313,7 +312,7 @@ This will:
 
 - **Per transaction** (`OidcOptions.authorizationDetails`): the details travel with a single `authorize` call and are sent for that login only:
   ```swift
-  let result = try await rarLogin.authorize { options in
+  let result = try await RarClientStore.shared.client.authorize { options in
       options.authorizationDetails = details
   }
   ```
@@ -327,7 +326,7 @@ With [Pushed Authorization Requests (RFC 9126)](https://www.rfc-editor.org/rfc/r
 
 - Toggling PAR rebuilds the RAR client (`RarClientStore.apply(_:)`), because `par` is fixed when a client is built.
 - PAR applies only when the discovery document advertises a `pushed_authorization_request_endpoint`. If it does not, the SDK silently falls back to the standard authorization flow.
-- **Do not pass `authorization_details` through query parameters.** `OidcOptions.additionalParameters` (and `customParams`) are applied to the authorization URL *after* the PAR round trip, so a raw `authorization_details` entry there lands on the front-channel query string and never reaches the PAR body. Use the typed `authorizationDetails` API above, which is threaded through the PAR-safe path.
+- **Prefer the typed `authorizationDetails` API over query parameters.** A raw `authorization_details` entry in `OidcOptions.additionalParameters` (or `customParams`) is forwarded when no typed details are set, and the SDK routes it into the PAR body when PAR is on — but the typed value wins when both are set, and a typed entry is validated and decoded rather than passed through as an opaque string. The SDK also logs a warning when both forms are present.
 
 ### Token Storage
 
@@ -341,7 +340,7 @@ Every browser-based workflow keeps one token in its own storage, and **starting 
 The **RAR Access Token** screen shows the token plus a "Granted Authorization Details" card listing each granted object (type, locations, actions, datatypes, privileges, and type-specific fields). The screen distinguishes three outcomes:
 
 - **Card shown**: the server processed the request as RAR and granted the listed details.
-- **"The token response carried no authorization_details."**: the `authorization_details` member is absent, so RAR processing was skipped (PAR off with no typed details sent, or a server that does not process `authorization_details`).
+- **"The token response carried no authorization_details."**: the `authorization_details` member is absent, so the server did not process the request as a Rich Authorization Request (a server that does not support it, or one with RAR not enabled).
 - **"The server returned an empty authorization_details array (no details granted)."**: RAR ran, but the consent flow granted nothing — typically the built-in example consent service, which does not echo details (see [server prerequisites](#pingam-configuration)).
 
 ### The Deny Path
@@ -447,7 +446,7 @@ oidcValue.scopes = Set(["openid", "profile"])
 - Ensure your OAuth client allows the configured redirect URI
 
 **Issue**: "No user session found" error
-**Solution**: Complete the login flow in [OidcLoginView.swift](OidcExample/Views/OidcLoginView.swift) before accessing token or user info views
+**Solution**: Complete the login flow in [OidcLoginView.swift](OidcExample/Views/OidcLoginView.swift) before accessing token or user info views. Before any login the token screens may instead show an authorization error from the SDK ("No AuthCode is available") — the same fix applies: log in first.
 
 **Issue**: Build fails with "Cannot find 'PingOidc' in scope"
 **Solution**:
@@ -465,12 +464,12 @@ oidcValue.scopes = Set(["openid", "profile"])
 **Solution**: Every `type` requested must be listed under **Authorization Detail Type(s)** on the OAuth 2.0 client. An unlisted type is rejected with `invalid_authorization_details`.
 
 **Issue**: "The server rejected the authorization request" (`invalid_request`) during a RAR login
-**Solution**: The OAuth 2.0 client has **Implied Consent** enabled. A client with Implied Consent on rejects `authorization_details` with `invalid_request`; turn Implied Consent off and use the Remote Consent Service flow.
+**Solution**: Common causes are **Implied Consent** enabled on the OAuth 2.0 client (implied consent rejects `authorization_details` with `invalid_request`; turn it off and use the Remote Consent Service flow) and no Remote Consent Service configured on the flow while RAR is enabled.
 
 **Issue**: PAR is on but the flow behaves the same as with PAR off
 **Solution**:
 - Check that the discovery document advertises a `pushed_authorization_request_endpoint`. Without it, the SDK silently falls back to the standard authorization flow
-- Confirm the details are sent through the typed `authorizationDetails` API. Query parameters such as `OidcOptions.additionalParameters` or `customParams` are applied after the PAR round trip, so a raw `authorization_details` entry there never reaches the PAR body
+- Confirm the details are sent through the typed `authorizationDetails` API. A raw `authorization_details` entry in `OidcOptions.additionalParameters` or `customParams` is forwarded only when no typed details are set, and the typed value wins when both are present
 
 ## Comparison with Other Authentication Methods
 

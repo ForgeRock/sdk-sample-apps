@@ -75,6 +75,12 @@ class RarLoginViewModel: ObservableObject {
         _ = validate()
     }
 
+    /// Clears the last login outcome so the screen shows the editor again.
+    /// The edited JSON, the PAR flag and the delivery choice are kept.
+    func resetState() {
+        state = nil
+    }
+
     /// Validates the editor text and records the outcome in `validationError` for display.
     /// - Returns: The decoded details, or `nil` when the text is empty or invalid.
     /// - Note: Event-handler use only, because it publishes; calling it from a view's `body`
