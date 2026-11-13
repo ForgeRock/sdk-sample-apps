@@ -29,7 +29,7 @@ either direction.
 - Flutter 3.44.x stable / Dart 3.12.x
 - An OAuth 2.0/OIDC client registered on a PingAM/PingOne Advanced Identity Cloud server (or any
   standard OIDC provider) that supports a native/mobile redirect URI
-- Android: API level 29+, Java 17
+- Android: API level 29+, Java 21
 - iOS: 16.0+, Xcode with Swift Package Manager support
 
 ## Getting Started
@@ -48,7 +48,10 @@ To try out the OIDC Flutter sample, perform these steps:
 3. From `sdk-sample-apps/flutter/`, run `flutter pub get` to resolve the pub workspace
    (`flutter-sdk-bridge/ping_core`, `flutter-sdk-bridge/ping_oidc`, `flutter-oidc`).
 4. Open [`lib/config/env.dart`](lib/config/env.dart) and replace the TODO placeholders with your
-   client's `discoveryEndpoint`, `clientId`, `redirectUri`, and `scopes`.
+   client's `discoveryEndpoint`, `clientId`, `redirectUri`, and `scopes`. Each value can
+   instead be passed at build time with `--dart-define` (or `--dart-define-from-file=../.env`) using
+   the keys `PINGAIC_DISCOVERY_ENDPOINT`, `PINGAIC_CLIENT_ID`, `PINGAIC_REDIRECT_URI`,
+   `PINGAIC_SCOPES` (comma- or space-separated) and, optionally, `PINGAIC_SIGN_OUT_REDIRECT_URI`.
 5. Register `redirectUri`'s custom scheme with both native hosts — see § Redirect URI setup below
    for the exact snippets, since this is the step most likely to trip up a first run.
 6. Run the app: `flutter run` from this directory (`flutter-oidc/`), or open
@@ -106,7 +109,7 @@ Swift, React Native, and Journey Flutter samples follow.
 Test coverage for the behaviour this app demonstrates lives in the bridge package instead:
 
 - **Unit tests** — `../flutter-sdk-bridge/ping_oidc/test/` (config/token mapping, error
-  translation). Run with `flutter test` from the `flutter/` workspace root.
+  translation). Run with `flutter test` from `flutter-sdk-bridge/ping_oidc/`.
 - **Integration tests** — `../flutter-sdk-bridge/ping_oidc/example/integration_test/`, which drive
   the real `OidcClient` API against a hermetic mock discovery server, with no UI in the loop (the
   browser-authorize step itself can't be scripted — see

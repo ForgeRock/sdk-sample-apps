@@ -16,9 +16,9 @@ import 'package:flutter_journey/ui/core/widgets/primary_button.dart';
 /// Read-only display of the active [Env] — analog of the native samples' server/realm config
 /// screen (Android's `Env.kt`), shown before starting a Journey.
 ///
-/// [serverUrl]/[realm]/[cookie]/[oidcConfig] default to [Env]'s values but are injectable so
-/// tests can exercise a real (non-placeholder) config without depending on — or overriding —
-/// the app-wide [Env] singleton.
+/// [serverUrl]/[realm]/[cookie] default to [Env]'s values but are injectable so tests can
+/// exercise a real (non-placeholder) config. [oidcConfig] has no default — the router passes
+/// [Env.oidcConfig] — and null omits the OIDC rows.
 class ConfigView extends StatelessWidget {
   const ConfigView({
     super.key,
@@ -26,7 +26,7 @@ class ConfigView extends StatelessWidget {
     this.serverUrl = Env.serverUrl,
     this.realm = Env.realm,
     this.cookie = Env.cookie,
-    this.oidcConfig = Env.oidcConfig,
+    this.oidcConfig,
   });
 
   final VoidCallback onContinue;

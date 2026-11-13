@@ -8,6 +8,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import 'package:flutter_journey/config/env.dart';
 import 'package:flutter_journey/ui/features/config/views/config_view.dart';
 import 'package:flutter_journey/ui/features/config/views/journey_name_view.dart';
 import 'package:flutter_journey/ui/features/journey/view_models/journey_view_model.dart';
@@ -21,7 +22,10 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: '/config',
       builder: (context, state) =>
-          ConfigView(onContinue: () => context.go('/journey-name')),
+          ConfigView(
+            onContinue: () => context.go('/journey-name'),
+            oidcConfig: Env.oidcConfig,
+          ),
     ),
     GoRoute(
       path: '/journey-name',
