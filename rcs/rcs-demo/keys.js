@@ -8,10 +8,11 @@
 
 // RSA signing keys for the demonstration RCS.
 //
-// On first start the app generates an RS256 keypair, writes it to .keys/ in
-// this directory, and reuses it on subsequent runs. Persisting the keys keeps
-// the JWK URI stable across restarts, so the authorization server's cached
-// copy stays valid.
+// On first start the app generates an RS256 keypair and writes the private key
+// to .keys/ in this directory, readable only by the current user. Later runs
+// reuse it and derive the public key from it, so the two can never drift apart.
+// Persisting the key keeps the JWK URI stable across restarts, so the
+// authorization server's cached copy stays valid.
 
 import { importPKCS8, exportJWK, generateKeyPair } from "jose";
 import { createPrivateKey, createPublicKey, generateKeyPairSync } from "node:crypto";
@@ -22,7 +23,6 @@ import { fileURLToPath } from "node:url";
 const KEY_DIR = path.join(path.dirname(fileURLToPath(import.meta.url)), ".keys");
 
 const privateKeyPemPath = path.join(KEY_DIR, "signing-key.pem");
-const publicKeyPemPath = path.join(KEY_DIR, "signing-key.pub.pem");
 
 /**
  * Loads the persisted signing keys, generating and persisting a new pair on
@@ -31,17 +31,15 @@ const publicKeyPemPath = path.join(KEY_DIR, "signing-key.pub.pem");
  * @returns {{ privateKey: import("node:crypto").PrivateKey, publicKey: import("node:crypto").PublicKey }}
  */
 export function loadSigningKeys() {
-  if (existsSync(privateKeyPemPath) && existsSync(publicKeyPemPath)) {
+  if (existsSync(privateKeyPemPath)) {
     const privateKey = createPrivateKey(readFileSync(privateKeyPemPath, "utf8"));
-    const publicKey = createPublicKey(readFileSync(publicKeyPemPath, "utf8"));
-    return { privateKey, publicKey };
+    return { privateKey, publicKey: createPublicKey(privateKey) };
   }
 
   const { publicKey, privateKey } = generateKeyPairSync("rsa", { modulusLength: 2048 });
 
   mkdirSync(KEY_DIR, { recursive: true });
-  writeFileSync(privateKeyPemPath, privateKey.export({ type: "pkcs8", format: "pem" }));
-  writeFileSync(publicKeyPemPath, publicKey.export({ type: "spki", format: "pem" }));
+  writeFileSync(privateKeyPemPath, privateKey.export({ type: "pkcs8", format: "pem" }), { mode: 0o600 });
 
   return { privateKey, publicKey };
 }

@@ -2,7 +2,7 @@
 
 # Remote Consent Service (RCS) Demo
 
-A small Node.js server that acts as a **Remote Consent Service** so you can test **Rich Authorization Requests** ([RFC 9396](https://www.rfc-editor.org/rfc/rfc9396)) end to end with PingAM and PingOne Advanced Identity Cloud (AIC). It is the companion server for the Rich Authorization Requests (RAR) screens in the sample apps in this repository, such as the [iOS OIDC module sample](../../iOS/swiftui-oidc-module/README.md#rich-authorization-requests-rfc-9396).
+A small Node.js server that acts as a **Remote Consent Service** so you can test **Rich Authorization Requests** ([RFC 9396](https://www.rfc-editor.org/rfc/rfc9396)) end to end with PingAM and PingOne Advanced Identity Cloud (AIC). It is the companion server for the Rich Authorization Requests (RAR) screens in the [iOS OIDC module sample](../../iOS/swiftui-oidc-module/README.md#rich-authorization-requests-rfc-9396), and a reference for any other client that sends `authorization_details`.
 
 ## Disclaimers
 
@@ -96,12 +96,12 @@ RCS demo listening on http://0.0.0.0:8081
 
 | Setting | Description |
 |---|---|
-| `PORT` | Port to listen on. Defaults to `8081` (for example `PORT=8082 npm start`) |
-| `RCS_DEBUG=1` or `npm run debug` | Logs every request, the decision, the granted details, and the signed response JWT |
+| `PORT` | Port to listen on. Defaults to `8081` (for example `PORT=8082 npm start` in a macOS or Linux shell) |
+| `npm run debug` (or `RCS_DEBUG=1`) | Logs every request, the decision, the granted details, and the signed response JWT |
 
 ### Signing keys
 
-The first run generates an RSA-2048 key pair and saves it to `.keys/` in this directory (ignored by git). Later runs reuse it, so the JWK URI stays stable across restarts. If you delete `.keys/`, a new key pair is generated and the agent configuration must be updated with the new JWK set.
+The first run generates an RSA-2048 key pair and saves the private key to `.keys/signing-key.pem` in this directory (ignored by git, readable only by your user). Later runs reuse it and derive the public JWK from it, so the JWK URI stays stable across restarts. If you delete `.keys/`, a new key pair is generated and the agent configuration must be updated with the new JWK set.
 
 ### Configure the Authorization Server
 
@@ -121,7 +121,7 @@ Rich Authorization Requests with a Remote Consent Service need three pieces of c
 
 The agent ID you choose does not need to be configured here: the app reads it from the consent request and uses it as the issuer of the response.
 
-> **Reachability:** The **Redirect URL** is followed by the user's *browser*, so it only has to be reachable from the device running the sample app. Use `localhost` for the iOS Simulator, which shares the Mac's network, or the Mac's local IP address for a physical device on the same network. The **Json Web Key URI** and **Metadata URL** are fetched by the *authorization server*, and a hosted AIC tenant cannot reach a private network address. For a hosted tenant, paste the JWK set into the agent's **Json Web Key** field, or publish this app through an HTTPS tunnel.
+> **Reachability:** The **Redirect URL** is followed by the user's *browser*, so it only has to be reachable from the device running the sample app. Use `localhost` for the iOS Simulator, which shares the Mac's network, or the Mac's local IP address for a physical device on the same network. The **Json Web Key URI** and **Metadata URL** are fetched by the *authorization server*, and a hosted AIC tenant cannot reach a private network address. For a hosted tenant, publish this app through an HTTPS tunnel and use the tunnel's address for those URLs. If your agent configuration allows it, you can instead paste the JWK set into the agent's **Json Web Key** field, so the tenant does not need to fetch `/keys`. A tunnel makes this unauthenticated app reachable from the internet, because anyone who can reach it can request a signed consent response. Keep it up only for the length of your test session.
 
 ## Try It With the iOS Sample
 
@@ -171,7 +171,7 @@ rcs-demo/
 ├── server.js      # Express app: consent page, decision handling, JWKS and metadata
 ├── keys.js        # Generates and loads the RSA signing key pair
 ├── package.json   # Dependencies (express, jose) and npm scripts
-└── .keys/         # Generated signing keys (git-ignored)
+└── .keys/         # Generated signing key (git-ignored)
 ```
 
 ## Security Considerations
@@ -184,7 +184,7 @@ This app trades safety for simplicity so that it is easy to read and run locally
 - Authenticate the user and apply real grant rules to the requested details
 - Bind to specific interfaces instead of all of them
 
-Run the demo on a trusted network, stop it when you are finished, and never reuse its signing keys elsewhere. `RCS_DEBUG=1` prints signed response JWTs to the console.
+Run the demo on a trusted network, stop it (and any tunnel) when you are finished, and never reuse its signing key elsewhere. Debug mode (`npm run debug`) prints signed response JWTs to the console.
 
 ## Additional Resources
 

@@ -40,7 +40,7 @@ app.use(express.urlencoded({ extended: false }));
 // Verbose logging, enabled by `npm run debug`. Logs every request; AIC caches
 // the agent's JWK set for about an hour, so knowing exactly when it fetched
 // /keys helps correlate signature failures with key changes.
-const DEBUG = process.env.RCS_DEBUG === "1";
+const DEBUG = process.env.RCS_DEBUG === "1" || process.argv.includes("--debug");
 if (DEBUG) {
   app.use((req, _res, next) => {
     console.log(`${new Date().toISOString()} ${req.method} ${req.url} from ${req.ip}`);
@@ -126,9 +126,9 @@ app.post("/consent", async (req, res) => {
       decision: decision === "grant",
       scopes: decision === "grant" ? Object.keys(claims.scopes ?? {}) : [],
       authorization_details: grantedDetails,
-      // Echo the client identifier under the claim name the request used. The
-      // request carries it as clientId; the docs' example response uses
-      // client_id. Send both so either AM expectation is satisfied.
+      // Echo the client identifier under both claim names. The consent
+      // request carries it as clientId, while AM documentation and examples
+      // use either name for the response, so send both.
       clientId,
       client_id: clientId,
       csrf: claims.csrf,
@@ -205,7 +205,11 @@ function decodeWithoutVerification(token) {
   if (parts.length !== 3) {
     throw new Error("Expected a signed three-part JWT.");
   }
-  return JSON.parse(Buffer.from(parts[1], "base64url").toString("utf8"));
+  const payload = JSON.parse(Buffer.from(parts[1], "base64url").toString("utf8"));
+  if (payload === null || typeof payload !== "object" || Array.isArray(payload)) {
+    throw new Error("Expected the JWT payload to be a JSON object.");
+  }
+  return payload;
 }
 
 /** Whether a requested authorization detail is of a type this RCS supports. */

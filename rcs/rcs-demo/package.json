@@ -6,7 +6,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "debug": "RCS_DEBUG=1 node server.js"
+    "debug": "node server.js --debug"
   },
   "engines": {
     "node": ">=18"
