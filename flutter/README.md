@@ -12,18 +12,19 @@ This is a native Dart [pub workspace](https://dart.dev/tools/pub/workspaces) —
 
 - [**Journey — `flutter-journey/`**](flutter-journey/) — authenticates against a PingAM/PingOne Advanced Identity Cloud authentication Journey: dynamic callback rendering, login, self-registration, and post-login token retrieval.
 - [**OIDC — `flutter-oidc/`**](flutter-oidc/) — browser-based, centralized OIDC login: configure a client, authorize via the system browser, then read tokens/userinfo, refresh, revoke, and sign off.
+- [**DaVinci — `flutter-davinci/`**](flutter-davinci/) — runs a PingOne DaVinci flow natively, with no browser: renders each node's collectors as a dynamic form, shows server-side field errors, handles polling, then reads tokens/userinfo and signs off.
 
 ## SDK Bridge
 
-- [`flutter-sdk-bridge/`](flutter-sdk-bridge/) — the `ping_core` + `ping_journey` + `ping_oidc`
-  plugin packages the samples above are built on. See its README for how the two modules share a
-  single configured OIDC client through `ping_core`'s registry, and how to add a bridge module for
-  a future sample (e.g. DaVinci).
+- [`flutter-sdk-bridge/`](flutter-sdk-bridge/) — the `ping_core` + `ping_journey` + `ping_oidc` +
+  `ping_davinci` plugin packages the samples above are built on. See its README for how the modules
+  share configured clients through `ping_core`'s registry, how DaVinci collectors differ from
+  Journey callbacks, and how to add a bridge module for a future sample.
 
 ## Requirements
 
 - Flutter 3.44.x stable / Dart 3.12.x
-- Android: API level 29+, Java 17
+- Android: API level 29+, Java 21
 - iOS: 16.0+, Xcode with Swift Package Manager support
 
 ## Native SDK version

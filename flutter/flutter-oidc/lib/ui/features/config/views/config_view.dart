@@ -7,22 +7,20 @@
 
 import 'package:flutter/material.dart';
 
-import 'package:flutter_oidc/config/env.dart';
 import 'package:flutter_oidc/ui/core/theme/app_theme.dart';
 import 'package:flutter_oidc/ui/core/widgets/app_card.dart';
 import 'package:flutter_oidc/ui/core/widgets/brand_logo.dart';
 import 'package:flutter_oidc/ui/core/widgets/primary_button.dart';
 import 'package:ping_oidc/ping_oidc.dart';
 
-/// Read-only display of the active [Env.oidcConfig], shown before starting the browser login.
-///
-/// [oidcConfig] defaults to [Env.oidcConfig] but is injectable so a caller can exercise this
-/// view with a real (non-placeholder) config without overriding the app-wide [Env] singleton.
+/// Read-only display of the active OIDC config (the router passes [Env.oidcConfig]), shown
+/// before starting the browser login. It is a parameter rather than read from [Env] so a caller
+/// can exercise this view with a real (non-placeholder) config.
 class ConfigView extends StatelessWidget {
   const ConfigView({
     super.key,
     required this.onContinue,
-    this.oidcConfig = Env.oidcConfig,
+    required this.oidcConfig,
   });
 
   final VoidCallback onContinue;

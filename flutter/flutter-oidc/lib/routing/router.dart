@@ -7,6 +7,7 @@
 
 import 'package:go_router/go_router.dart';
 
+import 'package:flutter_oidc/config/env.dart';
 import 'package:flutter_oidc/ui/features/config/views/config_view.dart';
 import 'package:flutter_oidc/ui/features/login/views/login_view.dart';
 import 'package:flutter_oidc/ui/features/success/views/success_view.dart';
@@ -18,7 +19,10 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: '/config',
       builder: (context, state) =>
-          ConfigView(onContinue: () => context.go('/login')),
+          ConfigView(
+            onContinue: () => context.go('/login'),
+            oidcConfig: Env.oidcConfig,
+          ),
     ),
     GoRoute(
       path: '/login',
