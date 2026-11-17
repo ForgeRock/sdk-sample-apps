@@ -1,0 +1,90 @@
+<!--
+  ~ Copyright (c) 2026 Ping Identity Corporation. All rights reserved.
+  ~
+  ~ This software may be modified and distributed under the terms
+  ~ of the MIT license. See the LICENSE file for details.
+  -->
+
+<resources>
+    <string name="app_name">PingOne Authenticator</string>
+
+    <string name="content_description_back">Back</string>
+
+    <!-- Navigation -->
+    <string name="content_description_navigate_back">Navigate back</string>
+
+    <!-- QR Scanner screen -->
+    <string name="qr_scanner_title">Scan QR Code</string>
+    <string name="qr_scanner_hint">Point the camera at a PingOne MFA QR code</string>
+    <string name="qr_scanner_pairing_key_label">Enter pairing key</string>
+    <string name="qr_scanner_pair_button">Pair</string>
+    <string name="qr_scanner_camera_error">Camera error: %1$s</string>
+    <string name="qr_scanner_permission_required">Camera permission is required to scan QR codes.</string>
+    <string name="qr_scanner_grant_permission_button">Grant Permission</string>
+    <string name="qr_scanner_pairing_in_progress">Pairing…</string>
+    <string name="qr_scanner_account_added">Account added successfully</string>
+
+    <string name="notification_channel_name">Push Authentication</string>
+    <string name="notification_channel_description">Push authentication requests from PingOne</string>
+    <string name="notification_permission_granted">Notification permission granted</string>
+    <string name="notification_permission_denied">Notification permission denied. Push notifications will not be displayed.</string>
+
+    <!-- OTP box -->
+    <string name="otp_box_title">One-Time Passcode</string>
+    <string name="otp_box_refreshes_in">Refreshes in %ds</string>
+
+    <!-- Diagnostic logs screen -->
+    <string name="diagnostic_logs_title">Diagnostic Logs (%d)</string>
+    <string name="diagnostic_logs_share_subject">PingOne MFA Diagnostic Logs</string>
+    <string name="diagnostic_logs_share_chooser_title">Share logs via…</string>
+    <string name="diagnostic_logs_share_content_desc">Share logs</string>
+    <string name="diagnostic_logs_clear_content_desc">Clear logs</string>
+    <string name="diagnostic_logs_empty_title">No logs yet</string>
+    <string name="diagnostic_logs_empty_subtitle">Logs will appear here as the app runs.</string>
+
+    <!-- Common -->
+    <string name="ok">OK</string>
+    <string name="error_title">Error</string>
+
+    <!-- Accounts screen -->
+    <string name="accounts_more_options">More options</string>
+    <string name="accounts_diagnostic_logs_menu_item">Diagnostic Logs</string>
+    <string name="accounts_add_account_content_desc">Add account</string>
+    <string name="accounts_users_section_label">Users</string>
+    <string name="accounts_empty_title">No accounts yet</string>
+    <string name="accounts_empty_subtitle">Tap the + button and scan a QR code\nto add your first account.</string>
+
+    <!-- Account card labels -->
+    <string name="account_card_name_label">Name: %1$s</string>
+    <string name="account_card_family_label">Family: %1$s</string>
+    <string name="account_card_region_label">Region: %1$s</string>
+    <string name="account_card_id_label">ID: %1$s</string>
+
+    <!-- QR scanner permission denial -->
+    <string name="qr_scanner_permission_permanently_denied">Camera permission was denied. Please enable it in app Settings.</string>
+    <string name="qr_scanner_open_settings_button">Open Settings</string>
+
+    <!-- Push notification screen -->
+    <string name="text_pingone_mfa_screen_push_title">Authentication Request</string>
+    <string name="text_pingone_mfa_approved_title">Approved</string>
+    <string name="text_pingone_mfa_approved_message">Authentication request approved successfully.</string>
+    <string name="text_pingone_mfa_denied_title">Denied</string>
+    <string name="text_pingone_mfa_denied_message">Authentication request denied.</string>
+    <string name="text_pingone_mfa_approval_failed">Failed to approve authentication request.</string>
+    <string name="text_pingone_mfa_deny_failed">Failed to deny authentication request.</string>
+    <string name="text_pingone_mfa_dry_push_message">This was a test push notification. No action is required.</string>
+    <string name="text_pingone_mfa_dismiss">Dismiss</string>
+
+    <!-- System notification actions -->
+    <string name="system_notification_title">Authentication Request</string>
+    <string name="system_notification_content">Tap to approve or deny.</string>
+    <string name="system_notification_approve">Approve</string>
+    <string name="system_notification_deny">Deny</string>
+
+    <!-- Number matching challenge -->
+    <string name="text_pingone_mfa_select_number">Select the number shown on the screen</string>
+    <string name="text_pingone_mfa_enter_number_prompt">Enter the number shown on the screen</string>
+    <string name="text_pingone_mfa_number_label">Number</string>
+    <string name="text_pingone_mfa_confirm_number">Confirm</string>
+
+</resources>

@@ -1,0 +1,16 @@
+<!--
+  ~ Copyright (c) 2026 Ping Identity Corporation. All rights reserved.
+  ~
+  ~ This software may be modified and distributed under the terms
+  ~ of the MIT license. See the LICENSE file for details.
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54,30 C40.745,30 30,40.745 30,54 C30,67.255 40.745,78 54,78 C67.255,78 78,67.255 78,54 C78,40.745 67.255,30 54,30 Z M54,42 C57.314,42 60,44.686 60,48 C60,51.314 57.314,54 54,54 C50.686,54 48,51.314 48,48 C48,44.686 50.686,42 54,42 Z M54,72 C46.5,72 39.9,68.1 36,62.1 C36.09,55.95 48,52.5 54,52.5 C59.97,52.5 71.91,55.95 72,62.1 C68.1,68.1 61.5,72 54,72 Z" />
+</vector>
