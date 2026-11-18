@@ -11,6 +11,7 @@ import com.pingidentity.flutter.core.mapper.JsonBridgeMapper
 import com.pingidentity.flutter.journey.CallbackMessage
 import com.pingidentity.flutter.journey.NodeMessage
 import com.pingidentity.flutter.journey.NodeType
+import com.pingidentity.flutter.journey.callback.JourneyCallbackLookup
 import com.pingidentity.journey.callback.AbstractValidatedCallback
 import com.pingidentity.journey.callback.AttributeInputCallback
 import com.pingidentity.journey.plugin.AbstractCallback
@@ -79,20 +80,12 @@ internal object JourneyNodeMapper {
     private fun mapCallbacks(node: ContinueNode): List<CallbackMessage> {
         val typeCounts = mutableMapOf<String, Int>()
         return node.callbacks.map { callback ->
-            val type = callbackType(callback)
+            val type = JourneyCallbackLookup.callbackType(callback)
             val index = typeCounts.getOrDefault(type, 0)
             typeCounts[type] = index + 1
             mapCallback(callback, type, index.toLong())
         }
     }
-
-    /**
-     * The server-registered `"type"` string from [AbstractCallback.json], stable across R8/proguard
-     * minification — unlike [Any.javaClass]'s `simpleName`, which is obfuscated in a minified build.
-     */
-    private fun callbackType(callback: Callback): String =
-        (callback as AbstractCallback).json["type"]?.jsonPrimitive?.content
-            ?: throw IllegalStateException("Callback is missing a \"type\" field: $callback")
 
     private fun mapCallback(callback: Callback, type: String, index: Long): CallbackMessage {
         var message = CallbackMessage(type = type, index = index)

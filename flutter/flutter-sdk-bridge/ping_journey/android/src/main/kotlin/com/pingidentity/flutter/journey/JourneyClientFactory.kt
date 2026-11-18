@@ -8,7 +8,7 @@
 package com.pingidentity.flutter.journey
 
 import com.pingidentity.flutter.core.CoreRuntime
-import com.pingidentity.flutter.core.registry.NativeHandle
+import com.pingidentity.flutter.core.node.ActiveNodeAccess
 import com.pingidentity.journey.Journey
 
 /**
@@ -18,8 +18,20 @@ import com.pingidentity.journey.Journey
  * configured an Oidc module — [Journey.user] unconditionally calls `oidcClient()` internally,
  * which throws `IllegalStateException` when no Oidc module was registered, so callers must
  * check this flag *before* touching `user()`/`token()` on a session-only Journey.
+ *
+ * Also owns the Journey's [activeNode] (its current `ContinueNode` and the lock shared with
+ * `next()`), and implements [ActiveNodeAccess] over it so an add-on plugin can reach a live
+ * callback through `ping_core` with no dependency on this module.
  */
-internal class JourneyHandle(val journey: Journey, val hasOidc: Boolean) : NativeHandle
+internal class JourneyHandle(val journey: Journey, val hasOidc: Boolean) : ActiveNodeAccess {
+    val activeNode = ActiveNodeState()
+
+    override suspend fun <T> withItem(
+        type: String,
+        index: Int,
+        block: suspend (item: Any) -> T,
+    ): T = activeNode.withItem(type, index, block)
+}
 
 /**
  * Builds a native [Journey] from a [JourneyConfigMessage] and registers it in the shared

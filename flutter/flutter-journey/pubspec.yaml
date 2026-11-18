@@ -36,6 +36,9 @@ dependencies:
   ping_journey:
     path: ../flutter-sdk-bridge/ping_journey
 
+  ping_device_profile:
+    path: ../flutter-sdk-bridge/ping_device_profile
+
   ping_oidc:
     path: ../flutter-sdk-bridge/ping_oidc
 

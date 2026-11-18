@@ -1,5 +1,8 @@
 ## Unreleased
 
+#### Added
+- An add-on callback seam: `AddOnCallback` (the open branch of the sealed `Callback` hierarchy) plus `Callback.registerAddOn(type, factory)`, so an add-on package can contribute a Dart type for a callback its optional native module owns (device profile, device binding, FIDO). Unregistered types keep rendering as the placeholder `TextOutputCallback`. Add-on factories receive the node's `journeyId`, and `AddOnCallback` exposes it with the callback's full server JSON (`raw`) [SDKS-5263]
+
 #### Updated
 - Bumped to native Ping SDK `2.2.0` (Android Maven, iOS SPM)
 

@@ -58,4 +58,24 @@ abstract final class CallbackType {
 
   /// Wire type for `BooleanAttributeInputCallback`.
   static const booleanAttributeInputCallback = 'BooleanAttributeInputCallback';
+
+  /// Every core wire type above. `Callback.registerAddOn` rejects these, so an add-on can't
+  /// shadow a type this package already maps. Add a new core constant here too.
+  static const Set<String> all = {
+    nameCallback,
+    passwordCallback,
+    validatedUsernameCallback,
+    validatedPasswordCallback,
+    validatedCreateUsernameCallback,
+    validatedCreatePasswordCallback,
+    choiceCallback,
+    kbaCreateCallback,
+    termsAndConditionsCallback,
+    textInputCallback,
+    textOutputCallback,
+    suspendedTextOutputCallback,
+    stringAttributeInputCallback,
+    numberAttributeInputCallback,
+    booleanAttributeInputCallback,
+  };
 }

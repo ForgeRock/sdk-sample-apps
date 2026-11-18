@@ -1,0 +1,28 @@
+name: ping_device_profile_example
+description: "Integration-test host for the ping_device_profile bridge package. Not a sample app."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.12.2
+
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  ping_device_profile:
+    path: ../
+  ping_journey:
+    path: ../../ping_journey
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
