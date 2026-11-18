@@ -8,11 +8,13 @@ A comprehensive iOS sample application demonstrating browser-based OIDC (OpenID 
 
 This sample application showcases how to implement centralized, browser-based authentication using the **PingOidc** module. Unlike embedded authentication flows, this approach redirects users to a browser-based login experience, allowing them to authenticate through a centralized identity provider such as PingOne, PingFederate, or PingAM.
 
+> **RAR support:** The Rich Authorization Requests screens in this sample require PingAM or PingOne Advanced Identity Cloud. PingOne does not currently support the PAR-based RAR flow demonstrated here (see [Scope](#scope)).
+
 ### Key Features
 
 - Browser-based OIDC authentication using ASWebAuthenticationSession
 - OAuth 2.0/OIDC authorization code flow with PKCE
-- Rich Authorization Requests (RFC 9396): a dedicated login screen with editable `authorization_details` JSON and presets
+- Rich Authorization Requests (RFC 9396) on PingAM or Advanced Identity Cloud: a dedicated login screen with editable `authorization_details` JSON and presets
 - Pushed Authorization Requests (RFC 9126, PAR) toggle, sent through the typed `authorizationDetails` path
 - "Granted Authorization Details" card showing the `authorization_details` the server granted for a token
 - Separate Keychain storage for the RAR token, so the standard and RAR tokens coexist and are revoked independently
@@ -89,7 +91,7 @@ public let oidcLogin = makeOidcWebClient()
 - `browserType`: Set to `.authSession` to use ASWebAuthenticationSession
 - `module(PingOidc.OidcModule.config)`: Configures OIDC-specific settings
 - `scopes`: **Must be `Set<String>`**, not `[String]` array
-- `discoveryEndpoint`: OIDC discovery URL (e.g., `https://auth.pingone.com/{envId}/as/.well-known/openid-configuration`)
+- `discoveryEndpoint`: OIDC discovery URL (e.g., `https://your-tenant.forgeblocks.com/am/oauth2/.well-known/openid-configuration`)
 
 #### RarClientStore.swift
 The client used for Rich Authorization Requests. It authenticates as a **second OAuth 2.0 client** (`RarClientStore.clientId`, a placeholder next to the shared ones), because consent handling is a per-client setting on the authorization server: Implied Consent on a client rejects `authorization_details` with `invalid_request`, while the standard login typically wants no consent prompt. The RAR client is built through the same factory, overrides the client ID, and keeps its token in a `KeychainStorage` under the dedicated `ACCESS_TOKEN_STORAGE_RAR` account; `apply(_:)` rebuilds it when `par` or the config-level `authorizationDetails` change. See [Rich Authorization Requests (RFC 9396)](#rich-authorization-requests-rfc-9396).
@@ -172,7 +174,7 @@ Before running the sample, configure your OAuth 2.0 client with:
    oidcValue.clientId = "your-client-id"
    oidcValue.scopes = Set(["openid", "profile", "email"])
    oidcValue.redirectUri = "com.yourapp://callback"
-   oidcValue.discoveryEndpoint = "https://auth.pingone.com/{envId}/as/.well-known/openid-configuration"
+   oidcValue.discoveryEndpoint = "https://your-tenant.forgeblocks.com/am/oauth2/.well-known/openid-configuration"
    ```
 
 4. **Update URL Scheme** in Xcode:
@@ -320,7 +322,7 @@ This will:
 
 A per-transaction value takes precedence over a config-level one. The **Delivery** picker on the RAR Login screen selects between the two.
 
-### Pushed Authorization Requests (PAR)
+### Pushed Authorization Requests (PAR) for RAR flows
 
 With [Pushed Authorization Requests (RFC 9126)](https://www.rfc-editor.org/rfc/rfc9126), the authorization parameters are sent to the server in a POST to the discovery document's `pushed_authorization_request_endpoint` before the browser redirect, and the redirect carries only the resulting `request_uri`. The **PAR** toggle on the RAR Login screen sets `par` on the client configuration.
 
@@ -430,7 +432,7 @@ Physical device **required** for:
 
 **Issue**: "Invalid redirect URI" error during login
 **Solution**:
-- Verify the redirect URI in [OidcLoginViewModel.swift:38](OidcExample/ViewModels/OidcLoginViewModel.swift#L38) matches exactly with your OAuth client configuration
+- Verify the `redirectUri` placeholder in [OidcLoginViewModel.swift](OidcExample/ViewModels/OidcLoginViewModel.swift) matches exactly with your OAuth client configuration
 - Ensure the URL scheme is registered in Xcode Info.plist
 
 **Issue**: "Type `[String]` cannot be assigned to `Set<String>`"

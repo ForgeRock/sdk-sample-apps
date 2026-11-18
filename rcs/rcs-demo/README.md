@@ -53,7 +53,7 @@ Supported authorization detail types: `account_information` and `payment_initiat
 
 ### The consent response
 
-The `consent_response` JWT is signed with `alg: RS256` and `kid: rcs-demo-signing-key`, and expires after 5 minutes. Its claims follow what PingAM expects:
+The `consent_response` JWT is signed with `alg: RS256` and `kid: rcs-demo-signing-key`, and expires after 5 minutes. Its claims follow what the AS expects:
 
 | Claim | Value |
 |---|---|
@@ -77,7 +77,7 @@ Requested details of a type that is not supported are left out of the response, 
 
 ## Setup
 
-The fastest path for testing from this Mac with the iOS Simulator: install mkcert once, generate a certificate for `localhost` and your Mac's IP, start the demo, trust the CA in each simulator you use, and configure the agent. Each step is explained below; this is the whole thing:
+The fastest path for testing is from MacOS with the iOS Simulator: install mkcert once, generate a certificate for `localhost` and your Mac's IP, start the demo, trust the CA in each simulator you use, and configure the agent. Each step is explained below; this is the whole thing:
 
 ```sh
 cd rcs/rcs-demo
@@ -100,9 +100,11 @@ xcrun simctl keychain booted add-root-cert "$(mkcert -CAROOT)/rootCA.pem"
 open "https://localhost:8081/metadata"
 ```
 
-Then configure the RCS agent on your authorization server (see [Configure the Authorization Server](#configure-the-authorization-server)) and run the sample app. The sections below explain each step, the settings, and what to do when your tenant is hosted or you test on a physical device.
+Then configure the RCS agent on your authorization server (see [Configure the Authorization Server](#configure-the-authorization-server)) and run the sample app. The sections below explain each step, the settings, and what to do when your tenant is hosted or you test on a physical device. Only the simulator CA-trust step is iOS-specific; the server itself is plain Node.js and works with any client.
 
 ### Run the demo
+
+This is the reference for the command in step 2 above, with all the settings the demo accepts.
 
 ```sh
 cd rcs/rcs-demo
@@ -130,7 +132,7 @@ RCS demo listening on http://0.0.0.0:8081
 
 ### HTTPS
 
-HTTPS matters here: ASWebAuthenticationSession, which the iOS sample uses for the login browser, and many browsers reject or warn on plain-HTTP pages embedded in an OAuth flow, and a hosted authorization server can only fetch JWK or metadata URLs it can reach over HTTPS.
+HTTPS matters here: ASWebAuthenticationSession, which the iOS sample uses for the login browser, and many browsers reject or warn on plain-HTTP pages embedded in an OAuth flow.
 
 The app serves HTTPS when either:
 
