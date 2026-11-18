@@ -28,6 +28,7 @@ This sample code is provided "as is" and is not a supported product of Ping Iden
 - PollingCollector
 - ImageCollector
 - MetadataCollector
+- RecognizeCollector
 
 ## Requirements
 

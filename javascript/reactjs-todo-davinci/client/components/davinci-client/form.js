@@ -26,6 +26,7 @@ import BooleanComponent from './boolean.js';
 import QrCode from './qr-code.js';
 import ImageComponent from './image.js';
 import MetadataComponent from './metadata.js';
+import RecognizeComponent from './recognize.js';
 import Unknown from './unknown.js';
 import Alert from './alert.js';
 import KeyIcon from '../icons/key-icon';
@@ -256,6 +257,15 @@ export default function Form() {
       case 'MetadataCollector':
         return (
           <MetadataComponent
+            collector={collector}
+            updater={updater(collector)}
+            submitForm={setNext}
+            key={collectorName}
+          />
+        );
+      case 'RecognizeCollector':
+        return (
+          <RecognizeComponent
             collector={collector}
             updater={updater(collector)}
             submitForm={setNext}
