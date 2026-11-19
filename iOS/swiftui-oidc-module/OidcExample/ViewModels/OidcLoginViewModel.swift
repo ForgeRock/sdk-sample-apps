@@ -2,7 +2,7 @@
 //  OidcLoginViewModel.swift
 //  OidcExample
 //
-//  Copyright (c) 2025 Ping Identity Corporation. All rights reserved.
+//  Copyright (c) 2025 - 2026 Ping Identity Corporation. All rights reserved.
 //
 //  This software may be modified and distributed under the terms
 //  of the MIT license. See the LICENSE file for details.
@@ -15,28 +15,38 @@ import PingLogger
 import PingBrowser
 import Combine
 
-/// Configures and initializes the OIDC Web instance with OAuth 2.0 client details.
+/// Creates an OIDC Web client with the settings shared by every client in the sample.
 /// - This configuration includes:
 ///   - Client ID
 ///   - Scopes
 ///   - Redirect URI
 ///   - Discovery Endpoint
 ///   - Browser settings
-public let oidcLogin = OidcWebClient.createOidcWebClient { config in
-    //TODO: Provide here the Server configuration. Add the PingOne/PingAM Discovery Endpoint and the OAuth2.0 client details
-    config.browserMode = .login
-    config.browserType = .authSession
-    config.logger = LogManager.standard
+/// - Parameter overrides: Called last with the client's own `OidcClientConfig`, so a client can
+///   adjust individual settings (for example its token storage) without repeating the shared ones.
+/// - Returns: A new client. Each call builds its own `OidcClientConfig`; none is shared between clients.
+nonisolated func makeOidcWebClient(overrides: @escaping @Sendable (OidcClientConfig) -> Void = { _ in }) -> OidcWebClient {
+    OidcWebClient.createOidcWebClient { config in
+        //TODO: Provide here the Server configuration. Add the PingOne/PingAM Discovery Endpoint and the OAuth2.0 client details
+        config.browserMode = .login
+        config.browserType = .authSession
+        config.logger = LogManager.standard
 
-    config.module(PingOidc.OidcModule.config) { oidcValue in
-        oidcValue.clientId = <#"Client ID"#>
-        oidcValue.scopes = Set([<#"openid"#>, <#"profile"#>, <#"email"#>])
-        oidcValue.redirectUri = <#"Redirect URI"#>
-        oidcValue.discoveryEndpoint = <#"Discovery Endpoint"#>
-        // Optional: Add ACR values if required by your authentication flow
-        // oidcValue.acrValues = <#"ACR_VALUE"#>
+        config.module(PingOidc.OidcModule.config) { oidcValue in
+            oidcValue.clientId = <#"Client ID"#>
+            oidcValue.scopes = Set([<#"openid"#>, <#"profile"#>, <#"email"#>])
+            oidcValue.redirectUri = <#"Redirect URI"#>
+            oidcValue.discoveryEndpoint = <#"Discovery Endpoint"#>
+            // Optional: Add ACR values if required by your authentication flow
+            // oidcValue.acrValues = <#"ACR_VALUE"#>
+            overrides(oidcValue)
+        }
     }
 }
+
+/// The standard OIDC Web instance. It is built from the shared settings with no overrides, so it
+/// keeps the SDK's default token storage.
+public let oidcLogin = makeOidcWebClient()
 
 /// A view model that manages the OIDC authentication flow and state.
 /// - Responsible for:
