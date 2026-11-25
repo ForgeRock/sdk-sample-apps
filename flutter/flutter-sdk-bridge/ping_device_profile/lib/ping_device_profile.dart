@@ -8,3 +8,4 @@
 export 'package:ping_core/ping_core.dart' show PingException;
 
 export 'src/device_profile_callback.dart';
+export 'src/ping_device_profile.dart';

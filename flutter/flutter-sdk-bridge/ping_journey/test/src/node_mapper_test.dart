@@ -9,6 +9,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:ping_journey/ping_journey.dart';
 import 'package:ping_journey/src/node_mapper.dart';
 
+const _journeyId = 'journey-1';
+
+Callback _mapCallback(CallbackMessage message) =>
+    NodeMapper.mapCallback(message, journeyId: _journeyId);
+
 void main() {
   group('NodeMapper.map', () {
     test(
@@ -182,7 +187,7 @@ void main() {
 
   group('Callback.toValue()', () {
     test('NameCallback submits its text value', () {
-      final callback = NodeMapper.mapCallback(
+      final callback = _mapCallback(
         CallbackMessage(type: 'NameCallback', index: 0, value: 'jdoe'),
       );
 
@@ -194,7 +199,7 @@ void main() {
     });
 
     test('ChoiceCallback submits the selected index as an int', () {
-      final callback = NodeMapper.mapCallback(
+      final callback = _mapCallback(
         CallbackMessage(
           type: 'ChoiceCallback',
           index: 0,
@@ -208,7 +213,7 @@ void main() {
 
     test('KbaCreateCallback submits an object-shaped value', () {
       final callback =
-          NodeMapper.mapCallback(
+          _mapCallback(
                 CallbackMessage(
                   type: 'KbaCreateCallback',
                   index: 0,
@@ -226,7 +231,7 @@ void main() {
     });
 
     test('TextOutputCallback is output-only and contributes no value', () {
-      final callback = NodeMapper.mapCallback(
+      final callback = _mapCallback(
         CallbackMessage(
           type: 'TextOutputCallback',
           index: 0,
@@ -243,9 +248,7 @@ void main() {
       'then submits whatever the UI sets',
       () {
         final callback =
-            NodeMapper.mapCallback(
-                  CallbackMessage(type: 'PasswordCallback', index: 0),
-                )
+            _mapCallback(CallbackMessage(type: 'PasswordCallback', index: 0))
                 as PasswordCallback;
         expect(callback.password, '');
 
@@ -260,7 +263,7 @@ void main() {
 
     test('ValidatedUsernameCallback submits the username value', () {
       final callback =
-          NodeMapper.mapCallback(
+          _mapCallback(
                 CallbackMessage(
                   type: 'ValidatedUsernameCallback',
                   index: 0,
@@ -280,7 +283,7 @@ void main() {
       'TextOutputCallback fallback (regression: this wire name differs from the native SDK\'s '
       'local ValidatedUsernameCallback class name)',
       () {
-        final callback = NodeMapper.mapCallback(
+        final callback = _mapCallback(
           CallbackMessage(
             type: 'ValidatedCreateUsernameCallback',
             index: 0,
@@ -297,7 +300,7 @@ void main() {
       'maps the "ValidatedCreatePasswordCallback" wire type to ValidatedPasswordCallback, not '
       'the TextOutputCallback fallback (see ValidatedCreateUsernameCallback test above)',
       () {
-        final callback = NodeMapper.mapCallback(
+        final callback = _mapCallback(
           CallbackMessage(type: 'ValidatedCreatePasswordCallback', index: 0),
         );
 
@@ -310,7 +313,7 @@ void main() {
       'back), then submits whatever the UI sets',
       () {
         final callback =
-            NodeMapper.mapCallback(
+            _mapCallback(
                   CallbackMessage(type: 'ValidatedPasswordCallback', index: 0),
                 )
                 as ValidatedPasswordCallback;
@@ -326,7 +329,7 @@ void main() {
 
     test('TermsAndConditionsCallback submits the accepted flag', () {
       final callback =
-          NodeMapper.mapCallback(
+          _mapCallback(
                 CallbackMessage(type: 'TermsAndConditionsCallback', index: 0),
               )
               as TermsAndConditionsCallback;
@@ -339,7 +342,7 @@ void main() {
 
     test('TextInputCallback submits its text value', () {
       final callback =
-          NodeMapper.mapCallback(
+          _mapCallback(
                 CallbackMessage(
                   type: 'TextInputCallback',
                   index: 0,
@@ -355,7 +358,7 @@ void main() {
 
     test('StringAttributeInputCallback submits its string value', () {
       final callback =
-          NodeMapper.mapCallback(
+          _mapCallback(
                 CallbackMessage(
                   type: 'StringAttributeInputCallback',
                   index: 0,
@@ -372,7 +375,7 @@ void main() {
 
     test('NumberAttributeInputCallback submits its numeric value', () {
       final callback =
-          NodeMapper.mapCallback(
+          _mapCallback(
                 CallbackMessage(
                   type: 'NumberAttributeInputCallback',
                   index: 0,
@@ -425,8 +428,7 @@ void main() {
           null, // raw
         ]);
 
-        final callback =
-            NodeMapper.mapCallback(wireMessage) as ValidatedPasswordCallback;
+        final callback = _mapCallback(wireMessage) as ValidatedPasswordCallback;
 
         expect(callback.failedPolicies, hasLength(1));
         expect(
@@ -442,7 +444,7 @@ void main() {
 
     test('BooleanAttributeInputCallback submits its boolean value', () {
       final callback =
-          NodeMapper.mapCallback(
+          _mapCallback(
                 CallbackMessage(
                   type: 'BooleanAttributeInputCallback',
                   index: 0,

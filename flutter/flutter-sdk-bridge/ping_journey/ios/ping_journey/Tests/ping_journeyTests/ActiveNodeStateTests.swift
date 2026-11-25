@@ -13,7 +13,8 @@ import ping_core
 @testable import ping_journey
 
 /// Unit tests for `ActiveNodeState`: callback lookup by `{type, index}`, node replacement and
-/// clearing, and that `withItem` and `withLock` exclude each other.
+/// clearing, that `withItem`, `withLock`, `clear` and `startWith` all exclude each other, and that
+/// entering the lock again from inside it throws instead of deadlocking.
 final class ActiveNodeStateTests: XCTestCase {
 
     func testWithItemReturnsTheCallbackAtTheRequestedTypeAndIndex() async throws {
@@ -92,11 +93,11 @@ final class ActiveNodeStateTests: XCTestCase {
         XCTAssertNil(state.current)
     }
 
-    func testClearDropsTheNode() async {
+    func testClearDropsTheNode() async throws {
         let state = ActiveNodeState()
         state.set(makeContinueNode(actions: [await makeCallback(NameCallback(), type: "NameCallback")]))
 
-        state.clear()
+        try await state.clear()
 
         XCTAssertNil(state.current)
         do {
@@ -107,6 +108,89 @@ final class ActiveNodeStateTests: XCTestCase {
         } catch {
             XCTFail("unexpected error: \(error)")
         }
+    }
+
+    func testClearWaitsForAnInFlightWithItemBeforeDroppingTheNode() async throws {
+        let state = ActiveNodeState()
+        state.set(makeContinueNode(actions: [await makeCallback(NameCallback(), type: "NameCallback")]))
+        let recorder = Recorder()
+        let entered = Gate()
+        let release = Gate()
+
+        let holder = Task {
+            try await state.withItem(type: "NameCallback", index: 0) { _ in
+                await recorder.add("item-start")
+                await entered.open()
+                await release.wait()
+                await recorder.add("item-end")
+            }
+        }
+        await entered.wait()
+        let waiter = Task {
+            try await state.clear()
+            await recorder.add("cleared")
+        }
+
+        try await Task.sleep(nanoseconds: 50_000_000)
+        let whileHeld = await recorder.events
+        XCTAssertEqual(whileHeld, ["item-start"])
+        XCTAssertNotNil(state.current)
+
+        await release.open()
+        try await holder.value
+        try await waiter.value
+        let afterwards = await recorder.events
+        XCTAssertEqual(afterwards, ["item-start", "item-end", "cleared"])
+        XCTAssertNil(state.current)
+    }
+
+    func testStartWithCachesTheNodeItReturns() async throws {
+        let state = ActiveNodeState()
+        let started = makeContinueNode(actions: [await makeCallback(NameCallback(), type: "NameCallback")])
+
+        let result = try await state.startWith { started }
+
+        XCTAssertTrue((result as AnyObject) === started)
+        XCTAssertTrue(state.current === started)
+    }
+
+    func testStartWithWaitsForAnInFlightWithItemBeforeReplacingTheNode() async throws {
+        let oldCallback = await makeCallback(NameCallback(), type: "NameCallback")
+        let newNode = makeContinueNode(actions: [await makeCallback(NameCallback(), type: "NameCallback")])
+        let state = ActiveNodeState()
+        state.set(makeContinueNode(actions: [oldCallback]))
+        let recorder = Recorder()
+        let entered = Gate()
+        let release = Gate()
+
+        let holder = Task {
+            try await state.withItem(type: "NameCallback", index: 0) { item in
+                await recorder.add("item-start")
+                await entered.open()
+                await release.wait()
+                // Still the old callback: the restart hasn't replaced the node under us.
+                XCTAssertTrue((item as AnyObject) === oldCallback)
+                await recorder.add("item-end")
+            }
+        }
+        await entered.wait()
+        let waiter = Task {
+            try await state.startWith {
+                await recorder.add("start")
+                return newNode
+            }
+        }
+
+        try await Task.sleep(nanoseconds: 50_000_000)
+        let whileHeld = await recorder.events
+        XCTAssertEqual(whileHeld, ["item-start"])
+
+        await release.open()
+        try await holder.value
+        _ = try await waiter.value
+        let afterwards = await recorder.events
+        XCTAssertEqual(afterwards, ["item-start", "item-end", "start"])
+        XCTAssertTrue(state.current === newNode)
     }
 
     func testWithItemExcludesAConcurrentWithLockUntilTheBlockFinishes() async throws {
@@ -138,6 +222,106 @@ final class ActiveNodeStateTests: XCTestCase {
         try await waiter.value
         let afterwards = await recorder.events
         XCTAssertEqual(afterwards, ["item-start", "item-end", "lock"])
+    }
+
+    // --- Reentrancy --------------------------------------------------------------------------
+
+    func testWithItemInsideWithItemThrowsInsteadOfDeadlocking() async throws {
+        try await assertReentryRejected { state in
+            _ = try await state.withItem(type: "NameCallback", index: 0) { _ in 0 }
+        }
+    }
+
+    func testWithLockInsideWithItemThrowsInsteadOfDeadlocking() async throws {
+        try await assertReentryRejected { state in
+            try await state.withLock { 0 }
+        }
+    }
+
+    func testClearInsideWithItemThrowsInsteadOfDeadlocking() async throws {
+        try await assertReentryRejected { state in
+            try await state.clear()
+        }
+    }
+
+    func testStartWithInsideWithItemThrowsInsteadOfDeadlocking() async throws {
+        let spare = makeContinueNode(actions: [])
+        try await assertReentryRejected { state in
+            _ = try await state.startWith { spare }
+        }
+    }
+
+    func testWithItemInsideWithLockThrowsInsteadOfDeadlocking() async throws {
+        let state = ActiveNodeState()
+        state.set(makeContinueNode(actions: [await makeCallback(NameCallback(), type: "NameCallback")]))
+
+        do {
+            _ = try await state.withLock {
+                try await state.withItem(type: "NameCallback", index: 0) { _ in 0 }
+            }
+            XCTFail("expected ActiveNodeError.reentrantLock")
+        } catch ActiveNodeError.reentrantLock {
+            // expected
+        } catch {
+            XCTFail("unexpected error: \(error)")
+        }
+    }
+
+    func testHoldingOneStatesLockDoesNotBlockUsingAnothers() async throws {
+        let first = ActiveNodeState()
+        first.set(makeContinueNode(actions: [await makeCallback(NameCallback(), type: "NameCallback")]))
+        let second = ActiveNodeState()
+        second.set(makeContinueNode(actions: [await makeCallback(PasswordCallback(), type: "PasswordCallback")]))
+
+        let result = try await first.withItem(type: "NameCallback", index: 0) { _ in
+            try await second.withItem(type: "PasswordCallback", index: 0) { _ in "both" }
+        }
+
+        XCTAssertEqual(result, "both")
+    }
+
+    func testReEnteringTheFirstStateIsStillCaughtWhileHoldingTwo() async throws {
+        let first = ActiveNodeState()
+        first.set(makeContinueNode(actions: [await makeCallback(NameCallback(), type: "NameCallback")]))
+        let second = ActiveNodeState()
+        second.set(makeContinueNode(actions: [await makeCallback(PasswordCallback(), type: "PasswordCallback")]))
+
+        do {
+            _ = try await first.withItem(type: "NameCallback", index: 0) { _ in
+                try await second.withItem(type: "PasswordCallback", index: 0) { _ in
+                    try await first.withItem(type: "NameCallback", index: 0) { _ in 0 }
+                }
+            }
+            XCTFail("expected ActiveNodeError.reentrantLock")
+        } catch ActiveNodeError.reentrantLock {
+            // expected
+        } catch {
+            XCTFail("unexpected error: \(error)")
+        }
+    }
+
+    /// Runs `reenter` from inside a `withItem` body on a fresh state and asserts it is rejected
+    /// with `reentrantLock`, then that the lock still works afterwards.
+    private func assertReentryRejected(
+        _ reenter: @escaping @Sendable (ActiveNodeState) async throws -> Void,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) async throws {
+        let state = ActiveNodeState()
+        state.set(makeContinueNode(actions: [await makeCallback(NameCallback(), type: "NameCallback")]))
+
+        do {
+            try await state.withItem(type: "NameCallback", index: 0) { _ in try await reenter(state) }
+            XCTFail("expected ActiveNodeError.reentrantLock", file: file, line: line)
+        } catch ActiveNodeError.reentrantLock {
+            // expected
+        } catch {
+            XCTFail("unexpected error: \(error)", file: file, line: line)
+        }
+
+        // The rejected call must not have wedged the lock.
+        let ok = try await state.withItem(type: "NameCallback", index: 0) { _ in "ok" }
+        XCTAssertEqual(ok, "ok", file: file, line: line)
     }
 
     // --- Helpers -----------------------------------------------------------------------------

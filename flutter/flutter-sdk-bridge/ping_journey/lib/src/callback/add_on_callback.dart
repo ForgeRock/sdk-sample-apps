@@ -14,9 +14,11 @@ part of 'callback.dart';
 /// A `switch` over [Callback] handles every add-on with one `AddOnCallback()` case, then narrows
 /// by subtype.
 ///
-/// An add-on callback submits nothing by default: the native callback holds its own result, and
-/// `JourneyClient.next` just advances the flow. Override [toValue] only if the add-on needs to send
-/// a value from Dart.
+/// An add-on callback submits nothing from Dart: [toValue] stays `null`. The add-on sets its value
+/// natively instead, inside the Journey's active-node `withItem` block, on the live native
+/// callback (device profile's `collect()` stores the profile through the native callback's
+/// `input(...)`). `JourneyClient.next` then just advances the flow and the native SDK submits that
+/// value. Override [toValue] only if an add-on has to send a value from Dart.
 abstract base class AddOnCallback extends Callback {
   /// Creates an add-on callback from its wire [message] and the [journeyId] of the node it
   /// belongs to — the id an add-on passes back to native to reach this same live callback.
@@ -36,6 +38,8 @@ abstract base class AddOnCallback extends Callback {
   /// the core mapper doesn't know about.
   final Map<String, Object?> raw;
 
+  /// `null`: an add-on sets its value natively inside `withItem` (see [AddOnCallback]), so there is
+  /// nothing for `JourneyClient.next` to send from Dart.
   @override
   CallbackValueMessage? toValue() => null;
 }

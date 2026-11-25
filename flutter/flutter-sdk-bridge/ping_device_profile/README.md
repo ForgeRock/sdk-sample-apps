@@ -24,9 +24,9 @@ There is normally nothing to render: collection is automatic, so a UI shows a pr
 
 ## Registration
 
-`DeviceProfileCallback` is registered with `ping_journey`'s add-on callback registry **automatically**: the package declares `dartPluginClass: DeviceProfileCallback`, so Flutter's generated plugin registrant calls `DeviceProfileCallback.registerWith()` before `main()` on both platforms. No app code is needed.
+`DeviceProfileCallback` is registered with `ping_journey`'s add-on callback registry **automatically**: the package declares `dartPluginClass: PingDeviceProfile`, so Flutter's generated plugin registrant calls `PingDeviceProfile.registerWith()` before `main()` on both platforms. No app code is needed.
 
-The same static method works as a manual fallback (`PingDeviceProfile.registerWith()` is not required; import `DeviceProfileCallback` and call `DeviceProfileCallback.registerWith()`), with identical semantics — a later registration replaces an earlier one.
+`PingDeviceProfile` is the package registrant: `registerWith()` registers everything the package contributes to the Dart side. Today that is the one `DeviceProfileCallback` type; a package that contributes several types (FIDO, external IdP) adds them all to its own `registerWith()`. Calling it manually works too, with identical semantics — a later registration replaces an earlier one.
 
 If the type is somehow not registered, a Device Profile node falls back to the placeholder `TextOutputCallback` that `ping_journey` renders for unknown callbacks, and the flow can still be submitted.
 

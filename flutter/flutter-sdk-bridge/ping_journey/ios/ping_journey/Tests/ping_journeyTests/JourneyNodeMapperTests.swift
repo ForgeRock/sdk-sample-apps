@@ -258,6 +258,20 @@ final class JourneyNodeMapperTests: XCTestCase {
         XCTAssertEqual(callbacks[2]!.index, 1)
     }
 
+    func testMapContinueNodeWithACallbackMissingItsTypeFallsBackToFailureNode() async {
+        let name = NameCallback()
+        _ = await name.initialize(with: ["type": "NameCallback"])
+        // Never initialized, so its JSON has no "type" to address it by on the wire.
+        let untyped = PasswordCallback()
+        let node = makeContinueNode(input: [:], actions: [name, untyped])
+
+        let result = JourneyNodeMapper.map(node)
+
+        XCTAssertEqual(result.type, .failureNode)
+        XCTAssertNil(result.callbacks)
+        XCTAssertTrue(result.cause?.contains("missing a \"type\" field") == true)
+    }
+
     // --- Helpers -----------------------------------------------------------------------------
 
     private func makeContinueNode(input: [String: Any], actions: [any Action]) -> ContinueNode {

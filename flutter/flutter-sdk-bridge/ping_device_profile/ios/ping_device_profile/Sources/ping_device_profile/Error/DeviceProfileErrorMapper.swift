@@ -23,7 +23,7 @@ enum DeviceProfileErrorMapper {
         switch error {
         case DeviceProfileHostApiError.argumentError: type = "argument"
         case DeviceProfileHostApiError.stateError: type = "state"
-        case ActiveNodeError.noActiveNode, ActiveNodeError.notFound: type = "state"
+        case ActiveNodeError.noActiveNode, ActiveNodeError.notFound, ActiveNodeError.reentrantLock: type = "state"
         case ActiveNodeError.itemNotFound: type = "argument"
         default: type = "unknown"
         }

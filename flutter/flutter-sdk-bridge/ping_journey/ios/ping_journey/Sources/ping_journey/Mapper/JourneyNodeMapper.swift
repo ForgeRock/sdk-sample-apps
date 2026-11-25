@@ -18,13 +18,19 @@ enum JourneyNodeMapper {
     static func map(_ node: Node) -> NodeMessage {
         switch node {
         case let continueNode as ContinueNode:
-            return NodeMessage(
-                type: .continueNode,
-                header: continueNode.pageHeader,
-                pageDescription: continueNode.pageDescription,
-                stage: continueNode.stage,
-                callbacks: mapCallbacks(continueNode)
-            )
+            do {
+                return NodeMessage(
+                    type: .continueNode,
+                    header: continueNode.pageHeader,
+                    pageDescription: continueNode.pageDescription,
+                    stage: continueNode.stage,
+                    callbacks: try mapCallbacks(continueNode)
+                )
+            } catch {
+                // A callback with no `"type"` can't be addressed on the wire. Report it as a
+                // failure node with the reason instead of crashing the host app.
+                return NodeMessage(type: .failureNode, cause: plainErrorMessage(for: error))
+            }
         case let successNode as SuccessNode:
             return NodeMessage(
                 type: .successNode,
@@ -46,25 +52,16 @@ enum JourneyNodeMapper {
         }
     }
 
-    private static func mapCallbacks(_ node: ContinueNode) -> [CallbackMessage] {
+    /// Uses `JourneyCallbackLookup.callbackType` for the wire `"type"`, the same function the value
+    /// applier and the active-node lookup use, so the three can't disagree on a callback's address.
+    private static func mapCallbacks(_ node: ContinueNode) throws -> [CallbackMessage] {
         var typeCounts: [String: Int64] = [:]
-        return node.callbacks.map { callback in
-            let type = callbackType(callback)
+        return try node.callbacks.map { callback in
+            let type = try JourneyCallbackLookup.callbackType(callback)
             let index = typeCounts[type, default: 0]
             typeCounts[type] = index + 1
             return mapCallback(callback, type: type, index: index)
         }
-    }
-
-    /// The server-registered `"type"` string from `AbstractCallback.json`, stable across
-    /// release-build symbol stripping — unlike `String(describing: type(of:))`, which reflects the
-    /// Swift runtime type name and isn't a wire-format guarantee.
-    private static func callbackType(_ callback: any Callback) -> String {
-        guard let abstractCallback = callback as? AbstractCallback,
-              let type = abstractCallback.json[JourneyConstants.type] as? String else {
-            fatalError("Callback is missing a \"type\" field: \(callback)")
-        }
-        return type
     }
 
     private static func mapCallback(_ callback: any Callback, type: String, index: Int64) -> CallbackMessage {

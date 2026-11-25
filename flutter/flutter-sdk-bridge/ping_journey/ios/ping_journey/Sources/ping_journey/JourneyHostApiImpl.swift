@@ -39,12 +39,19 @@ final class JourneyHostApiImpl: PingJourneyHostApi, @unchecked Sendable {
                 )))
                 return
             }
-            let node = await handle.journey.start(name) { startOptions in
-                startOptions.forceAuth = options.forceAuth
-                startOptions.noSession = options.noSession
+            do {
+                // On the same serializer as next() and an add-on's withItem, so a restart can't
+                // swap the node while either is still using the previous one.
+                let node = try await handle.activeNode.startWith {
+                    await handle.journey.start(name) { startOptions in
+                        startOptions.forceAuth = options.forceAuth
+                        startOptions.noSession = options.noSession
+                    }
+                }
+                completion(.success(JourneyNodeMapper.map(node)))
+            } catch {
+                completion(.failure(JourneyErrorMapper.from(JourneyErrorCodes.start, error)))
             }
-            handle.activeNode.set(node)
-            completion(.success(JourneyNodeMapper.map(node)))
         }
     }
 
@@ -235,16 +242,27 @@ final class JourneyHostApiImpl: PingJourneyHostApi, @unchecked Sendable {
                 let user = await handle.journey.journeyUser()
                 await user?.logout()
             }
-            handle.activeNode.clear()
-            completion(.success(true))
+            do {
+                try await handle.activeNode.clear()
+                completion(.success(true))
+            } catch {
+                completion(.failure(JourneyErrorMapper.from(JourneyErrorCodes.signOff, error)))
+            }
         }
     }
 
     func dispose(journeyId: String, completion: @escaping (Result<Void, Error>) -> Void) {
         Task {
-            await resolveHandle(journeyId)?.activeNode.clear()
+            // Unregister first, so no new add-on call can resolve the Journey, then close its node;
+            // clear() waits for an operation still running on that node.
+            let handle = await resolveHandle(journeyId)
             await CoreRuntime.journeyRegistry.remove(journeyId)
-            completion(.success(()))
+            do {
+                try await handle?.activeNode.clear()
+                completion(.success(()))
+            } catch {
+                completion(.failure(JourneyErrorMapper.from(JourneyErrorCodes.dispose, error)))
+            }
         }
     }
 

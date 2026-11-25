@@ -10,9 +10,6 @@ import 'package:ping_journey/ping_journey.dart';
 
 import 'messages.g.dart';
 
-/// The server's wire type for this callback.
-const String _callbackType = 'DeviceProfileCallback';
-
 /// A Journey callback that collects the device's profile (identifier, metadata, location) during
 /// authentication, contributed by this add-on package.
 ///
@@ -26,7 +23,7 @@ const String _callbackType = 'DeviceProfileCallback';
 /// app can display or audit it.
 final class DeviceProfileCallback extends AddOnCallback {
   /// Creates a device profile callback from its wire [message] and the node's [journeyId].
-  /// Called by `NodeMapper` once [registerWith] has registered this class.
+  /// Called by `NodeMapper` once `PingDeviceProfile.registerWith` has registered this class.
   ///
   /// [hostApi] is for tests only; production callers get the default channel-backed API.
   DeviceProfileCallback(super.message, super.journeyId, {PingDeviceProfileHostApi? hostApi})
@@ -72,13 +69,6 @@ final class DeviceProfileCallback extends AddOnCallback {
     final result = await _guard(() => _hostApi.collect(journeyId, index));
     return result.cast<String, Object?>();
   }
-
-  /// Registers this class as the Dart type for the native `DeviceProfileCallback`.
-  ///
-  /// Called automatically at app startup through the plugin's `dartPluginClass` hook. Calling it
-  /// again is harmless — a later registration replaces the earlier one.
-  static void registerWith() =>
-      Callback.registerAddOn(_callbackType, DeviceProfileCallback.new);
 }
 
 Future<T> _guard<T>(Future<T> Function() body) async {

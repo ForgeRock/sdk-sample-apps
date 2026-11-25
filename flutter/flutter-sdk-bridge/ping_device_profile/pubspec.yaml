@@ -30,7 +30,7 @@ flutter:
       android:
         package: com.pingidentity.flutter.deviceprofile
         pluginClass: PingDeviceProfilePlugin
-        dartPluginClass: DeviceProfileCallback
+        dartPluginClass: PingDeviceProfile
       ios:
         pluginClass: PingDeviceProfilePlugin
-        dartPluginClass: DeviceProfileCallback
+        dartPluginClass: PingDeviceProfile

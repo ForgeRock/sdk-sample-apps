@@ -27,7 +27,9 @@ class NodeMapper {
           callbacks:
               message.callbacks
                   ?.whereType<CallbackMessage>()
-                  .map((callback) => mapCallback(callback, journeyId: journeyId))
+                  .map(
+                    (callback) => mapCallback(callback, journeyId: journeyId),
+                  )
                   .toList() ??
               const [],
         ),
@@ -47,8 +49,13 @@ class NodeMapper {
   /// [TextOutputCallback] with a placeholder message instead of dropping it.
   /// [CallbackMessage.raw] (the native callback's full JSON) is still populated on the wire for
   /// these types, for debugging/diagnostic purposes and for add-on callbacks to read.
-  static Callback mapCallback(CallbackMessage message, {String journeyId = ''}) =>
-      switch (message.type) {
+  ///
+  /// [journeyId] is required, with no default: an add-on callback uses it to address its live native
+  /// callback, so an empty or guessed id would only fail later with "instance not found".
+  static Callback mapCallback(
+    CallbackMessage message, {
+    required String journeyId,
+  }) => switch (message.type) {
     CallbackType.nameCallback => NameCallback(
       type: message.type,
       index: message.index,

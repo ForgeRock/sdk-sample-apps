@@ -21,14 +21,19 @@ public protocol ActiveNodeAccess: NativeHandle {
     /// therefore can't race a submit on the same item.
     ///
     /// The item is only valid inside `body`: every `next()` replaces the node, so never keep a
-    /// reference to it. The lock is not reentrant: `body` must not call back into `next()` for the
-    /// same handle, or it deadlocks.
+    /// reference to it. The lock is not reentrant: calling `withItem` on the same handle from
+    /// inside `body` throws `ActiveNodeError.reentrantLock` instead of deadlocking. `body` must
+    /// also not wait on `next()` for the same handle: that runs separately, waits for the lock
+    /// `body` holds, and can't be detected as reentry.
     ///
     /// - Parameters:
     ///   - type: the server-registered type string, as sent in the wire message's `type`.
-    ///   - index: 0-based position among items of the same `type` in the current node.
+    ///   - index: the item's 0-based index, as the owning module put it on the wire. What it counts
+    ///     is that module's convention: a Journey counts among callbacks of the same `type`, while
+    ///     DaVinci's collector index counts across the whole node regardless of type.
     /// - Throws: `ActiveNodeError.noActiveNode` if the handle has no active node;
-    ///   `ActiveNodeError.itemNotFound` if the node has no item at `type` / `index`.
+    ///   `ActiveNodeError.itemNotFound` if the node has no item at `type` / `index`;
+    ///   `ActiveNodeError.reentrantLock` if called from inside an operation already holding the lock.
     func withItem<T: Sendable>(
         type: String,
         index: Int,
@@ -45,6 +50,9 @@ public enum ActiveNodeError: Error, CustomStringConvertible {
     case noActiveNode
     /// The current node has no item at the requested type and index.
     case itemNotFound(type: String, index: Int)
+    /// The lock was entered again from inside an operation already holding it, which would wait on
+    /// itself forever.
+    case reentrantLock
 
     public var description: String {
         switch self {
@@ -54,6 +62,9 @@ public enum ActiveNodeError: Error, CustomStringConvertible {
             return "No active ContinueNode"
         case .itemNotFound(let type, let index):
             return "No active item found for type \(type) at index \(index)"
+        case .reentrantLock:
+            return "The active node's lock is not reentrant: it was entered again from inside an "
+                + "operation already holding it"
         }
     }
 }

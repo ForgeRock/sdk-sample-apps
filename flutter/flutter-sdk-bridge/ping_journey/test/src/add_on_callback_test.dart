@@ -23,15 +23,18 @@ CallbackMessage _message(
   ..prompt = prompt
   ..raw = raw;
 
+const _journeyId = 'journey-1';
+
+Callback _mapCallback(CallbackMessage message) =>
+    NodeMapper.mapCallback(message, journeyId: _journeyId);
+
 void main() {
   // The add-on registry is process-wide, so every test uses a type name of its own.
   group('Callback.registerAddOn', () {
     test(
       'an unregistered type still maps to the placeholder TextOutputCallback',
       () {
-        final callback = NodeMapper.mapCallback(
-          _message('UnregisteredAddOnCallback'),
-        );
+        final callback = _mapCallback(_message('UnregisteredAddOnCallback'));
 
         expect(callback, isA<TextOutputCallback>());
         expect(
@@ -44,7 +47,7 @@ void main() {
     test('a registered type maps to the add-on subclass', () {
       Callback.registerAddOn('MapsAddOnCallback', _FakeAddOnCallback.new);
 
-      final callback = NodeMapper.mapCallback(
+      final callback = _mapCallback(
         _message('MapsAddOnCallback', index: 2, prompt: 'Collecting'),
       );
 
@@ -61,11 +64,13 @@ void main() {
         (message, journeyId) => _FakeAddOnCallback(message, journeyId),
       );
 
-      final node = NodeMapper.map(
-        NodeMessage(type: NodeType.continueNode)
-          ..callbacks = [_message('JourneyIdAddOnCallback')],
-        'journey-42',
-      ) as ContinueNode;
+      final node =
+          NodeMapper.map(
+                NodeMessage(type: NodeType.continueNode)
+                  ..callbacks = [_message('JourneyIdAddOnCallback')],
+                'journey-42',
+              )
+              as ContinueNode;
 
       final callback = node.callbacks.single as AddOnCallback;
       expect(callback.journeyId, 'journey-42');
@@ -77,7 +82,7 @@ void main() {
         Callback.registerAddOn('RawAddOnCallback', _FakeAddOnCallback.new);
 
         final callback =
-            NodeMapper.mapCallback(
+            _mapCallback(
                   _message(
                     'RawAddOnCallback',
                     raw: <String?, Object?>{
@@ -101,8 +106,7 @@ void main() {
       Callback.registerAddOn('NoRawAddOnCallback', _FakeAddOnCallback.new);
 
       final callback =
-          NodeMapper.mapCallback(_message('NoRawAddOnCallback'))
-              as AddOnCallback;
+          _mapCallback(_message('NoRawAddOnCallback')) as AddOnCallback;
 
       expect(callback.raw, isEmpty);
     });
@@ -110,7 +114,7 @@ void main() {
     test('an add-on callback submits nothing by default', () {
       Callback.registerAddOn('ValueAddOnCallback', _FakeAddOnCallback.new);
 
-      final callback = NodeMapper.mapCallback(_message('ValueAddOnCallback'));
+      final callback = _mapCallback(_message('ValueAddOnCallback'));
 
       expect(callback.toValue(), isNull);
     });
@@ -120,7 +124,7 @@ void main() {
       Callback.registerAddOn('ReplacedAddOnCallback', _OtherAddOnCallback.new);
 
       expect(
-        NodeMapper.mapCallback(_message('ReplacedAddOnCallback')),
+        _mapCallback(_message('ReplacedAddOnCallback')),
         isA<_OtherAddOnCallback>(),
       );
     });
@@ -136,7 +140,7 @@ void main() {
     });
 
     test('a core type is not routed to the registry', () {
-      final callback = NodeMapper.mapCallback(
+      final callback = _mapCallback(
         _message(CallbackType.nameCallback, prompt: 'User Name'),
       );
 
@@ -152,7 +156,7 @@ void main() {
         );
 
         expect(
-          () => NodeMapper.mapCallback(_message('ThrowingAddOnCallback')),
+          () => _mapCallback(_message('ThrowingAddOnCallback')),
           throwsStateError,
         );
       },

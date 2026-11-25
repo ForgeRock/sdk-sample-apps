@@ -27,12 +27,17 @@ interface ActiveNodeAccess : NativeHandle {
      * therefore can't race a submit on the same item.
      *
      * The item is only valid inside [block]: every `next()` replaces the node, so never keep a
-     * reference to it. The lock is not reentrant: [block] must not call back into `next()` for the
-     * same handle, or it deadlocks.
+     * reference to it. The lock is not reentrant: calling [withItem] on the same handle from inside
+     * [block] throws [IllegalStateException] instead of deadlocking. [block] must also not wait on
+     * `next()` for the same handle: that runs separately, waits for the lock [block] holds, and
+     * can't be detected as reentry.
      *
      * @param type the server-registered type string, as sent in the wire message's `type`
-     * @param index 0-based position among items of the same [type] in the current node
-     * @throws IllegalStateException if the handle has no active node
+     * @param index the item's 0-based index, as the owning module put it on the wire. What it
+     *   counts is that module's convention: a Journey counts among callbacks of the same [type],
+     *   while DaVinci's collector index counts across the whole node regardless of type.
+     * @throws IllegalStateException if the handle has no active node, or if called from inside a
+     *   block already holding the handle's lock
      * @throws IllegalArgumentException if the node has no item at [type] / [index]
      */
     suspend fun <T> withItem(type: String, index: Int, block: suspend (item: Any) -> T): T

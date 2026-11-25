@@ -52,11 +52,15 @@ class JourneyHostApiImpl : PingJourneyHostApi {
         scope.launch {
             val result = runCatching {
                 val handle = resolveHandle(journeyId)
-                val node = handle.journey.start(name) {
-                    forceAuth = options.forceAuth
-                    noSession = options.noSession
-                }
-                handle.activeNode.set(node)
+                // Under the same lock as next() and an add-on's withItem, so a restart can't swap
+                // the node while either is still using the previous one.
+                val node =
+                    handle.activeNode.startWith {
+                        handle.journey.start(name) {
+                            forceAuth = options.forceAuth
+                            noSession = options.noSession
+                        }
+                    }
                 JourneyNodeMapper.map(node)
             }
             callback(result.classifyError(JourneyErrorCodes.START))
@@ -245,18 +249,24 @@ class JourneyHostApiImpl : PingJourneyHostApi {
     }
 
     override fun dispose(journeyId: String, callback: (Result<Unit>) -> Unit) {
-        callback(
-            runCatching { removeJourney(journeyId) }.classifyError(JourneyErrorCodes.DISPOSE)
-        )
+        scope.launch {
+            val result = runCatching { removeJourney(journeyId) }
+            callback(result.classifyError(JourneyErrorCodes.DISPOSE))
+        }
     }
 
     private fun resolveHandle(journeyId: String): JourneyHandle =
         (CoreRuntime.journeyRegistry.resolve(journeyId) as? JourneyHandle)
             ?: throw IllegalStateException("Journey instance not found for id=$journeyId")
 
-    private fun removeJourney(journeyId: String) {
-        (CoreRuntime.journeyRegistry.resolve(journeyId) as? JourneyHandle)?.activeNode?.clear()
+    /**
+     * Unregisters the Journey first, so no new add-on call can resolve it, then closes its node.
+     * [ActiveNodeState.clear] waits for an operation still running on that node.
+     */
+    private suspend fun removeJourney(journeyId: String) {
+        val handle = CoreRuntime.journeyRegistry.resolve(journeyId) as? JourneyHandle
         CoreRuntime.journeyRegistry.remove(journeyId)
+        handle?.activeNode?.clear()
     }
 
     private companion object {

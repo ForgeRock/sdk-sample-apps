@@ -32,7 +32,7 @@ class _FakeHostApi extends PingDeviceProfileHostApi {
 CallbackMessage _message({int index = 0, Map<String?, Object?>? raw}) =>
     CallbackMessage(type: 'DeviceProfileCallback', index: index)..raw = raw;
 
-/// Builds a callback bound to [hostApi] the way `NodeMapper` does after [registerWith], so the
+/// Builds a callback bound to [hostApi] the way `NodeMapper` does after `PingDeviceProfile.registerWith`, so the
 /// tests exercise the registered factory path rather than the constructor alone.
 DeviceProfileCallback _mapped({int index = 0, Map<String?, Object?>? raw}) =>
     NodeMapper.mapCallback(_message(index: index, raw: raw), journeyId: 'journey-1')
@@ -44,9 +44,12 @@ DeviceProfileCallback _withHost(_FakeHostApi hostApi, {int index = 0}) =>
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
+  // Production does this through the plugin's `dartPluginClass` hook before `main()`.
+  setUpAll(PingDeviceProfile.registerWith);
+
   group('registration', () {
-    test('registerWith makes NodeMapper produce a DeviceProfileCallback', () {
-      DeviceProfileCallback.registerWith();
+    test('PingDeviceProfile.registerWith makes NodeMapper produce a DeviceProfileCallback', () {
+      PingDeviceProfile.registerWith();
 
       final callback =
           NodeMapper.mapCallback(_message()..prompt = 'Collecting', journeyId: 'journey-9')
@@ -56,9 +59,9 @@ void main() {
       expect(callback.prompt, 'Collecting');
     });
 
-    test('registerWith is idempotent', () {
-      DeviceProfileCallback.registerWith();
-      DeviceProfileCallback.registerWith();
+    test('PingDeviceProfile.registerWith is idempotent', () {
+      PingDeviceProfile.registerWith();
+      PingDeviceProfile.registerWith();
 
       expect(NodeMapper.mapCallback(_message(), journeyId: 'j'), isA<DeviceProfileCallback>());
     });
