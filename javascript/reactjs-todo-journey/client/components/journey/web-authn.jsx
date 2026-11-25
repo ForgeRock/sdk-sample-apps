@@ -43,16 +43,10 @@ export default function WebAuthnComponent({ step, setSubmissionStep, callbacksFo
             message: 'Use your device to verify your identity',
           });
 
-          // (Optional) Check if the browser supports conditional mediation
-          const isConditionalSupported = await WebAuthn.isConditionalMediationSupported();
+          // Check if the browser supports conditional mediation and the PingAM authorization server requested it
+          const isConditionalMediation = await WebAuthn.isConditionalMediationSupported(step);
 
-          // Check if the PingAM authorization server allows conditional mediation
-          const metadataCallback = WebAuthn.getMetadataCallback(step);
-          const meta = metadataCallback?.getData();
-          const isConditionalMediation =
-            meta?.mediation === 'conditional' || meta?.conditional === true;
-
-          if (isConditionalSupported && isConditionalMediation) {
+          if (isConditionalMediation) {
             setAutofill(true);
             const controller = new AbortController();
             await WebAuthn.authenticate(step, controller.signal);
