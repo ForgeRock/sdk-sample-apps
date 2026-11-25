@@ -27,7 +27,9 @@ class NodeMapper {
           callbacks:
               message.callbacks
                   ?.whereType<CallbackMessage>()
-                  .map(mapCallback)
+                  .map(
+                    (callback) => mapCallback(callback, journeyId: journeyId),
+                  )
                   .toList() ??
               const [],
         ),
@@ -42,13 +44,18 @@ class NodeMapper {
       };
 
   /// Maps a [CallbackMessage] to the matching [Callback] subtype, keyed by its native class-name
-  /// [CallbackMessage.type]. Unrecognized types are not representable in the v1 sealed hierarchy,
-  /// so the `_` case below renders them as a generic [TextOutputCallback] with a placeholder
-  /// message instead of dropping them. [CallbackMessage.raw] (the native callback's full JSON) is
-  /// still populated on the wire for these types, for debugging/diagnostic purposes.
+  /// [CallbackMessage.type]. A type no core case matches goes to the add-on registry
+  /// ([Callback.registerAddOn]); if none is registered, the `_` case below renders it as a generic
+  /// [TextOutputCallback] with a placeholder message instead of dropping it.
+  /// [CallbackMessage.raw] (the native callback's full JSON) is still populated on the wire for
+  /// these types, for debugging/diagnostic purposes and for add-on callbacks to read.
+  ///
+  /// [journeyId] is required, with no default: an add-on callback uses it to address its live native
+  /// callback, so an empty or guessed id would only fail later with "instance not found".
   static Callback mapCallback(
-    CallbackMessage message,
-  ) => switch (message.type) {
+    CallbackMessage message, {
+    required String journeyId,
+  }) => switch (message.type) {
     CallbackType.nameCallback => NameCallback(
       type: message.type,
       index: message.index,
@@ -153,14 +160,16 @@ class NodeMapper {
       policies: message.policies?.cast<String, Object?>(),
       failedPolicies: _castFailedPolicies(message.failedPolicies),
     ),
-    _ => TextOutputCallback(
-      type: message.type,
-      index: message.index,
-      message:
-          message.message ??
-          message.prompt ??
-          'Unsupported callback: ${message.type}',
-    ),
+    _ =>
+      Callback.tryFromAddOn(message, journeyId) ??
+          TextOutputCallback(
+            type: message.type,
+            index: message.index,
+            message:
+                message.message ??
+                message.prompt ??
+                'Unsupported callback: ${message.type}',
+          ),
   };
 
   static List<Map<String, Object?>> _castFailedPolicies(List<Object?>? raw) =>

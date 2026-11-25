@@ -6,6 +6,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:ping_device_profile/ping_device_profile.dart';
 import 'package:ping_journey/ping_journey.dart';
 import 'package:provider/provider.dart';
 
@@ -14,6 +15,7 @@ import 'package:flutter_journey/ui/core/widgets/primary_button.dart';
 import 'package:flutter_journey/ui/features/journey/view_models/journey_view_model.dart';
 import 'package:flutter_journey/ui/features/journey/views/widgets/callbacks/boolean_attribute_input_callback_view.dart';
 import 'package:flutter_journey/ui/features/journey/views/widgets/callbacks/choice_callback_view.dart';
+import 'package:flutter_journey/ui/features/journey/views/widgets/callbacks/device_profile_callback_view.dart';
 import 'package:flutter_journey/ui/features/journey/views/widgets/callbacks/kba_create_callback_view.dart';
 import 'package:flutter_journey/ui/features/journey/views/widgets/callbacks/name_callback_view.dart';
 import 'package:flutter_journey/ui/features/journey/views/widgets/callbacks/number_attribute_input_callback_view.dart';
@@ -175,6 +177,17 @@ class _ContinueNodeView extends StatelessWidget {
                     callback: callback,
                     onChanged: viewModel.refresh,
                   ),
+                DeviceProfileCallback() => DeviceProfileCallbackView(
+                  callback: callback,
+                  collect: () => viewModel.collectDeviceProfile(callback),
+                ),
+                AddOnCallback() => TextOutputCallbackView(
+                  callback: TextOutputCallback(
+                    type: callback.type,
+                    index: callback.index,
+                    message: 'Unsupported callback: ${callback.type}',
+                  ),
+                ),
               },
             ),
           const SizedBox(height: 16),

@@ -12,17 +12,9 @@ import PingOrchestrate
 import ping_core
 
 /// Implements the generated `PingJourneyHostApi`: `configureJourney`/`start` build the native
-/// `Journey` and cache the current node per `journeyId`; `next()` applies submitted callback
-/// values onto the cached `ContinueNode` and advances the flow.
+/// `Journey` and cache the current node on its `JourneyHandle`; `next()` applies submitted callback
+/// values onto that cached node and advances the flow.
 final class JourneyHostApiImpl: PingJourneyHostApi, @unchecked Sendable {
-    private let lock = NSLock()
-
-    /// Most recent `ContinueNode` per journeyId, for future callback re-resolution.
-    private var continueNodeMap: [String: ContinueNode] = [:]
-
-    /// Serializes `next()` per journeyId so a double-submit can't race two callback applications.
-    private let nextSerializer = KeyedSerialExecutor()
-
     func configureJourney(config: JourneyConfigMessage, completion: @escaping (Result<String, Error>) -> Void) {
         Task {
             do {
@@ -41,18 +33,25 @@ final class JourneyHostApiImpl: PingJourneyHostApi, @unchecked Sendable {
         completion: @escaping (Result<NodeMessage, Error>) -> Void
     ) {
         Task {
-            guard let journey = await resolveJourney(journeyId) else {
+            guard let handle = await resolveHandle(journeyId) else {
                 completion(.failure(JourneyErrorMapper.from(
                     JourneyErrorCodes.start, JourneyHostApiError.journeyNotFound(journeyId)
                 )))
                 return
             }
-            let node = await journey.start(name) { startOptions in
-                startOptions.forceAuth = options.forceAuth
-                startOptions.noSession = options.noSession
+            do {
+                // On the same serializer as next() and an add-on's withItem, so a restart can't
+                // swap the node while either is still using the previous one.
+                let node = try await handle.activeNode.startWith {
+                    await handle.journey.start(name) { startOptions in
+                        startOptions.forceAuth = options.forceAuth
+                        startOptions.noSession = options.noSession
+                    }
+                }
+                completion(.success(JourneyNodeMapper.map(node)))
+            } catch {
+                completion(.failure(JourneyErrorMapper.from(JourneyErrorCodes.start, error)))
             }
-            setNode(journeyId: journeyId, node: node)
-            completion(.success(JourneyNodeMapper.map(node)))
         }
     }
 
@@ -63,15 +62,21 @@ final class JourneyHostApiImpl: PingJourneyHostApi, @unchecked Sendable {
     ) {
         Task {
             do {
-                let message = try await nextSerializer.run(key: journeyId) { [self] in
-                    guard let currentNode = self.activeContinueNode(journeyId) else {
+                guard let handle = await resolveHandle(journeyId) else {
+                    throw JourneyHostApiError.journeyNotFound(journeyId)
+                }
+                let submitted = values.compactMap { $0 }
+                // Same lock an add-on's withItem takes, so a double-submit can't race two callback
+                // applications and a collect can't race a submit.
+                let message = try await handle.activeNode.withLock {
+                    guard let currentNode = handle.activeNode.current else {
                         throw JourneyHostApiError.stateError(
                             "No active ContinueNode found for journeyId=\(journeyId)"
                         )
                     }
-                    try JourneyCallbackValueApplier.apply(currentNode, values: values.compactMap { $0 })
+                    try JourneyCallbackValueApplier.apply(currentNode, values: submitted)
                     let nextNode = await currentNode.next()
-                    self.setNode(journeyId: journeyId, node: nextNode)
+                    handle.activeNode.set(nextNode)
                     return JourneyNodeMapper.map(nextNode)
                 }
                 completion(.success(message))
@@ -237,50 +242,32 @@ final class JourneyHostApiImpl: PingJourneyHostApi, @unchecked Sendable {
                 let user = await handle.journey.journeyUser()
                 await user?.logout()
             }
-            clearNodeState(journeyId: journeyId)
-            completion(.success(true))
+            do {
+                try await handle.activeNode.clear()
+                completion(.success(true))
+            } catch {
+                completion(.failure(JourneyErrorMapper.from(JourneyErrorCodes.signOff, error)))
+            }
         }
     }
 
     func dispose(journeyId: String, completion: @escaping (Result<Void, Error>) -> Void) {
         Task {
-            clearNodeState(journeyId: journeyId)
-            await nextSerializer.remove(key: journeyId)
+            // Unregister first, so no new add-on call can resolve the Journey, then close its node;
+            // clear() waits for an operation still running on that node.
+            let handle = await resolveHandle(journeyId)
             await CoreRuntime.journeyRegistry.remove(journeyId)
-            completion(.success(()))
+            do {
+                try await handle?.activeNode.clear()
+                completion(.success(()))
+            } catch {
+                completion(.failure(JourneyErrorMapper.from(JourneyErrorCodes.dispose, error)))
+            }
         }
-    }
-
-    private func resolveJourney(_ journeyId: String) async -> Journey? {
-        await resolveHandle(journeyId)?.journey
     }
 
     private func resolveHandle(_ journeyId: String) async -> JourneyHandle? {
         await CoreRuntime.journeyRegistry.resolve(journeyId) as? JourneyHandle
-    }
-
-    private func activeContinueNode(_ journeyId: String) -> ContinueNode? {
-        lock.lock()
-        defer { lock.unlock() }
-        return continueNodeMap[journeyId]
-    }
-
-    private func setNode(journeyId: String, node: Node) {
-        lock.lock()
-        defer { lock.unlock() }
-        if let continueNode = node as? ContinueNode {
-            continueNodeMap[journeyId] = continueNode
-        } else {
-            continueNodeMap.removeValue(forKey: journeyId)
-        }
-    }
-
-    /// Closes the cached `ContinueNode` (mirrors Android's `removeJourney()`) before dropping it,
-    /// so any `Closeable` actions on the last node get a chance to release resources.
-    private func clearNodeState(journeyId: String) {
-        lock.lock()
-        defer { lock.unlock() }
-        continueNodeMap.removeValue(forKey: journeyId)?.close()
     }
 }
 

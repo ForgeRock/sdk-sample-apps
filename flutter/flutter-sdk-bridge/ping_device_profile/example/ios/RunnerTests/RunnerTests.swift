@@ -1,0 +1,24 @@
+import Flutter
+import Testing
+import UIKit
+
+// If your plugin has been explicitly set to "type: .dynamic" in the Package.swift,
+// you will need to add your plugin as a dependency of RunnerTests within Xcode.
+
+@testable import ping_device_profile
+
+// This demonstrates a simple unit test of the Swift portion of this plugin's implementation.
+//
+// See https://developer.apple.com/xcode/swift-testing/ for more information about using
+// Swift Testing.
+
+struct RunnerTests {
+
+  @Test func getPlatformVersionSucceeds() throws {
+    let plugin = PingDeviceProfilePlugin()
+
+    let result = try plugin.getPlatformVersion()
+    #expect(result == "iOS " + UIDevice.current.systemVersion)
+  }
+
+}

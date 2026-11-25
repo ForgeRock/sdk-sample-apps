@@ -8,6 +8,8 @@ workspace:
   - flutter-sdk-bridge/ping_core
   - flutter-sdk-bridge/ping_davinci
   - flutter-sdk-bridge/ping_davinci/example
+  - flutter-sdk-bridge/ping_device_profile
+  - flutter-sdk-bridge/ping_device_profile/example
   - flutter-sdk-bridge/ping_journey
   - flutter-sdk-bridge/ping_journey/example
   - flutter-sdk-bridge/ping_oidc

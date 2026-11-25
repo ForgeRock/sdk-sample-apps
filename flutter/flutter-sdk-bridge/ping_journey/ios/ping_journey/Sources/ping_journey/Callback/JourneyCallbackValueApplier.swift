@@ -18,7 +18,7 @@ enum JourneyCallbackValueApplier {
     static func apply(_ node: ContinueNode, values: [CallbackValueMessage]) throws {
         var callbacksByType: [String: [any Callback]] = [:]
         for callback in node.callbacks {
-            callbacksByType[try callbackType(callback), default: []].append(callback)
+            callbacksByType[try JourneyCallbackLookup.callbackType(callback), default: []].append(callback)
         }
 
         for value in values {
@@ -30,17 +30,6 @@ enum JourneyCallbackValueApplier {
             }
             try applyValue(matching[Int(value.index)], value)
         }
-    }
-
-    /// The server-registered `"type"` string from `AbstractCallback.json`, stable across
-    /// release-build symbol stripping — unlike `String(describing: type(of:))`, which reflects the
-    /// Swift runtime type name and isn't a wire-format guarantee.
-    private static func callbackType(_ callback: any Callback) throws -> String {
-        guard let abstractCallback = callback as? AbstractCallback,
-              let type = abstractCallback.json[JourneyConstants.type] as? String else {
-            throw JourneyHostApiError.callbackApply("Callback is missing a \"type\" field: \(callback)")
-        }
-        return type
     }
 
     private static func applyValue(_ callback: any Callback, _ value: CallbackValueMessage) throws {

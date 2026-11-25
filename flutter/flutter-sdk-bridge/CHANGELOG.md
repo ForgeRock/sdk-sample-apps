@@ -1,6 +1,9 @@
 ## Unreleased
 
 #### Added
+- `flutter-journey`: handles Journey pages carrying a `DeviceProfileCallback` — an automatic "Gathering device profile…" step that runs the native collection through `ping_device_profile` and advances the flow. Unknown add-on callbacks render as a readable unsupported-callback row [SDKS-5263]
+
+#### Added
 - Added `ping_davinci`, a Pigeon-generated bridge over the native Ping DaVinci SDK `2.2.0`: `configureDaVinci`, `start`, `next`, `validate`, `getSession`, `getToken`, `getUserInfo`, `signOff`, `dispose`, and streamed polling, with a sealed `Collector` hierarchy covering all 17 core collector keys, structured validation errors, and per-field server errors on a recoverable `ErrorNode` [SDKS-5267]
 - `ping_core`: `Registry` reports its size (`size` on Android, `count()` on iOS), a diagnostic for leak checks
 

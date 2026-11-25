@@ -51,6 +51,15 @@ graph LR
 
 On the way back, Dart addresses each answered callback by `{ type, index }` rather than sending a whole object back; native re-resolves that pair against the `ContinueNode` it already has cached in `CoreRuntime` and applies the value to the real callback (`JourneyCallbackValueApplier`) before calling the native SDK's own `next()`.
 
+### Add-on callbacks
+
+The v1 callback set above is closed, but Journey pages can carry callback types belonging to optional native modules (device profile, device binding, FIDO). An add-on package contributes a Dart type for those:
+
+- `ping_journey` declares `abstract base class AddOnCallback extends Callback` (the one open branch of the sealed hierarchy) and a registry: `Callback.registerAddOn(type, factory)`, keyed by the callback's server `"type"` string. A later registration for the same type replaces an earlier one; registering a core type throws.
+- `NodeMapper` consults the registry before falling back to the placeholder `TextOutputCallback` it renders for unknown types. An add-on callback submits nothing by default (`toValue()` returns `null`), because the native callback holds its own result and the generic `next()` carries it.
+- The factory receives the node's `journeyId` along with the wire message, and `AddOnCallback` exposes both `journeyId` and the callback's full server JSON (`raw`), which is everything an add-on needs to call back into native against the same live callback — through `ping_core`'s `ActiveNodeAccess` seam, which hands the live item out under the same lock that serializes `next()`.
+- Registration is done by the add-on package, typically automatically through Flutter's `dartPluginClass` hook. `ping_device_profile` is the first consumer and the working example.
+
 ## Dart public API
 
 The generated Pigeon code (`lib/src/messages.g.dart`) is intentionally low-level — flat messages, no sealed types. `ping_journey.dart` and the rest of `lib/src/` wrap it in the API the sample app actually uses:

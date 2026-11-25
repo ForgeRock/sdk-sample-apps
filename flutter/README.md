@@ -17,9 +17,9 @@ This is a native Dart [pub workspace](https://dart.dev/tools/pub/workspaces) —
 ## SDK Bridge
 
 - [`flutter-sdk-bridge/`](flutter-sdk-bridge/) — the `ping_core` + `ping_journey` + `ping_oidc` +
-  `ping_davinci` plugin packages the samples above are built on. See its README for how the modules
-  share configured clients through `ping_core`'s registry, how DaVinci collectors differ from
-  Journey callbacks, and how to add a bridge module for a future sample.
+  `ping_davinci` + `ping_device_profile` plugin packages the samples above are built on. See its
+  README for how the modules share configured clients through `ping_core`'s registry, how DaVinci
+  collectors differ from Journey callbacks, and how to add a bridge module for a future sample.
 
 ## Requirements
 

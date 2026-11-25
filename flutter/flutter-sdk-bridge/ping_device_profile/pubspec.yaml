@@ -1,0 +1,36 @@
+name: ping_device_profile
+description: "Flutter bridge for the Ping Device Profile SDK: device profile collection for Journey callbacks from Dart via ping_core."
+version: 0.0.1
+homepage:
+publish_to: none
+
+environment:
+  sdk: ^3.12.2
+  flutter: '>=3.3.0'
+
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+  ping_core:
+    path: ../ping_core
+  ping_journey:
+    path: ../ping_journey
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  pigeon: ^27.1.2
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: com.pingidentity.flutter.deviceprofile
+        pluginClass: PingDeviceProfilePlugin
+        dartPluginClass: PingDeviceProfile
+      ios:
+        pluginClass: PingDeviceProfilePlugin
+        dartPluginClass: PingDeviceProfile

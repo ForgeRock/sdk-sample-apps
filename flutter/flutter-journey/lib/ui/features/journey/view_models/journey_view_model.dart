@@ -6,6 +6,7 @@
  */
 
 import 'package:flutter/foundation.dart';
+import 'package:ping_device_profile/ping_device_profile.dart';
 import 'package:ping_journey/ping_journey.dart';
 
 import 'package:flutter_journey/data/journey_repository.dart';
@@ -33,6 +34,18 @@ class JourneyViewModel extends ChangeNotifier {
     final current = _node;
     if (current is! ContinueNode) return Future.value();
     return _run(() => _repository.next(current));
+  }
+
+  /// Runs the device profile collection for [callback] and advances the journey — one automatic
+  /// step, since there is nothing for the user to fill in. Goes through [_run] so a collection
+  /// failure surfaces in the same error banner as any other step.
+  Future<void> collectDeviceProfile(DeviceProfileCallback callback) {
+    final current = _node;
+    if (current is! ContinueNode) return Future.value();
+    return _run(() async {
+      await callback.collect();
+      return _repository.next(current);
+    });
   }
 
   Future<bool> signOff() async {
