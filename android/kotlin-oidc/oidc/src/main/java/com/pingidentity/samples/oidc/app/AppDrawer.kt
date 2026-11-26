@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 Ping Identity Corporation. All rights reserved.
+ * Copyright (c) 2025 - 2026 Ping Identity Corporation. All rights reserved.
  *
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
@@ -19,6 +19,8 @@ import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.GeneratingTokens
 import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Shield
+import androidx.compose.material.icons.filled.VerifiedUser
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.NavigationDrawerItem
@@ -31,6 +33,8 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.pingidentity.samples.oidc.app.Destinations.CENTRALIZE_ROUTE
+import com.pingidentity.samples.oidc.app.Destinations.RAR_LOGIN_ROUTE
+import com.pingidentity.samples.oidc.app.Destinations.RAR_TOKEN_ROUTE
 import com.pingidentity.samples.oidc.app.Destinations.TOKEN_ROUTE
 import com.pingidentity.samples.oidc.app.Destinations.USER_INFO
 
@@ -76,6 +80,26 @@ fun AppDrawer(
             icon = { Icon(Icons.Filled.Person, null) },
             onClick = {
                 navigateTo(USER_INFO)
+                closeDrawer()
+            },
+            modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
+        )
+        NavigationDrawerItem(
+            label = { Text("RAR Login") },
+            selected = false,
+            icon = { Icon(Icons.Filled.VerifiedUser, null) },
+            onClick = {
+                navigateTo(RAR_LOGIN_ROUTE)
+                closeDrawer()
+            },
+            modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
+        )
+        NavigationDrawerItem(
+            label = { Text("RAR Access Token") },
+            selected = false,
+            icon = { Icon(Icons.Filled.Shield, null) },
+            onClick = {
+                navigateTo(RAR_TOKEN_ROUTE)
                 closeDrawer()
             },
             modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),

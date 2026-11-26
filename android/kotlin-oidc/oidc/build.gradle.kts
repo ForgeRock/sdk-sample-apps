@@ -15,7 +15,8 @@ plugins {
 
 android {
     namespace = "com.pingidentity.samples.oidc.app"
-    compileSdk = 36
+    // Ping SDK 2.3.0 is built against API 37, so consumers must compile against 37 or later.
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.pingidentity.samples.oidc.app"
@@ -73,6 +74,9 @@ dependencies {
     implementation(libs.pingidentity.oidc)
     implementation(libs.pingidentity.browser)
     implementation(libs.pingidentity.orchestrate)
+    // The oidc SDK pulls storage in at runtime only; the RAR client configures a
+    // separate storage file for its token, which needs the storage types at compile time.
+    implementation(libs.pingidentity.storage)
 
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.kotlinx.serialization.json)
