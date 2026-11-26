@@ -3,7 +3,7 @@ activityCompose = "1.9.3"
 agp = "8.12.2"
 coreSplashscreen = "1.0.1"
 datastore = "1.1.7"
-ping = "2.0.0"
+ping = "2.3.0"
 kotlin = "2.2.0"
 compose = "1.7.4"
 compose-material3 = "1.3.0"
@@ -33,6 +33,7 @@ kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 pingidentity-oidc = { module = "com.pingidentity.sdks:oidc", version.ref = "ping" }
 pingidentity-browser = { module = "com.pingidentity.sdks:browser", version.ref = "ping" }
 pingidentity-orchestrate = { module = "com.pingidentity.sdks:orchestrate", version.ref = "ping" }
+pingidentity-storage = { module = "com.pingidentity.sdks:storage", version.ref = "ping" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }

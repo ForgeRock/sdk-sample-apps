@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 Ping Identity Corporation. All rights reserved.
+ * Copyright (c) 2025 - 2026 Ping Identity Corporation. All rights reserved.
  *
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pingidentity.logger.Logger
 import com.pingidentity.logger.STANDARD
-import com.pingidentity.oidc.OidcWeb
+import com.pingidentity.oidc.OidcWebClient
 import com.pingidentity.oidc.module.Oidc
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 
 //TODO Update configuration
 val web by lazy {
-    OidcWeb {
+    OidcWebClient {
         logger = Logger.STANDARD
         module(Oidc) {
             clientId = "<Client ID>"

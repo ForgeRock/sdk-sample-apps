@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 Ping Identity Corporation. All rights reserved.
+ * Copyright (c) 2025 - 2026 Ping Identity Corporation. All rights reserved.
  *
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
@@ -14,6 +14,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.pingidentity.samples.oidc.app.centralize.Centralize
 import com.pingidentity.samples.oidc.app.centralize.CentralizeLoginViewModel
+import com.pingidentity.samples.oidc.app.rar.RarLogin
+import com.pingidentity.samples.oidc.app.rar.RarToken
 import com.pingidentity.samples.oidc.app.token.Token
 import com.pingidentity.samples.oidc.app.userprofile.UserProfile
 import com.pingidentity.samples.oidc.app.userprofile.UserProfileViewModel
@@ -39,6 +41,12 @@ fun AppNavHost(
             Centralize(centralizeLoginViewModel) {
                 navController.navigate(Destinations.USER_INFO)
             }
+        }
+        composable(Destinations.RAR_LOGIN_ROUTE) {
+            RarLogin(onViewToken = { navController.navigate(Destinations.RAR_TOKEN_ROUTE) })
+        }
+        composable(Destinations.RAR_TOKEN_ROUTE) {
+            RarToken()
         }
     }
 }
